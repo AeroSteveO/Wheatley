@@ -22,6 +22,7 @@ import org.w3c.dom.Text;
  * http://www.drdobbs.com/jvm/easy-dom-parsing-in-java/231002580
  */
 public class XmlHelpers {
+    
     protected void setNodeValue(String tagName, String value, NodeList nodes) {
         Node node = getNode(tagName, nodes);
         if ( node == null )
@@ -113,7 +114,6 @@ public class XmlHelpers {
                 }
             }
         }
-        
         return "";
     }
 }

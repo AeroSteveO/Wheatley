@@ -139,6 +139,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new Ping())
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
+                    .addListener(new BadWords())
 //                    .addListener(new SimplePing())
                     .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent());
           //  for (int i=0;i<baseElement.getElementsByTagName("listener").getLength();i++)
