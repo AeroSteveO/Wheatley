@@ -84,6 +84,9 @@ public class Blarghlebot extends ListenerAdapter {
         if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("trolo[lo]+", message.toLowerCase()))
             event.getBot().sendIRC().message(event.getChannel().getName(), "http://youtu.be/v1PBptSDIh8");
         
+        if (Pattern.matches("![0-9]+", message))
+            event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
+        
         if (message.equalsIgnoreCase("ba dum")||message.equalsIgnoreCase("badum"))
             event.getBot().sendIRC().message(event.getChannel().getName(), "psh");
         

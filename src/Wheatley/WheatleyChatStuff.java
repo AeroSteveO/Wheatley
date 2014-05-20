@@ -65,8 +65,6 @@ public class WheatleyChatStuff extends ListenerAdapter {
             else{
                 event.getChannel().send().kick(event.getUser(),"MASHY-SPIKE-PLATE smashed you into goop");
             }
-            
-            
         }
         if ((message.equalsIgnoreCase("!space"))||(message.equalsIgnoreCase("SPACE"))) {
             switch((int) (Math.random()*3+1)) {

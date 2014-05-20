@@ -35,8 +35,12 @@ public class MatrapterChat extends ListenerAdapter {
         }
         if (message.equalsIgnoreCase("!meatlab"))
             event.getBot().sendIRC().message(event.getChannel().getName(), "u so funny, me ruv u rong time");
-        if (message.equalsIgnoreCase("!matlab"))
-            event.getBot().sendIRC().message(event.getChannel().getName(), "MATRABBB");
+        if (message.toLowerCase().startsWith("!matlab")){
+            if (message.split(" ").length==1)
+                        event.getBot().sendIRC().message(event.getChannel().getName(), "MATRABBB");
+            else
+                event.respond("This bot doesn't contain 100% of Matrapter's original capability yet");
+        }
         
         //Meatpod Functions
         if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod")||message.equalsIgnoreCase("meatpod?"))
