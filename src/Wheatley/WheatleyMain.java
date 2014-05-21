@@ -121,6 +121,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use
                     .setCapEnabled(true) //Enable CAP features
                     .setAutoReconnect(true)
+                    .setMaxLineLength(425)
 //                    .addCapHandler(new TLSCapHandler(new UtilSSLSocketFactory().trustAllCertificates(), true))
                     .addListener(new WheatleyMain())    //This main class's listener
                     .addListener(new Blarghlebot()) //Trollbot Listener
@@ -140,6 +141,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
                     .addListener(new BadWords())
+                    .addListener(new GameBackbone())
 //                    .addListener(new SimplePing())
                     .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent());
           //  for (int i=0;i<baseElement.getElementsByTagName("listener").getLength();i++)

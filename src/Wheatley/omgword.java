@@ -59,7 +59,7 @@ public class omgword extends ListenerAdapter {
                     //get and shuffle the word
                     String chosenword = wordls.get((int) (Math.random()*wordls.size()-1));
                     String scrambled = shuffle(chosenword);
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "You have 30 seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled + Colors.NORMAL);
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "You have 30 seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
                     //setup amount of given time
                     DateTime dt = new DateTime();
                     DateTime end = dt.plusSeconds(time);
@@ -69,17 +69,17 @@ public class omgword extends ListenerAdapter {
                             MessageEvent CurrentEvent = queue.waitFor(MessageEvent.class);
                             dt = new DateTime();
                             if (dt.isAfter(end)){
-                                event.getBot().sendIRC().message(CurrentEvent.getChannel().getName(),"You did not guess the solution in time, the correct answer would have been "+chosenword);
+                                event.getBot().sendIRC().message(CurrentEvent.getChannel().getName(),"You did not guess the solution in time, the correct answer would have been "+chosenword.toUpperCase());
                                 activechan.remove(CurrentEvent.getChannel().getName());
                                 queue.close();
                             }
                             else if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
-                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + chosenword);
+                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + chosenword.toUpperCase());
                                 activechan.remove(CurrentEvent.getChannel().getName());
                                 queue.close();
                             }
                             else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
-                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + chosenword);
+                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + chosenword.toUpperCase());
                                 activechan.remove(CurrentEvent.getChannel().getName());
                                 queue.close();
                             }
