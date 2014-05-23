@@ -40,7 +40,7 @@ public class Hangman extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         {
             String message = Colors.removeFormattingAndColors(event.getMessage());
-            if (message.startsWith("!hangman")) {
+            if (message.equalsIgnoreCase("!hangman")&&!event.getChannel().getName().equals("#dtella")) {
                 if (wordls == null) {
                     wordls = getWordList();
                 }

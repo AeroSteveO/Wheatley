@@ -36,7 +36,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
         if (message.equalsIgnoreCase("Oh. Hi.")||message.equalsIgnoreCase("potato?"))
             event.getBot().sendIRC().message(event.getChannel().getName(),"Oh. Hi. So. How are you holding up? BECASUSE I'M A POTATO.");
         
-        if (message.equals("THIS STATEMENT IS FALSE"))
+        if (message.equalsIgnoreCase("THIS STATEMENT IS FALSE"))
             event.getBot().sendIRC().message(event.getChannel().getName(),"Um. 'True'. I'll go 'true'.");
         
         if (message.equalsIgnoreCase("Wheatley, you're a moron")||message.equalsIgnoreCase("Wheatley, you are a moron"))

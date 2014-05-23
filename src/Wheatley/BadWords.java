@@ -33,6 +33,14 @@ public class BadWords extends ListenerAdapter{
             if (message.contains(badwords.get(i))&&!event.getChannel().isHalfOp(event.getUser())&&!event.getChannel().isOwner(event.getUser())&&!event.getChannel().isOp(event.getUser())&&!event.getChannel().isSuperOp(event.getUser()))
                 event.getChannel().send().kick(event.getUser(), "Don't say "+badwords.get(i)+".  That's just turrable!");
         }
+        if (message.equalsIgnoreCase("!badwords")){
+            String a=badwords.get(0);
+            event.getBot().sendIRC().message(event.getChannel().getName(), "Users below HOP will be kicked for saying any of the following:");
+            for (int i=1;i<badwords.size();i++){
+                a = a + ", " + badwords.get(i);
+            }
+            event.getBot().sendIRC().message(event.getChannel().getName(), a);
+        }
     }
     
     public ArrayList<String> getBadWords() throws FileNotFoundException{

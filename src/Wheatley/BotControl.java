@@ -33,12 +33,7 @@ public class BotControl extends ListenerAdapter{
         }
         
         if (message.equalsIgnoreCase(Global.MainNick+", fix yourself")&&event.getUser().getNick().equals(Global.BotOwner)){
-//            try{
-//                File fXmlFile = new File("Settings.xml");
-//                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-//                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-//                Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
-//
+
             event.getBot().sendIRC().message("NickServ", "ghost " + Global.MainNick + " " + Global.NickPass);
             event.getBot().sendIRC().message("NickServ", "recover " + Global.MainNick + " " + Global.NickPass);
             
@@ -48,10 +43,6 @@ public class BotControl extends ListenerAdapter{
             for (int i=0;i<Global.Channels.size();i++){
                 event.getBot().sendIRC().joinChannel(Global.Channels.get(i));
             }
-//            }
-//            catch (Exception ex){
-//                ex.printStackTrace();
-//            }
         }
         
         if (message.equalsIgnoreCase(Global.MainNick+", please power down")||message.equalsIgnoreCase("!powerdown")||message.equalsIgnoreCase(Global.MainNick+", shutdown")) {

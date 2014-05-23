@@ -35,7 +35,7 @@ public class omgword extends ListenerAdapter {
         {
             String message = Colors.removeFormattingAndColors(event.getMessage());
             // keep the spammy spammy out of main
-            if (message.startsWith("!omgword")&&!event.getChannel().getName().equals("#dtella")) {
+            if (message.equalsIgnoreCase("!omgword")&&!event.getChannel().getName().equals("#dtella")) {
                 // get the list of words only if theres nothing in the list alread
                 if (wordls == null) {
                     wordls = getWordList();
