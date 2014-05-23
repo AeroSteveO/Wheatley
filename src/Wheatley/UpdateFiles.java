@@ -6,6 +6,10 @@
 
 package Wheatley;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -20,7 +24,35 @@ public class UpdateFiles extends ListenerAdapter{
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.toLowerCase().startsWith("!update ")){
+        if (message.toLowerCase().startsWith("!update ")&&event.getUser().getNick().equals(Global.BotOwner)){
+            String[] properties = message.split(" ");
+            if (properties.length== 3){
+                String filename = properties[1];
+                String addition = properties[2];
+                
+                
+                try{
+                    String data = " This content will append to the end of the file";
+                    
+                    File file =new File(filename+".txt");
+                    
+                    //if file doesnt exists, then create it
+                    if(!file.exists()){
+                        file.createNewFile();
+                    }
+                    
+                    //true = append file
+                    FileWriter fileWritter = new FileWriter(file.getName(),true);
+                    BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+                    bufferWritter.write("\n"+addition);
+                    bufferWritter.close();
+                    
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+addition+" was added to "+ filename);
+                    
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+            }
             
         }
     }

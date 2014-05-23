@@ -30,6 +30,7 @@ public class BotControl extends ListenerAdapter{
             Hangman.activechan.clear();
             Blarghlebot.poop = "null";
             FactSphereFacts.quotels = null;
+            BadWords.badwords = null;
         }
         
         if (message.equalsIgnoreCase(Global.MainNick+", fix yourself")&&event.getUser().getNick().equals(Global.BotOwner)){
