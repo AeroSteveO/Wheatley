@@ -41,7 +41,6 @@ public class BlarghleRandom extends ListenerAdapter {
             
         }
         //Not Added Yet
-        
     }
     public static String adjective() {
         List<String> a = new ArrayList<>();
@@ -54,6 +53,7 @@ public class BlarghleRandom extends ListenerAdapter {
         a.add("fishy-smelling");
         a.add("throbbing");
         a.add("sexy");
+        a.add("ugly");
         a.add("delicious");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
@@ -75,6 +75,7 @@ public class BlarghleRandom extends ListenerAdapter {
         List<String> a = new ArrayList<>();
         a.add("lovingly");
         a.add("carefully");
+        a.add("forcefully");
         a.add("hatefully");
         a.add("angrily");
         a.add("roughly");
@@ -111,6 +112,8 @@ public class BlarghleRandom extends ListenerAdapter {
 //* BlarghleBot randily flatulates on Steve-O's fishy-smelling arm
 //* BlarghleBot sadly flatulates on Vanilla's throbbing foot
 //* BlarghleBot emotionally noms on Steve-O's sexy toes
+//* BlarghleBot forcefully noms on Steve-O's ugly toes
+//* BlarghleBot lovingly flatulates on Pankeiko's scrumptious hand
 
 //       COMMAND SENTENCE SET 2
 //* BlarghleBot intricately rips off Steve-O's nose and emotionally beats them with it.
