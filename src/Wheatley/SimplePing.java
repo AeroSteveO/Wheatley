@@ -18,8 +18,9 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author theDoctor
  * idea from jnick
  * 
- * large chunk of old code from Steve-O for his more advanced ping function
- * just in case he wants to look at it later
+ * Saved alongside Ping.java as a simple version that forgoes checking servers/sites
+ * saved in an XML file
+ * 
  */
 public class SimplePing extends ListenerAdapter{
     @Override

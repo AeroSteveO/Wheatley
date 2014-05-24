@@ -30,28 +30,20 @@ public class BotControl extends ListenerAdapter{
             Hangman.activechan.clear();
             Blarghlebot.poop = "null";
             FactSphereFacts.quotels = null;
+            BadWords.badwords = null;
         }
         
         if (message.equalsIgnoreCase(Global.MainNick+", fix yourself")&&event.getUser().getNick().equals(Global.BotOwner)){
-//            try{
-//                File fXmlFile = new File("Settings.xml");
-//                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-//                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-//                Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
-//
-            event.getBot().sendIRC().message("NickServ", "ghost " + Global.MainNick + " " + Global.NickPass);
-            event.getBot().sendIRC().message("NickServ", "recover " + Global.MainNick + " " + Global.NickPass);
+
+            event.getBot().sendIRC().message("NickServ", "ghost " + Global.MainNick + " " + Global.NickPass);  //ghost is a depricated command, if it doesn't work, the next command should work
+            event.getBot().sendIRC().message("NickServ", "recover " + Global.MainNick + " " + Global.NickPass);//sends both commands, NS can yell about one and do the other
             
-            Thread.sleep(5000);
+            Thread.sleep(5000); // wait between killing the ghost to changing nick and registering
             event.getBot().sendIRC().changeNick(Global.MainNick);
             event.getBot().sendIRC().message("NickServ", "identify " + Global.NickPass);
             for (int i=0;i<Global.Channels.size();i++){
                 event.getBot().sendIRC().joinChannel(Global.Channels.get(i));
             }
-//            }
-//            catch (Exception ex){
-//                ex.printStackTrace();
-//            }
         }
         
         if (message.equalsIgnoreCase(Global.MainNick+", please power down")||message.equalsIgnoreCase("!powerdown")||message.equalsIgnoreCase(Global.MainNick+", shutdown")) {
@@ -68,10 +60,10 @@ public class BotControl extends ListenerAdapter{
                 System.exit(0);
             }
             else
-                event.getChannel().send().kick(event.getUser(), "PART 5! BOOBY TRAP THE STALEMATE BUTTON!");
+                event.getChannel().send().kick(event.getUser(), "PART 5! BOOBY TRAP THE STALEMATE BUTTON!"); // kick people for trying to kill the bot
         }
         
-        
+        // command the bot to join channels
         if ((message.toLowerCase().startsWith("!join ")||message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", join ")||message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", please join "))&&event.getUser().getNick().equals(Global.BotOwner)){
             String[] chan = message.split("#");
             if (message.toLowerCase().contains("#")){
@@ -82,7 +74,7 @@ public class BotControl extends ListenerAdapter{
                 event.getBot().sendIRC().message(event.getChannel().getName(),chan[chan.length-1] + " is not a channel");
         }
         
-        
+        // command the bot to part a different channel from where you are
         if ((message.toLowerCase().startsWith("!part")||message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", leave")||message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", please leave"))){
             if (message.toLowerCase().contains("#")&&event.getUser().getNick().equals(Global.BotOwner)) {
                 String[] chan = message.split("#");
@@ -94,7 +86,7 @@ public class BotControl extends ListenerAdapter{
                     c.send().part();
                     event.respond("Parted from " + chan[1] + ".");
                 }
-            }
+            } // command the bot to part the current channel that the command was sent from
             else if ((event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equals(Global.BotOwner))&&(message.endsWith("leave")||message.equalsIgnoreCase("!part")))
                 event.getChannel().send().part("Goodbye");
         }

@@ -38,7 +38,7 @@ public class Bomb extends ListenerAdapter {
         if (colorls == null) {
             colorls = getColorList();
         }
-        if (message.equalsIgnoreCase("!bomb")){
+        if (message.equalsIgnoreCase("!bomb")&&!event.getChannel().getName().equals("#dtella")){
             String player = event.getUser().getNick();
             List<String> colours = new ArrayList<>();
             String colorlist = "";

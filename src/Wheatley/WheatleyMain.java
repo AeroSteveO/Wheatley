@@ -1,8 +1,8 @@
-/**
- *
- *
- *
- */
+ /**
+  *
+  *
+  *
+  */
 package Wheatley;
 
 import org.pircbotx.Configuration;
@@ -107,12 +107,12 @@ public class WheatleyMain extends ListenerAdapter {
             
             
             
-          //  ArrayList<Listener> BotListeners = new ArrayList();
-          //  BotListeners.add(new Blarghlebot());
-          //  Class listenerclass = Class.forName("org.pircbotx.impl.Blarghlebot");
-          //  BotListeners.add(new listenerclass());
+            //  ArrayList<Listener> BotListeners = new ArrayList();
+            //  BotListeners.add(new Blarghlebot());
+            //  Class listenerclass = Class.forName("org.pircbotx.impl.Blarghlebot");
+            //  BotListeners.add(new listenerclass());
             
-
+            
             //   Configuration configuration;
             Configuration.Builder configuration = new Configuration.Builder()
                     .setName(Global.MainNick) //Set the nick of the bot. CHANGE IN YOUR CODE
@@ -121,12 +121,13 @@ public class WheatleyMain extends ListenerAdapter {
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use
                     .setCapEnabled(true) //Enable CAP features
                     .setAutoReconnect(true)
+                    .setMaxLineLength(425)
 //                    .addCapHandler(new TLSCapHandler(new UtilSSLSocketFactory().trustAllCertificates(), true))
                     .addListener(new WheatleyMain())    //This main class's listener
                     .addListener(new Blarghlebot()) //Trollbot Listener
                     .addListener(new omgword())     //omgword game listener
-                    .addListener(new Why())
-                    .addListener(new WheatleyChatStuff())
+                    .addListener(new Why())         // gives a random reason as to 'why?'
+                    .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
                     .addListener(new AutodlText())
                     .addListener(new Ignite())
@@ -140,26 +141,31 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
                     .addListener(new BadWords())
+                    .addListener(new GameBackbone())
+                    .addListener(new TextModification())
+                    .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
+                    .addListener(new UpdateFiles())          // updates text files via irc
+                    .addListener(new Bane())                 // Banes qq speech
 //                    .addListener(new SimplePing())
                     .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent());
-          //  for (int i=0;i<baseElement.getElementsByTagName("listener").getLength();i++)
-           //     configuration.addListener("new "baseElement.getElementsByTagName("listener").item(i).getTextContent()+"()")
-           //             .buildConfiguration();
-                        
+            //  for (int i=0;i<baseElement.getElementsByTagName("listener").getLength();i++)
+            //     configuration.addListener("new "baseElement.getElementsByTagName("listener").item(i).getTextContent()+"()")
+            //             .buildConfiguration();
             
             
             
-                        for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++)
-                        {
-                            configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
-                                    Global.Channels.add(eElement.getElementsByTagName("channel").item(i).getTextContent());
-                                    //.buildConfiguration();
-                        }
-                        Configuration config = configuration.buildConfiguration();
-                        Global.bot = new PircBotX(config);
-                        //bot.connect throws various exceptions for failures
-                        PircBotX bot = new PircBotX(config);
-                        bot.startBot();
+            
+            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++)
+            {
+                configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
+                Global.Channels.add(eElement.getElementsByTagName("channel").item(i).getTextContent());
+                //.buildConfiguration();
+            }
+            Configuration config = configuration.buildConfiguration();
+            Global.bot = new PircBotX(config);
+            //bot.connect throws various exceptions for failures
+            PircBotX bot = new PircBotX(config);
+            bot.startBot();
         } //In your code you should catch and handle each exception seperately,
         //but here we just lump them all together for simplicity
         catch (Exception ex) {

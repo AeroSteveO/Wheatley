@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<Company>
+    <Name>My Company</Name>
+    <Executive type="CEO">
+        <LastName>Smith</LastName>
+        <FirstName>Jim</FirstName>
+        <street>123 Main Street</street>
+        <city>Mytown</city>
+        <state>NY</state>
+        <zip>11234</zip>
+    </Executive>
+</Company>
+
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Employees>
+    <Employee id="1">
+        <name>Pankaj</name>
+        <age>29</age>
+        <role>Java Developer</role>
+        <gender>Male</gender>
+    </Employee>
+    <Employee id="2">
+        <name>Lisa</name>
+        <age>35</age>
+        <role>CSS Developer</role>
+        <gender>Female</gender>
+    </Employee>
+</Employees>
