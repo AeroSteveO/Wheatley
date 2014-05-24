@@ -23,7 +23,7 @@ public class MatrapterChat extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (message.equalsIgnoreCase("!penis"))
             event.getBot().sendIRC().message(event.getChannel().getName(), "8==D");
-        if (message.equalsIgnoreCase("!boobs")||message.equalsIgnoreCase("!botd")){
+        if (message.equalsIgnoreCase("!boobs")||message.equalsIgnoreCase("!botd")||message.equalsIgnoreCase("!melons")){
             List<String> a = new ArrayList<>();
             a.add("( . ) ( . )");
             a.add("(oYo)");
