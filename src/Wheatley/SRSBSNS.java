@@ -17,7 +17,9 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 /**
  *
- * @author Stephen
+ * @author Steve-O
+ *      Original Bot: SRSBSNS by: i dunno who
+ * 
  */
 public class SRSBSNS extends ListenerAdapter {
     List<String> UrlHistory = new ArrayList<>();
@@ -32,7 +34,7 @@ public class SRSBSNS extends ListenerAdapter {
             URL url = new URL(item);
             // If possible then replace with anchor...
             UrlHistory.add(item);
-            event.getBot().sendIRC().action(event.getChannel().getName(),UrlHistory.get(UrlHistory.size()-1));
+          //  event.getBot().sendIRC().action(event.getChannel().getName(),UrlHistory.get(UrlHistory.size()-1));
             if (UrlHistory.size()>2)
                 UrlHistory.remove(0);
         } catch (MalformedURLException e) {

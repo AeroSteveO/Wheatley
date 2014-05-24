@@ -34,7 +34,7 @@ public class omgword extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws FileNotFoundException{
         {
             String message = Colors.removeFormattingAndColors(event.getMessage());
-            // keep the spammy spammy out of main
+            // keep the spammy spammy out of main, could move to XML/Global.java at some point
             if (message.equalsIgnoreCase("!omgword")&&!event.getChannel().getName().equals("#dtella")) {
                 // get the list of words only if theres nothing in the list alread
                 if (wordls == null) {
@@ -45,7 +45,6 @@ public class omgword extends ListenerAdapter {
                     activechan.add(event.getChannel().getName());
                 }
                 else{ //if its not empty, check if the channel calling the function is already active
-                    // for (int i=1; i<=Integer.parseInt(rolls[0])-1;i++){
                     for (int i=0;i<activechan.size();i++){
                         if (activechan.get(i).equals(event.getChannel().getName())){
                             isactive = true;
@@ -64,7 +63,7 @@ public class omgword extends ListenerAdapter {
                     DateTime dt = new DateTime();
                     DateTime end = dt.plusSeconds(time);
                     WaitForQueue queue = new WaitForQueue(event.getBot());
-                    while (true){
+                    while (true){  //magical BS timer built into a waitforqueue, only updates upon message event
                         try {
                             MessageEvent CurrentEvent = queue.waitFor(MessageEvent.class);
                             dt = new DateTime();
