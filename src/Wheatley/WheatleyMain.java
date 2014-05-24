@@ -145,6 +145,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new TextModification())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
+                    .addListener(new Bane())                 // Banes qq speech
 //                    .addListener(new SimplePing())
                     .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent());
             //  for (int i=0;i<baseElement.getElementsByTagName("listener").getLength();i++)
