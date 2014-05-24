@@ -13,7 +13,7 @@ This README would normally document whatever steps are necessary to get your app
 * Summary of set up
 * Configuration
 * Dependencies
-1.  comoons-codec-1.9.jar
+>1.  comoons-codec-1.9.jar
 2.  commons-email-1.3.2.jar
 3.  commons-lang3-3.2.1.jar
 4.  guava-16.0.jar
