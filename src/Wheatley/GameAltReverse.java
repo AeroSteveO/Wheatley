@@ -1,38 +1,40 @@
 /*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 package Wheatley;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import org.joda.time.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.joda.time.DateTime;
 import org.pircbotx.Colors;
-import org.pircbotx.hooks.*;
-import org.pircbotx.hooks.events.*;
+import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.WaitForQueue;
+import org.pircbotx.hooks.events.MessageEvent;
 
 /**
  *
  * @author Steve-O
- * Based on the C# IRC bot, CasinoBot
- * which is really unstable and breaks all the time
- *
+ *  Original Bot: WHEATLEY
+ *      a variant of the reverse function from CasinoBot, idea from Steve-O
  */
-public class GameOmgword extends ListenerAdapter {
-    // Initialize needed variables
+public class GameAltReverse extends ListenerAdapter {
     static ArrayList<String> wordls = null;
     static ArrayList<String> activechan = new ArrayList<String>();
     boolean isactive = false;
-    int time = 30;
+    int time = 20;
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException{
         String message = Colors.removeFormattingAndColors(event.getMessage());
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
-        if (message.equalsIgnoreCase("!omgword")&&!event.getChannel().getName().equals("#dtella")) {
+        if ((message.equalsIgnoreCase("!altreverse")||message.equalsIgnoreCase("esrever!"))&&!event.getChannel().getName().equals("#dtella")) {
             // get the list of words only if theres nothing in the list alread
             if (wordls == null) {
                 wordls = getWordList();
@@ -54,8 +56,8 @@ public class GameOmgword extends ListenerAdapter {
             if (!isactive){
                 //get and shuffle the word
                 String chosenword = wordls.get((int) (Math.random()*wordls.size()-1));
-                String scrambled = shuffle(chosenword);
-                event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
+                String reversed = reverse(chosenword);
+                event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +chosenword.toUpperCase() + Colors.NORMAL);
                 //setup amount of given time
                 DateTime dt = new DateTime();
                 DateTime end = dt.plusSeconds(time);
@@ -65,23 +67,23 @@ public class GameOmgword extends ListenerAdapter {
                         MessageEvent CurrentEvent = queue.waitFor(MessageEvent.class);
                         dt = new DateTime();
                         if (dt.isAfter(end)){
-                            event.getBot().sendIRC().message(CurrentEvent.getChannel().getName(),"You did not guess the solution in time, the correct answer would have been "+chosenword.toUpperCase());
+                            event.getBot().sendIRC().message(CurrentEvent.getChannel().getName(),"You did not guess the solution in time, the correct answer would have been "+reversed.toUpperCase());
                             activechan.remove(CurrentEvent.getChannel().getName());
                             queue.close();
                         }
-                        else if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
-                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + chosenword.toUpperCase());
+                        else if (CurrentEvent.getMessage().equalsIgnoreCase(reversed)&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
+                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + reversed.toUpperCase());
                             activechan.remove(CurrentEvent.getChannel().getName());
                             queue.close();
                         }
                         else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
-                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + chosenword.toUpperCase());
+                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + reversed.toUpperCase());
                             activechan.remove(CurrentEvent.getChannel().getName());
                             queue.close();
                         }
                     } catch (InterruptedException ex) {
                         //      activechan.remove(CurrentEvent.getChannel().getName());
-                        ex.printStackTrace();
+                        Logger.getLogger(GameOmgword.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -89,22 +91,6 @@ public class GameOmgword extends ListenerAdapter {
                 isactive=false;
         }
     }
-    // Stupid freaking warning is wrong, breaks code when implemented
-    @SuppressWarnings("SizeReplaceableByIsEmpty")
-    // Shuffle up the chosen word string
-    public static String shuffle(String input){
-        List<Character> characters = new ArrayList<Character>();
-        for(char c:input.toCharArray()){
-            characters.add(c);
-        }
-        StringBuilder output = new StringBuilder(input.length());
-        while(characters.size()!=0){
-            int randPicker = (int)(Math.random()*characters.size());
-            output.append(characters.remove(randPicker));
-        }
-        return(output.toString());
-    }
-    // Grabs the wordlist and loads into variable
     public ArrayList<String> getWordList() throws FileNotFoundException{
         try{
             Scanner wordfile = new Scanner(new File("wordlist.txt"));
@@ -115,8 +101,20 @@ public class GameOmgword extends ListenerAdapter {
             wordfile.close();
             return (wordls);
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(GameOmgword.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+    }
+       public static String reverse(String input){
+        List<Character> characters = new ArrayList<Character>();
+        for(char c:input.toCharArray()){
+            characters.add(c);
+        }
+        StringBuilder output = new StringBuilder(input.length());
+        for(int i=characters.size();i>0;i--){
+            //int randPicker = (int)(Math.random()*characters.size());
+            output.append(characters.get(i-1));
+        }
+        return(output.toString());
     }
 }

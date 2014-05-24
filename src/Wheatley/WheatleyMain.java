@@ -129,6 +129,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameReverse())        //reverse the word game
                     .addListener(new GameHangman())     //omgword game listener
                     .addListener(new GameBomb()) 
+                    .addListener(new GameAltReverse())
                     .addListener(new Why())         // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
@@ -162,7 +163,7 @@ public class WheatleyMain extends ListenerAdapter {
                 Global.Channels.add(eElement.getElementsByTagName("channel").item(i).getTextContent());
             }
             Configuration config = configuration.buildConfiguration();
-            Global.bot = new PircBotX(config);
+//            Global.bot = new PircBotX(config);
             //bot.connect throws various exceptions for failures
             PircBotX bot = new PircBotX(config);
             bot.startBot();

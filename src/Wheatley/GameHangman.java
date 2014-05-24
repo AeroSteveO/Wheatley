@@ -62,7 +62,7 @@ public class GameHangman extends ListenerAdapter {
                     char[] characters = chosenword.toCharArray();
                     // Make a variable of all blanks to use
                     String guess = MakeBlank(chosenword);
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "You have 1 minute to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);
                     //        event.getBot().sendIRC().message(event.getChannel().getName(), "You have 1 minute to find the following word: " + Colors.BOLD + chosenword + Colors.NORMAL);
                     DateTime dt = new DateTime();
                     DateTime end = dt.plusSeconds(time);
