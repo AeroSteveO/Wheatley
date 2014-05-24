@@ -11,8 +11,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.joda.time.DateTime;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -25,7 +23,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * Based on the C# IRC bot, CasinoBot
  * which is generally unstable and requires windows to run
  */
-public class Bomb extends ListenerAdapter {
+public class GameBomb extends ListenerAdapter {
     // Woohooo basic variables for junk
     int time = 10;
     
@@ -89,7 +87,7 @@ public class Bomb extends ListenerAdapter {
             wordfile.close();
             return (colorls);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(omgword.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             return null;
         }
     }

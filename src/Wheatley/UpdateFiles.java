@@ -32,8 +32,6 @@ public class UpdateFiles extends ListenerAdapter{
                 
                 
                 try{
-                    String data = " This content will append to the end of the file";
-                    
                     File file =new File(filename+".txt");
                     
                     //if file doesnt exists, then create it

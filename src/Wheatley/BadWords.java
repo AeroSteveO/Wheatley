@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -57,7 +55,7 @@ public class BadWords extends ListenerAdapter{
             wordfile.close();
             return (wordls);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(omgword.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             return null;
         }
     }

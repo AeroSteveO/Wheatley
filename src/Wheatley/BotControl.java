@@ -25,9 +25,9 @@ public class BotControl extends ListenerAdapter{
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
         if (message.equalsIgnoreCase("!flush")&&event.getUser().getNick().equals(Global.BotOwner)){
-            omgword.activechan.clear();
-            omgword.wordls.clear();
-            Hangman.activechan.clear();
+            GameOmgword.activechan.clear();
+            GameOmgword.wordls.clear();
+            GameHangman.activechan.clear();
             Blarghlebot.poop = "null";
             FactSphereFacts.quotels = null;
             BadWords.badwords = null;
