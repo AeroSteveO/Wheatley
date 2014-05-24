@@ -23,7 +23,7 @@ public class Laser extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.equalsIgnoreCase("!laser")){
+        if (message.toLowerCase().startsWith("!laser")){
             String it;
             String a="";
             String[] parts = null;
