@@ -33,6 +33,7 @@ public class AutodlText extends ListenerAdapter {
         String message = event.getMessage();        
         if (event.getUser().getNick().equals("SHODAN")){
             if(message.startsWith("Saved")){
+                // LOAD XML
                 File fXmlFile = new File("Settings.xml");
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -41,6 +42,7 @@ public class AutodlText extends ListenerAdapter {
                 int mailsetting = 0;  //NOTE: can setup multiple email profiles for different functions here
                 Node nNode = nList.item(mailsetting);
                 Element eElement = (Element) nNode;
+                //SEND EMAIL STUFF
                 Email email = new SimpleEmail();
                 email.setHostName(eElement.getElementsByTagName("hostname").item(0).getTextContent());
                 email.setSmtpPort(465);

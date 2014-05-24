@@ -160,15 +160,13 @@ public class WheatleyMain extends ListenerAdapter {
             {
                 configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
                 Global.Channels.add(eElement.getElementsByTagName("channel").item(i).getTextContent());
-                //.buildConfiguration();
             }
             Configuration config = configuration.buildConfiguration();
             Global.bot = new PircBotX(config);
             //bot.connect throws various exceptions for failures
             PircBotX bot = new PircBotX(config);
             bot.startBot();
-        } //In your code you should catch and handle each exception seperately,
-        //but here we just lump them all together for simplicity
+        }
         catch (Exception ex) {
             ex.printStackTrace();
         }
