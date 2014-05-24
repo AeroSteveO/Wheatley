@@ -16,13 +16,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  * original bot = Matrapter
- * matlab based IRC bot written by Steve-O
+ * MATLAB based IRC bot written by Steve-O
+ * 
  */
 public class Laser extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.startsWith("!laser")){
+        if (message.equalsIgnoreCase("!laser")){
             String it;
             String a="";
             String[] parts = null;

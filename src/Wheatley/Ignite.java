@@ -24,7 +24,7 @@ public class Ignite extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.startsWith("!ignite")){
+        if (message.equalsIgnoreCase("!ignite")){
             String it;
             String[] check = message.split(" ");
             if (check.length!=2){
