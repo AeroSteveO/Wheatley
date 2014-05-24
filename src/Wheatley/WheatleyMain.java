@@ -127,7 +127,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new Blarghlebot()) //Trollbot Listener
                     .addListener(new omgword())     //omgword game listener
                     .addListener(new Why())         // gives a random reason as to 'why?'
-                    .addListener(new WheatleyChatStuff())
+                    .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
                     .addListener(new AutodlText())
                     .addListener(new Ignite())
