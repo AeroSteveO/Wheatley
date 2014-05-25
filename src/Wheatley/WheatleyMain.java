@@ -29,6 +29,7 @@ import java.util.ArrayList;
  *      Bellagio    -- by http://casinobot.codeplex.com/
  *      theTardis   -- by theDoctor
  *      RoyalBot    -- by http://www.msclemens.com/royaldev/royalbot
+ *      SrsBsns     -- by 
  *
  * @author Steve-O
  * often by siphoning code from other bots by tangd, and Vanilla, and theDoctor

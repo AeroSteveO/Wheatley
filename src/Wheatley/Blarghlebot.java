@@ -18,6 +18,7 @@ import org.pircbotx.hooks.events.*;
  * @author Steve-O
  * original bot functions by Blarghedy
  * Who's lazy and doesn't run his bot much
+ * 
  */
 public class Blarghlebot extends ListenerAdapter {
     int shoot = 0;

@@ -18,6 +18,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * original bot functions by Blarghedy
  * Who's lazy and doesn't run his bot much
  * Original Bot output can be seen below
+ * 
  */
 public class BlarghleRandom extends ListenerAdapter {
     @Override

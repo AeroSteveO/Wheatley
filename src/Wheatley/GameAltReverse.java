@@ -57,7 +57,7 @@ public class GameAltReverse extends ListenerAdapter {
                 //get and shuffle the word
                 String chosenword = wordls.get((int) (Math.random()*wordls.size()-1));
                 String reversed = reverse(chosenword);
-                event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +chosenword.toUpperCase() + Colors.NORMAL);
+                event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +chosenword.toUpperCase() + Colors.NORMAL);
                 //setup amount of given time
                 DateTime dt = new DateTime();
                 DateTime end = dt.plusSeconds(time);
