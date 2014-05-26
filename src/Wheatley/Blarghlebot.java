@@ -76,6 +76,9 @@ public class Blarghlebot extends ListenerAdapter {
         if (message.equalsIgnoreCase("!kickme"))
             event.getChannel().send().kick(event.getUser(), "you += dead");
         
+        if (message.equalsIgnoreCase("!dropthebass"))
+            event.getBot().sendIRC().message(event.getChannel().getName(),"WUB WUB WUBWUBWUBWUB WUB WUB");
+        
         if (message.equalsIgnoreCase("!vuvuzela"))
             event.getBot().sendIRC().message(event.getChannel().getName(), "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         
