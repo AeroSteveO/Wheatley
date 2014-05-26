@@ -27,8 +27,8 @@ public class MarkovInterface extends ListenerAdapter{
     int newLines = 0;
     String previousMessage = new String();
     int newLinesBeforeUpdate = 10;
-    //File words = 
-    File markovFile = new File("MarkovWords.txt");
+    String markovFileName = "ImportMarkov";
+    File markovFile = new File(markovFileName);
     
     JBorg Borg = new JBorg(1,10);
     boolean loaded =Borg.loadWords(markovFile);
@@ -44,16 +44,18 @@ public class MarkovInterface extends ListenerAdapter{
            newLines++;
            if (newLines>=newLinesBeforeUpdate){
                newLines = 0;
-               File oddFile = new File("MarkovWords");
+               File oddFile = new File(markovFileName);
                Borg.saveWords(oddFile);
            }
+           previousMessage=message;
         }
         if (message.equalsIgnoreCase("!line")){
             //String reply = new JBorg().generateReply(previousMessage);
             String reply = Borg.generateReply(previousMessage);
             event.getBot().sendIRC().message(event.getChannel().getName(), reply);
+            previousMessage = reply;
         }
-        previousMessage=message;
+        //previousMessage=message;
     }
     
     public ArrayList<String> getBotList() throws FileNotFoundException{

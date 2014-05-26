@@ -12,6 +12,10 @@
     <mode>learn</mode>
     
     <ignorebots id="dtella">
+        <bot>NickServ</bot>
+        <bot>ChanServ</bot>
+        <bot>***</bot>
+        
         <bot>BlarghleBot</bot>
         <bot>theTardis</bot>
         <bot>Pankeiko</bot>
@@ -37,8 +41,50 @@
         <bot>Matrapter</bot>
         <bot>meatpod</bot>
         <bot>metapod</bot>
+        <bot>Gollum</bot>
+        <bot>butteredtoast</bot>
+        <bot>harmony</bot>
+        
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        <bot>***REMOVED***</bot>
+        
     </ignorebots>
-   
+    <importsettings>
+        <file>ZNC DTELLA-#alternateuniverse</file>
+        <file>ZNC DTELLA-#apples</file>
+        <file>ZNC DTELLA-#dtella</file>
+        <file>ZNC DTELLA-#dtella2.0</file>
+        <file>ZNC DTELLA-#dtella-help</file>
+        <file>ZNC DTELLA-#homework</file>
+        <file>ZNC DTELLA-#releaseteam</file>
+        <file>znc dhirc backup-#alternateuniverse</file>
+        <file>znc dhirc backup-#dtella</file>
+        <file>znc dhirc backup-#dtella2.0</file>
+        <file>znc dhirc backup-#releaseteam</file>
+        <file>New Network-#dtella</file>
+        <file>dtella-#releaseteam</file>
+        <file>dtella-#dtella</file>
+        <file>dtella-#alternateuniverse</file>
+        <file>NETWORK-#dtella</file>
+        
+        
+        <file>NETWORK-#asylum</file>
+        <file>NETWORK-#***REMOVED***</file>
+        <file>ZNC PTM-#asylum</file>
+        <file>ZNC PTM-#***REMOVED***</file>
+        <file>ZNC TL-#***REMOVED***leech</file>
+        <file>ZNC GFT-#gftracker</file>
+    </importsettings>
 
 
 </settings>
