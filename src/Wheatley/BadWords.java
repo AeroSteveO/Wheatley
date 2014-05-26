@@ -32,7 +32,7 @@ public class BadWords extends ListenerAdapter{
                 badwords.add(message.split(" ")[2]);
         
         for (int i=0;i<badwords.size();i++){
-            if (message.contains(badwords.get(i))&&!event.getChannel().isHalfOp(event.getUser())&&!event.getChannel().isOwner(event.getUser())&&!event.getChannel().isOp(event.getUser())&&!event.getChannel().isSuperOp(event.getUser()))
+            if (message.contains(" "+badwords.get(i)+" ")&&!event.getChannel().isHalfOp(event.getUser())&&!event.getChannel().isOwner(event.getUser())&&!event.getChannel().isOp(event.getUser())&&!event.getChannel().isSuperOp(event.getUser()))
                 event.getChannel().send().kick(event.getUser(), "Don't say "+badwords.get(i)+".  That's just turrable!");
         }
         if (message.equalsIgnoreCase("!badwords")){
