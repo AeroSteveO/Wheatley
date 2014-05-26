@@ -7,8 +7,6 @@ package Wheatley;
 
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
-import org.pircbotx.UtilSSLSocketFactory;
-import org.pircbotx.cap.TLSCapHandler;
 import org.pircbotx.dcc.ReceiveChat;
 import org.pircbotx.Configuration.*;
 import org.pircbotx.hooks.*;
@@ -17,7 +15,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Element;
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  *

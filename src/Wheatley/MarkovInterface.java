@@ -9,7 +9,6 @@ package Wheatley;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -20,14 +19,14 @@ import org.pircbotx.Colors;
 
 /**
  *
- * @author Stephen
+ * @author Steve-O
  */
 public class MarkovInterface extends ListenerAdapter{
     static ArrayList<String> botlist = null;
     int newLines = 0;
     String previousMessage = new String();
     int newLinesBeforeUpdate = 10;
-    String markovFileName = "ImportMarkov";
+    String markovFileName = "ImportedMarkov";
     File markovFile = new File(markovFileName);
     
     JBorg Borg = new JBorg(1,10);
