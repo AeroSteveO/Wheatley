@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : ServerSettings.xml
+    Created on : February 15, 2014, 3:33 PM
+    Author     : Steve-O
+    Description:  <useserver>1</useserver>
+        Purpose of the document follows.
+-->
+
+<settings>
+    <mode>learn</mode>
+    
+    <ignorebots id="dtella">
+        <bot>BlarghleBot</bot>
+        <bot>theTardis</bot>
+        <bot>Pankeiko</bot>
+        <bot>Poopsock</bot>
+        <bot>modman</bot>
+        <bot>srsbsns</bot>
+        <bot>Hermes</bot>
+        <bot>Galois</bot>
+        <bot>Jarvis</bot>
+        <bot>pepperoni</bot>
+        <bot>peetsa</bot>
+        <bot>samwisegamgee</bot>
+        <bot>Sonny</bot>
+        <bot>LilWayne</bot>
+        <bot>magikarp</bot>
+        <bot>stats</bot>
+        <bot>***REMOVED***</bot>
+        <bot>Shepard</bot>
+        <bot>Jenny</bot>
+        <bot>SHODAN</bot>
+        <bot>Wheatley</bot>
+        <bot>Bellagio</bot>
+        <bot>Matrapter</bot>
+        <bot>meatpod</bot>
+        <bot>metapod</bot>
+    </ignorebots>
+   
+
+
+</settings>
