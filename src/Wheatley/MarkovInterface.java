@@ -24,9 +24,14 @@ import org.pircbotx.Colors;
  */
 public class MarkovInterface extends ListenerAdapter{
     static ArrayList<String> botlist = null;
+    int newLines = 0;
+    String previousMessage = new String();
+    int newLinesBeforeUpdate = 10;
     //File words = 
     File markovFile = new File("MarkovWords.txt");
-    boolean loaded =new JBorg().loadWords(markovFile);
+    
+    JBorg Borg = new JBorg(1,10);
+    boolean loaded =Borg.loadWords(markovFile);
     
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException {
@@ -34,11 +39,21 @@ public class MarkovInterface extends ListenerAdapter{
 
        // boolean bot = isBot(event.getUser().getNick().toString());
         if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())){
-           new JBorg().learn(message);
+           Borg.learn(message);
            //new JBorg().loadWords(null)
+           newLines++;
+           if (newLines>=newLinesBeforeUpdate){
+               newLines = 0;
+               File oddFile = new File("MarkovWords");
+               Borg.saveWords(oddFile);
+           }
         }
-        
-        
+        if (message.equalsIgnoreCase("!line")){
+            //String reply = new JBorg().generateReply(previousMessage);
+            String reply = Borg.generateReply(previousMessage);
+            event.getBot().sendIRC().message(event.getChannel().getName(), reply);
+        }
+        previousMessage=message;
     }
     
     public ArrayList<String> getBotList() throws FileNotFoundException{
@@ -47,7 +62,7 @@ public class MarkovInterface extends ListenerAdapter{
             File fXmlFile = new File("SettingMarkov.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("ignorebots");
+            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("ignorebots").item(0);
             for (int i=0;i<eElement.getElementsByTagName("bot").getLength();i++)
             {
                 botlist.add(eElement.getElementsByTagName("bot").item(i).getTextContent());

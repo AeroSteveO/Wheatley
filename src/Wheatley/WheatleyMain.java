@@ -144,6 +144,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
                     .addListener(new BadWords())
+                    .addListener(new MarkovInterface())
 //                    .addListener(new GameBackbone())
                     .addListener(new TextModification())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
