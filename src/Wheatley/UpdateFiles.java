@@ -16,7 +16,8 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 /**
  *
- * @author Stephen
+ * @author Steve-O
+ * Used to update .txt files
  */
 public class UpdateFiles extends ListenerAdapter{
     

@@ -20,6 +20,7 @@ import org.pircbotx.Colors;
 /**
  *
  * @author Steve-O
+ * JBorg markov chain integration, based off seeborg which is based on pyborg
  */
 public class MarkovInterface extends ListenerAdapter{
     static ArrayList<String> botlist = null;
@@ -28,33 +29,58 @@ public class MarkovInterface extends ListenerAdapter{
     int newLinesBeforeUpdate = 10;
     String markovFileName = "ImportedMarkov";
     File markovFile = new File(markovFileName);
-    
+    boolean speakUp = true;
     JBorg Borg = new JBorg(1,10);
     boolean loaded =Borg.loadWords(markovFile);
+    int chance = 100; //chance of wheatley to speak
     
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-
-       // boolean bot = isBot(event.getUser().getNick().toString());
+        
+        //Toggle off Markov Chain Talking
+        if (message.equalsIgnoreCase(Global.MainNick + ", shutup")||message.equalsIgnoreCase("!mute")||message.equalsIgnoreCase(Global.MainNick+" shutup"))
+            speakUp = false;
+        
+        //Toggle on Markov Chain Talking
+        if (message.equalsIgnoreCase(Global.MainNick + ", speak up")||message.equalsIgnoreCase("!speak"))
+            speakUp = true;
+            
+        
+        
         if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())){
-           Borg.learn(message);
-           //new JBorg().loadWords(null)
-           newLines++;
-           if (newLines>=newLinesBeforeUpdate){
-               newLines = 0;
-               File oddFile = new File(markovFileName);
-               Borg.saveWords(oddFile);
-           }
-           previousMessage=message;
+            Borg.learn(message);
+            newLines++;
+            
+            //Automatically Save lines every 10 new messages added
+            if (newLines>=newLinesBeforeUpdate){
+                newLines = 0;
+                File oddFile = new File(markovFileName);
+                Borg.saveWords(oddFile);
+            }
+            
+            //Automatically speak with a 1/chance probability
+            if (chance==((int) (Math.random()*chance))&&speakUp==true){
+                String reply = Borg.generateReply(message);
+                event.getBot().sendIRC().message(event.getChannel().getName(), reply);
+            }
+            previousMessage=message;
         }
+        
+        //Command Wheatley to save his lines
+        if (message.equalsIgnoreCase("!save lines")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+            newLines = 0;
+            File oddFile = new File(markovFileName);
+            Borg.saveWords(oddFile);
+        }
+        
+        //Command Wheatley to speak a line
         if (message.equalsIgnoreCase("!line")){
             //String reply = new JBorg().generateReply(previousMessage);
             String reply = Borg.generateReply(previousMessage);
             event.getBot().sendIRC().message(event.getChannel().getName(), reply);
             previousMessage = reply;
         }
-        //previousMessage=message;
     }
     
     public ArrayList<String> getBotList() throws FileNotFoundException{
