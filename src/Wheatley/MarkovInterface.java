@@ -9,6 +9,7 @@ package Wheatley;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -46,21 +47,23 @@ public class MarkovInterface extends ListenerAdapter{
         if (message.equalsIgnoreCase(Global.MainNick + ", speak up")||message.equalsIgnoreCase("!speak"))
             speakUp = true;
             
+        if (message.toLowerCase().startsWith("!set chance ")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+            String[] chanceSplit = message.split(" ");
+            chance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
+        }
         
-        
-        if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())){
+        if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&!Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())){
             Borg.learn(message);
             newLines++;
             
             //Automatically Save lines every 10 new messages added
             if (newLines>=newLinesBeforeUpdate){
                 newLines = 0;
-                File oddFile = new File(markovFileName);
-                Borg.saveWords(oddFile);
+                Borg.saveWords(markovFile);
             }
             
             //Automatically speak with a 1/chance probability
-            if (chance==((int) (Math.random()*chance))&&speakUp==true){
+            if (chance==((int) (Math.random()*chance)+1)&&speakUp){
                 String reply = Borg.generateReply(message);
                 event.getBot().sendIRC().message(event.getChannel().getName(), reply);
             }
@@ -70,8 +73,7 @@ public class MarkovInterface extends ListenerAdapter{
         //Command Wheatley to save his lines
         if (message.equalsIgnoreCase("!save lines")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
             newLines = 0;
-            File oddFile = new File(markovFileName);
-            Borg.saveWords(oddFile);
+            Borg.saveWords(markovFile);
         }
         
         //Command Wheatley to speak a line
