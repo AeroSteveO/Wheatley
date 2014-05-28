@@ -18,30 +18,32 @@ import org.pircbotx.hooks.events.MessageEvent;
  * original bot functions by Blarghedy
  * Who's lazy and doesn't run his bot much
  * Original Bot output can be seen below
- * 
+ *
  */
 public class BlarghleRandom extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.equalsIgnoreCase("!blarghlebot")){
-            String a = new String();
-          //  a=" " + adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();
-            switch((int) (Math.random()*3+1)) {
-                case 1:
-                    a= adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();
-                    break;
-                case 2:
-                    a= adverb() + " " + "rips off" + " " + event.getUser().getNick()+"'s " + bodypart()+ " and "+adverb()+ " beats them with it";
-                    break;
-                case 3:
-                    a= adverb() + " " + "shoves" + " " + event.getUser().getNick()+"'s " + bodypart() + " through their "+adjective()+ " " + bodypart();
-                    break;
+        if (!event.getBot().getUserChannelDao().userExists("BlarghleBot")) {
+            if (message.equalsIgnoreCase("!blarghlebot")){
+                String a = new String();
+                //  a=" " + adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();
+                switch((int) (Math.random()*3+1)) {
+                    case 1:
+                        a= adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();
+                        break;
+                    case 2:
+                        a= adverb() + " " + "rips off" + " " + event.getUser().getNick()+"'s " + bodypart()+ " and "+adverb()+ " beats them with it";
+                        break;
+                    case 3:
+                        a= adverb() + " " + "shoves" + " " + event.getUser().getNick()+"'s " + bodypart() + " through their "+adjective()+ " " + bodypart();
+                        break;
+                }
+                event.getBot().sendIRC().action(event.getChannel().getName(), a);
+                
             }
-            event.getBot().sendIRC().action(event.getChannel().getName(), a);
-            
+            //Not Added Yet
         }
-        //Not Added Yet
     }
     public static String adjective() {
         List<String> a = new ArrayList<>();
@@ -94,11 +96,11 @@ public class BlarghleRandom extends ListenerAdapter {
         a.add("noms on");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-        public static String verbset2() {
+    public static String verbset2() {
         List<String> a = new ArrayList<>();
         a.add("shoves");
         a.add("rips off");
-  //      a.add("beats");
+        //      a.add("beats");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
     
