@@ -26,7 +26,7 @@ public class SRSBSNS extends ListenerAdapter {
     
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (!event.getBot().getUserChannelDao().userExists("srsbsns")) {
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
             // separete input by spaces ( URLs don't have spaces )
             String [] parts = message.split("\\s");
             // Attempt to convert each item into an URL.
