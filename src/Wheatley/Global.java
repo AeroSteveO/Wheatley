@@ -8,7 +8,6 @@ package Wheatley;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.pircbotx.PircBotX;
 
 /**
  *
