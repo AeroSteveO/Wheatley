@@ -24,7 +24,7 @@ public class BlarghleRandom extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (!event.getBot().getUserChannelDao().userExists("BlarghleBot")) {
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
             if (message.equalsIgnoreCase("!blarghlebot")){
                 String a = new String();
                 //  a=" " + adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();

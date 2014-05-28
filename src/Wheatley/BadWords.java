@@ -26,7 +26,7 @@ public class BadWords extends ListenerAdapter{
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (!event.getBot().getUserChannelDao().userExists("BlarghleBot")) {
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
             if (badwords == null)
                 badwords = getBadWords();
             if (message.toLowerCase().startsWith("!update badwordlist"))

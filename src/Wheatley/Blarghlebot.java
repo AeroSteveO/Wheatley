@@ -26,7 +26,7 @@ public class Blarghlebot extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (!event.getBot().getUserChannelDao().userExists("BlarghleBot")) {
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
             
             String[] messageArray = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
             if ((message.equalsIgnoreCase("Blarghlebot, transform and rollout"))||(message.equalsIgnoreCase(Global.MainNick+", transform and rollout"))) {
