@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.SimpleEmail;
+import org.pircbotx.Colors;
 import static org.pircbotx.Colors.removeFormattingAndColors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -30,7 +31,7 @@ import org.w3c.dom.NodeList;
 public class AutodlText extends ListenerAdapter {
         @Override
         public void onMessage(final MessageEvent event) throws Exception {
-        String message = event.getMessage();        
+        String message = Colors.removeFormattingAndColors(event.getMessage());        
         if (event.getUser().getNick().equals("SHODAN")){
             if(message.startsWith("Saved")){
                 // LOAD XML
@@ -50,7 +51,7 @@ public class AutodlText extends ListenerAdapter {
                 email.setSSLOnConnect(true);
                 email.setFrom(eElement.getElementsByTagName("from").item(0).getTextContent());
                 email.setSubject(eElement.getElementsByTagName("subject").item(0).getTextContent());
-                email.setMsg(removeFormattingAndColors(message));
+                email.setMsg(message);
                 email.addTo(eElement.getElementsByTagName("to").item(0).getTextContent());
                 email.send();
                 event.getBot().sendIRC().message(event.getChannel().getName(),"AAAaaaAAHhhH I just connected to an email server, I feel dirty");
