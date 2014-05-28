@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import org.pircbotx.Colors;
@@ -15,17 +14,18 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 /**
  *
- * @author Stephen
+ * @author Steve-O
  */
 public class TextModification extends ListenerAdapter{
     List<String> ColorList = getColorList();
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.toLowerCase().startsWith("!colortext")){
-            event.getBot().sendIRC().message(event.getChannel().getName(), "this text is "+ Colors.BLUE + Colors.WHITE +",02blue on a white background");
-            event.getBot().sendIRC().message(event.getChannel().getName(), "this text is "+ Colors.WHITE + Colors.BLUE +",02white on a blue background");
+        if (!event.getBot().getUserChannelDao().userExists("BlarghleBot")&&!event.getChannel().getName().equals("#dtella")) {
+            if (message.toLowerCase().startsWith("!colortext")){
+                event.getBot().sendIRC().message(event.getChannel().getName(), "this text is "+ Colors.BLUE + Colors.WHITE +",02blue on a white background");
+                event.getBot().sendIRC().message(event.getChannel().getName(), "this text is "+ Colors.WHITE + Colors.BLUE +",02white on a blue background");
+            }
         }
-        
     }
     public static List<String> getColorList() {
         List<String> a = new ArrayList<>();
@@ -45,7 +45,7 @@ public class TextModification extends ListenerAdapter{
         a.add(Colors.OLIVE.toString());
         a.add(Colors.PURPLE.toString());
         a.add(Colors.TEAL.toString());
-
+        
         
         a.add(Colors.NORMAL.toString());
         a.add(Colors.BOLD.toString());

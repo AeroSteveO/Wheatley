@@ -121,14 +121,14 @@ public class WheatleyMain extends ListenerAdapter {
                     .setAutoReconnect(true)
                     .setMaxLineLength(425)
 //                    .addCapHandler(new TLSCapHandler(new UtilSSLSocketFactory().trustAllCertificates(), true))
-                    .addListener(new WheatleyMain())    //This main class's listener
-                    .addListener(new Blarghlebot()) //Trollbot Listener
+                    .addListener(new WheatleyMain())       //This main class's listener
+                    .addListener(new Blarghlebot())        //Trollbot Listener
                     .addListener(new GameOmgword())        //omgword game listener
                     .addListener(new GameReverse())        //reverse the word game
-                    .addListener(new GameHangman())     //omgword game listener
+                    .addListener(new GameHangman())        //omgword game listener
                     .addListener(new GameBomb()) 
                     .addListener(new GameAltReverse())
-                    .addListener(new Why())         // gives a random reason as to 'why?'
+                    .addListener(new Why())                // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
                     .addListener(new AutodlText())
