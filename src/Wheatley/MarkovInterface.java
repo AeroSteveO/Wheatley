@@ -22,6 +22,7 @@ import org.pircbotx.Colors;
  *
  * @author Steve-O
  * JBorg markov chain integration, based off seeborg which is based on pyborg
+ * 
  */
 public class MarkovInterface extends ListenerAdapter{
     static ArrayList<String> botlist = null;
@@ -32,7 +33,7 @@ public class MarkovInterface extends ListenerAdapter{
     File markovFile = new File(markovFileName);
     boolean speakUp = true;
     JBorg Borg = new JBorg(1,10);
-    boolean loaded =Borg.loadWords(markovFile);
+    boolean loaded = Borg.loadWords(markovFile);
     int chance = 100; //chance of wheatley to speak
     
     @Override
@@ -46,13 +47,13 @@ public class MarkovInterface extends ListenerAdapter{
         //Toggle on Markov Chain Talking
         if (message.equalsIgnoreCase(Global.MainNick + ", speak up")||message.equalsIgnoreCase("!speak"))
             speakUp = true;
-            
+        //||event.getChannel().isOwner(event.getUser())
         if (message.toLowerCase().startsWith("!set chance ")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
             String[] chanceSplit = message.split(" ");
             chance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
         }
         
-        if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&!Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())){
+        if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&!Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())&&!Pattern.matches("[a-zA-Z]{1}", message)){
             Borg.learn(message);
             newLines++;
             
@@ -78,7 +79,6 @@ public class MarkovInterface extends ListenerAdapter{
         
         //Command Wheatley to speak a line
         if (message.equalsIgnoreCase("!line")){
-            //String reply = new JBorg().generateReply(previousMessage);
             String reply = Borg.generateReply(previousMessage);
             event.getBot().sendIRC().message(event.getChannel().getName(), reply);
             previousMessage = reply;
