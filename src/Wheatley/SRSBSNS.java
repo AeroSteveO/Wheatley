@@ -58,7 +58,7 @@ public class SRSBSNS extends ListenerAdapter {
     public int getChanIdx(String toCheck){
         int idx = -1;
         for(int i = 0; i < Global.Channels.size(); i++) {
-            if (Global.Channels.get(i).name.equals(toCheck)) {
+            if (Global.Channels.get(i).name.equalsIgnoreCase(toCheck)) {
                 idx = i;
                 break;
             }
