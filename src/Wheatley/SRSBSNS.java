@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import static Wheatley.TextModification.getColorList;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,26 +32,37 @@ public class SRSBSNS extends ListenerAdapter {
             for( String item : parts ) try {
                 URL url = new URL(item);
                 // If possible then replace with anchor...
-                UrlHistory.add(item);
-                //  event.getBot().sendIRC().action(event.getChannel().getName(),UrlHistory.get(UrlHistory.size()-1));
-                if (UrlHistory.size()>2)
-                    UrlHistory.remove(0);
+                Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).secondLastUrl = Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).lastUrl;
+                Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).lastUrl = item;
+//                event.getBot().sendIRC().action(event.getChannel().getName(),item);
+//                if (UrlHistory.size()>2)
+//                    UrlHistory.remove(0);
             } catch (MalformedURLException e) {
                 // If there was an URL that was not it!...
                 //System.out.print( item + " " );
             }
             if (message.equalsIgnoreCase("!lasturl")){
-                if (UrlHistory.size()>0)
-                    event.getBot().sendIRC().action(event.getChannel().getName(),"Last URL: "+UrlHistory.get(UrlHistory.size()-1));
+                if (!Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).lastUrl.equals(""))
+                    event.getBot().sendIRC().action(event.getChannel().getName(),"Last URL: "+Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).lastUrl);
                 else
                     event.getBot().sendIRC().action(event.getChannel().getName(),"No previous URL found");
             }
             if (message.equalsIgnoreCase("!secondlasturl")){
-                if (UrlHistory.size()>1)
-                    event.getBot().sendIRC().action(event.getChannel().getName(),"Second to last URL: "+UrlHistory.get(UrlHistory.size()-2));
+                if (!Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).secondLastUrl.equals(""))
+                    event.getBot().sendIRC().action(event.getChannel().getName(),"Second to last URL: "+Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).secondLastUrl);
                 else
                     event.getBot().sendIRC().action(event.getChannel().getName(),"Currently less than 2 URLs found");
             }
         }
+    }
+    public int getChanIdx(String toCheck){
+        int idx = -1;
+        for(int i = 0; i < Global.Channels.size(); i++) {
+            if (Global.Channels.get(i).name.equals(toCheck)) {
+                idx = i;
+                break;
+            }
+        }
+        return (idx);
     }
 }

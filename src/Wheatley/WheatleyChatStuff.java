@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import java.util.regex.Pattern;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -39,7 +40,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
         if (message.equalsIgnoreCase("THIS STATEMENT IS FALSE"))
             event.getBot().sendIRC().message(event.getChannel().getName(),"Um. 'True'. I'll go 'true'.");
         
-        if (message.equalsIgnoreCase("Wheatley, you're a moron")||message.equalsIgnoreCase("Wheatley, you are a moron"))
+        if (Pattern.matches("Wheatley,?\\s+(youre|you're|you\\s+are)\\s+a?\\s*moron.*",message))
             event.getBot().sendIRC().message(event.getChannel().getName(),"I AM NOT A MORON");
         
         if (message.equalsIgnoreCase("Wheatley?"))

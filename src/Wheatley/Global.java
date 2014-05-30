@@ -8,12 +8,13 @@ package Wheatley;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
  * @author Steve-O
  * YES GASP I KNOW GLOBAL VARIABLES ARE REALLY NICE SOMETIMES
- * 
+ *
  */
 public class Global {
     public static String BotOwner = new String(); //Updated in the Main .java file from Setings.XML
@@ -21,5 +22,6 @@ public class Global {
     public static String NickPass = new String(); //Updated in the Main .java file from Setings.XML
     public static boolean reconnect = true;
 //    public static PircBotX bot;
-    public static List<String> Channels = new ArrayList<>();
+    //public static List<String> Channels = new ArrayList<>();
+    public static Vector<ChannelStore> Channels = new Vector<>();
 }

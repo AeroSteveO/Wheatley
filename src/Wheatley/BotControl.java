@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import java.util.List;
 import java.util.Random;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
@@ -45,7 +44,7 @@ public class BotControl extends ListenerAdapter{
             event.getBot().sendIRC().changeNick(Global.MainNick);
             event.getBot().sendIRC().message("NickServ", "identify " + Global.NickPass);
             for (int i=0;i<Global.Channels.size();i++){
-                event.getBot().sendIRC().joinChannel(Global.Channels.get(i));
+                event.getBot().sendIRC().joinChannel(Global.Channels.get(i).toString());
             }
         }
         
@@ -72,7 +71,7 @@ public class BotControl extends ListenerAdapter{
             if (message.toLowerCase().contains("#")){
                 event.getBot().sendIRC().message(event.getChannel().getName(),"Joining #" + chan[1]);
                 event.getBot().sendIRC().joinChannel("#" + chan[1]);
-                Global.Channels.add("#"+chan[1]);
+                Global.Channels.add(new ChannelStore("#"+chan[1]));
             }
             else
                 event.getBot().sendIRC().message(event.getChannel().getName(),chan[chan.length-1] + " is not a channel");
@@ -89,35 +88,26 @@ public class BotControl extends ListenerAdapter{
                 else {
                     c.send().part();
                     event.respond("Parted from " + chan[1] + ".");
-                    Global.Channels.remove(getArrayIdx(Global.Channels,"#"+chan[1]));
+                    Global.Channels.remove(getChanIdx("#"+chan[1]));
                 }
             } // command the bot to part the current channel that the command was sent from
             else if ((event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equals(Global.BotOwner))&&(message.endsWith("leave")||message.equalsIgnoreCase("!part"))){
                 
-//            event.respond(Global.Channels.get(getArrayIdx(Global.Channels,event.getChannel().getName().toString())-1));
                 event.getChannel().send().part("Goodbye");
-                Global.Channels.remove(getArrayIdx(Global.Channels,event.getChannel().getName().toString())-1);
+                Global.Channels.remove(getChanIdx(event.getChannel().getName().toString()));
             }
         }
     }
     
-    //gets the arraylist index of a string inside a list
-    public int getArrayIdx(List<String> array, String search) {
-        int idx = 0;
-        while (idx < array.size())
-        {
-            if(array.get(idx) == search)
-            {
-//                Remove item
-                array.remove(idx);
-//                ArrayList2.remove(idx);
-            }
-            else
-            {
-                ++idx;
+    public int getChanIdx(String toCheck){
+        int idx = -1;
+        for(int i = 0; i < Global.Channels.size(); i++) {
+            if (Global.Channels.get(i).name.equals(toCheck)) {
+                idx = i;
+                break;
             }
         }
-        return(idx);
+        return (idx);
     }
     
 }

@@ -159,7 +159,7 @@ public class WheatleyMain extends ListenerAdapter {
             for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++)
             {
                 configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
-                Global.Channels.add(eElement.getElementsByTagName("channel").item(i).getTextContent());
+                Global.Channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
             }
             Configuration config = configuration.buildConfiguration();
 //            Global.bot = new PircBotX(config);
