@@ -37,15 +37,17 @@ public class MatrapterChat extends ListenerAdapter {
             event.getBot().sendIRC().message(event.getChannel().getName(), "u so funny, me ruv u rong time");
         if (message.toLowerCase().startsWith("!matlab")){
             if (message.split(" ").length==1)
-                        event.getBot().sendIRC().message(event.getChannel().getName(), "MATRABBB");
+                event.getBot().sendIRC().message(event.getChannel().getName(), "MATRABBB");
             else
                 event.respond("This bot doesn't contain 100% of Matrapter's original capability yet");
         }
         
         //Meatpod Functions
-        if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod")||message.equalsIgnoreCase("meatpod?"))
-            event.getBot().sendIRC().message(event.getChannel().getName(), "http://meatspin.cc");
-        if (message.equalsIgnoreCase("fuck"))
-            event.getBot().sendIRC().message(event.getChannel().getName(), "you");
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("meatpod")).contains(event.getChannel())) {
+            if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod")||message.equalsIgnoreCase("meatpod?"))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "http://meatspin.cc");
+            if (message.equalsIgnoreCase("fuck"))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "you");
+        }
     }
 }

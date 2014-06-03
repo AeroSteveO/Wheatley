@@ -28,6 +28,25 @@ public class WheatleyChatStuff extends ListenerAdapter {
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
+        if (message.toLowerCase().startsWith("!hack")){
+            if(event.getUser().getNick().equals(Global.BotOwner)||event.getChannel().isOwner(event.getUser())){
+                String[] kill = message.split(" ");
+                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Wheatley has killed you in his attempt to plug your brain into a computer");
+            }
+            else{
+                event.getChannel().send().kick(event.getUser(),"Wheatley has killed you in an attempt to counter hack your brain");
+            }
+        }
+        if (message.toLowerCase().startsWith("!smash")){
+            if(event.getUser().getNick().equals(Global.BotOwner)||event.getUser().getNick().equals("fluke42")||event.getChannel().isOwner(event.getUser())){
+                String[] kill = message.split(" ");
+                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Aristotle vs MASHY-SPIKE-PLATE");
+            }
+            else{
+                event.getChannel().send().kick(event.getUser(),"MASHY-SPIKE-PLATE smashed you into goop");
+            }
+        }
+        
         if (message.equalsIgnoreCase("!Wheatley"))
             event.getBot().sendIRC().message(event.getChannel().getName(),"My command list --> http://bit.ly/QWAKdE");
         
@@ -49,24 +68,6 @@ public class WheatleyChatStuff extends ListenerAdapter {
         if (message.equalsIgnoreCase("GLaDOS?"))
             event.respond("What a nasty piece of work she was, honestly. Like a proper maniac. You know who ended up, do you know who ended up taking her down in the end? You're not going to believe this. A human. I know! I know, I wouldn't have believe it either.");
         
-        if (message.toLowerCase().startsWith("!hack")){
-            if(event.getUser().getNick().equals(Global.BotOwner)||event.getChannel().isOwner(event.getUser())){
-                String[] kill = message.split(" ");
-                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Wheatley has killed you in his attempt to plug your brain into a computer");
-            }
-            else{
-                event.getChannel().send().kick(event.getUser(),"Wheatley has killed you in an attempt to counter hack your brain");
-            }
-        }
-        if (message.toLowerCase().startsWith("!smash")){
-            if(event.getUser().getNick().equals(Global.BotOwner)||event.getUser().getNick().equals("fluke42")||event.getChannel().isOwner(event.getUser())){
-                String[] kill = message.split(" ");
-                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Aristotle vs MASHY-SPIKE-PLATE");
-            }
-            else{
-                event.getChannel().send().kick(event.getUser(),"MASHY-SPIKE-PLATE smashed you into goop");
-            }
-        }
         if ((message.equalsIgnoreCase("!space"))||(message.equalsIgnoreCase("SPACE"))) {
             switch((int) (Math.random()*3+1)) {
                 case 1:

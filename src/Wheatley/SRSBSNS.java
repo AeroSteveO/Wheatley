@@ -23,6 +23,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class SRSBSNS extends ListenerAdapter {
     List<String> UrlHistory = new ArrayList<>();
     
+    @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
@@ -34,9 +35,6 @@ public class SRSBSNS extends ListenerAdapter {
                 // If possible then replace with anchor...
                 Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).secondLastUrl = Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).lastUrl;
                 Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).lastUrl = item;
-//                event.getBot().sendIRC().action(event.getChannel().getName(),item);
-//                if (UrlHistory.size()>2)
-//                    UrlHistory.remove(0);
             } catch (MalformedURLException e) {
                 // If there was an URL that was not it!...
                 //System.out.print( item + " " );

@@ -17,6 +17,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *      Idea for a random command similar to !Xzibit
  */
 public class Bane extends ListenerAdapter{
+    @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (message.equalsIgnoreCase("!bane"))
