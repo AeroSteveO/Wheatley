@@ -61,6 +61,10 @@ public class SRSBSNS extends ListenerAdapter {
                 break;
             }
         }
+        if (idx==-1){
+            Global.Channels.add(new ChannelStore(toCheck));
+            idx = Global.Channels.size();
+        }
         return (idx);
     }
 }

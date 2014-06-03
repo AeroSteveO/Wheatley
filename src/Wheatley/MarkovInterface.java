@@ -52,9 +52,13 @@ public class MarkovInterface extends ListenerAdapter{
         
         
         //||event.getChannel().isOwner(event.getUser())
-        if (message.toLowerCase().startsWith("!set chance ")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        if (message.toLowerCase().startsWith("!set chance ")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getChannel().isOwner(event.getUser()))){
             String[] chanceSplit = message.split(" ");
-            Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).chance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
+            int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
+            if (inputChance>0)
+                Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).chance = inputChance;
+            else
+                event.getBot().sendIRC().message(event.getChannel().getName(), "Chance must be an integer value greater than 0");
         }
         
         if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&!Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())&&!Pattern.matches("[a-zA-Z]{1}", message)){
@@ -129,6 +133,10 @@ public class MarkovInterface extends ListenerAdapter{
                 idx = i;
                 break;
             }
+        }
+        if (idx==-1){
+            Global.Channels.add(new ChannelStore(toCheck));
+            idx = Global.Channels.size();
         }
         return (idx);
     }
