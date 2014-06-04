@@ -38,16 +38,17 @@ public class MarkovInterface extends ListenerAdapter{
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-//        int idx = getArrayIdx(Global.Channels, event.getChannel().getName());
+        String currentChan = event.getChannel().getName();
+        int channelIndex = getChanIdx(currentChan);
         
         //Toggle off Markov Chain Talking
         if (message.equalsIgnoreCase(Global.MainNick + ", shutup")||message.equalsIgnoreCase("!mute")||message.equalsIgnoreCase(Global.MainNick+" shutup")){
-            Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).speak = false;
+            Global.Channels.get(channelIndex).speak = false;
         }
         
         //Toggle on Markov Chain Talking
         if (message.equalsIgnoreCase(Global.MainNick + ", speak up")||message.equalsIgnoreCase("!speak")){
-            Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).speak = true;
+            Global.Channels.get(channelIndex).speak = true;
         }
         
         
@@ -56,12 +57,14 @@ public class MarkovInterface extends ListenerAdapter{
             String[] chanceSplit = message.split(" ");
             int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
             if (inputChance>0)
-                Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).chance = inputChance;
+                Global.Channels.get(channelIndex).chance = inputChance;
             else
-                event.getBot().sendIRC().message(event.getChannel().getName(), "Chance must be an integer value greater than 0");
+                event.getBot().sendIRC().message(currentChan, "Chance must be an integer value greater than 0");
         }
         
-        if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&!Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())&&!Pattern.matches("[a-zA-Z]{1}", message)){
+        if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&
+                !Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())&&!Pattern.matches("[a-zA-Z]{1}", message)&&
+                !Pattern.matches("[a-zA-Z_0-9]+\\++", message.toLowerCase())){
             Borg.learn(message);
             newLines++;
             
@@ -72,11 +75,11 @@ public class MarkovInterface extends ListenerAdapter{
             }
             
             //Automatically speak with a 1/chance probability
-            if (Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).chance==((int) (Math.random()*Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).chance)+1)&&Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).speak){
+            if (Global.Channels.get(channelIndex).chance==((int) (Math.random()*Global.Channels.get(channelIndex).chance)+1)&&Global.Channels.get(channelIndex).speak){
                 String reply = Borg.generateReply(message);
-                event.getBot().sendIRC().message(event.getChannel().getName(), reply);
+                event.getBot().sendIRC().message(currentChan, reply);
             }
-            Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).previousMessage = message;
+            Global.Channels.get(channelIndex).previousMessage = message;
         }
         
         //Command Wheatley to save his lines
@@ -87,9 +90,9 @@ public class MarkovInterface extends ListenerAdapter{
         
         //Command Wheatley to speak a line
         if (message.equalsIgnoreCase("!line")){
-            String reply = Borg.generateReply(Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).previousMessage);
-            event.getBot().sendIRC().message(event.getChannel().getName(), reply);
-            Global.Channels.get(getChanIdx(event.getChannel().getName().toString())).previousMessage = message;
+            String reply = Borg.generateReply(Global.Channels.get(channelIndex).previousMessage);
+            event.getBot().sendIRC().message(currentChan, reply);
+            Global.Channels.get(channelIndex).previousMessage = message;
         }
     }
     
@@ -111,6 +114,7 @@ public class MarkovInterface extends ListenerAdapter{
             return(null);
         }
     }
+    
     public boolean isBot(String nick) throws FileNotFoundException {
         boolean bot = false;
         if (botlist==null){
@@ -126,6 +130,7 @@ public class MarkovInterface extends ListenerAdapter{
         }
         return(bot);
     }
+    
     public int getChanIdx(String toCheck){
         int idx = -1;
         for(int i = 0; i < Global.Channels.size(); i++) {
