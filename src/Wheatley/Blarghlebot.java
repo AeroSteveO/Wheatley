@@ -5,6 +5,7 @@
 */
 
 package Wheatley;
+
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,8 @@ public class Blarghlebot extends ListenerAdapter {
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
             
             String[] messageArray = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
+            
+            //KICKS ON KICKS ON KICKS
             if ((message.equalsIgnoreCase("Blarghlebot, transform and rollout"))||(message.equalsIgnoreCase(Global.MainNick+", transform and rollout"))) {
                 switch((int) (Math.random()*3+1)) {
                     case 1:
@@ -48,16 +51,9 @@ public class Blarghlebot extends ListenerAdapter {
                         break;
                 }
             }
-            if (messageArray[0].equalsIgnoreCase("!g")) {
-                String searchquery;
-                searchquery = message.substring(message.indexOf(" ") + 1);
-                String url = "http://lmgtfy.com/?q=" + URLEncoder.encode(searchquery, "UTF-8");
-                event.respond(url);
-            }
-            if (message.equalsIgnoreCase("!headon")){
-                event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
-                event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
-                event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
+            if (message.equalsIgnoreCase("!banme")){
+                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " 1m " + event.getUser().getNick() + "!*@*");
+                event.getChannel().send().kick(event.getUser(), "You're Welcome");
             }
             
             if (message.equalsIgnoreCase("i put on my robe and wizard hat"))
@@ -65,36 +61,27 @@ public class Blarghlebot extends ListenerAdapter {
             
             if (message.equalsIgnoreCase("!suicide"))
                 event.getChannel().send().kick(event.getUser(), "SOMETHING WITTY ABOUT DYING");
-            
-            if (message.equalsIgnoreCase("!burn"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1076");
-            
-            if (message.equalsIgnoreCase("!udon"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1019");
-            
-            if (message.equalsIgnoreCase("!rimshot"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.instantrimshot.com/");
-            
+                        
             if (message.equalsIgnoreCase("!kickme"))
                 event.getChannel().send().kick(event.getUser(), "you += dead");
             
-            if (message.equalsIgnoreCase("!dropthebass"))
-                event.getBot().sendIRC().message(event.getChannel().getName(),"WUB WUB WUBWUBWUBWUB WUB WUB");
+            if (message.toLowerCase().startsWith("!troll")){
+                if(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equalsIgnoreCase("Blarghedy")){
+                    String[] kill = message.split(" ");
+                    event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"YOO GAWT TROLLED " + kill[1]);
+                }
+                else{
+                    event.getChannel().send().kick(event.getUser(),"YOO GAWT TROLLED " + event.getUser());
+                }
+            }
             
-            if (message.equalsIgnoreCase("!vuvuzela"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-            
-            if (Pattern.matches("!hm[m]+", message.toLowerCase()))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "indeed good chap the old what for ah yes hm yes good sir old bean");
-            
-            if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("trolo[lo]+", message.toLowerCase()))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://youtu.be/v1PBptSDIh8");
-            
-            if (Pattern.matches("![0-9]+", message))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
-            
-            if (message.equalsIgnoreCase("ba dum")||message.equalsIgnoreCase("badum"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "psh");
+            //Mildly Useful functions
+            if (messageArray[0].equalsIgnoreCase("!g")) {
+                String searchquery;
+                searchquery = message.substring(message.indexOf(" ") + 1);
+                String url = "http://lmgtfy.com/?q=" + URLEncoder.encode(searchquery, "UTF-8");
+                event.respond(url);
+            }
             
             if (message.equalsIgnoreCase("!russianroulette")) {
                 if (shoot==0){
@@ -120,18 +107,25 @@ public class Blarghlebot extends ListenerAdapter {
                     }
                 }
             }
-            if (message.toLowerCase().startsWith("!troll")){
-                if(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equalsIgnoreCase("Blarghedy")){
-                    String[] kill = message.split(" ");
-                    event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"YOO GAWT TROLLED " + kill[1]);
-                }
-                else{
-                    event.getChannel().send().kick(event.getUser(),"YOO GAWT TROLLED " + event.getUser());
-                }
-            }
-            //(int) (Math.random()*5+1)
             
-            if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")&&message.endsWith("?"))){
+            if (message.equalsIgnoreCase("!headon")){
+                event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
+                event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
+                event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
+            }
+            
+            //Functions Using REGEX
+            if (Pattern.matches("!hm[m]+", message.toLowerCase()))
+                event.getBot().sendIRC().message(event.getChannel().getName(), event.getUser().getNick()+", good sir old bean good chap verily mm why certainly the old what for");//indeed good chap the old what for ah yes hm yes good sir old bean
+            
+            if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("trolo[lo]+", message.toLowerCase()))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "http://youtu.be/v1PBptSDIh8");
+            
+            if (Pattern.matches("![0-9]+", message))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
+            
+            //OTHER Functions
+            if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why")&&message.endsWith("?"))){
                 //Messages from : http://en.wikipedia.org/wiki/Magic_8-Ball
                 List<String> magic = new ArrayList<>();
                 magic.add( "It is certain" );
@@ -170,10 +164,6 @@ public class Blarghlebot extends ListenerAdapter {
                     poop = "null";
                 }
             }
-            if (message.equalsIgnoreCase("!banme")){
-                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " 1m " + event.getUser().getNick() + "!*@*");
-                event.getChannel().send().kick(event.getUser(), "You're Welcome");
-            }
             
             if (message.startsWith("!roll")&&(Pattern.matches("!roll [0-9]{1,2}?d[0-9]{1,3}?", message.toLowerCase()))){
                 String[] rolls = message.split(" ")[1].split("d");
@@ -197,6 +187,25 @@ public class Blarghlebot extends ListenerAdapter {
                 //String[] xzibit = message.split(" ");
                 event.getBot().sendIRC().message(event.getChannel().getName(),"Yo dawg I heard you like " + messageArray[1] + " so I put an " + messageArray[1] + " in your " + messageArray[2] + " so you can " + messageArray[1] + " while you " + messageArray[2] + ".");
             }
+            
+            //DUMB CHAT
+            if (message.equalsIgnoreCase("!burn"))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1076");
+            
+            if (message.equalsIgnoreCase("!udon"))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1019");
+            
+            if (message.equalsIgnoreCase("!rimshot"))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.instantrimshot.com/");
+            
+            if (message.equalsIgnoreCase("!dropthebass"))
+                event.getBot().sendIRC().message(event.getChannel().getName(),"WUB WUB WUBWUBWUBWUB WUB WUB");
+            
+            if (message.equalsIgnoreCase("!vuvuzela"))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+            
+            if (message.equalsIgnoreCase("ba dum")||message.equalsIgnoreCase("badum"))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "psh");
         }
     }
 }
