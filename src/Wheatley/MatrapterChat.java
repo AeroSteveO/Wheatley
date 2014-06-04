@@ -20,9 +20,11 @@ public class MatrapterChat extends ListenerAdapter {
     
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
+        String currentChan = event.getChannel().getName();
         String message = Colors.removeFormattingAndColors(event.getMessage());
+        
         if (message.equalsIgnoreCase("!penis"))
-            event.getBot().sendIRC().message(event.getChannel().getName(), "8==D");
+            event.getBot().sendIRC().message(currentChan, "8==D");
         if (message.equalsIgnoreCase("!boobs")||message.equalsIgnoreCase("!botd")||message.equalsIgnoreCase("!melons")){
             List<String> a = new ArrayList<>();
             a.add("( . ) ( . )");
@@ -31,13 +33,13 @@ public class MatrapterChat extends ListenerAdapter {
             a.add("（。 ㅅ  。）");
             a.add("（@ㅅ@）");
             a.add("（•_ㅅ_•）");
-            event.getBot().sendIRC().message(event.getChannel().getName(),a.get((int) (Math.random()*a.size()-1)) );
+            event.getBot().sendIRC().message(currentChan,a.get((int) (Math.random()*a.size()-1)) );
         }
         if (message.equalsIgnoreCase("!meatlab"))
-            event.getBot().sendIRC().message(event.getChannel().getName(), "u so funny, me ruv u rong time");
+            event.getBot().sendIRC().message(currentChan, "u so funny, me ruv u rong time");
         if (message.toLowerCase().startsWith("!matlab")){
             if (message.split(" ").length==1)
-                event.getBot().sendIRC().message(event.getChannel().getName(), "MATRABBB");
+                event.getBot().sendIRC().message(currentChan, "MATRABBB");
             else
                 event.respond("This bot doesn't contain 100% of Matrapter's original capability yet");
         }
@@ -45,9 +47,9 @@ public class MatrapterChat extends ListenerAdapter {
         //Meatpod Functions
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("meatpod")).contains(event.getChannel())) {
             if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod")||message.equalsIgnoreCase("meatpod?"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://meatspin.cc");
+                event.getBot().sendIRC().message(currentChan, "http://meatspin.cc");
             if (message.equalsIgnoreCase("fuck"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "you");
+                event.getBot().sendIRC().message(currentChan, "you");
         }
     }
 }

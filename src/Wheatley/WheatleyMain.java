@@ -1,8 +1,8 @@
- /**
-  *
-  *
-  *
-  */
+/**
+ *
+ *
+ *
+ */
 package Wheatley;
 
 import org.pircbotx.Configuration;
@@ -26,7 +26,7 @@ import java.io.File;
  *      Bellagio    -- by http://casinobot.codeplex.com/
  *      theTardis   -- by theDoctor
  *      RoyalBot    -- by http://www.msclemens.com/royaldev/royalbot
- *      SrsBsns     -- by 
+ *      SrsBsns     -- by
  *
  * @author Steve-O
  * often by siphoning code from other bots by tangd, and Vanilla, and theDoctor
@@ -51,6 +51,10 @@ public class WheatleyMain extends ListenerAdapter {
     // Set mode +B for Bots
     public void onConnect(ConnectEvent event) throws Exception {
         event.getBot().sendRaw().rawLine("mode " + event.getBot().getNick() + " +B"); // Register this as a Bot
+    }
+    @Override
+    public void onInvite(InviteEvent e) {
+        e.getBot().sendIRC().joinChannel(e.getChannel());
     }
     @Override
     // Something from the example script that has continued to stay in my bots code
@@ -78,38 +82,12 @@ public class WheatleyMain extends ListenerAdapter {
             File fXmlFile = new File("Settings.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            //     doc.getDocumentElement().normalize();
-            //  }
-            //   catch (Exception ex) {
-            //		ex.printStackTrace();
-            //  }
-            
-            // Get basic settings for Wheatley and which server to log onto
-            //Document doc = dBuilder.parse(fXmlFile);
-            //NodeList basesettings = doc.getElementsByTagName("basicsettings");
-            //Node basenode = basesettings.item(0);
-            //Element baseElement = (Element) basenode;
             Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
-            //Element ListenerElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("listener").item(0);
             int test = Integer.parseInt(baseElement.getElementsByTagName("test").item(0).getTextContent());
-            
-            // Get server settings from XML file for the server defined by the above commands
-            //NodeList nList = doc.getElementsByTagName("server");
-            //       int test = 0;
-            //Node nNode = nList.item(test);
-            //Element eElement = (Element) nNode;
             Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(test);
             Global.MainNick = baseElement.getElementsByTagName("nick").item(0).getTextContent();
             Global.NickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
             Global.BotOwner = baseElement.getElementsByTagName("botowner").item(0).getTextContent();
-            
-            
-            
-            //  ArrayList<Listener> BotListeners = new ArrayList();
-            //  BotListeners.add(new Blarghlebot());
-            //  Class listenerclass = Class.forName("org.pircbotx.impl.Blarghlebot");
-            //  BotListeners.add(new listenerclass());
-            
             
             //   Configuration configuration;
             Configuration.Builder configuration = new Configuration.Builder()
@@ -117,7 +95,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .setLogin(baseElement.getElementsByTagName("login").item(0).getTextContent()) //login part of hostmask, eg name:login@host
                     .setNickservPassword(Global.NickPass)
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use
-                    .setCapEnabled(true) //Enable CAP features
+                    .setCapEnabled(true)     //Enable CAP features
                     .setAutoReconnect(true)
                     .setMaxLineLength(425)
 //                    .addCapHandler(new TLSCapHandler(new UtilSSLSocketFactory().trustAllCertificates(), true))
@@ -126,7 +104,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameOmgword())        //omgword game listener
                     .addListener(new GameReverse())        //reverse the word game
                     .addListener(new GameHangman())        //omgword game listener
-                    .addListener(new GameBomb()) 
+                    .addListener(new GameBomb())
                     .addListener(new GameAltReverse())
                     .addListener(new Why())                // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
