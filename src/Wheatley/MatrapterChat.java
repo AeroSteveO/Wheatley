@@ -31,8 +31,9 @@ public class MatrapterChat extends ListenerAdapter {
             a.add("(oYo)");
             a.add("(.Y.)");
             a.add("（。 ㅅ  。）");
-            a.add("（@ㅅ@）");
+            a.add("（@Y@）");
             a.add("（•_ㅅ_•）");
+            a.add("( × Y × )");
             event.getBot().sendIRC().message(currentChan,a.get((int) (Math.random()*a.size()-1)) );
         }
         if (message.equalsIgnoreCase("!meatlab"))
