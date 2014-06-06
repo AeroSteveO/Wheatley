@@ -6,18 +6,22 @@
 
 package Wheatley;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Steve-O
  * KIDDO'S LEARNING ERBJERCTS
  */
 public class ChannelStore {
-    String name;               // The name of the channel
-    int chance;                // The chance of markov spamming lines to that channel (1/chance)
-    boolean speak;             // will markov speak?
-    String previousMessage;    // previous message sent in this channel
-    String lastUrl;            // last url seen in this channel
-    String secondLastUrl;      // second last url seen in this channel
+    String name;                             // The name of the channel
+    int chance;                              // The chance of markov spamming lines to that channel (1/chance)
+    boolean speak;                           // will markov speak?
+    String previousMessage;                  // previous message sent in this channel
+    String lastUrl;                          // last url seen in this channel
+    String secondLastUrl;                    // second last url seen in this channel
+    List<String> msgLog = new ArrayList<>(); // for use in s/find/replace commands
     
     ChannelStore(String aName) {
         this.name = aName;
@@ -25,7 +29,8 @@ public class ChannelStore {
         this.speak = true;
         this.previousMessage = null;
         this.lastUrl = "";
-        this.secondLastUrl = "";   
+        this.secondLastUrl = "";
+        this.msgLog.add("");
     }
     @Override
     public String toString(){

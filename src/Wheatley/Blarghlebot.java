@@ -9,7 +9,7 @@ package Wheatley;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.*;
 import org.pircbotx.hooks.events.*;
@@ -26,10 +26,35 @@ public class Blarghlebot extends ListenerAdapter {
     static String poop = "null";
     @Override
     public void onMessage(MessageEvent event) throws Exception {
-        String message = Colors.removeFormattingAndColors(event.getMessage());
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
-            
+            String message = Colors.removeFormattingAndColors(event.getMessage());
             String[] messageArray = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
+            
+            
+            int idx = getChanIdx(event.getChannel().getName());
+            Global.Channels.get(idx).msgLog.add("<"+event.getUser().getNick()+"> "+message);
+            if(Global.Channels.get(idx).msgLog.size()>100)
+                Global.Channels.get(idx).msgLog.remove(Global.Channels.get(idx).msgLog.size()-1);
+            
+            if (message.toLowerCase().startsWith("s/")||message.toLowerCase().startsWith("sed/")){
+                String[] findNreplace = Colors.removeFormattingAndColors(event.getMessage()).split("/");
+                Pattern findThis = Pattern.compile(findNreplace[1]);
+                String reply = "";
+                boolean found = false;
+                int i=Global.Channels.get(idx).msgLog.size()-2;
+//                Matcher match = findThis.matcher(message);
+                while (i>=0&&!found){
+                    if (findThis.matcher(Global.Channels.get(idx).msgLog.get(i)).find()){
+                        reply = Global.Channels.get(idx).msgLog.get(i).replaceAll(findNreplace[1],findNreplace[2]);
+                        found = true;
+                    }
+                    i--;
+                }
+                if (found==true){
+                    event.getBot().sendIRC().action(event.getChannel().getName(),reply);
+                    Global.Channels.get(idx).msgLog.add(reply);
+                }
+            }
             
             //KICKS ON KICKS ON KICKS
             if ((message.equalsIgnoreCase("Blarghlebot, transform and rollout"))||(message.equalsIgnoreCase(Global.MainNick+", transform and rollout"))) {
@@ -61,7 +86,7 @@ public class Blarghlebot extends ListenerAdapter {
             
             if (message.equalsIgnoreCase("!suicide"))
                 event.getChannel().send().kick(event.getUser(), "SOMETHING WITTY ABOUT DYING");
-                        
+            
             if (message.equalsIgnoreCase("!kickme"))
                 event.getChannel().send().kick(event.getUser(), "you += dead");
             
@@ -207,5 +232,19 @@ public class Blarghlebot extends ListenerAdapter {
             if (message.equalsIgnoreCase("ba dum")||message.equalsIgnoreCase("badum"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "psh");
         }
+    }
+    public int getChanIdx(String toCheck){
+        int idx = -1;
+        for(int i = 0; i < Global.Channels.size(); i++) {
+            if (Global.Channels.get(i).name.equalsIgnoreCase(toCheck)) {
+                idx = i;
+                break;
+            }
+        }
+        if (idx==-1){
+            Global.Channels.add(new ChannelStore(toCheck));
+            idx = Global.Channels.size();
+        }
+        return (idx);
     }
 }
