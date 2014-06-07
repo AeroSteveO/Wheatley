@@ -42,7 +42,7 @@ public class MarkovInterface extends ListenerAdapter{
         int channelIndex = getChanIdx(currentChan);
         
         //Toggle off Markov Chain Talking
-        if (message.equalsIgnoreCase(Global.MainNick + ", shutup")||message.equalsIgnoreCase("!mute")||message.equalsIgnoreCase(Global.MainNick+" shutup")){
+        if (Pattern.matches(Global.MainNick + ", (shutup|shut\\s+up)",message)||message.equalsIgnoreCase("!mute")||Pattern.matches("(shutup|shut\\s+up)\\s+"+Global.MainNick,message)){
             Global.Channels.get(channelIndex).speak = false;
         }
         
@@ -50,7 +50,6 @@ public class MarkovInterface extends ListenerAdapter{
         if (message.equalsIgnoreCase(Global.MainNick + ", speak up")||message.equalsIgnoreCase("!speak")){
             Global.Channels.get(channelIndex).speak = true;
         }
-        
         
         //||event.getChannel().isOwner(event.getUser())
         if (message.toLowerCase().startsWith("!set chance ")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getChannel().isOwner(event.getUser()))){
@@ -61,10 +60,15 @@ public class MarkovInterface extends ListenerAdapter{
             else
                 event.getBot().sendIRC().message(currentChan, "Chance must be an integer value greater than 0");
         }
+        if (message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", what do you think of")){
+            String[] keyWord = message.split(" ");
+            event.getBot().sendIRC().message(currentChan, Borg.generateReply(keyWord[keyWord.length-1]));
+        }
         
         if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&
                 !Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())&&!Pattern.matches("[a-zA-Z]{1}", message)&&
-                !Pattern.matches("[a-zA-Z_0-9]+\\++", message.toLowerCase())){
+                !Pattern.matches("[a-zA-Z_0-9]+\\++", message.toLowerCase())&&
+                !message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", what do you think of")){
             Borg.learn(message);
             newLines++;
             
