@@ -53,6 +53,7 @@ public class WheatleyMain extends ListenerAdapter {
         event.getBot().sendRaw().rawLine("mode " + event.getBot().getNick() + " +B"); // Register this as a Bot
     }
     @Override
+    // Joins channels it has been invited to
     public void onInvite(InviteEvent e) {
         e.getBot().sendIRC().joinChannel(e.getChannel());
     }

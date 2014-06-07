@@ -41,7 +41,7 @@ public class Bane extends ListenerAdapter{
                 event.getBot().sendIRC().message(event.getChannel().getName(),baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[1]+baneparts.get(2)+baneterm[2]+baneparts.get(3));
             }
             else
-                event.getBot().sendIRC().message(event.getChannel().getName(),"Bane input should be '!bane [term1] [term2]'");
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Bane input should be '!bane [term1] [term2]'");
         }
     }  
 }
