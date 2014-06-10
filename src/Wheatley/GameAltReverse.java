@@ -24,6 +24,10 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  *  Original Bot: WHEATLEY
  *      a variant of the reverse function from CasinoBot, idea from Steve-O
+ * 
+ *  Activate Command with:
+ *      !altreverse
+ *      esrever!
  */
 public class GameAltReverse extends ListenerAdapter {
     static ArrayList<String> wordls = null;

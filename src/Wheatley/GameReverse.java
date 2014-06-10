@@ -25,6 +25,9 @@ import org.pircbotx.hooks.events.MessageEvent;
  * Based on the C# IRC bot, CasinoBot
  * which is really unstable and breaks all the time
  * 
+ * Activate Command with:
+ *      !reverse
+ * 
  */
 public class GameReverse extends ListenerAdapter {
     static ArrayList<String> wordls = null;

@@ -20,6 +20,9 @@ import org.pircbotx.hooks.events.*;
  * @author Steve-O
  * Based on the C# IRC bot, CasinoBot
  * which is really unstable and breaks all the time
+ * 
+ * Activate command with:
+ *      !omgword
  *
  */
 public class GameOmgword extends ListenerAdapter {

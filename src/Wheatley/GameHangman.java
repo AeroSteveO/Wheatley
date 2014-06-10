@@ -22,6 +22,9 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Stephen
  * Based on the C# IRC bot, CasinoBot
  * which is generally unstable and requires windows to run
+ * 
+ * Activate Command with:
+ *      !hangman
  */
 public class GameHangman extends ListenerAdapter {
     // Woohooo basic variables for junk
