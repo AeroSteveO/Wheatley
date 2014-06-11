@@ -75,7 +75,7 @@ public class GameReverse extends ListenerAdapter {
                             activechan.remove(CurrentEvent.getChannel().getName());
                             queue.close();
                         }
-                        else if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
+                        else if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
                             event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + chosenword.toUpperCase());
                             activechan.remove(CurrentEvent.getChannel().getName());
                             queue.close();

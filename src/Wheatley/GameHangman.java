@@ -82,7 +82,7 @@ public class GameHangman extends ListenerAdapter {
                             lives = baselives;
                             queue.close();
                         }
-                        else if ((Pattern.matches("[a-z]{1}", CurrentEvent.getMessage())||Pattern.matches("[A-Z]{1}", CurrentEvent.getMessage()))&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
+                        else if ((Pattern.matches("[a-z]{1}", CurrentEvent.getMessage())||Pattern.matches("[A-Z]{1}", CurrentEvent.getMessage()))&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
                             for (int i = 0; i<chosenword.length(); i++){
                                 if (Character.toString(characters[i]).equalsIgnoreCase(CurrentEvent.getMessage())){
                                     String temp = guess.substring(0,i)+CurrentEvent.getMessage()+guess.substring(i+1);
