@@ -34,11 +34,12 @@ public class GameReverse extends ListenerAdapter {
     static ArrayList<String> activechan = new ArrayList<String>();
     boolean isactive = false;
     int time = 20;
+    String blockedChan = "#dtella";
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException{
         String message = Colors.removeFormattingAndColors(event.getMessage());
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
-        if (message.equalsIgnoreCase("!reverse")&&!event.getChannel().getName().equals("#dtella")) {
+        if (message.equalsIgnoreCase("!reverse")&&!event.getChannel().getName().equals(blockedChan)) {
             // get the list of words only if theres nothing in the list alread
             if (wordls == null) {
                 wordls = getWordList();

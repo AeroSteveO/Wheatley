@@ -35,13 +35,13 @@ public class GameHangman extends ListenerAdapter {
     ArrayList<String> wordls = null;
     static ArrayList<String> activechan = new ArrayList<String>();
     boolean isactive = false;
-    
+    String blockedChan = "#dtella";
     int correct = 0;
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         {
             String message = Colors.removeFormattingAndColors(event.getMessage());
-            if (message.equalsIgnoreCase("!hangman")&&!event.getChannel().getName().equals("#dtella")) {
+            if (message.equalsIgnoreCase("!hangman")&&!event.getChannel().getName().equals(blockedChan)) {
                 if (wordls == null) {
                     wordls = getWordList();
                 }
@@ -82,7 +82,7 @@ public class GameHangman extends ListenerAdapter {
                             lives = baselives;
                             queue.close();
                         }
-                        else if ((Pattern.matches("[a-z]{1}", CurrentEvent.getMessage())||Pattern.matches("[A-Z]{1}", CurrentEvent.getMessage()))&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
+                        else if (Pattern.matches("[a-zA-Z]{1}", CurrentEvent.getMessage())&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
                             for (int i = 0; i<chosenword.length(); i++){
                                 if (Character.toString(characters[i]).equalsIgnoreCase(CurrentEvent.getMessage())){
                                     String temp = guess.substring(0,i)+CurrentEvent.getMessage()+guess.substring(i+1);

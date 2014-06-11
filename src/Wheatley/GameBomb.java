@@ -29,7 +29,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class GameBomb extends ListenerAdapter {
     // Woohooo basic variables for junk
     int time = 10;
-    
+    String blockedChan = "#dtella";
     ArrayList<String> colorls = null;
     
     @Override
@@ -39,7 +39,7 @@ public class GameBomb extends ListenerAdapter {
         if (colorls == null) {
             colorls = getColorList();
         }
-        if (message.equalsIgnoreCase("!bomb")&&!event.getChannel().getName().equals("#dtella")){
+        if (message.equalsIgnoreCase("!bomb")&&!event.getChannel().getName().equals(blockedChan)){
             String player = event.getUser().getNick();
             List<String> colours = new ArrayList<>();
             String colorlist = "";
