@@ -7,6 +7,7 @@
 package Wheatley;
 
 import java.util.Vector;
+import org.pircbotx.PircBotX;
 
 /**
  *
@@ -19,7 +20,7 @@ public class Global {
     public static String MainNick = new String(); //Updated in the Main .java file from Setings.XML
     public static String NickPass = new String(); //Updated in the Main .java file from Setings.XML
     public static boolean reconnect = true;
-//    public static PircBotX bot;
+    public static PircBotX bot;
     //public static List<String> Channels = new ArrayList<>();
     public static Vector<ChannelStore> Channels = new Vector<>();
 }

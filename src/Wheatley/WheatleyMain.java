@@ -1,8 +1,8 @@
-/**
- *
- *
- *
- */
+ /**
+  *
+  *
+  *
+  */
 package Wheatley;
 
 import org.pircbotx.Configuration;
@@ -143,8 +143,16 @@ public class WheatleyMain extends ListenerAdapter {
             Configuration config = configuration.buildConfiguration();
 //            Global.bot = new PircBotX(config);
             //bot.connect throws various exceptions for failures
-            PircBotX bot = new PircBotX(config);
-            bot.startBot();
+            Global.bot = new PircBotX(config);
+//            bot.startBot();
+//            try {
+                Runner parallel = new Runner(Global.bot);
+                Thread t = new Thread(parallel);
+                parallel.giveT(t);
+                t.start();
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
         }
         catch (Exception ex) {
             ex.printStackTrace();
