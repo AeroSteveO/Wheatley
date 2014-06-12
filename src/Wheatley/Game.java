@@ -6,11 +6,14 @@
 
 package Wheatley;
 
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  *
@@ -28,6 +31,10 @@ public class Game {
     String modifier;
     String solution;
     
+    
+    Toolkit toolkit;
+    Timer timer;
+    
     Game(String channel, String mod, String type) throws FileNotFoundException{
         this.channelName = channel;
         this.modifier = mod;
@@ -43,9 +50,32 @@ public class Game {
         this.timeLimit = time;
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
+//        Timer timer = new Timer(this.timeLimit,GameOmgword);
+//        timer.setInitialDelay(this.timeLimit*1000);
+        
+//        TimerTask tasknew = new TimerSchedulePeriod();
+//        Timer timer = new Timer();
+//// scheduling the task at interval
+//        timer.schedule(tasknew,100, 100);
+        ReminderBeep(5);
+    }
+    public void ReminderBeep(int seconds) {
+        toolkit = Toolkit.getDefaultToolkit();
+        timer = new Timer();
+        timer.schedule(new RemindTask(), seconds * 1000);
+    }
+    class RemindTask extends TimerTask {
+        public void run() {
+            System.out.println("Time's up!");
+            toolkit.beep();
+            //timer.cancel(); //Not necessary because we call System.exit
+     //       System.exit(0); //Stops the AWT thread (and everything else)
+        }
+    }
+    private void timerTask(){
+        
         
     }
-    
     
     private ArrayList<String> getWordList() throws FileNotFoundException{
         try{
@@ -123,10 +153,10 @@ public class Game {
             isChan = true;
         return(isChan);
     }
-    public boolean isGameRunning(String inputChannel, String inputGame) {
+    public boolean isGameRunning(String inputChannel, String gameName) {
         boolean isChan = false;
         if (inputChannel.equalsIgnoreCase(this.channelName))
-            if (inputGame.equalsIgnoreCase(this.gameType))
+            if (gameName.equalsIgnoreCase(this.gameType))
                 isChan = true;
         return(isChan);
     }

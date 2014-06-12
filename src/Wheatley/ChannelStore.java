@@ -8,6 +8,7 @@ package Wheatley;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -38,5 +39,35 @@ public class ChannelStore {
     }
     public void addMsg(String msg){
         this.previousMessage = msg;
+    }
+    public class ChannelArray extends Vector<ChannelStore>{
+//        protected ChannelArray instance;
+//        
+////        Vector<ChannelStore> ChannelList;
+//        
+//        private ChannelArray(){
+//            
+//        }
+//        public ChannelArray getInstance(){
+//            if (instance == null){
+//                instance = new ChannelArray();
+//            }
+//            return instance;
+//        }
+        
+        public int getChanIdx(String toCheck){
+            int idx = -1;
+            for(int i = 0; i < this.size(); i++) {
+                if (this.get(i).name.equalsIgnoreCase(toCheck)) {
+                    idx = i;
+                    break;
+                }
+            }
+            if (idx==-1){
+                this.add(new ChannelStore(toCheck));
+                idx = this.size();
+            }
+            return (idx);
+        }
     }
 }
