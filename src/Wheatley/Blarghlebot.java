@@ -20,6 +20,16 @@ import org.pircbotx.hooks.events.*;
  * original bot functions by Blarghedy
  * Who's lazy and doesn't run his bot much
  *
+ * Activate Commands with:
+ *      s/replaceThis/replaceWithThis
+ *          Replaces the text replaceThis with the text replaceWithThis, using the log of previous messages in Global.channels
+ *      !roll xdy
+ *          Rolls x number of dy dice and outputs the result
+ *      !russianroulette
+ *          Play a game of Russian Roulette with the bot
+ *      !g [terms to google]
+ *          Pulls up let me google that for you, to tell people to google things
+ * 
  */
 public class Blarghlebot extends ListenerAdapter {
     int shoot = 0;
@@ -31,11 +41,13 @@ public class Blarghlebot extends ListenerAdapter {
             String[] messageArray = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
             
             
-            int idx = getChanIdx(event.getChannel().getName());
+            int idx = Global.Channels.getChanIdx(event.getChannel().getName());
             Global.Channels.get(idx).msgLog.add("<"+event.getUser().getNick()+"> "+message);
             if(Global.Channels.get(idx).msgLog.size()>100)
                 Global.Channels.get(idx).msgLog.remove(Global.Channels.get(idx).msgLog.size()-1);
-            
+            //<Evidlo> re.split('(?<!\\\\)/','hello\/world/hello')
+            //<Evidlo> Whenever python sees \/, it changes it to \\/
+            //<Evidlo> So thats why theres \\\\
             if (message.toLowerCase().startsWith("s/")||message.toLowerCase().startsWith("sed/")){
                 String[] findNreplace = Colors.removeFormattingAndColors(event.getMessage()).split("/");
                 Pattern findThis = Pattern.compile(findNreplace[1]);
@@ -43,14 +55,16 @@ public class Blarghlebot extends ListenerAdapter {
                 boolean found = false;
                 int i=Global.Channels.get(idx).msgLog.size()-2;
 //                Matcher match = findThis.matcher(message);
-                while (i>=0&&!found){
-                    if (findThis.matcher(Global.Channels.get(idx).msgLog.get(i)).find()){
-                        reply = Global.Channels.get(idx).msgLog.get(i).replaceAll(findNreplace[1],findNreplace[2]);
-                        found = true;
-                    }
-                    i--;
-                }
-                if (found==true){
+                reply = findReplace(i, findNreplace, findThis, idx);
+                found = true;
+//                while (i>=0&&!found){
+//                    if (findThis.matcher(Global.Channels.get(idx).msgLog.get(i)).find()){
+//                        reply = Global.Channels.get(idx).msgLog.get(i).replaceAll(findNreplace[1],findNreplace[2]);
+//                        found = true;
+//                    }
+//                    i--;
+//                }
+                if (!reply.equalsIgnoreCase("")){
                     event.getBot().sendIRC().message(event.getChannel().getName(),reply);
                     Global.Channels.get(idx).msgLog.add(reply);
                 }
@@ -189,7 +203,12 @@ public class Blarghlebot extends ListenerAdapter {
                     poop = "null";
                 }
             }
-            
+            //<Blarghedy> !roll 5d5+4d4+3d3+2d2+8*9d3
+            //<BlarghleBot> Blarghedy rolled 16, 8, 5, 3, 22, 23, 17, 19, 21, 15, 21, 18 for a total of 188
+            //<Blarghedy> !roll 5*3d3
+            //<BlarghleBot> Blarghedy rolled 2 1 3 : 6, 3 2 3 : 8, 3 1 3 : 7, 1 2 2 : 5, 1 1 2 : 4, for a total of 30
+            //<Blarghedy> !roll 1000d1000
+            //<BlarghleBot> Blarghedy rolled 506063 for a total of 506063
             if (message.startsWith("!roll")&&(Pattern.matches("!roll [0-9]{1,2}?d[0-9]{1,3}?", message.toLowerCase()))){
                 String[] rolls = message.split(" ")[1].split("d");
                 String dice = "You rolled: ";
@@ -212,7 +231,8 @@ public class Blarghlebot extends ListenerAdapter {
                 //String[] xzibit = message.split(" ");
                 event.getBot().sendIRC().message(event.getChannel().getName(),"Yo dawg I heard you like " + messageArray[1] + " so I put an " + messageArray[1] + " in your " + messageArray[2] + " so you can " + messageArray[1] + " while you " + messageArray[2] + ".");
             }
-            
+            //<Evidlo> [15:02:31] !yodawg b a
+            // <BlarghleBot> [15:02:31] Yo dawg I heard you like bs so I put an b in your a so you can b while you a.
             //DUMB CHAT
             if (message.equalsIgnoreCase("!burn"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1076");
@@ -233,18 +253,31 @@ public class Blarghlebot extends ListenerAdapter {
                 event.getBot().sendIRC().message(event.getChannel().getName(), "psh");
         }
     }
-    public int getChanIdx(String toCheck){
-        int idx = -1;
-        for(int i = 0; i < Global.Channels.size(); i++) {
-            if (Global.Channels.get(i).name.equalsIgnoreCase(toCheck)) {
-                idx = i;
-                break;
+    private String findReplace(int i, String[] findNreplace, Pattern findThis, int idx){
+        String reply="";
+        String[] backReply;
+        Boolean found = false;
+        
+        while (i>=0&&!found){
+            if (findThis.matcher(Global.Channels.get(idx).msgLog.get(i)).find()){
+                reply = Global.Channels.get(idx).msgLog.get(i).replaceAll(findNreplace[1],findNreplace[2]);
+                backReply = reply.split(" ");
+                if (backReply.length>1){
+                    if(backReply[1].startsWith("s/")||backReply[1].startsWith("sed/")){
+                        i--;
+                        reply=backReply[1];
+                        for(int c = 2;c<backReply.length;c++){
+                            reply = reply +" "+ backReply[c];
+                        }
+                        findNreplace = reply.split("/");
+                        findThis = Pattern.compile(findNreplace[1]);
+                        reply = findReplace(i, findNreplace, findThis, idx);
+                    }
+                }
+                found = true;
             }
+            i--;
         }
-        if (idx==-1){
-            Global.Channels.add(new ChannelStore(toCheck));
-            idx = Global.Channels.size();
-        }
-        return (idx);
+        return(reply);
     }
 }

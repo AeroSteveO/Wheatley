@@ -40,21 +40,7 @@ public class ChannelStore {
     public void addMsg(String msg){
         this.previousMessage = msg;
     }
-    public class ChannelArray extends Vector<ChannelStore>{
-//        protected ChannelArray instance;
-//        
-////        Vector<ChannelStore> ChannelList;
-//        
-//        private ChannelArray(){
-//            
-//        }
-//        public ChannelArray getInstance(){
-//            if (instance == null){
-//                instance = new ChannelArray();
-//            }
-//            return instance;
-//        }
-        
+    public static class ChannelArray extends Vector<ChannelStore>{
         public int getChanIdx(String toCheck){
             int idx = -1;
             for(int i = 0; i < this.size(); i++) {

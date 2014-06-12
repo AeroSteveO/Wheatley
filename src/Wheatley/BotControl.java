@@ -23,9 +23,10 @@ public class BotControl extends ListenerAdapter{
     @Override
     public void onMessage(MessageEvent event) throws InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
+//        int index = Global.Channels.getChanIdx(event.getChannel().getName().toString());
         
         if (message.equalsIgnoreCase("!flush")&&event.getUser().getNick().equals(Global.BotOwner)){
-            GameOmgword.activechan.clear();
+            GameOmgword.activeGame.clear();
 //            GameOmgword.wordls.clear();
             GameHangman.activechan.clear();
             GameReverse.activechan.clear();
@@ -88,30 +89,14 @@ public class BotControl extends ListenerAdapter{
                 else {
                     c.send().part();
                     event.respond("Parted from " + chan[1] + ".");
-                    Global.Channels.remove(getChanIdx("#"+chan[1]));
+                    Global.Channels.remove(Global.Channels.getChanIdx("#"+chan[1]));
                 }
             } // command the bot to part the current channel that the command was sent from
             else if ((event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equals(Global.BotOwner))&&(message.endsWith("leave")||message.equalsIgnoreCase("!part"))){
                 
                 event.getChannel().send().part("Goodbye");
-                Global.Channels.remove(getChanIdx(event.getChannel().getName().toString()));
+                Global.Channels.remove(Global.Channels.getChanIdx(event.getChannel().getName().toString()));
             }
         }
     }
-    
-    public int getChanIdx(String toCheck){
-        int idx = -1;
-        for(int i = 0; i < Global.Channels.size(); i++) {
-            if (Global.Channels.get(i).name.equalsIgnoreCase(toCheck)) {
-                idx = i;
-                break;
-            }
-        }
-        if (idx==-1){
-            Global.Channels.add(new ChannelStore(toCheck));
-            idx = Global.Channels.size();
-        }
-        return (idx);
-    }
-    
 }

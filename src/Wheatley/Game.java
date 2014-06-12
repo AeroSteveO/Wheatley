@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 /**
  *
@@ -32,7 +32,6 @@ public class Game {
     String solution;
     
     
-    Toolkit toolkit;
     Timer timer;
     
     Game(String channel, String mod, String type) throws FileNotFoundException{
@@ -60,16 +59,14 @@ public class Game {
         ReminderBeep(5);
     }
     public void ReminderBeep(int seconds) {
-        toolkit = Toolkit.getDefaultToolkit();
         timer = new Timer();
         timer.schedule(new RemindTask(), seconds * 1000);
     }
     class RemindTask extends TimerTask {
         public void run() {
             System.out.println("Time's up!");
-            toolkit.beep();
             //timer.cancel(); //Not necessary because we call System.exit
-     //       System.exit(0); //Stops the AWT thread (and everything else)
+            //       System.exit(0); //Stops the AWT thread (and everything else)
         }
     }
     private void timerTask(){
@@ -159,5 +156,18 @@ public class Game {
             if (gameName.equalsIgnoreCase(this.gameType))
                 isChan = true;
         return(isChan);
+    }
+    
+    public static class ChannelArray extends Vector<Game>{
+        public int getGameIdx(String toCheck){
+            int idx = -1;
+            for(int i = 0; i < this.size(); i++) {
+                if (this.get(i).channelName.equalsIgnoreCase(toCheck)) {
+                    idx = i;
+                    break;
+                }
+            }
+            return (idx);
+        }
     }
 }
