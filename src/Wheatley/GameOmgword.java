@@ -5,11 +5,8 @@
 */
 
 package Wheatley;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 import org.joda.time.*;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.*;
@@ -27,13 +24,16 @@ import org.pircbotx.hooks.events.*;
  */
 public class GameOmgword extends ListenerAdapter {
     // Initialize needed variables
-    static ArrayList<String> activechan = new ArrayList<String>();
     boolean isActive = false;
     String blockedChan = "#dtella";
     int time = 30;
     
     static ArrayList<Game> activeGame = new ArrayList<Game>();
-    
+    public void actionPerformed(ActionEvent e) {
+    //If still loading, can't animate.
+
+}
+
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException{
         String message = Colors.removeFormattingAndColors(event.getMessage());
@@ -47,19 +47,19 @@ public class GameOmgword extends ListenerAdapter {
             }
             else{
                 for (int i=0;i<activeGame.size();i++){
-                    if(activeGame.get(i).isGameRunning(currentChan,"hangman")){
+                    if(activeGame.get(i).isGameRunning(currentChan,"omgword")){
                         isActive = true;
                     }
                 }
-                    if (!isActive){
-                        activeGame.add(new Game(currentChan,"omgword","shuffle",time));
-                        currentIndex = activeGame.size()-1;
-                    }
+                if (!isActive){
+                    activeGame.add(new Game(currentChan,"omgword","shuffle",time));
+                    currentIndex = activeGame.size()-1;
+                }
             }
             
             if (!isActive){
                 //get and shuffle the word
-                currentIndex = getChanIdx(currentChan);
+                currentIndex = getGameIdx(currentChan);
                 String chosenword = activeGame.get(currentIndex).chosenWord;
                 String scrambled = activeGame.get(currentIndex).solution;
                 event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
@@ -71,7 +71,7 @@ public class GameOmgword extends ListenerAdapter {
                     try {
                         MessageEvent CurrentEvent = queue.waitFor(MessageEvent.class);
                         dt = new DateTime();
-                        currentIndex = getChanIdx(currentChan);
+                        currentIndex = getGameIdx(currentChan);
                         if (dt.isAfter(end)){
                             event.getBot().sendIRC().message(CurrentEvent.getChannel().getName(),"You did not guess the solution in time, the correct answer would have been "+chosenword.toUpperCase());
                             activeGame.remove(currentIndex);
@@ -97,9 +97,9 @@ public class GameOmgword extends ListenerAdapter {
                 isActive=false;
         }
     }
-    public int getChanIdx(String toCheck){
+    public int getGameIdx(String toCheck){
         int idx = -1;
-        for(int i = 0; i < Global.Channels.size(); i++) {
+        for(int i = 0; i < this.activeGame.size(); i++) {
             if (this.activeGame.get(i).channelName.equalsIgnoreCase(toCheck)) {
                 idx = i;
                 break;
