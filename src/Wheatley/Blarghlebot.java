@@ -29,6 +29,12 @@ import org.pircbotx.hooks.events.*;
  *          Play a game of Russian Roulette with the bot
  *      !g [terms to google]
  *          Pulls up let me google that for you, to tell people to google things
+ *      ![number]
+ *          Pulls up a link for the dtella irc quote with that number
+ *      !xkcdb [number]
+ *          Pulls up a link for the xkcdb quote with that number
+ *      !bash [number]
+ *          Pulls up a link for the bash.org quote with that number
  * 
  */
 public class Blarghlebot extends ListenerAdapter {

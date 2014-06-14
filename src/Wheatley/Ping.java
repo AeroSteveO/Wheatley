@@ -24,6 +24,13 @@ import org.w3c.dom.Element;
  * idea for ping function by jnick
  *
  * Modified to allow me to remotely check to see if my servers are up
+ * 
+ * Activate Command with:
+ *      !ping [host] [port]
+ *      !ping google.com
+ *      !ping mc.myminecraft.com 25565
+ *      !ping check [XML group]
+ *      !ping check LAN
  */
 public class Ping extends ListenerAdapter {
     @Override
