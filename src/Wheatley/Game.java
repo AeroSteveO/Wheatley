@@ -14,6 +14,11 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+import org.pircbotx.Channel;
+import org.pircbotx.PircBotX;
+import org.pircbotx.User;
+import org.pircbotx.hooks.WaitForQueue;
+import org.pircbotx.hooks.events.MessageEvent;
 
 /**
  *
@@ -49,31 +54,55 @@ public class Game {
         this.timeLimit = time;
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
-//        Timer timer = new Timer(this.timeLimit,GameOmgword);
-//        timer.setInitialDelay(this.timeLimit*1000);
-        
-//        TimerTask tasknew = new TimerSchedulePeriod();
-//        Timer timer = new Timer();
-//// scheduling the task at interval
-//        timer.schedule(tasknew,100, 100);
-        ReminderBeep(5);
     }
-    public void ReminderBeep(int seconds) {
-        timer = new Timer();
-        timer.schedule(new RemindTask(), seconds * 1000);
-    }
-    class RemindTask extends TimerTask {
-        public void run() {
-            System.out.println("Time's up!");
-            //timer.cancel(); //Not necessary because we call System.exit
-            //       System.exit(0); //Stops the AWT thread (and everything else)
+    public class TimedWaitForQueue extends WaitForQueue{
+        int time;
+        private QueueTime runnable = null;
+        Thread t;
+        public TimedWaitForQueue(PircBotX bot,int time, Channel chan,User user, int key) throws InterruptedException {
+            super(bot);
+            this.time=time;
+            QueueTime runnable = new QueueTime(Global.bot,time,chan,user,key);
+            this.t = new Thread(runnable);
+            runnable.giveT(t);
+            t.start();
+//            Thread.sleep(this.time*1000);
+//            bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
+        }
+        public void end() throws InterruptedException{
+            this.close();
+            t.join(1000);
         }
     }
-    private void timerTask(){
+    public class QueueTime implements Runnable {
+        int time;
+        User user;
+        Channel chan;
+        int key;
+        PircBotX bot;
+        Thread t;
+        QueueTime(PircBotX bot, int time, Channel chan, User user, int key) {
+            this.time = time;
+            this.chan=chan;
+            this.user=user;
+            this.key=key;
+            this.bot=bot;
+        }
         
+        public void giveT(Thread t) {
+            this.t = t;
+        }
         
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(time*1000);
+                bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
-    
     private ArrayList<String> getWordList() throws FileNotFoundException{
         try{
             Scanner wordfile = new Scanner(new File("wordlist.txt"));
