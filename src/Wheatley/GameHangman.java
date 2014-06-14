@@ -10,15 +10,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.regex.Pattern;
-import org.joda.time.DateTime;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
-import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.WaitForQueue;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -52,7 +48,6 @@ public class GameHangman extends ListenerAdapter {
                 if (wordls == null) {
                     wordls = getWordList();
                 }
-                
                 if (activechan.isEmpty()){
                     activechan.add(gameChan);
                 }
@@ -73,30 +68,13 @@ public class GameHangman extends ListenerAdapter {
                     // Make a variable of all blanks to use
                     String guess = MakeBlank(chosenword);
                     event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);
-                    DateTime dt = new DateTime();
-                    DateTime end = dt.plusSeconds(time);
-                    Timer timer = new Timer();
                     boolean running=true;
-                    
-//                    timer.schedule(new gameTimeLimit(), time * 1000);
                     int key=(int) (Math.random()*100000+1);
                     TimedWaitForQueue timedQueue = new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
-//                    WaitForQueue queue = new WaitForQueue(Global.bot);
-                    
                     while (running){
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                         String currentChan = CurrentEvent.getChannel().getName();
-                        dt = new DateTime();
                         changed = 0;
-                        
-//                        if (dt.isAfter(end)||lives==0){
-//                            event.respond("Game over! "+Colors.BOLD + chosenword + Colors.NORMAL + " would have been the solution.");
-//                            activechan.remove(currentChan);
-//                            changed = 0;
-//                            correct = 0;
-//                            lives = baselives;
-//                            timedQueue.close();
-//                        } 
                         if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
                             event.getBot().sendIRC().message(gameChan,"Game over! "+Colors.BOLD + chosenword.toUpperCase() + Colors.NORMAL + " would have been the solution.");
                             running = false;
@@ -143,21 +121,6 @@ public class GameHangman extends ListenerAdapter {
             }
         }
     }
-    
-    
-    class gameTimeLimit extends TimerTask {
-        boolean running=true;
-        public void run() {
-            System.out.println("Time's up!");
-            this.running=false;
-//            timer.cancel(); //Not necessary because we call System.exit
-            
-            //       System.exit(0); //Stops the AWT thread (and everything else)
-        }
-        public boolean isRunning(){
-            return(this.running);
-        }
-    }
     public static String MakeBlank(String input){
         String blanks = new String();
         for (int i = 0; i<input.length(); i++){
@@ -165,16 +128,15 @@ public class GameHangman extends ListenerAdapter {
         }
         return(blanks);
     }
-    
     public ArrayList<String> getWordList() throws FileNotFoundException{
         try{
             Scanner wordfile = new Scanner(new File("wordlist.txt"));
-            ArrayList<String> wordls = new ArrayList<String>();
+            ArrayList<String> wordList = new ArrayList<String>();
             while (wordfile.hasNext()){
-                wordls.add(wordfile.next());
+                wordList.add(wordfile.next());
             }
             wordfile.close();
-            return (wordls);
+            return (wordList);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
             return null;
@@ -182,26 +144,12 @@ public class GameHangman extends ListenerAdapter {
     }
     public class TimedWaitForQueue extends WaitForQueue{
         int time;
-        
         public TimedWaitForQueue(PircBotX bot,int time, Channel chan,User user, int key) throws InterruptedException {
             super(bot);
             this.time=time;
-//            Timer timer = new Timer();
-//            timer.schedule(new GameEnd(), this.time * 1000);
             Thread.sleep(this.time*1000);
             bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
-//            queue.close();
         }
         
-    }
-    private static class GameEnd extends TimerTask {
-        @Override
-        public void run() {
-            System.out.println("Time's up!");
-            
-        }
-        public GameEnd() {
-            
-        }
     }
 }
