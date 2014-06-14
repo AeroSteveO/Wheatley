@@ -163,6 +163,12 @@ public class Blarghlebot extends ListenerAdapter {
             if (Pattern.matches("![0-9]+", message))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
             
+            if (Pattern.matches("!bash [0-9]+", message))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "http://bash.org/?"+message.split(" ")[1]);
+            
+            if (Pattern.matches("!xkcdb [0-9]+", message))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.xkcdb.com/"+message.split(" ")[1]);
+            
             //OTHER Functions
             if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why")&&message.endsWith("?"))){
                 //Messages from : http://en.wikipedia.org/wiki/Magic_8-Ball

@@ -56,7 +56,7 @@ public class MatrapterChat extends ListenerAdapter {
         //Bane
         //Idea for a random command similar to !Xzibit
         if (message.equalsIgnoreCase("!bane"))
-            event.getBot().sendIRC().message(event.getChannel().getName(),"Ah you think darkness is your ally? You merely adopted the dark. I was born in it, molded by it. I didn't see the light until I was already a man, by then it was nothing to me but blinding!");
+            event.getBot().sendIRC().message(currentChan,"Ah you think darkness is your ally? You merely adopted the dark. I was born in it, molded by it. I didn't see the light until I was already a man, by then it was nothing to me but blinding!");
         
         if (message.toLowerCase().startsWith("!bane ")){
             String[] baneterm = message.split(" ");
@@ -65,7 +65,7 @@ public class MatrapterChat extends ListenerAdapter {
                 baneparts.add("Ah you think ");
                 baneparts.add(" is your ally? You merely adopted the ");
                 baneparts.add(". I was born in it, molded by it. I didn't see the light until I was already a man, by then it was nothing to me but blinding!");
-                event.getBot().sendIRC().message(event.getChannel().getName(),baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[1]+baneparts.get(2));
+                event.getBot().sendIRC().message(currentChan,baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[1]+baneparts.get(2));
             }
             else if (baneterm.length==3){
                 ArrayList<String> baneparts = new ArrayList<String>();
@@ -73,7 +73,7 @@ public class MatrapterChat extends ListenerAdapter {
                 baneparts.add(" is your ally? You merely adopted the ");
                 baneparts.add(". I was born in it, molded by it. I didn't see the ");
                 baneparts.add(" until I was already a man, by then it was nothing to me but blinding!");
-                event.getBot().sendIRC().message(event.getChannel().getName(),baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[1]+baneparts.get(2)+baneterm[2]+baneparts.get(3));
+                event.getBot().sendIRC().message(currentChan,baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[1]+baneparts.get(2)+baneterm[2]+baneparts.get(3));
             }
             else
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Bane input should be '!bane [term1] [term2]'");
