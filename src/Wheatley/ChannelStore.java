@@ -55,5 +55,19 @@ public class ChannelStore {
             }
             return (idx);
         }
+        public ChannelStore getChan(String toCheck){
+            int idx = -1;
+            for(int i = 0; i < this.size(); i++) {
+                if (this.get(i).name.equalsIgnoreCase(toCheck)) {
+                    idx = i;
+                    break;
+                }
+            }
+            if (idx==-1){
+                this.add(new ChannelStore(toCheck));
+                idx = this.size();
+            }
+            return (this.get(idx));
+        }
     }
 }
