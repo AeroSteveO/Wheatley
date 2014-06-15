@@ -27,12 +27,10 @@ public class BotControl extends ListenerAdapter{
         
         if (message.equalsIgnoreCase("!flush")&&event.getUser().getNick().equals(Global.BotOwner)){
             GameOmgword.activeGame.clear();
-//            GameOmgword.wordls.clear();
-            GameHangman.activechan.clear();
-            GameReverse.activechan.clear();
-            GameAltReverse.activechan.clear();
+            GameHangman.activeGame.clear();
+            GameReverse.activeGame.clear();
+            GameAltReverse.activeGame.clear();
             Blarghlebot.poop = "null";
-//            FactSphereFacts.quotels = null;
             BadWords.badwords = null;
         }
         
