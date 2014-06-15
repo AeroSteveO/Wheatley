@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Timer;
 import java.util.Vector;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
