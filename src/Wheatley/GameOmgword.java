@@ -5,9 +5,9 @@
 */
 
 package Wheatley;
+import Wheatley.Game.GameArray;
+import Wheatley.Game.TimedWaitForQueue;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import org.joda.time.*;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.*;
 import org.pircbotx.hooks.events.*;
@@ -24,87 +24,51 @@ import org.pircbotx.hooks.events.*;
  */
 public class GameOmgword extends ListenerAdapter {
     // Initialize needed variables
-    boolean isActive = false;
     String blockedChan = "#dtella";
     int time = 30;
-    
-    static ArrayList<Game> activeGame = new ArrayList<Game>();
-    public void actionPerformed(ActionEvent e) {
-    //If still loading, can't animate.
-
-}
+    static GameArray activeGame = new GameArray();
 
     @Override
-    public void onMessage(MessageEvent event) throws FileNotFoundException{
+    public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException{
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String currentChan = event.getChannel().getName();
         int currentIndex=0;
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
         if (message.equalsIgnoreCase("!omgword")&&!currentChan.equals(blockedChan)) {
-            if (activeGame.isEmpty()){
-                activeGame.add(new Game(currentChan,"omgword","shuffle",time));
-                currentIndex = 0;
-            }
-            else{
-                for (int i=0;i<activeGame.size();i++){
-                    if(activeGame.get(i).isGameRunning(currentChan,"omgword")){
-                        isActive = true;
-                    }
-                }
-                if (!isActive){
-                    activeGame.add(new Game(currentChan,"omgword","shuffle",time));
-                    currentIndex = activeGame.size()-1;
-                }
-            }
             
-            if (!isActive){
+            if (!activeGame.isGameActive(currentChan, "omgword", "shuffle", time)){
                 //get and shuffle the word
-                currentIndex = getGameIdx(currentChan);
+                boolean running = true;
+                currentIndex = activeGame.getGameIdx(currentChan,"omgword");
                 String chosenword = activeGame.get(currentIndex).chosenWord;
                 String scrambled = activeGame.get(currentIndex).solution;
                 event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
-                //setup amount of given time
-                DateTime dt = new DateTime();
-                DateTime end = dt.plusSeconds(time);
-                WaitForQueue queue = new WaitForQueue(event.getBot());
-                while (true){  //magical BS timer built into a waitforqueue, only updates upon message event
+                int key=(int) (Math.random()*100000+1);
+                TimedWaitForQueue timedQueue = activeGame.getGame(currentChan,"omgword").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                while (running){ 
                     try {
-                        MessageEvent CurrentEvent = queue.waitFor(MessageEvent.class);
-                        dt = new DateTime();
-                        currentIndex = getGameIdx(currentChan);
-                        if (dt.isAfter(end)){
-                            event.getBot().sendIRC().message(CurrentEvent.getChannel().getName(),"You did not guess the solution in time, the correct answer would have been "+chosenword.toUpperCase());
-                            activeGame.remove(currentIndex);
-                            queue.close();
+                        MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
+                        if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
+                            event.getBot().sendIRC().message(currentChan,"You did not guess the solution in time, the correct answer would have been "+chosenword.toUpperCase());
+                            running = false;
+                            timedQueue.end();
                         }
                         else if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
                             event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + chosenword.toUpperCase());
-                            activeGame.remove(currentIndex);
-                            queue.close();
+                            running = false;
+                            timedQueue.end();
                         }
                         else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
                             event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + chosenword.toUpperCase());
-                            activeGame.remove(currentIndex);
-                            queue.close();
+                            running = false;
+                            timedQueue.end();
                         }
                     } catch (InterruptedException ex) {
-                        //      activechan.remove(CurrentEvent.getChannel().getName());
                         ex.printStackTrace();
                     }
                 }
-            }
-            else
-                isActive=false;
-        }
-    }
-    public int getGameIdx(String toCheck){
-        int idx = -1;
-        for(int i = 0; i < this.activeGame.size(); i++) {
-            if (this.activeGame.get(i).channelName.equalsIgnoreCase(toCheck)) {
-                idx = i;
-                break;
+                activeGame.remove(activeGame.getGameIdx(currentChan,"omgword"));
             }
         }
-        return (idx);
     }
 }

@@ -6,17 +6,12 @@
 
 package Wheatley;
 
-import java.io.File;
+import Wheatley.Game.GameArray;
+import Wheatley.Game.TimedWaitForQueue;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.regex.Pattern;
-import org.pircbotx.Channel;
 import org.pircbotx.Colors;
-import org.pircbotx.PircBotX;
-import org.pircbotx.User;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.WaitForQueue;
 import org.pircbotx.hooks.events.MessageEvent;
 
 /**
@@ -34,9 +29,7 @@ public class GameHangman extends ListenerAdapter {
     int changed = 0;
     int lives = baselives;
     int time = 60;
-    ArrayList<String> wordls = null;
-    static ArrayList<String> activechan = new ArrayList<String>();
-    boolean isactive = false;
+    static GameArray activeGame = new GameArray();
     String blockedChan = "#dtella";
     int correct = 0;
     @Override
@@ -44,41 +37,29 @@ public class GameHangman extends ListenerAdapter {
         {
             String message = Colors.removeFormattingAndColors(event.getMessage());
             String gameChan = event.getChannel().getName();
+            int currentIndex=0;
             if (message.equalsIgnoreCase("!hangman")&&!gameChan.equals(blockedChan)) {
-                if (wordls == null) {
-                    wordls = getWordList();
-                }
-                if (activechan.isEmpty()){
-                    activechan.add(gameChan);
-                }
-                else{ //if its not empty, check if the channel calling the function is already active
-                    for (int i=0;i<activechan.size();i++){
-                        if (activechan.get(i).equals(gameChan)){
-                            isactive = true;
-                        }
-                    }
-                    if (!isactive) { //if its not active, add it to the active channel list, and start the game
-                        activechan.add(gameChan);
-                    }
-                }
-                if (!isactive){
+                
+                if (!activeGame.isGameActive(gameChan, "hangman", "blank", time)){
                     // Choose a random word from the list
-                    String chosenword = wordls.get((int) (Math.random()*wordls.size()-1));
+                    currentIndex = activeGame.getGameIdx(gameChan,"hangman");
+                    String chosenword = activeGame.get(currentIndex).chosenWord;
+                    String guess = activeGame.get(currentIndex).solution;
                     char[] characters = chosenword.toCharArray();
-                    // Make a variable of all blanks to use
-                    String guess = MakeBlank(chosenword);
+                    
                     event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);
                     boolean running=true;
                     int key=(int) (Math.random()*100000+1);
-                    TimedWaitForQueue timedQueue = new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                    TimedWaitForQueue timedQueue = activeGame.getGame(gameChan, "hangman").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                    
                     while (running){
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                         String currentChan = CurrentEvent.getChannel().getName();
                         changed = 0;
                         if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
-                            event.getBot().sendIRC().message(gameChan,"Game over! "+Colors.BOLD + chosenword.toUpperCase() + Colors.NORMAL + " would have been the solution.");
+                            event.getBot().sendIRC().message(gameChan,"Game over! You've run out of time. "+Colors.BOLD + chosenword.toUpperCase() + Colors.NORMAL + " would have been the solution.");
                             running = false;
-                            timedQueue.close();
+                            timedQueue.end();
                         }
                         else if (Pattern.matches("[a-zA-Z]{1}", CurrentEvent.getMessage())&&currentChan.equalsIgnoreCase(gameChan)){
                             for (int i = 0; i<chosenword.length(); i++){
@@ -96,60 +77,27 @@ public class GameHangman extends ListenerAdapter {
                                 if(lives == 0){
                                     event.getBot().sendIRC().message(gameChan, "You've run out of lives! The word we looked for was " + Colors.BOLD + Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
                                     running = false;
-                                    timedQueue.close();
+                                    timedQueue.end();
                                 }
                             }
                             else if (correct == chosenword.length()){
                                 event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD + chosenword.toUpperCase() + Colors.NORMAL);
                                 running = false;
-                                timedQueue.close();
+                                timedQueue.end();
                             }
                         }
                         else if ((CurrentEvent.getMessage().equals("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(gameChan)){
                             CurrentEvent.respond("You have given up! Correct answer was " + chosenword.toUpperCase());
                             running = false;
-                            timedQueue.close();
+                            timedQueue.end();
                         }
                     }
                     correct = 0;
                     changed = 0;
                     lives = baselives;
-                    activechan.remove(gameChan);
+                    activeGame.remove(activeGame.getGameIdx(gameChan,"hangman")); //updated current index of the game
                 }
-                else
-                    isactive=false;
             }
         }
-    }
-    public static String MakeBlank(String input){
-        String blanks = new String();
-        for (int i = 0; i<input.length(); i++){
-            blanks = blanks + "_";
-        }
-        return(blanks);
-    }
-    public ArrayList<String> getWordList() throws FileNotFoundException{
-        try{
-            Scanner wordfile = new Scanner(new File("wordlist.txt"));
-            ArrayList<String> wordList = new ArrayList<String>();
-            while (wordfile.hasNext()){
-                wordList.add(wordfile.next());
-            }
-            wordfile.close();
-            return (wordList);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-    public class TimedWaitForQueue extends WaitForQueue{
-        int time;
-        public TimedWaitForQueue(PircBotX bot,int time, Channel chan,User user, int key) throws InterruptedException {
-            super(bot);
-            this.time=time;
-            Thread.sleep(this.time*1000);
-            bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
-        }
-        
     }
 }
