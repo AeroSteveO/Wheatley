@@ -13,7 +13,9 @@ import java.util.Vector;
 /**
  *
  * @author Steve-O
- * KIDDO'S LEARNING ERBJERCTS
+ * ChannelStore Object and Corresponding ChannelArray Object
+ * ->stores channel specific settings and logs
+ * ->primarily oriented towards markov interface
  */
 public class ChannelStore {
     String name;                             // The name of the channel
@@ -37,8 +39,10 @@ public class ChannelStore {
     public String toString(){
         return(this.name);
     }
-    public void addMsg(String msg){
-        this.previousMessage = msg;
+    public void addMessageToLog(String msg){
+        this.msgLog.add(msg);
+        if (msgLog.size()>100)
+            this.msgLog.remove(this.msgLog.size()-1);
     }
     public static class ChannelArray extends Vector<ChannelStore>{
         public int getChanIdx(String toCheck){
