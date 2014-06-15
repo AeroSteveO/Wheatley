@@ -61,6 +61,17 @@ public class GameHangman extends ListenerAdapter {
                             running = false;
                             timedQueue.end();
                         }
+                        else if (Pattern.matches("[a-zA-Z]{2,}",CurrentEvent.getMessage())&&currentChan.equalsIgnoreCase(gameChan)){
+                            if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
+                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD + chosenword.toUpperCase() + Colors.NORMAL);
+                                running=false;
+                                timedQueue.end();
+                            }
+                            else{
+                                lives--;
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is incorrect. Lives left: " + lives );
+                            }
+                        }
                         else if (Pattern.matches("[a-zA-Z]{1}", CurrentEvent.getMessage())&&currentChan.equalsIgnoreCase(gameChan)){
                             for (int i = 0; i<chosenword.length(); i++){
                                 if (Character.toString(characters[i]).equalsIgnoreCase(CurrentEvent.getMessage())){
