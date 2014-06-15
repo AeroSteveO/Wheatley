@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
@@ -23,6 +22,19 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
+ * Game Object built to simplify building IRC based games
+ * ->stores game specific settings and ensures only one instance of a game can be in each channel
+ * ->reduces redundant code and allows for re-use of code across games
+ * 
+ * ->Current Modifiers
+ * ---->Shuffle
+ *          Shuffles the characters in the chosen word
+ * ---->Blank
+ *          Changes the characters in the chosen word to all underscores
+ * ---->Reverse
+ *          Reverses the characters in the chosen word
+ * ---->None
+ *          Does nothing
  */
 public class Game {
     String channelName;
@@ -55,7 +67,8 @@ public class Game {
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
     }
-    public class TimedWaitForQueue extends WaitForQueue{
+    
+    public  class TimedWaitForQueue extends WaitForQueue{
         int time;
         private QueueTime runnable = null;
         Thread t;
@@ -66,15 +79,13 @@ public class Game {
             this.t = new Thread(runnable);
             runnable.giveT(t);
             t.start();
-//            Thread.sleep(this.time*1000);
-//            bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
         }
         public void end() throws InterruptedException{
-            this.close();
-            t.join(1000);
+            this.close(); //Close this EventQueue
+            t.join(1000); //Ensure the thread also closes
         }
     }
-    public class QueueTime implements Runnable {
+    public  class QueueTime implements Runnable {
         int time;
         User user;
         Channel chan;
@@ -95,7 +106,7 @@ public class Game {
         
         @Override
         public void run() {
-            try {
+            try { // No need to loop for this thread
                 Thread.sleep(time*1000);
                 bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
             } catch (InterruptedException ex) {
@@ -103,6 +114,7 @@ public class Game {
             }
         }
     }
+    
     private ArrayList<String> getWordList() throws FileNotFoundException{
         try{
             Scanner wordfile = new Scanner(new File("wordlist.txt"));
@@ -117,14 +129,17 @@ public class Game {
             return null;
         }
     }
+    
     private static String modify(String mod, String word){
         String modifiedWord ="";
-        if(mod.equalsIgnoreCase("blank"))
+        if(mod.equalsIgnoreCase("blank"))   //Change the chosenword to all underscores
             modifiedWord=makeBlank(word);
-        if(mod.equalsIgnoreCase("shuffle"))
+        if(mod.equalsIgnoreCase("shuffle")) //Shuffle the characters in the chosen word
             modifiedWord=shuffle(word);
-        if(mod.equalsIgnoreCase("reverse"))
+        if(mod.equalsIgnoreCase("reverse")) //Reverse the chosenword
             modifiedWord=reverse(word);
+        if(mod.equalsIgnoreCase("none"))    //User doesn't want the string modified
+            modifiedWord=word;
         
         return(modifiedWord);
     }
@@ -154,7 +169,6 @@ public class Game {
         }
         StringBuilder output = new StringBuilder(input.length());
         for(int i=characters.size();i>0;i--){
-            //int randPicker = (int)(Math.random()*characters.size());
             output.append(characters.get(i-1));
         }
         return(output.toString());
@@ -187,16 +201,37 @@ public class Game {
         return(isChan);
     }
     
-    public static class ChannelArray extends Vector<Game>{
-        public int getGameIdx(String toCheck){
+    public static class GameArray extends Vector<Game>{
+        public int getGameIdx(String channel,String game){
             int idx = -1;
             for(int i = 0; i < this.size(); i++) {
-                if (this.get(i).channelName.equalsIgnoreCase(toCheck)) {
+                if (this.get(i).channelName.equalsIgnoreCase(channel)&&this.get(i).gameType.equalsIgnoreCase(game)) {
                     idx = i;
                     break;
                 }
             }
             return (idx);
+        }
+        
+        public Game getGame(String channel,String game){
+            return (this.get(this.getGameIdx(channel, game)));
+        }
+        public boolean isGameActive(String currentChan,String GameType, String modification, int time) throws FileNotFoundException{
+            boolean isActive=false;
+            if (this.isEmpty()){
+                this.add(new Game(currentChan,GameType,modification,time));
+            }
+            else{
+                for (int i=0;i<this.size();i++){
+                    if(this.get(i).isGameRunning(currentChan,GameType)){
+                        isActive = true;
+                    }
+                }
+                if (!isActive){
+                    this.add(new Game(currentChan,GameType,modification,time));
+                }
+            }
+            return(isActive);
         }
     }
 }
