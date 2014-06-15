@@ -15,6 +15,13 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
+ *
+ * Activate Commands With
+ *      !bane
+ *      !bane [word 1] [word 2]
+ *      !bane [word 1] [word 2] [word 3]
+ *      !bane [word 1] [word 2] [word 3] [word 4]
+ *          Sends banes speech either as he said it, or replacing "darkness", "dark" and "light" with the given words
  */
 public class MatrapterChat extends ListenerAdapter {
     
@@ -74,6 +81,22 @@ public class MatrapterChat extends ListenerAdapter {
                 baneparts.add(". I was born in it, molded by it. I didn't see the ");
                 baneparts.add(" until I was already a man, by then it was nothing to me but blinding!");
                 event.getBot().sendIRC().message(currentChan,baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[1]+baneparts.get(2)+baneterm[2]+baneparts.get(3));
+            }
+            else if (baneterm.length==4){
+                ArrayList<String> baneparts = new ArrayList<String>();
+                baneparts.add("Ah you think ");
+                baneparts.add(" is your ally? You merely adopted the ");
+                baneparts.add(". I was born in it, molded by it. I didn't see the ");
+                baneparts.add(" until I was already a man, by then it was nothing to me but blinding!");
+                event.getBot().sendIRC().message(currentChan,baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[2]+baneparts.get(2)+baneterm[3]+baneparts.get(3));
+            }
+            else if (baneterm.length==5){
+                ArrayList<String> baneparts = new ArrayList<String>();
+                baneparts.add("Ah you think ");
+                baneparts.add(" is your ally? You merely adopted the ");
+                baneparts.add(". I was born in it, molded by it. I didn't see the ");
+                baneparts.add(" until I was already a man, by then it was nothing to me but ");
+                event.getBot().sendIRC().message(currentChan,baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[2]+baneparts.get(2)+baneterm[3]+baneparts.get(3)+baneterm[4]+"!");
             }
             else
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Bane input should be '!bane [term1] [term2]'");
