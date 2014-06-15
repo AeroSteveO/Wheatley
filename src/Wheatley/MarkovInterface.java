@@ -22,6 +22,19 @@ import org.pircbotx.Colors;
  *
  * @author Steve-O
  * JBorg markov chain integration, based off seeborg which is based on pyborg
+ * 
+ * Activate Commands With
+ *      !shutup
+ *      !speak up
+ *          To turn on and off the random response markov generator
+ *      !set chance [num]
+ *          To set the chance of the markov generator to respond (1/[num] chance)
+ *      !save lines
+ *          To save the current lines used in markov chain generation
+ *      !line
+ *          To command the bot to respond with a line
+ *      [botnick], what do you think of [item]
+ *          To force a seed word into the generator and command a reply
  *
  */
 public class MarkovInterface extends ListenerAdapter{
@@ -125,7 +138,6 @@ public class MarkovInterface extends ListenerAdapter{
         }
         int i=0;
         while(bot==false&&i<botlist.size()){
-            //for (int i=0;i<botlist.size();i++){
             if (nick.equalsIgnoreCase(botlist.get(i))){
                 bot=true;
             }
