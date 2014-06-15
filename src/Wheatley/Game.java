@@ -44,12 +44,8 @@ public class Game {
     String chosenWord;
     String winner;
     int moneyChange = 0;
-    boolean active = true;
     String modifier;
     String solution;
-    
-    
-    Timer timer;
     
     Game(String channel, String mod, String type) throws FileNotFoundException{
         this.channelName = channel;
