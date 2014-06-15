@@ -9,7 +9,6 @@ package Wheatley;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,7 +67,7 @@ public class MarkovInterface extends ListenerAdapter{
         if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&
                 !Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())&&!Pattern.matches("[a-zA-Z]{1}", message)&&
                 !Pattern.matches("[a-zA-Z_0-9]+\\++", message.toLowerCase())&&
-                !message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", what do you think of")){
+                !message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")){
             Borg.learn(message);
             newLines++;
             
