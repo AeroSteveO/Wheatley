@@ -48,9 +48,9 @@ public class Blarghlebot extends ListenerAdapter {
             
             
             int idx = Global.Channels.getChanIdx(event.getChannel().getName());
-            Global.Channels.get(idx).msgLog.add("<"+event.getUser().getNick()+"> "+message);
-            if(Global.Channels.get(idx).msgLog.size()>100)
-                Global.Channels.get(idx).msgLog.remove(Global.Channels.get(idx).msgLog.size()-1);
+            Global.Channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message);
+//            if(Global.Channels.get(idx).msgLog.size()>100)
+//                Global.Channels.get(idx).msgLog.remove(Global.Channels.get(idx).msgLog.size()-1);
             //<Evidlo> re.split('(?<!\\\\)/','hello\/world/hello')
             //<Evidlo> Whenever python sees \/, it changes it to \\/
             //<Evidlo> So thats why theres \\\\
@@ -58,11 +58,11 @@ public class Blarghlebot extends ListenerAdapter {
                 String[] findNreplace = Colors.removeFormattingAndColors(event.getMessage()).split("/");
                 Pattern findThis = Pattern.compile(findNreplace[1]);
                 String reply = "";
-                boolean found = false;
+//                boolean found = false;
                 int i=Global.Channels.get(idx).msgLog.size()-2;
 //                Matcher match = findThis.matcher(message);
                 reply = findReplace(i, findNreplace, findThis, idx);
-                found = true;
+//                found = true;
 //                while (i>=0&&!found){
 //                    if (findThis.matcher(Global.Channels.get(idx).msgLog.get(i)).find()){
 //                        reply = Global.Channels.get(idx).msgLog.get(i).replaceAll(findNreplace[1],findNreplace[2]);
@@ -165,7 +165,7 @@ public class Blarghlebot extends ListenerAdapter {
             
             if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("trolo[lo]+", message.toLowerCase()))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "http://youtu.be/v1PBptSDIh8");
-            
+            // REGEX for creating IRC quote links
             if (Pattern.matches("![0-9]+", message))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
             
