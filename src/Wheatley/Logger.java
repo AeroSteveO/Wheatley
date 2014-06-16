@@ -33,7 +33,7 @@ public class Logger extends ListenerAdapter{
         String message = Colors.removeFormattingAndColors(event.getMessage());
         log.add("<"+event.getUser().getNick()+"> "+message);
 //        System.out.printf(log.get(log.size()-1)+"\n");
-        if(log.size()>100||(message.equalsIgnoreCase("!savelogs")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner))){
+        if(log.size()>100||(message.equalsIgnoreCase("!save logs")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner))){
             success = saveToFile(log);
             if(!success)
                 event.getBot().sendIRC().notice(Global.BotOwner,"Log file failed to save");
