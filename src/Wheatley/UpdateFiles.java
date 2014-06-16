@@ -18,6 +18,10 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  * Used to update .txt files
+ * 
+ * Activate commands with
+ *      !update [filename] [singleWordItem]
+ *          !update badwordlist defenetely
  */
 public class UpdateFiles extends ListenerAdapter{
     
@@ -30,7 +34,6 @@ public class UpdateFiles extends ListenerAdapter{
             if (properties.length== 3){
                 String filename = properties[1];
                 String addition = properties[2];
-                
                 
                 try{
                     File file =new File(filename+".txt");
@@ -52,7 +55,6 @@ public class UpdateFiles extends ListenerAdapter{
                     e.printStackTrace();
                 }
             }
-            
         }
     }
 }

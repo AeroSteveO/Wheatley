@@ -1,8 +1,8 @@
- /**
-  *
-  *
-  *
-  */
+/**
+ *
+ *
+ *
+ */
 package Wheatley;
 
 import org.pircbotx.Configuration;
@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Element;
 import java.io.File;
+import org.pircbotx.hooks.managers.BackgroundListenerManager;
 
 /**
  *
@@ -37,25 +38,24 @@ public class WheatleyMain extends ListenerAdapter {
     
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
-        //      String message = Colors.removeFormattingAndColors(event.getMessage());
-        
+// in case something should be done here        
     }
     @Override
     // Rejoin on Kick
     public void onKick(KickEvent event) throws Exception {
         if (event.getRecipient().getNick().equals(event.getBot().getNick())) {
-            event.getBot().sendIRC().joinChannel(event.getChannel().getName());
+            event.getBot().sendIRC().joinChannel(event.getChannel().getName()); 
         }
     }
     @Override
     // Set mode +B for Bots
     public void onConnect(ConnectEvent event) throws Exception {
-        event.getBot().sendRaw().rawLine("mode " + event.getBot().getNick() + " +B"); // Register this as a Bot
+        event.getBot().sendRaw().rawLine("mode " + event.getBot().getNick() + " +B");
     }
     @Override
     // Joins channels it has been invited to
     public void onInvite(InviteEvent e) {
-        e.getBot().sendIRC().joinChannel(e.getChannel());
+        e.getBot().sendIRC().joinChannel(e.getChannel()); 
     }
     @Override
     // Something from the example script that has continued to stay in my bots code
@@ -90,6 +90,8 @@ public class WheatleyMain extends ListenerAdapter {
             Global.NickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
             Global.BotOwner = baseElement.getElementsByTagName("botowner").item(0).getTextContent();
             
+            BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
+
             //   Configuration configuration;
             Configuration.Builder configuration = new Configuration.Builder()
                     .setName(Global.MainNick) //Set the nick of the bot. CHANGE IN YOUR CODE
@@ -100,6 +102,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .setAutoReconnect(true)
                     .setMaxLineLength(425)
 //                    .addCapHandler(new TLSCapHandler(new UtilSSLSocketFactory().trustAllCertificates(), true))
+                    .setListenerManager(BackgroundListener)//Allow for logger background listener
                     .addListener(new WheatleyMain())       //This main class's listener
                     .addListener(new Blarghlebot())        //Trollbot Listener
                     .addListener(new GameOmgword())        //omgword game listener
@@ -121,38 +124,32 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new BlarghleRandom())
                     .addListener(new BadWords())
                     .addListener(new MarkovInterface())
-//                    .addListener(new GameBackbone())
                     .addListener(new TextModification())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
-//                    .addListener(new Bane())                 // Banes qq speech
-//                    .addListener(new SimplePing())
                     .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent());
-            //  for (int i=0;i<baseElement.getElementsByTagName("listener").getLength();i++)
-            //     configuration.addListener("new "baseElement.getElementsByTagName("listener").item(i).getTextContent()+"()")
-            //             .buildConfiguration();
             
-            
-            
-            
-            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++)
-            {
-                configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
-                Global.Channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
-            }
-            Configuration config = configuration.buildConfiguration();
+                    BackgroundListener.addListener(new Logger(),true); //Add logger background listener
+                    
+                    for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++) //Add channels from XML and load into Channels Object
+                    {
+                        configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
+                        Global.Channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
+                    }
+                    Configuration config = configuration.buildConfiguration();
 //            Global.bot = new PircBotX(config);
-            //bot.connect throws various exceptions for failures
-            Global.bot = new PircBotX(config);
+                    //bot.connect throws various exceptions for failures
+                    Global.bot = new PircBotX(config);
 //            bot.startBot();
-//            try {
-                Runner parallel = new Runner(Global.bot);
-                Thread t = new Thread(parallel);
-                parallel.giveT(t);
-                t.start();
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
+            try {
+                    Runner parallel = new Runner(Global.bot);
+                    Thread t = new Thread(parallel);
+                    parallel.giveT(t);
+                    t.start();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.printf("Failed to start bot\n");
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();
