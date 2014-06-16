@@ -22,7 +22,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  * 
  * Activate commands with
- *      !savelogs
+ *      !save logs
  *          Saves all currently in ram lines to log
  */
 public class Logger extends ListenerAdapter{
