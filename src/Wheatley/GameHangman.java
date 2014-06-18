@@ -46,7 +46,7 @@ public class GameHangman extends ListenerAdapter {
                     String chosenword = activeGame.get(currentIndex).getChosenWord();
                     String guess = activeGame.get(currentIndex).getSolution();
                     char[] characters = chosenword.toCharArray();
-                    
+                    char[] blanks = guess.toCharArray();
                     event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);
                     boolean running=true;
                     int key=(int) (Math.random()*100000+1);
@@ -74,9 +74,10 @@ public class GameHangman extends ListenerAdapter {
                         }
                         else if (Pattern.matches("[a-zA-Z]{1}", CurrentEvent.getMessage())&&currentChan.equalsIgnoreCase(gameChan)){
                             for (int i = 0; i<chosenword.length(); i++){
-                                if (Character.toString(characters[i]).equalsIgnoreCase(CurrentEvent.getMessage())){
+                                if (Character.toString(characters[i]).equalsIgnoreCase(CurrentEvent.getMessage())&&!Character.toString(blanks[i]).equalsIgnoreCase(CurrentEvent.getMessage())){
                                     String temp = guess.substring(0,i)+CurrentEvent.getMessage()+guess.substring(i+1);
                                     guess = temp;
+                                    blanks = guess.toCharArray();
                                     event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is correct! " + Colors.BOLD + guess.toUpperCase() + Colors.NORMAL + " Lives left: " +  lives );
                                     correct++;
                                     changed = 1;
@@ -102,6 +103,7 @@ public class GameHangman extends ListenerAdapter {
                             running = false;
                             timedQueue.end();
                         }
+                        
                     }
                     correct = 0;
                     changed = 0;
