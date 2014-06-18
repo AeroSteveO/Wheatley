@@ -24,7 +24,7 @@ public class ChannelStore {
     String previousMessage;                  // previous message sent in this channel
     String lastUrl;                          // last url seen in this channel
     String secondLastUrl;                    // second last url seen in this channel
-    List<String> msgLog = new ArrayList<>(); // for use in s/find/replace commands
+    private List<String> msgLog = new ArrayList<>(); // for use in s/find/replace commands
     
     ChannelStore(String aName) {
         this.name = aName;
@@ -43,6 +43,12 @@ public class ChannelStore {
         this.msgLog.add(msg);
         if (msgLog.size()>100)
             this.msgLog.remove(this.msgLog.size()-1);
+    }
+    public int getMessageLogSize(){
+        return(this.msgLog.size());
+    }
+    public String getMessage(int i){
+        return(this.msgLog.get(i));
     }
     public static class ChannelArray extends Vector<ChannelStore>{
         public int getChanIdx(String toCheck){

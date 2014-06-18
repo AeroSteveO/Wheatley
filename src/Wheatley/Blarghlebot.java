@@ -59,7 +59,7 @@ public class Blarghlebot extends ListenerAdapter {
                 Pattern findThis = Pattern.compile(findNreplace[1]);
                 String reply = "";
 //                boolean found = false;
-                int i=Global.Channels.get(idx).msgLog.size()-2;
+                int i=Global.Channels.get(idx).getMessageLogSize()-2;
 //                Matcher match = findThis.matcher(message);
                 reply = findReplace(i, findNreplace, findThis, idx);
 //                found = true;
@@ -72,7 +72,7 @@ public class Blarghlebot extends ListenerAdapter {
 //                }
                 if (!reply.equalsIgnoreCase("")){
                     event.getBot().sendIRC().message(event.getChannel().getName(),reply);
-                    Global.Channels.get(idx).msgLog.add(reply);
+                    Global.Channels.get(idx).addMessageToLog(reply);
                 }
             }
             
@@ -271,8 +271,8 @@ public class Blarghlebot extends ListenerAdapter {
         Boolean found = false;
         
         while (i>=0&&!found){
-            if (findThis.matcher(Global.Channels.get(idx).msgLog.get(i)).find()){
-                reply = Global.Channels.get(idx).msgLog.get(i).replaceAll(findNreplace[1],findNreplace[2]);
+            if (findThis.matcher(Global.Channels.get(idx).getMessage(i)).find()){
+                reply = Global.Channels.get(idx).getMessage(i).replaceAll(findNreplace[1],findNreplace[2]);
                 backReply = reply.split(" ");
                 if (backReply.length>1){
                     if(backReply[1].startsWith("s/")||backReply[1].startsWith("sed/")){
