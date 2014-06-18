@@ -77,7 +77,6 @@ public class GameHangman extends ListenerAdapter {
                                 if (Character.toString(characters[i]).equalsIgnoreCase(CurrentEvent.getMessage())&&!Character.toString(blanks[i]).equalsIgnoreCase(CurrentEvent.getMessage())){
                                     String temp = guess.substring(0,i)+CurrentEvent.getMessage()+guess.substring(i+1);
                                     guess = temp;
-                                    blanks = guess.toCharArray();
                                     event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is correct! " + Colors.BOLD + guess.toUpperCase() + Colors.NORMAL + " Lives left: " +  lives );
                                     correct++;
                                     changed = 1;
@@ -103,7 +102,7 @@ public class GameHangman extends ListenerAdapter {
                             running = false;
                             timedQueue.end();
                         }
-                        
+                        blanks = guess.toCharArray();
                     }
                     correct = 0;
                     changed = 0;
