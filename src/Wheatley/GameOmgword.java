@@ -40,8 +40,8 @@ public class GameOmgword extends ListenerAdapter {
                 //get and shuffle the word
                 boolean running = true;
                 currentIndex = activeGame.getGameIdx(currentChan,"omgword");
-                String chosenword = activeGame.get(currentIndex).chosenWord;
-                String scrambled = activeGame.get(currentIndex).solution;
+                String chosenword = activeGame.get(currentIndex).getChosenWord();
+                String scrambled = activeGame.get(currentIndex).getSolution();
                 event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
                 int key=(int) (Math.random()*100000+1);
                 TimedWaitForQueue timedQueue = activeGame.getGame(currentChan,"omgword").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);

@@ -43,8 +43,8 @@ public class GameHangman extends ListenerAdapter {
                 if (!activeGame.isGameActive(gameChan, "hangman", "blank", time)){
                     // Choose a random word from the list
                     currentIndex = activeGame.getGameIdx(gameChan,"hangman");
-                    String chosenword = activeGame.get(currentIndex).chosenWord;
-                    String guess = activeGame.get(currentIndex).solution;
+                    String chosenword = activeGame.get(currentIndex).getChosenWord();
+                    String guess = activeGame.get(currentIndex).getSolution();
                     char[] characters = chosenword.toCharArray();
                     
                     event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);

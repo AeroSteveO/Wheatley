@@ -38,8 +38,8 @@ public class GameReverse extends ListenerAdapter {
             if (!activeGame.isGameActive(gameChan, "reverse", "reverse", time)){
                 //get and shuffle the word
                 int currentIndex = activeGame.getGameIdx(gameChan,"reverse");
-                String chosenword = activeGame.get(currentIndex).chosenWord;
-                String reversed = activeGame.get(currentIndex).solution;
+                String chosenword = activeGame.get(currentIndex).getChosenWord();
+                String reversed = activeGame.get(currentIndex).getSolution();
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +reversed.toUpperCase() + Colors.NORMAL);
                 //setup amount of given time
                 int key=(int) (Math.random()*100000+1);

@@ -24,7 +24,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * Game Object built to simplify building IRC based games
  * ->stores game specific settings and ensures only one instance of a game can be in each channel
  * ->reduces redundant code and allows for re-use of code across games
- * 
+ *
  * ->Current Modifiers
  * ---->Shuffle
  *          Shuffles the characters in the chosen word
@@ -36,15 +36,15 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Does nothing
  */
 public class Game {
-    String channelName;
-    String gameType;
-    List<String> wordList = getWordList();
-    int timeLimit;
-    String chosenWord;
-    String winner;
-    int moneyChange = 0;
-    String modifier;
-    String solution;
+    private String channelName;
+    private String gameType;
+    private List<String> wordList = getWordList();
+    private int timeLimit;
+    private String chosenWord;
+    private String winner = "";
+    private int moneyChange = 0;
+    private String modifier;
+    private String solution;
     
     Game(String channel, String mod, String type) throws FileNotFoundException{
         this.channelName = channel;
@@ -62,7 +62,18 @@ public class Game {
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
     }
-    
+    public String getGameType(){
+        return(this.gameType);
+    }
+    public String getChosenWord(){
+        return(this.chosenWord);
+    }
+    public String getSolution(){
+        return(this.solution);
+    }
+    public String getChannelName(){
+        return(this.channelName);
+    }
     public  class TimedWaitForQueue extends WaitForQueue{
         int time;
         private QueueTime runnable = null;
