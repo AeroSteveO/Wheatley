@@ -44,7 +44,7 @@ public class MarkovInterface extends ListenerAdapter{
     
     String markovFileName = "ImportedMarkov";
     File markovFile = new File(markovFileName);
-    JBorg Borg = new JBorg(1,10);
+    JBorg Borg = new JBorg(1,15);
     boolean loaded = Borg.loadWords(markovFile);
     
     @Override
