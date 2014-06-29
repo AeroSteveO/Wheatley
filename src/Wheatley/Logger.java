@@ -8,7 +8,6 @@ package Wheatley;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +31,6 @@ public class Logger extends ListenerAdapter{
     public void onMessage(MessageEvent event) throws IOException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         log.add("<"+event.getUser().getNick()+"> "+message);
-//        System.out.printf(log.get(log.size()-1)+"\n");
         if(log.size()>100||(message.equalsIgnoreCase("!save logs")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner))){
             success = saveToFile(log);
             if(!success)
@@ -43,7 +41,6 @@ public class Logger extends ListenerAdapter{
     public void onAction(ActionEvent event) {
         String action = Colors.removeFormattingAndColors(event.getMessage());
         log.add("* "+event.getUser().getNick()+" "+action);
-//        System.out.printf(log.get(log.size()-1)+"\n");
     }
     private Boolean saveToFile(ArrayList<String> log) throws IOException {
         Boolean isSaved = false;
@@ -62,7 +59,6 @@ public class Logger extends ListenerAdapter{
         }catch(IOException e){
             e.printStackTrace();
         }
-        
         return(isSaved);
     }
 }
