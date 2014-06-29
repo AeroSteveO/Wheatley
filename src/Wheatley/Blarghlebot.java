@@ -35,20 +35,19 @@ import org.pircbotx.hooks.events.*;
  *          Pulls up a link for the xkcdb quote with that number
  *      !bash [number]
  *          Pulls up a link for the bash.org quote with that number
- * 
+ *
  */
 public class Blarghlebot extends ListenerAdapter {
     int shoot = 0;
     static String poop = "null";
     @Override
     public void onMessage(MessageEvent event) throws Exception {
+        String message = Colors.removeFormattingAndColors(event.getMessage());
+        int idx = Global.Channels.getChanIdx(event.getChannel().getName());
+        Global.Channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message);
+        
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
-            String message = Colors.removeFormattingAndColors(event.getMessage());
             String[] messageArray = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
-            
-            
-            int idx = Global.Channels.getChanIdx(event.getChannel().getName());
-            Global.Channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message);
 //            if(Global.Channels.get(idx).msgLog.size()>100)
 //                Global.Channels.get(idx).msgLog.remove(Global.Channels.get(idx).msgLog.size()-1);
             //<Evidlo> re.split('(?<!\\\\)/','hello\/world/hello')
