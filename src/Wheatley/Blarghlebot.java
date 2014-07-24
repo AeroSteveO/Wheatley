@@ -47,9 +47,7 @@ public class Blarghlebot extends ListenerAdapter {
         Global.Channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message);
         
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
-            String[] messageArray = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
-//            if(Global.Channels.get(idx).msgLog.size()>100)
-//                Global.Channels.get(idx).msgLog.remove(Global.Channels.get(idx).msgLog.size()-1);
+            String[] messageArray = message.split(" ");
             //<Evidlo> re.split('(?<!\\\\)/','hello\/world/hello')
             //<Evidlo> Whenever python sees \/, it changes it to \\/
             //<Evidlo> So thats why theres \\\\
@@ -57,18 +55,8 @@ public class Blarghlebot extends ListenerAdapter {
                 String[] findNreplace = Colors.removeFormattingAndColors(event.getMessage()).split("/");
                 Pattern findThis = Pattern.compile(findNreplace[1]);
                 String reply = "";
-//                boolean found = false;
                 int i=Global.Channels.get(idx).getMessageLogSize()-2;
-//                Matcher match = findThis.matcher(message);
                 reply = findReplace(i, findNreplace, findThis, idx);
-//                found = true;
-//                while (i>=0&&!found){
-//                    if (findThis.matcher(Global.Channels.get(idx).msgLog.get(i)).find()){
-//                        reply = Global.Channels.get(idx).msgLog.get(i).replaceAll(findNreplace[1],findNreplace[2]);
-//                        found = true;
-//                    }
-//                    i--;
-//                }
                 if (!reply.equalsIgnoreCase("")){
                     event.getBot().sendIRC().message(event.getChannel().getName(),reply);
                     Global.Channels.get(idx).addMessageToLog(reply);
@@ -239,7 +227,6 @@ public class Blarghlebot extends ListenerAdapter {
             }
             
             if (message.toLowerCase().startsWith("!xzibit")&&(Pattern.matches("!xzibit [a-zA-Z]+ [a-zA-Z]+", message.toLowerCase()))){
-                //String[] xzibit = message.split(" ");
                 event.getBot().sendIRC().message(event.getChannel().getName(),"Yo dawg I heard you like " + messageArray[1] + " so I put an " + messageArray[1] + " in your " + messageArray[2] + " so you can " + messageArray[1] + " while you " + messageArray[2] + ".");
             }
             //<Evidlo> [15:02:31] !yodawg b a
@@ -270,8 +257,9 @@ public class Blarghlebot extends ListenerAdapter {
         Boolean found = false;
         
         while (i>=0&&!found){
-            if (findThis.matcher(Global.Channels.get(idx).getMessage(i)).find()){
-                reply = Global.Channels.get(idx).getMessage(i).replaceAll(findNreplace[1],findNreplace[2]);
+            if (findThis.matcher(Global.Channels.get(idx).getMessage(i).split(" ",2)[1]).find()){
+                String[] temp = reply.split(" ",2);
+                reply = Global.Channels.get(idx).getMessage(i).split(" ",2)[0]+" "+Global.Channels.get(idx).getMessage(i).split(" ",2)[1].replaceAll(findNreplace[1],findNreplace[2]);
                 backReply = reply.split(" ");
                 if (backReply.length>1){
                     if(backReply[1].startsWith("s/")||backReply[1].startsWith("sed/")){

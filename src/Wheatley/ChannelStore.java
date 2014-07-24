@@ -41,8 +41,10 @@ public class ChannelStore {
     }
     public void addMessageToLog(String msg){
         this.msgLog.add(msg);
-        if (msgLog.size()>100)
-            this.msgLog.remove(this.msgLog.size()-1);
+        if (msgLog.size()>100){
+            //this.msgLog.remove(this.msgLog.size()-1);
+            this.msgLog.remove(0);
+        }
     }
     public int getMessageLogSize(){
         return(this.msgLog.size());
