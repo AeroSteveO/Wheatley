@@ -120,19 +120,8 @@ public class RandChan extends ListenerAdapter {
     }
     
     private String get4ChanImage(String board) throws Exception {
-//        JSONParser parser = new JSONParser();
         List<String> threads = new ArrayList<>();
         System.out.println(board+"\n");
-//        try{
-//            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/board/catalog.json"));
-//            for (int i=0; i<jsonObject.size(); i++) {
-//                JSONArray threadsTemp = (JSONArray) jsonObject.get("threads");
-//            }
-//        }
-//        catch(Exception ex){
-//            ex.printStackTrace();
-//            System.out.println(ex.getMessage());
-//        }
         String jsonText = readUrl("http://a.4cdn.org/"+board+"/threads.json");
         JSONParser parser = new JSONParser();
         KeyFinder finder = new KeyFinder();
@@ -142,8 +131,6 @@ public class RandChan extends ListenerAdapter {
                 parser.parse(jsonText, finder, true);
                 if(finder.isFound()){
                     finder.setFound(false);
-//                    System.out.println("found id:");
-//                    System.out.println(finder.getValue());
                     threads.add(finder.getValue().toString());
                 }
             }
@@ -157,7 +144,6 @@ public class RandChan extends ListenerAdapter {
         System.out.println("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
         List<String> filename = new ArrayList<>();
         List<String> extension = new ArrayList<>();
-//        List<String> fileDeleted = new ArrayList<>();
         String image = new String();
         try{
             parser = new JSONParser();
@@ -181,25 +167,7 @@ public class RandChan extends ListenerAdapter {
                     extension.add(finder.getValue().toString());
                 }
             }
-//            parser = new JSONParser();
-//            finder = new KeyFinder();
-//            finder.setMatchKey("filedeleted");
-//            while(!finder.isEnd()){
-//                parser.parse(jsonText, finder, true);
-//                if(finder.isFound()){
-//                    finder.setFound(false);
-//                    fileDeleted.add(finder.getValue().toString());
-//                }
-//            }
-//            System.out.println(fileDeleted.size());
-            System.out.println(filename.size());
-            System.out.println(extension.size());
             int filenum = (int) (Math.random()*filename.size());
-//            while(fileDeleted.get(filenum).equals("1")){
-//                
-//                filenum = (int) (Math.random()*filename.size()-1);
-//            }
-            
             image = "http://i.4cdn.org/"+board+"/"+filename.get(filenum)+extension.get(filenum);
         }
         catch(ParseException pe){
