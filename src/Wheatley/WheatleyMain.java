@@ -127,6 +127,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new TextModification())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
+                    .addListener(new RandChan())
                     .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent());
             
                     BackgroundListener.addListener(new Logger(),true); //Add logger background listener
