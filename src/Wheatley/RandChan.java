@@ -7,27 +7,18 @@
 package Wheatley;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.regex.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.pircbotx.Colors;
-import org.pircbotx.hooks.*;
-import org.pircbotx.hooks.events.*;
 
 /**
  *
@@ -74,13 +65,13 @@ public class RandChan extends ListenerAdapter {
                 else {
                     timeLog.addFirst(d.getTime());
                     event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
-                    //get4ChanImage(defaultBoard);
                 }
             }
         }
         catch(Exception ex){
             ex.printStackTrace();
             System.out.println(ex.getMessage());
+            event.respond("http://i.imgur.com/JaKGGo7.jpg");
         }
         
     }
@@ -144,31 +135,9 @@ public class RandChan extends ListenerAdapter {
         
         String threadNumber = threads.get((int) (Math.random()*threads.size()-1));
         jsonText = readUrl("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
-        System.out.println("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
         
         try{
-//            parser = new JSONParser();
-//            finder = new KeyFinder();
-//            finder.setMatchKey("tim");
-//            while(!finder.isEnd()){
-//                parser.parse(jsonText, finder, true);
-//                if(finder.isFound()){
-//                    finder.setFound(false);
-//                    filename.add(finder.getValue().toString());
-//                }
-//            }
             filename = JSONKeyFinder(jsonText,"tim");
-//            parser = new JSONParser();
-//            finder = new KeyFinder();
-//            finder.setMatchKey("ext");
-//            while(!finder.isEnd()){
-//                
-//                parser.parse(jsonText, finder, true);
-//                if(finder.isFound()){
-//                    finder.setFound(false);
-//                    extension.add(finder.getValue().toString());
-//                }
-//            }
             extension = JSONKeyFinder(jsonText,"ext");
             int filenum = (int) (Math.random()*filename.size());
             image = "http://i.4cdn.org/"+board+"/"+filename.get(filenum)+extension.get(filenum);
