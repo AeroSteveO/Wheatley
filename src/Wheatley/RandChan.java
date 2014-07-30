@@ -120,8 +120,11 @@ public class RandChan extends ListenerAdapter {
     }
     
     private String get4ChanImage(String board) throws Exception {
+        String image = new String();
         List<String> threads = new ArrayList<>();
-        System.out.println(board+"\n");
+        List<String> filename = new ArrayList<>();
+        List<String> extension = new ArrayList<>();
+        
         String jsonText = readUrl("http://a.4cdn.org/"+board+"/threads.json");
         JSONParser parser = new JSONParser();
         KeyFinder finder = new KeyFinder();
@@ -142,38 +145,53 @@ public class RandChan extends ListenerAdapter {
         String threadNumber = threads.get((int) (Math.random()*threads.size()-1));
         jsonText = readUrl("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
         System.out.println("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
-        List<String> filename = new ArrayList<>();
-        List<String> extension = new ArrayList<>();
-        String image = new String();
+        
         try{
-            parser = new JSONParser();
-            finder = new KeyFinder();
-            finder.setMatchKey("tim");
-            while(!finder.isEnd()){
-                parser.parse(jsonText, finder, true);
-                if(finder.isFound()){
-                    finder.setFound(false);
-                    filename.add(finder.getValue().toString());
-                }
-            }
-            parser = new JSONParser();
-            finder = new KeyFinder();
-            finder.setMatchKey("ext");
-            while(!finder.isEnd()){
-                
-                parser.parse(jsonText, finder, true);
-                if(finder.isFound()){
-                    finder.setFound(false);
-                    extension.add(finder.getValue().toString());
-                }
-            }
+//            parser = new JSONParser();
+//            finder = new KeyFinder();
+//            finder.setMatchKey("tim");
+//            while(!finder.isEnd()){
+//                parser.parse(jsonText, finder, true);
+//                if(finder.isFound()){
+//                    finder.setFound(false);
+//                    filename.add(finder.getValue().toString());
+//                }
+//            }
+            filename = JSONKeyFinder(jsonText,"tim");
+//            parser = new JSONParser();
+//            finder = new KeyFinder();
+//            finder.setMatchKey("ext");
+//            while(!finder.isEnd()){
+//                
+//                parser.parse(jsonText, finder, true);
+//                if(finder.isFound()){
+//                    finder.setFound(false);
+//                    extension.add(finder.getValue().toString());
+//                }
+//            }
+            extension = JSONKeyFinder(jsonText,"ext");
             int filenum = (int) (Math.random()*filename.size());
             image = "http://i.4cdn.org/"+board+"/"+filename.get(filenum)+extension.get(filenum);
         }
         catch(ParseException pe){
             pe.printStackTrace();
+            image="http://i.imgur.com/JaKGGo7.jpg";
         }
         
         return(image);
+    }
+    private List<String> JSONKeyFinder(String jsonText,String jsonKey) throws ParseException{
+        JSONParser parser = new JSONParser();
+        KeyFinder finder = new KeyFinder();
+        List<String> matchedJson = new ArrayList<>();
+        finder.setMatchKey(jsonKey);
+        while(!finder.isEnd()){
+            parser.parse(jsonText, finder, true);
+            if(finder.isFound()){
+                finder.setFound(false);
+                matchedJson.add(finder.getValue().toString());
+            }
+        }
+        return(matchedJson);
     }
 }
