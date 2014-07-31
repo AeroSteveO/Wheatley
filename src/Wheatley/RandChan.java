@@ -23,6 +23,15 @@ import org.json.simple.parser.ParseException;
 /**
  *
  * @author Steve-O
+ * --created the json grabbing and parsing parts
+ * Previous Bot: Poopsock by khwain
+ * --created the russianroulette/throttling in the original randchan function
+ * 
+ * Activate Commands with:
+ *      !randchan [board]
+ *          responds with a link to a random 4chan image in the given board,
+ *          if no board is given, then it responds with a random image from a 
+ *          random board
  */
 public class RandChan extends ListenerAdapter {
     
@@ -35,6 +44,8 @@ public class RandChan extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         try{
             if(event.getMessage().trim().matches("!randchan(\\s+\\p{Alnum}+)?")) {
+                
+                //Little bit of throttling up in here
                 Date d = new Date();
                 long currentTime = d.getTime();
                 if(timeLog.size() > MAX_LOG) {
@@ -71,10 +82,11 @@ public class RandChan extends ListenerAdapter {
         catch(Exception ex){
             ex.printStackTrace();
             System.out.println(ex.getMessage());
-            event.respond("http://i.imgur.com/JaKGGo7.jpg");
+            event.respond("http://i.imgur.com/JaKGGo7.jpg"); // Throws hanson if theres an error
         }
-        
     }
+    
+    //converts URL to string, primarily used to string-ify json text
     private static String readUrl(String urlString) throws Exception {
         BufferedReader reader = null;
         try {
@@ -92,6 +104,7 @@ public class RandChan extends ListenerAdapter {
         }
     }
     
+    //Gets a full list of 4Chan boards using the 4chan json
     private List<String> getBoardList(){
         JSONParser parser = new JSONParser();
         List<String> boards = new ArrayList<>();
@@ -117,38 +130,26 @@ public class RandChan extends ListenerAdapter {
         List<String> extension = new ArrayList<>();
         
         String jsonText = readUrl("http://a.4cdn.org/"+board+"/threads.json");
-        JSONParser parser = new JSONParser();
-        KeyFinder finder = new KeyFinder();
-        finder.setMatchKey("no");
-        try{
-            while(!finder.isEnd()){
-                parser.parse(jsonText, finder, true);
-                if(finder.isFound()){
-                    finder.setFound(false);
-                    threads.add(finder.getValue().toString());
-                }
+        threads = JSONKeyFinder(jsonText,"no");
+        while(extension.isEmpty()){ //If theres nothing added into the extension list, then there must not be any images in that thread
+            
+            String threadNumber = threads.get((int) (Math.random()*threads.size()-1));
+            jsonText = readUrl("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
+            try{
+                filename = JSONKeyFinder(jsonText,"tim");
+                extension = JSONKeyFinder(jsonText,"ext");
+                int filenum = (int) (Math.random()*filename.size());
+                image = "http://i.4cdn.org/"+board+"/"+filename.get(filenum)+extension.get(filenum);
+            }
+            catch(ParseException pe){
+                pe.printStackTrace();
+                image="http://i.imgur.com/JaKGGo7.jpg"; // Throw Hanson if theres an error
             }
         }
-        catch(ParseException pe){
-            pe.printStackTrace();
-        }
-        
-        String threadNumber = threads.get((int) (Math.random()*threads.size()-1));
-        jsonText = readUrl("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
-        
-        try{
-            filename = JSONKeyFinder(jsonText,"tim");
-            extension = JSONKeyFinder(jsonText,"ext");
-            int filenum = (int) (Math.random()*filename.size());
-            image = "http://i.4cdn.org/"+board+"/"+filename.get(filenum)+extension.get(filenum);
-        }
-        catch(ParseException pe){
-            pe.printStackTrace();
-            image="http://i.imgur.com/JaKGGo7.jpg";
-        }
-        
         return(image);
     }
+    
+    //Finds the given key in the json string using keyfinder.java
     private List<String> JSONKeyFinder(String jsonText,String jsonKey) throws ParseException{
         JSONParser parser = new JSONParser();
         KeyFinder finder = new KeyFinder();
