@@ -25,7 +25,10 @@ import org.json.simple.parser.ParseException;
  * @author Steve-O
  * --created the json grabbing and parsing parts
  * Previous Bot: Poopsock by khwain
- * --created the russianroulette/throttling in the original randchan function
+ * --created the russian roulette/throttling in the original randchan function
+ * 
+ * This function requires the json-simple-1.1.1 library
+ * Besides the one specialty library, this is plug and play
  * 
  * Activate Commands with:
  *      !randchan [board]
