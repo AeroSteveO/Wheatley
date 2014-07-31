@@ -27,7 +27,7 @@ import org.json.simple.parser.ParseException;
  * Previous Bot: Poopsock by khwain
  * --created the russian roulette/throttling in the original randchan function
  * 
- * This function requires the json-simple-1.1.1 library
+ * This function requires the json-simple-1.1.1 library and KeyFinder.java
  * Besides the one specialty library, this is plug and play
  * 
  * Activate Commands with:

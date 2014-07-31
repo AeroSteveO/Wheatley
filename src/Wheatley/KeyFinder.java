@@ -13,6 +13,8 @@ import org.json.simple.parser.ParseException;
 /**
  *
  * @author Steve-O
+ * Example class from the json-simple wiki
+ * used without modification
  */
 public class KeyFinder implements ContentHandler{
     private Object value;
