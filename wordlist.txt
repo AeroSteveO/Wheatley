@@ -1664,7 +1664,6 @@ love
 lovely
 low
 lower
-lrsfrt
 lucky
 lunch
 lying
