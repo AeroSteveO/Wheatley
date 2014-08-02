@@ -24,8 +24,8 @@ import org.pircbotx.Colors;
  * JBorg markov chain integration, based off seeborg which is based on pyborg
  * 
  * Activate Commands With
- *      !shutup
- *      !speak up
+ *      !mute
+ *      !speak
  *          To turn on and off the random response markov generator
  *      !set chance [num]
  *          To set the chance of the markov generator to respond (1/[num] chance)
