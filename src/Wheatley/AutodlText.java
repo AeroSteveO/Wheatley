@@ -32,7 +32,7 @@ public class AutodlText extends ListenerAdapter {
         @Override
         public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());        
-        if (event.getUser().getNick().equals("SHODAN")){
+        if (event.getUser().getNick().equals("SHODAN")){  //Auto Download bot nick
             if(message.startsWith("Saved")){
                 // LOAD XML
                 File fXmlFile = new File("Settings.xml");

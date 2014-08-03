@@ -28,6 +28,7 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  *      theTardis   -- by theDoctor
  *      RoyalBot    -- by http://www.msclemens.com/royaldev/royalbot
  *      SrsBsns     -- by
+ *      Poopsock    -- by khwain
  *
  * @author Steve-O
  * often by siphoning code from other bots by tangd, and Vanilla, and theDoctor
@@ -94,7 +95,7 @@ public class WheatleyMain extends ListenerAdapter {
 
             //   Configuration configuration;
             Configuration.Builder configuration = new Configuration.Builder()
-                    .setName(Global.MainNick) //Set the nick of the bot. CHANGE IN YOUR CODE
+                    .setName(Global.MainNick) 
                     .setLogin(baseElement.getElementsByTagName("login").item(0).getTextContent()) //login part of hostmask, eg name:login@host
                     .setNickservPassword(Global.NickPass)
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use

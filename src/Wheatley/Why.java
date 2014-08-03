@@ -62,7 +62,7 @@ public class Why extends ListenerAdapter {
             event.getBot().sendIRC().message(event.getChannel().getName(), a);
         }
     }
-    public static String special_case() {
+    private static String special_case() {
         List<String> a = new ArrayList<>();
         a.add("why not?");
         a.add("don't ask!");
@@ -79,7 +79,7 @@ public class Why extends ListenerAdapter {
         return (a.get((int) (Math.random()*a.size()-1)));
     }
     
-    public static String phrase() {
+    private static String phrase() {
         String a = new String();
         switch((int) (Math.random()*3+1)) {
             case 1:
@@ -95,7 +95,7 @@ public class Why extends ListenerAdapter {
         return (a);
     }
     
-    public static String prepositional_phrase() {
+    private static String prepositional_phrase() {
         String a = new String();
         switch((int) (Math.random()*3+1)) {
             case 1:
@@ -111,13 +111,13 @@ public class Why extends ListenerAdapter {
         return (a);
     }
     
-    public static String sentence() {
+    private static String sentence() {
         String a;
         a = subject() + " " + predicate() + ".";
         return (a);
     }
     
-    public static String noun_phrase() {
+    private static String noun_phrase() {
         String a = new String();
         switch((int) (Math.random()*3+1)) {
             case 1:
@@ -132,7 +132,7 @@ public class Why extends ListenerAdapter {
         }
         return (a);
     }
-    public static String subject() {
+    private static String subject() {
         String a = new String();
         switch((int) (Math.random()*4+1)) {
             case 1:
@@ -150,7 +150,7 @@ public class Why extends ListenerAdapter {
         }
         return (a);
     }
-    public static String adjective_phrase() {
+    private static String adjective_phrase() {
         String a = new String();
         switch((int) (Math.random()*6+1)) {
             case 1:
@@ -174,7 +174,7 @@ public class Why extends ListenerAdapter {
         }
         return (a);
     }
-    public static String predicate() {
+    private static String predicate() {
         String a = new String();
         switch((int) (Math.random()*3+1)) {
             case 1:
@@ -189,7 +189,7 @@ public class Why extends ListenerAdapter {
         }
         return (a);
     }
-    public static String oobject() {
+    private static String oobject() {
         String a = new String();
         switch((int) (Math.random()*3+1)) {
             case 1:
@@ -227,13 +227,13 @@ public class Why extends ListenerAdapter {
     }
     
     
-    public static String preposition() {
+    private static String preposition() {
         List<String> a = new ArrayList<>();
         a.add("of");
         a.add("from");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String noun() {
+    private static String noun() {
         List<String> a = new ArrayList<>();
         a.add("mathematician");
         a.add("programmer");
@@ -243,13 +243,13 @@ public class Why extends ListenerAdapter {
         a.add("kid");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String nouned_verb() {
+    private static String nouned_verb() {
         List<String> a = new ArrayList<>();
         a.add("love");
         a.add("approval");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String proper_noun() {
+    private static String proper_noun() {
         List<String> a = new ArrayList<>();
         a.add("Cleve");
         a.add("Jack");
@@ -265,7 +265,7 @@ public class Why extends ListenerAdapter {
         a.add("Mara");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String nominative_pronoun() {
+    private static String nominative_pronoun() {
         List<String> a = new ArrayList<>();
         a.add("I");
         a.add("you");
@@ -274,7 +274,7 @@ public class Why extends ListenerAdapter {
         a.add("they");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String accusative_pronoun() {
+    private static String accusative_pronoun() {
         List<String> a = new ArrayList<>();
         a.add("me");
         a.add("all");
@@ -282,7 +282,7 @@ public class Why extends ListenerAdapter {
         a.add("him");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String adverb() {
+    private static String adverb() {
         List<String> a = new ArrayList<>();
         a.add("very");
         a.add("not very");
@@ -290,7 +290,7 @@ public class Why extends ListenerAdapter {
         a.add("not excessively");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String adjective() {
+    private static String adjective() {
         List<String> a = new ArrayList<>();
         a.add("tall");
         a.add("bald");
@@ -300,14 +300,14 @@ public class Why extends ListenerAdapter {
         a.add("good");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String article() {
+    private static String article() {
         List<String> a = new ArrayList<>();
         a.add("the");
         a.add("some");
         a.add("a");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String present_verb() {
+    private static String present_verb() {
         List<String> a = new ArrayList<>();
         a.add("fool");
         a.add("please");
@@ -315,7 +315,7 @@ public class Why extends ListenerAdapter {
         a.add("honor");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String intrasitive_verb() {
+    private static String intrasitive_verb() {
         List<String> a = new ArrayList<>();
         a.add("insisted on it");
         a.add("suggested it");
@@ -325,7 +325,7 @@ public class Why extends ListenerAdapter {
         a.add("wanted it that way");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String transitive_verb() {
+    private static String transitive_verb() {
         List<String> a = new ArrayList<>();
         a.add("threatened");
         a.add("told");

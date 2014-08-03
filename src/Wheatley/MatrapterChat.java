@@ -49,7 +49,7 @@ public class MatrapterChat extends ListenerAdapter {
             if (message.split(" ").length==1)
                 event.getBot().sendIRC().message(currentChan, "MATRABBB");
             else
-                event.respond("This bot doesn't contain 100% of Matrapter's original capability yet");
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"This bot doesn't contain 100% of Matrapter's original capability");
         }
         
         //Meatpod Functions
