@@ -45,6 +45,8 @@ public class Game {
     private int moneyChange = 0;
     private String modifier;
     private String solution;
+    private int chosenNum;
+    private ArrayList<Integer> chosenNumArray;
     
     Game(String channel, String mod, String type) throws FileNotFoundException{
         this.channelName = channel;
@@ -62,6 +64,48 @@ public class Game {
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
     }
+    Game(String channel, String game, String mod, int length, int charSize, int time) throws FileNotFoundException{
+        this.channelName=channel;
+        this.gameType = game;
+        this.modifier = mod;
+        this.timeLimit = time;
+        if (mod.equalsIgnoreCase("int array")){
+            this.chosenNumArray = getRandIntArray(length,charSize);
+            this.chosenNum = convertIntegers();
+        }
+        else if (mod.equalsIgnoreCase("int")){
+            this.chosenNum = getRandInt(charSize);
+        }
+        
+        
+    }
+    private static ArrayList<Integer> getRandIntArray(int length, int charSize){
+        ArrayList<Integer> numbers = new ArrayList<>();
+        if (length>10)
+            length=10;
+        if (charSize>10)
+            charSize=10;
+        for(int c=0;c<length;c++){
+            numbers.add(getRandInt(charSize));
+        }
+        return numbers;
+    }
+    
+    private static int getRandInt(int charSize){
+        return (int) (Math.random()*charSize-1);
+    }
+    
+    public int convertIntegers(){
+        StringBuilder strNum = new StringBuilder();
+        
+        for (int num : this.chosenNumArray)
+        {
+            strNum.append(num);
+        }
+        int finalInt = Integer.parseInt(strNum.toString());
+        return finalInt;
+        }
+    
     public String getGameType(){
         return(this.gameType);
     }
@@ -140,13 +184,12 @@ public class Game {
         String modifiedWord ="";
         if(mod.equalsIgnoreCase("blank"))   //Change the chosenword to all underscores
             modifiedWord=makeBlank(word);
-        if(mod.equalsIgnoreCase("shuffle")) //Shuffle the characters in the chosen word
+        else if(mod.equalsIgnoreCase("shuffle")) //Shuffle the characters in the chosen word
             modifiedWord=shuffle(word);
-        if(mod.equalsIgnoreCase("reverse")) //Reverse the chosenword
+        else if(mod.equalsIgnoreCase("reverse")) //Reverse the chosenword
             modifiedWord=reverse(word);
-        if(mod.equalsIgnoreCase("none"))    //User doesn't want the string modified
+        else if(mod.equalsIgnoreCase("none"))    //User doesn't want the string modified
             modifiedWord=word;
-        
         return(modifiedWord);
     }
     private static String shuffle(String input){
@@ -161,6 +204,7 @@ public class Game {
         }
         return(output.toString());
     }
+    
     private static String makeBlank(String input){
         String blanks = new String();
         for (int i = 0; i<input.length(); i++){
@@ -168,6 +212,7 @@ public class Game {
         }
         return(blanks);
     }
+    
     private static String reverse(String input){
         List<Character> characters = new ArrayList<Character>();
         for(char c:input.toCharArray()){
@@ -179,6 +224,7 @@ public class Game {
         }
         return(output.toString());
     }
+    
     private ArrayList<String> getColorList() throws FileNotFoundException{
         try{
             Scanner wordfile = new Scanner(new File("colorlist.txt"));
@@ -206,6 +252,7 @@ public class Game {
                 isChan = true;
         return(isChan);
     }
+    
     
     public static class GameArray extends Vector<Game>{
         public int getGameIdx(String channel,String game){
