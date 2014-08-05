@@ -109,8 +109,9 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameOmgword())        //omgword game listener
                     .addListener(new GameReverse())        //reverse the word game
                     .addListener(new GameHangman())        //omgword game listener
-                    .addListener(new GameBomb())
-                    .addListener(new GameAltReverse())
+                    .addListener(new GameBomb())           //bomb game listener
+                    .addListener(new GameMasterMind())     //mastermind game listener
+                    .addListener(new GameAltReverse())     //alternate reverse game listener
                     .addListener(new Why())                // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
@@ -128,7 +129,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new TextModification())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
-                    .addListener(new RandChan())
+                    .addListener(new RandChan())             // generates random 4chan image links
                     .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent());
             
                     BackgroundListener.addListener(new Logger(),true); //Add logger background listener
