@@ -70,32 +70,38 @@ public class Game {
         this.modifier = mod;
         this.timeLimit = time;
         if (mod.equalsIgnoreCase("int array")){
-            this.chosenNumArray = getRandIntArray(length,charSize);
+            this.chosenNumArray = createIntArray(length,charSize);
             this.chosenNum = convertIntegers();
         }
         else if (mod.equalsIgnoreCase("int")){
-            this.chosenNum = getRandInt(charSize);
+            this.chosenNum = createInt(charSize);
         }
         
         
     }
-    private static ArrayList<Integer> getRandIntArray(int length, int charSize){
+    public int getInt(){
+        return this.chosenNum;
+    }
+    public void setTime(int t){
+        this.timeLimit = t;
+    }
+    public ArrayList<Integer> getIntArray(){
+        return this.chosenNumArray;
+    }
+    private static ArrayList<Integer> createIntArray(int length, int charSize){
         ArrayList<Integer> numbers = new ArrayList<>();
-        if (length>10)
-            length=10;
-        if (charSize>10)
-            charSize=10;
+        
         for(int c=0;c<length;c++){
-            numbers.add(getRandInt(charSize));
+            numbers.add(createInt(charSize));
         }
         return numbers;
     }
     
-    private static int getRandInt(int charSize){
+    private static int createInt(int charSize){
         return (int) (Math.random()*charSize-1);
     }
     
-    public int convertIntegers(){
+    private int convertIntegers(){
         StringBuilder strNum = new StringBuilder();
         
         for (int num : this.chosenNumArray)
@@ -104,7 +110,7 @@ public class Game {
         }
         int finalInt = Integer.parseInt(strNum.toString());
         return finalInt;
-        }
+    }
     
     public String getGameType(){
         return(this.gameType);
@@ -265,7 +271,17 @@ public class Game {
             }
             return (idx);
         }
-        
+        public boolean isGameActive(String inputChannel, String GameType) {
+            boolean isChan = false;
+            if (!this.isEmpty()){
+                for (int i=0;i<this.size();i++){
+                    if(this.get(i).isGameRunning(inputChannel,GameType)){
+                        isChan = true;
+                    }
+                }
+            }
+            return(isChan);
+        }
         public Game getGame(String channel,String game){
             return (this.get(this.getGameIdx(channel, game)));
         }
