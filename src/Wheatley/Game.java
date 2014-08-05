@@ -98,20 +98,24 @@ public class Game {
     }
     
     private static int createInt(int charSize){
-        return (int) (Math.random()*charSize-1);
+        return (int) (Math.random()*charSize);
     }
     
     private int convertIntegers(){
-        StringBuilder strNum = new StringBuilder();
-        
-        for (int num : this.chosenNumArray)
-        {
-            strNum.append(num);
+        String converted = "";
+        for (int i=0;i<this.chosenNumArray.size();i++){
+            converted = converted + Integer.toString(this.chosenNumArray.get(i));
         }
-        int finalInt = Integer.parseInt(strNum.toString());
+        int finalInt = Integer.parseInt(converted);
         return finalInt;
     }
-    
+    public String convertIntToString(){
+        String converted = "";
+        for (int i=0;i<this.chosenNumArray.size();i++){
+            converted = converted + Integer.toString(this.chosenNumArray.get(i));
+        }
+        return converted;
+    }
     public String getGameType(){
         return(this.gameType);
     }

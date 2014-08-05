@@ -49,22 +49,30 @@ public class GameMasterMind extends ListenerAdapter {
                 
                 if (options.length==2){
                     length = Integer.parseInt(options[1]);
+                    if (length>10)
+                        length=10;
                     lives = length * charSize;
                 }
                 else if (options.length == 3){
                     length = Integer.parseInt(options[1]);
+                    if (length>10)
+                        length=10;
                     charSize = Integer.parseInt(options[2]);
+                    if (charSize>10)
+                        charSize=10;
                     lives = length * charSize;
                 }
                 else if (options.length == 4){
                     length = Integer.parseInt(options[1]);
+                    if (length>10)
+                        length=10;
                     charSize = Integer.parseInt(options[2]);
+                    if (charSize>10)
+                        charSize=10;
                     lives = Integer.parseInt(options[3]);
                 }
-                if (length>10)
-                    length=10;
-                if (charSize>10)
-                    charSize=10;
+                
+                
                 int time = 30+(charSize+length)*10;
                 int scorePositionValue = 0;
                 int scoreValue = 0;
@@ -73,12 +81,18 @@ public class GameMasterMind extends ListenerAdapter {
                 currentIndex = activeGame.getGameIdx(gameChan,"mastermind");
                 
                 ArrayList<Integer> solutionArray = activeGame.get(currentIndex).getIntArray();
-                int solution = activeGame.get(currentIndex).getInt();
+                String solution = activeGame.get(currentIndex).convertIntToString();
                 
                 boolean running=true;
                 int key=(int) (Math.random()*100000+1);
                 Game.TimedWaitForQueue timedQueue = activeGame.getGame(gameChan, "mastermind").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                 event.respond("Try to correctly guess a "+length+" digit code (0-"+Integer.toString(charSize-1)+")");
+                event.respond(""+Integer.toString(solutionArray.size()) + "  "+ solution);
+                String stuff = "";
+                for (int i=0;i<solutionArray.size();i++){
+                    stuff = stuff + Integer.toString(solutionArray.get(i));
+                }
+                event.respond(""+Integer.toString(solutionArray.size()) + "  "+ stuff);
                 while (running){
                     MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                     String guess = CurrentEvent.getMessage();
@@ -89,7 +103,7 @@ public class GameMasterMind extends ListenerAdapter {
                         timedQueue.end();
                     }
                     else if ((CurrentEvent.getMessage().equals("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(gameChan)){
-                        CurrentEvent.respond("You have given up! Correct answer was " + Integer.toString(solution));
+                        CurrentEvent.respond("You have given up! Correct answer was " + solution);
                         running = false;
                         timedQueue.end();
                     }
@@ -110,7 +124,12 @@ public class GameMasterMind extends ListenerAdapter {
                         }
                         lives--;
                         if (lives <= 0){
-                            CurrentEvent.respond("You've run out of lives, the solution was "+Integer.toString(solution));
+                            CurrentEvent.respond("You've run out of lives, the solution was "+solution);
+                            running = false;
+                            timedQueue.end();
+                        }
+                        else if (scorePositionValue == length){
+                            event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the code: " + Colors.BOLD + solution + Colors.NORMAL);
                             running = false;
                             timedQueue.end();
                         }
