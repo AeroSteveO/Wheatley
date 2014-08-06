@@ -71,7 +71,7 @@ public class Game {
         this.timeLimit = time;
         if (mod.equalsIgnoreCase("int array")){
             this.chosenNumArray = createIntArray(length,charSize);
-            this.chosenNum = convertIntegers();
+            //this.chosenNum = convertIntegers();
         }
         else if (mod.equalsIgnoreCase("int")){
             this.chosenNum = createInt(charSize);

@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import static Wheatley.GameHangman.activeGame;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -56,11 +55,13 @@ public class GameMasterMind extends ListenerAdapter {
                 }
                 else if (options.length == 3){
                     length = Integer.parseInt(options[1]);
-                    if (length>10)
+                    if (length>10){
                         length=10;
+                    }
                     charSize = Integer.parseInt(options[2]);
-                    if (charSize>10)
+                    if (charSize>10){
                         charSize=10;
+                    }
                     lives = length * charSize;
                 }
                 else if (options.length == 4){
@@ -88,7 +89,7 @@ public class GameMasterMind extends ListenerAdapter {
                 int key=(int) (Math.random()*100000+1);
                 Game.TimedWaitForQueue timedQueue = activeGame.getGame(gameChan, "mastermind").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                 event.respond("Try to correctly guess a "+length+" digit code (0-"+Integer.toString(charSize-1)+")");
-                event.respond(""+Integer.toString(solutionArray.size()) + "  "+ solution);
+                //event.respond(""+Integer.toString(solutionArray.size()) + "  "+ solution);
                 
                 while (running){
                     MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
