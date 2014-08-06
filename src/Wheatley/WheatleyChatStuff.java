@@ -46,6 +46,8 @@ public class WheatleyChatStuff extends ListenerAdapter {
                 event.getChannel().send().kick(event.getUser(),"MASHY-SPIKE-PLATE smashed you into goop");
             }
         }
+        if (message.toLowerCase().startsWith("!old "))
+            event.getBot().sendIRC().notice(event.getUser().getNick(),"you so funny, me ruv u rong time");
         
         if (message.equalsIgnoreCase("!Wheatley"))
             event.getBot().sendIRC().message(event.getChannel().getName(),"My command list --> http://bit.ly/QWAKdE");
