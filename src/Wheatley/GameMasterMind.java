@@ -105,7 +105,7 @@ public class GameMasterMind extends ListenerAdapter {
                         running = false;
                         timedQueue.end();
                     }
-                    else if (Pattern.matches("[0-9]{1,}",guess)&&currentChan.equalsIgnoreCase(gameChan)){
+                    else if (Pattern.matches("[0-9]{"+length+"}",guess)&&currentChan.equalsIgnoreCase(gameChan)){
                         String[] temp = guess.split("(?!^)");
                         ArrayList<Integer> guessArr = new ArrayList<Integer>();
                         for (int i=0;i<temp.length;i++){
@@ -114,7 +114,6 @@ public class GameMasterMind extends ListenerAdapter {
                         for (int i = 0;i<guessArr.size()&&i<solutionArray.size();i++){
                             if (guessArr.get(i)==solutionArray.get(i))
                                 scorePositionValue++;
-                            
                         }
                         for (int i = 0;i<=charSize;i++){
                             if (solutionArray.contains(i)&&guessArr.contains(i)){

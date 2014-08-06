@@ -34,6 +34,10 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Reverses the characters in the chosen word
  * ---->None
  *          Does nothing
+ * ---->Int Array
+ *          Creates an array of integers using the number of characters and number of unique characters
+ * ---->Int
+ *          Creates an int using the upper bounds input
  */
 public class Game {
     private String channelName;
