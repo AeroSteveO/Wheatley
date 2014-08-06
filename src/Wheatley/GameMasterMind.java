@@ -20,11 +20,12 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * Requested by: PiTheMathGod
  * Activate Command with:
- *      !Mastermind [length] [chars]
+ *      !Mastermind [length] [chars] [lives]
  *
  *          Options include:
  *              Length: the number of characters in the code [int]
  *              Chars: the number of unique characters to use in the code [int]
+ *              Lives: number of guesses you can make before losing [int]
  *
  *
  *
@@ -44,7 +45,7 @@ public class GameMasterMind extends ListenerAdapter {
             if (!activeGame.isGameActive(gameChan, "mastermind")){
                 String[] options = message.split(" ");
                 int length = 5;
-                int charSize = 3;
+                int charSize = 2;
                 int lives = length * charSize;
                 
                 if (options.length==2){
@@ -88,11 +89,7 @@ public class GameMasterMind extends ListenerAdapter {
                 Game.TimedWaitForQueue timedQueue = activeGame.getGame(gameChan, "mastermind").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                 event.respond("Try to correctly guess a "+length+" digit code (0-"+Integer.toString(charSize-1)+")");
                 event.respond(""+Integer.toString(solutionArray.size()) + "  "+ solution);
-                String stuff = "";
-                for (int i=0;i<solutionArray.size();i++){
-                    stuff = stuff + Integer.toString(solutionArray.get(i));
-                }
-                event.respond(""+Integer.toString(solutionArray.size()) + "  "+ stuff);
+                
                 while (running){
                     MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                     String guess = CurrentEvent.getMessage();
@@ -118,9 +115,15 @@ public class GameMasterMind extends ListenerAdapter {
                                 scorePositionValue++;
                             
                         }
-                        for (int i = 0;i<charSize;i++){
-                            if (solutionArray.contains(i)&&guessArr.contains(i))
-                                scoreValue++;
+                        for (int i = 0;i<=charSize;i++){
+                            if (solutionArray.contains(i)&&guessArr.contains(i)){
+                                int solCount = characterCounter(solutionArray,i);
+                                int gueCount = characterCounter(guessArr,i);
+                                if(solCount>gueCount)
+                                    scoreValue = scoreValue + gueCount;
+                                else
+                                    scoreValue = scoreValue + solCount;
+                            }
                         }
                         lives--;
                         if (lives <= 0){
@@ -144,5 +147,14 @@ public class GameMasterMind extends ListenerAdapter {
                 activeGame.remove(activeGame.getGameIdx(gameChan,"mastermind")); //updated current index of the game
             }
         }
+    }
+    public int characterCounter(ArrayList<Integer> s, int charToFind){
+        int counter = 0;
+        for( int i=0; i<s.size(); i++ ) {
+            if( s.get(i)==(charToFind) ) {
+                counter++;
+            }
+        }
+        return counter;
     }
 }
