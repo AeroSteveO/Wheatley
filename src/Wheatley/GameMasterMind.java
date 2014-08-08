@@ -22,9 +22,9 @@ import org.pircbotx.hooks.events.MessageEvent;
  *      !Mastermind [length] [chars] [lives]
  *
  *          Options include:
- *              Length: the number of characters in the code [int]
- *              Chars: the number of unique characters to use in the code [int]
- *              Lives: number of guesses you can make before losing [int]
+ *              Length: The number of characters in the code [int]
+ *              Chars: The number of unique characters to use in the code [int]
+ *              Lives: Number of guesses you can make before losing [int]
  *
  *
  *
@@ -79,7 +79,6 @@ public class GameMasterMind extends ListenerAdapter {
                 int scorePositionValue = 0;
                 int scoreValue = 0;
                 activeGame.add(new Game( gameChan, "mastermind", "int array", length, charSize, time));
-                // Choose a random word from the list
                 currentIndex = activeGame.getGameIdx(gameChan,"mastermind");
                 
                 ArrayList<Integer> solutionArray = activeGame.get(currentIndex).getIntArray();

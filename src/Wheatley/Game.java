@@ -78,7 +78,7 @@ public class Game {
             //this.chosenNum = convertIntegers();
         }
         else if (mod.equalsIgnoreCase("int")){
-            this.chosenNum = createInt(charSize);
+            this.chosenNum = createInt(charSize,length); //when creating a general integer, charSize and length are used as lower and upper bounds
         }
         
         
@@ -103,6 +103,9 @@ public class Game {
     
     private static int createInt(int charSize){
         return (int) (Math.random()*charSize);
+    }
+    private static int createInt(int lowerBound,int upperBound){
+        return (int) (Math.random()*upperBound)+lowerBound;
     }
     
     private int convertIntegers(){

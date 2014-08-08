@@ -111,6 +111,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameHangman())        //omgword game listener
                     .addListener(new GameBomb())           //bomb game listener
                     .addListener(new GameMasterMind())     //mastermind game listener
+                    .addListener(new GameGuessTheNumber()) //guess the number game listener
                     .addListener(new GameAltReverse())     //alternate reverse game listener
                     .addListener(new Why())                // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
