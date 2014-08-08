@@ -85,11 +85,11 @@ public class GameGuessTheNumber extends ListenerAdapter {
                             timedQueue.end();
                         }
                         else if (Integer.parseInt(guess)<Integer.parseInt(solution)){
-                            CurrentEvent.respond("Your guess is too low");
+                            CurrentEvent.respond("Your guess is too low, lives left: "+lives);
                             lives--;
                         }
                         else if (Integer.parseInt(guess)>Integer.parseInt(solution)){
-                            CurrentEvent.respond("Your guess is too high");
+                            CurrentEvent.respond("Your guess is too high, lives left: "+lives);
                             lives--;
                         }
                     }
