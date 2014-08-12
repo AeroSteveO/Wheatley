@@ -78,7 +78,8 @@ public class MarkovInterface extends ListenerAdapter{
         }
         
         if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&
-                !Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())&&!Pattern.matches("[a-zA-Z]{1}", message)&&
+                !Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())&&
+                !Pattern.matches("[a-zA-Z]{1}", message)&&
                 !Pattern.matches("[a-zA-Z_0-9]+\\++", message.toLowerCase())&&
                 !Pattern.matches("[0-9]+", message.toLowerCase())&&
                 !(message.split(" ").length==1)&&
