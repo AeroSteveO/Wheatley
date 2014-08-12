@@ -116,6 +116,8 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new Why())                // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
+                    .addListener(new EnglishSayings())
+                    .addListener(new Definitions())
                     .addListener(new AutodlText())
                     .addListener(new Ignite())
                     .addListener(new Laser())
