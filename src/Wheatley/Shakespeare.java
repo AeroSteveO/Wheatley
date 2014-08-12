@@ -17,16 +17,31 @@ import org.pircbotx.hooks.events.MessageEvent;
  * original bot = Matrapter
  * matlab based IRC bot written by Steve-O
  * Source:  http://www.tastefullyoffensive.com/2011/10/shakespeare-insult-kit.html
+ *          http://imgur.com/gallery/q4UXODX
+ *          http://www.pangloss.com/seidel/shake_rule.html
+ *          http://m.imgur.com/gallery/gUnGqDI
+ *          http://i.imgur.com//reyuFY3.jpg
  * shakespeare(it) insults the provided object.
  * shakespeare, by itself, insults 'thou'.
  */
 public class Shakespeare extends ListenerAdapter {
-    ArrayList<String> first = null;
-    ArrayList<String> mid = null;
-    ArrayList<String> ending = null;
+    ArrayList<String> first = ShakespeareFront();
+    ArrayList<String> mid = ShakespeareMid();
+    ArrayList<String> ending = ShakespeareEnd();
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
+        if(message.startsWith("!insult")){
+            String it;
+            String[] check = message.split(" ");
+            if (check.length!=2){
+                it = "You ";
+            }
+            else {
+                it = check[1] + ", you ";
+            }
+            event.getBot().sendIRC().message(event.getChannel().getName(), BasicInsult(it));
+        }
         if (message.startsWith("!shakespeare"))    {
             String it;
             String[] check = message.split(" ");
@@ -34,23 +49,100 @@ public class Shakespeare extends ListenerAdapter {
                 it = "Thou";
             }
             else {
-                it = check[1];
+                it = check[1] + ", thou";
             }
-            if (first == null)
-                first = Front();
+//            if (first == null)
+//                first = ShakespeareFront();
+//            if (mid == null)
+//                mid = ShakespeareMid();
+//            if (ending == null)
+//                ending = ShakespeareEnd();
             
-            if (mid == null)
-                mid = Middle();
-            
-            if (ending == null)
-                ending = Ending();
-            if (it.equals("Thou"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), event.getBot().getUserChannelDao().getUser(it).getNick() + " " + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
-            else
-                event.getBot().sendIRC().message(event.getChannel().getName(), event.getBot().getUserChannelDao().getUser(it).getNick() + ", thou " + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
+//            if (it.equals("Thou"))
+            event.getBot().sendIRC().message(event.getChannel().getName(), it + " " + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
+//            else
+//                event.getBot().sendIRC().message(event.getChannel().getName(), event.getBot().getUserChannelDao().getUser(it).getNick() + ", thou " + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
         }
     }
-    public ArrayList<String> Front(){
+    public String BasicInsult(String insult){
+        ArrayList<String> a = new ArrayList<String>(); //Begenning part of insult
+        ArrayList<String> b = new ArrayList<String>(); //Middle of insult
+        ArrayList<String> c = new ArrayList<String>(); //End of insult
+        a.add("idiotic");
+        a.add("insecure");
+        a.add("stupid");
+        a.add("slimy");
+        a.add("slutty");
+        a.add("smelly");
+        a.add("pompous");
+        a.add("lazy");
+        a.add("communist");
+        a.add("dicknose");
+        a.add("pie-eating");
+        a.add("racist");
+        a.add("elitist");
+        a.add("white trash");
+        a.add("butterface");
+        a.add("drug-loving");
+        a.add("tone deaf");
+        a.add("ugly");
+        a.add("creepy");
+        
+        b.add("douche");
+        b.add("ass");
+        b.add("turd");
+        b.add("rectum");
+        b.add("butt");
+        b.add("cock");
+        b.add("shit");
+        b.add("crotch");
+        b.add("bitch");
+        b.add("prick");
+        b.add("slut");
+        b.add("taint");
+        b.add("fuck");
+        b.add("dick");
+        b.add("shart");
+        b.add("boner");
+        b.add("nut");
+        b.add("sphincter");
+        
+        c.add("pilot");
+        c.add("canoe");
+        c.add("captain");
+        c.add("pirate");
+        c.add("hammer");
+        c.add("knob");
+        c.add("box");
+        c.add("jockey");
+        c.add("Nazi");
+        c.add("waffle");
+        c.add("goblin");
+        c.add("blossom");
+        c.add("biscuit");
+        c.add("clown");
+        c.add("socket");
+        c.add("monster");
+        c.add("hound");
+        c.add("dragon");
+        c.add("balloon");
+        
+        //String insult = "You ";
+        int scale = (int) (Math.random()*3);
+        if (scale == 0)
+            insult = insult + a.get((int) (Math.random()*a.size()-1))+" ";
+        else {
+            int index;
+            for (int i=0; i<=scale;i++){
+                index = (int) (Math.random()*a.size()-1);
+                insult = insult + a.get(index)+", ";
+                a.remove(index);
+            }
+        }
+        insult = insult + b.get((int) (Math.random()*b.size()-1)) + " " +c.get((int) (Math.random()*c.size()-1));
+        return(insult);
+    }
+    public ArrayList<String> ShakespeareFront(){
         ArrayList<String> first = new ArrayList<String>();
         first.add("artless");
         first.add("bawdy");
@@ -102,10 +194,23 @@ public class Shakespeare extends ListenerAdapter {
         first.add("clouted");
         first.add("cockered");
         first.add("currish");
+        //Booster kit 1
+        first.add("cullionly");
+        first.add("fusty");
+        first.add("caluminous");
+        first.add("wimpled");
+        first.add("burly-boned");
+        first.add("misbegotten");
+        first.add("odiferous");
+        first.add("cullionly");
+        first.add("poisonous");
+        first.add("fishified");
+        first.add("Wart-necked");
+        
         //    first.add("");
         return first;
     }
-    public ArrayList<String> Ending(){
+    public ArrayList<String> ShakespeareEnd(){
         ArrayList<String> end = new ArrayList<String>();
         end.add("apple-john");
         end.add("boar-pig");
@@ -157,9 +262,20 @@ public class Shakespeare extends ListenerAdapter {
         end.add("baggage");
         end.add("barnacle");
         end.add("bladdar");
+        //Booster kit 1
+        end.add("knave");
+        end.add("blind-worm");
+        end.add("popinjay");
+        end.add("scullian");
+        end.add("jolt-head");
+        end.add("malcontent");
+        end.add("devil-monk");
+        end.add("toad");
+        end.add("rascal");
+        end.add("Basket-Cockle");
         return end;
     }
-    public ArrayList<String> Middle(){
+    public ArrayList<String> ShakespeareMid(){
         ArrayList<String> mid = new ArrayList<String>();
         mid.add("base-court");
         mid.add("bat-fowling");
@@ -211,6 +327,19 @@ public class Shakespeare extends ListenerAdapter {
         mid.add("toad-spotted");
         mid.add("unchin-snouted");
         mid.add("weather-bitten");
+        //Booster kit 1
+        mid.add("whoreson");
+        mid.add("malmsey-nosed");
+        mid.add("rampallian");
+        mid.add("lily-livered");
+        mid.add("scurvy-valiant");
+        mid.add("brazen-faced");
+        mid.add("unwash'd");
+        mid.add("bunch-back'd");
+        mid.add("leaden-footed");
+        mid.add("muddy-mettled");
+        mid.add("pigeon-liver'd");
+        mid.add("scale-sided");
         return mid;
     }
 }
