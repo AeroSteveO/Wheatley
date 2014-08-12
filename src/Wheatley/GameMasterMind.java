@@ -136,7 +136,7 @@ public class GameMasterMind extends ListenerAdapter {
                             timedQueue.end();
                         }
                         else{
-                            CurrentEvent.respond("Code has "+scorePositionValue+" digits in the correct place, and uses "+scoreValue+" digits | Lives left: "+lives);
+                            CurrentEvent.respond("Code has "+scorePositionValue+" digits correct in position and value | "+scoreValue+" digits correct in value | Lives left: "+lives);
                         }
                         
                         scoreValue = 0;
