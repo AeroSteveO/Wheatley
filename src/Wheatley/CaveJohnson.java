@@ -20,16 +20,13 @@ import org.pircbotx.hooks.events.MessageEvent;
  * http://www.cavejohnsonhere.com/
  */
 public class CaveJohnson extends ListenerAdapter {
-    List<String> a = null;
+    List<String> a = getQuoteList();
     
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
         String[] messageArray = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
         if ((message.equalsIgnoreCase("Cave Johnson"))||(message.equalsIgnoreCase("!cave"))||message.equalsIgnoreCase("cave johnson here")) {
-            if (a == null) {
-                a = getQuoteList();
-            }
             String quote = a.get((int) (Math.random()*a.size()-1));
             event.getBot().sendIRC().message(event.getChannel().getName(),quote);
         }
