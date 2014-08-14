@@ -18,6 +18,14 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
+ * Source: http://www.phrases.org.uk/meanings/phrases-and-sayings-list.html
+ *
+ * Activate Commands With
+ *      !saying
+ *          responds with a random saying using a randomly chosen type
+ *      !saying [, . -]
+ *          responds with a random saying using the specified type, comma separated saying (,),
+ *          hyphenated saying (-), or a straight up saying (.)
  *
  */
 public class EnglishSayings extends ListenerAdapter {
@@ -37,7 +45,7 @@ public class EnglishSayings extends ListenerAdapter {
                 case 3:
                     event.getBot().sendIRC().message(event.getChannel().getName(),randCommaSeparatedSaying());
                     break;
-            } 
+            }
         }
         if (message.equalsIgnoreCase("!saying -")){ //hyphenated sayings only
             event.getBot().sendIRC().message(event.getChannel().getName(),randHyphenatedSaying());
@@ -66,18 +74,41 @@ public class EnglishSayings extends ListenerAdapter {
     private String randHyphenatedSaying() {
         String saying = "";
         ArrayList<String> start = new ArrayList<String>();
+        ArrayList<String> middle = new ArrayList<String>();
         ArrayList<String> end = new ArrayList<String>();
         
         for (int i=0;i<sayings.size();i++){
-            if (Pattern.matches("[a-zA-Z]+\\-[a-z,A-Z]+", sayings.get(i))){
-                start.add(sayings.get(i).split("-")[0]);
-                end.add(sayings.get(i).split("-")[1]);
+            if (Pattern.matches("[a-zA-Z]+\\-[a-zA-Z]+", sayings.get(i))){
+                String[] grabbedSaying = sayings.get(i).split("-");
+                
+                if (grabbedSaying.length==2){
+                    start.add(grabbedSaying[0]);
+                    end.add(grabbedSaying[1]);
+                }
+//                else{
+//                    start.add(grabbedSaying[0]);
+//                    end.add(grabbedSaying[grabbedSaying.length-1]);
+//                    for(int c=1;c<grabbedSaying.length-1;i++){
+//                        middle.add(grabbedSaying[c]);
+//                        System.out.print(grabbedSaying[c]);
+//                    }
+//                }
 //                System.out.print(sayings.get(i));
             }
         }
-        return (start.get((int) (Math.random()*start.size()-1))+"-"+end.get((int) (Math.random()*end.size()-1)));
+        saying = start.get((int) (Math.random()*start.size()-1))+"-";
+//        int mid = (int) (Math.random()*3-1);
+//        int index;
+//        for (int i=0; i<=mid;i++){
+//            index = (int) (Math.random()*middle.size()-1);
+//            saying = saying + middle.get(index)+"-";
+//            middle.remove(index);
+//        }
+        saying = saying+end.get((int) (Math.random()*end.size()-1));
+        return (saying);
+        
     }
-        private String randCommaSeparatedSaying() {
+    private String randCommaSeparatedSaying() {
         String saying = "";
         ArrayList<String> start = new ArrayList<String>();
         ArrayList<String> end = new ArrayList<String>();
@@ -85,8 +116,8 @@ public class EnglishSayings extends ListenerAdapter {
         for (int i=0;i<sayings.size();i++){
             if (Pattern.matches("[a-zA-Z\\s]+\\,[a-zA-Z\\s]+", sayings.get(i))){
                 try {
-                start.add(sayings.get(i).split(",")[0]);
-                end.add(sayings.get(i).split(",")[1]);
+                    start.add(sayings.get(i).split(",")[0]);
+                    end.add(sayings.get(i).split(",")[1]);
 //                System.out.println(sayings.get(i));
                 }
                 catch (Exception e){
