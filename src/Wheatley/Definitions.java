@@ -107,10 +107,12 @@ public class Definitions extends ListenerAdapter {
                 
                 f2.write(definitions.get(definitions.size()-1));
                 f2.close();
+                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+message.split(" ",2)[1]+" was removed from definitions.txt");
             } catch (IOException e) {
                 e.printStackTrace();
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: DEF NOT DELETED");
             }
+            
         }
         else if ((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition not found");
@@ -134,6 +136,7 @@ public class Definitions extends ListenerAdapter {
                 
                 f2.write(definitions.get(definitions.size()-1));
                 f2.close();
+                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+message.split(" ",2)[1].split("@")[0].trim()+" was updated in definitions.txt");
             } catch (IOException e) {
                 e.printStackTrace();
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
