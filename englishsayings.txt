@@ -140,7 +140,8 @@ Another think coming
 The apple of my eye
 Apple pie order
 April fool
-Arm candy - see ear candy
+Arm candy
+Ear candy
 Arms akimbo
 Ars longa, vita brevis
 Arty-farty
@@ -321,7 +322,54 @@ Blue-plate special
 Bob's your uncle
 Bode well
 Bodice ripper
-          Body - phrases related to the human body
+A bear of very little brain 
+A bird in the hand is worth two in the bush 
+A chip on his shoulder 
+A finger of Fudge is just enough to give your kids a treat
+A foot in both camps 
+A hair up your ass 
+A head for business and a body for sin 
+A healthy mind in a healthy body 
+A lump in the throat 
+A man after my own heart 
+A room without books is like a body without a soul
+A shoulder to cry on 
+A viper in your bosom 
+Able bodied 
+Above my head 
+Absence makes the heart grow fonder 
+Acid head 
+Affair of the heart 
+After your own heart 
+Air head 
+All mouth and trousers 
+Always have your nose in a book 
+Ample bosom 
+An albatross round his neck 
+An army marches on its stomach 
+An eye for an eye, a tooth for a tooth 
+Ankle biter 
+Ankle deep 
+Arm candy 
+Arm in arm 
+Arms and the Man 
+Arse about face 
+Arse bandit 
+Arse over tit 
+As busy as a one legged arse kicker 
+As cold as a well digger's arse 
+As crooked as a dog's hind leg 
+As cute as a bug's ear 
+As fine as frog's hair 
+As long as your arm 
+As mad as a bear with a sore head 
+As many chins as a Chinese phone book 
+As plain as the nose on your face 
+As stiff as a poker 
+As tight as a duck's arse 
+As useless as tits on a boar 
+At first hand 
+Athlete's foot 
 Body surfing
 Bog standard
 Bolt from the blue
@@ -600,7 +648,7 @@ Dropping like flies
 Drummed out of the army
 Ducks and drakes
 Dust up
-Dutch - My old
+My old Dutch
 Duvet day
 Ear candy
 The early bird catches the worm
@@ -648,9 +696,651 @@ Fall from grace
 Fall guy
 Fall off the back of a lorry
 Fall on your sword
+Atom Heart Mother
+Babe in arms 
+Bad hair day 
+Bad taste in the mouth 
+Bang your head against a brick wall 
+Bang, bang, Maxwell's silver hammer came down upon her head
+Barnet Fair
+Be it on your head 
+Be still my quiet heart 
+Bear arms 
+Bend your ear 
+Bend your elbow 
+Bite someone's head off 
+Bite the hand that feeds you 
+Bite your hand off 
+Bite your lip 
+Biting the hand that feeds
+Bleeding heart liberal 
+Blow it out your arse 
+Blow it out your ear 
+Blow your nose 
+Body and soul 
+Body bag 
+Body blow 
+Body building 
+Body heat 
+Body language 
+Body mass index 
+Body of evidence 
+Body of opinion 
+Body off Baywatch, face off Crimewatch 
+Body politic 
+Body popping 
+Body snatcher 
+Body surfing 
+Bone head 
+Bored stiff 
+Born with a silver spoon in his mouth 
+Bosom buddies 
+Bosom pals 
+Bottle and glass
+Bound hand and foot 
+Bow the knee 
+Bowel movement 
+Brain bucket 
+Brain candy 
+Brain dead 
+Brain drain 
+Brain dump 
+Brain fade 
+Brain fart 
+Brain picker 
+Brain teaser 
+Brain wave 
+Break a leg 
+Break your heart 
+Break your neck 
+Breathing down your neck 
+Bring to a head 
+Brothers in arms 
+Bury your head in the sand 
+Business at hand 
+Butt head 
+Butter wouldn't melt in her mouth 
+Butterflies in my stomach 
+Button your lip 
+By heart 
+By the hairs on my chinny chin chin, I'll blow your house down 
+By the scruff of your neck 
+Call to arms 
+Can't make head or tail of it 
+Can't see beyond the end of your nose 
+Cap in hand 
+Case the joint 
+Cash in hand 
+Caught with your hand in the cookie jar 
+Caught with your hand in the till 
+Cauliflower ear 
+Chance your arm 
+Change of heart 
+Cheek by jowl 
+Chin wag 
+Chopped liver 
+Clear your throat 
+Clip joint 
+Cock a leg 
+Cock an ear 
+Cold hands warm heart 
+Cold shoulder 
+Come the three corners of the world in arms 
+Come to a head 
+Condemned out of hand 
+Contemplate my navel 
+Cool Hand Luke 
+Cost an arm and a leg 
+Couldn't make head or tail of it 
+Cross my heart and hope to die 
+Cross my palm with silver 
+Cry from the heart 
+Cry your heart out 
+Curl your lip 
+Cut off your nose to spite your face 
+Cut throat competition 
+Cut your own throat 
+Dab hand at 
+Dancing cheek to cheek 
+Dead from the neck up 
+Deep Throat
+Didn't turn a hair 
+Dip your toe into the water 
+Do you kiss your mother with that mouth 
+Do your head in 
+Doesn't have a jealous bone in his body 
+Doesn't know his arse from a hole in the ground 
+Doesn't know his arse from his elbow 
+Don't Go Breaking My Heart
+Don't get your tits in the wringer 
+Don't look a gift horse in the mouth 
+Don't mess with my head 
+Don't trouble your pretty little head about it 
+Down in the mouth 
+Drink, feck, arse
+Dying on your arse 
+Ear bashing 
+Ear candy 
+Ear for music 
+Ear splitting 
+Eat out of someone's hand 
+Eat your heart out 
+Elbow grease 
+Elbow room 
+Elbow to elbow 
+Enough to make your hair curl 
+Every picture tells a story 
+Extend the hand of friendship 
+Eye of newt and toe of frog, wool of bat and tongue of dog 
+Eyes in the back of your head 
+Face palm moment 
+Faint at heart 
+Faint heart never won fair lady 
+Fickle finger of fate 
+Fifteen men on a dead man's chest 
+Fight tooth and nail 
+Find it in your heart 
+Finger food 
+Finger in many pies 
+Finger lickin' good!
+Fish always rot from the head downwards 
+Fish and finger pie
+Fleet of foot 
+Flesh and blood 
+Flesh out 
+Foam at the mouth 
+Fold your hand 
+Follow your heart 
+Follow your nose
+Foot in mouth 
+Foot in the door 
+Foot the bill 
+Force his hand 
+Fountain head 
+Free hand 
+Frog in the throat 
+From the bottom of my heart 
+From top to toe 
+Fruiting body 
+Full bodied 
+Full head of hair 
+Funny in the head 
+Game brain 
+Garbage mouth 
+Gentleman at arms 
+Get in your hair 
+Get it in the neck 
+Get it into your head 
+Get it off your chest 
+Get off on the right foot 
+Get off on the wrong foot 
+Get off your arse 
+Get out of hand 
+Get out of my hair 
+Get the upper hand 
+Get to the heart of the matter 
+Get up your nose 
+Get your foot in the door 
+Get your head around something 
+Get your head down 
+Get your head together 
+Get your leg over 
+Get your toe in the door 
+Give a hand 
+Give a leg up 
+Give one's right arm for 
+Give someone a bloody nose 
+Give someone a thick ear 
+Given the elbow 
+Glass chin 
+Go and boil your head 
+Go boil your head 
+Go cap in hand 
+Go down on bended knee 
+Go for the throat 
+Go out on a limb 
+Go the way of all flesh 
+Go to your head 
+Go-Go Gadget Arms
+Gone tits up 
+Good head on his shoulders 
+Got it on the brain 
+Got to hand it to you 
+Got your head screwed on 
+Got your heart set on 
+Grate on the ear 
+Grease your palm 
+Gregory Peck
+Grin from ear to ear 
+Habeas corpus 
+Hair Canada
+Hair of the dog 
+Hair of the dog that bit you 
+Hair pie 
+Hair raising 
+Hair shirt 
+Hair today gone tomorrow 
+Hair trigger 
+Hand a line 
+Hand in glove 
+Hand in hand 
+Hand in your notice 
+Hand it on a plate 
+Hand it over 
+Hand job 
+Hand me down 
+Hand me downs 
+Hand over 
+Hand over fist 
+Hand picked 
+Hand to mouth 
+Hang by the neck until dead 
+Hang your head 
+Hanging over your head 
+Harden your heart against 
+Hat in hand 
+Have a hand in 
+Have a heart 
+Have it in hand 
+Have someone's ear 
+Have the stomach for 
+Have your best interests at heart 
+Have your hair stand on end 
+Have your head examined 
+He makes my flesh crawl 
+He makes my flesh creep 
+He wears his heart on his sleeve 
+Head and shoulders above 
+Head banger 
+Head case 
+Head count 
+Head doctor 
+Head first 
+Head for figures 
+Head for heights 
+Head for the hills 
+Head games 
+Head honcho 
+Head hunting 
+Head in the clouds 
+Head in the sand 
+Head like a sieve 
+Head of hair 
+Head of steam 
+Head of the family 
+Head of the household 
+Head off 
+Head on 
+Head on collision 
+Head over heels in love 
+Head start 
+Head them off at the pass 
+Head to head 
+Head to toe 
+Head up 
+Head wind 
+Heap coals of fire on someone's head 
+Heart Of Gold
+Heart and soul 
+Heart attack on a plate 
+Heart attack waiting to happen 
+Heart of Dixie
+Heart of stone 
+Heart rending 
+Heart throb 
+Heart to God, hand to man
+Heart to heart talk 
+Heart warming 
+Heart-warming experience 
+Heavenly body 
+Heavy Lunch
+Helping hand 
+Hit it on the nose 
+Hit the nail on the head 
+Hold a gun to his head 
+Hold up your head 
+Hold your head up high 
+Hold your nose 
+Holding your cards close to your chest 
+Home is where the heart is 
+Housemaid's knee 
+How sharper than a serpent's tooth it is to have a thankless child? 
+Hungry Heart
+I Want To Hold Your Hand
+I ate his liver with some fava beans and a nice chianti
+I could do that standing on my head 
+I don't believe it 
+I will wear my heart upon my sleeve 
+I'll go to the foot of our stairs 
+If I said you had a beautiful body would you hold it against me? 
+If it ain't Stiff it ain't worth a fuck
+If you can keep your head when all about you
+In Abraham's bosom 
+In my heart of hearts 
+In one ear and out the other 
+In over your head 
+In the arms of Morpheus 
+In the flesh 
+In the palm of your hand 
+In the pit of your stomach 
+In your hair 
+Invasion of the Bodysnatchers 
+Irritable bowel syndrome 
+Is she or isn't she?
+Is there anybody there? 
+It's a dirty job, but somebody has to do it 
+It's no skin off my nose 
+Jog someone's elbow 
+Jump down my throat 
+Keep a civil tongue in your head 
+Keep a cool head 
+Keep a stiff upper lip 
+Keep body and soul together 
+Keep your chin up 
+Keep your ear to the ground 
+Keep your finger on the pulse 
+Keep your hair on 
+Keep your hand in 
+Keep your head 
+Keep your head above water 
+Keep your head down 
+Keep your mouth shut 
+Keep your nose clean 
+Keep your nose out of 
+Keep your nose to the grindstone 
+Keep your shoulder to the wheel 
+Key to your heart 
+Khyber pass
+Kill the fatted calf 
+Knee deep in 
+Knee high to a duck 
+Knee high to a grasshopper 
+Knee jerk reaction 
+Knee trembler 
+Knock it on the head 
+Know by heart 
+Know like the back of your hand 
+Knuckle down to 
+Knuckle head 
+Knuckle sandwich 
+Knuckle under 
+Lame brain 
+Laser Rocket Arm
+Laugh your head off 
+Lay a finger on 
+Lay down your arms 
+Lead by the nose 
+Lead with the chin 
+Learnt at your mother's knee 
+Learnt off by heart 
+Leaves a bad taste in the mouth 
+Leg it 
+Leg lamp 
+Leg over 
+Leg pull 
+Leg up 
+Lend a helping hand 
+Lend an ear 
+Let your hair down 
+Level head 
+Like a chicken with its head cut off 
+Long in the tooth 
+Look down your nose 
+Look over your shoulder 
+Lose your hair 
+Lose your head 
+Lose your heart 
+Loud mouth 
+M&Ms melt in your mouth, not in your hand
+Make your head spin 
+Makes your hair stands on end 
+Mass hysteria 
+Meat head 
+Melt the heart 
+Melts in the mouth 
+Milk: It does a body good
+More power to your elbow 
+More than flesh and blood can stand 
+Mouth breather 
+Mouth off 
+Mouth to mouth 
+Muscle bound 
+Muscle in on 
+Muscle man 
+My head is spinning 
+My heart bleeds 
+My heart missed a beat 
+My heart sank into my boots 
+My stomach thinks my throat's been cut 
+Nasty taste in the mouth 
+Nature, red in tooth and claw 
+Navel gazing 
+Near and dear to my heart 
+Near the knuckle 
+Near to one's heart 
+Neck and crop 
+Neck and neck 
+Need your head examined 
+Neither hide nor hair 
+Nil by mouth 
+Nobody better lay a finger on my Butterfinger! 
+Nose around 
+Nose dive 
+Nose for crime 
+Nose for trouble 
+Nose to tail 
+Not right in the head 
+Nothing to worry your pretty little head about 
+Off hand 
+Off the top of my head 
+Off with his head 
+Off your head 
+Old head on young shoulders 
+On a full stomach 
+On bended knee 
+On its ear 
+On the back foot 
+On the brain 
+On the one hand 
+On the other hand 
+On the wrong foot 
+On your own head be it 
+One Foot In The Grave
+One hand tied behind your back 
+One hand washes the other 
+One toe over the line 
+Open your big mouth 
+Open your heart 
+Out of your head 
+Out on your ear 
+Over my dead body 
+Over the teeth and through the gums, look out stomach here it comes 
+Over your head 
+Pain in the arse 
+Pain in the neck 
+Palm Sunday 
+Palm off 
+Pay an arm and a leg 
+Pay lip service to 
+Pay through the nose 
+Pecker head 
+Penis Von Lesbian 
+Petrol head 
+Pierce through the heart 
+Pig's ear
+Play by ear 
+Point the finger 
+Pointy head 
+Pot head 
+Potty mouth 
+Pound of flesh 
+Powder your nose 
+Press the flesh 
+Price on his head 
+Propeller head 
+Puddin' Head
+Pull your finger out 
+Pull your hair out 
+Pull your head in 
+Put a foot wrong 
+Put a gun to your head 
+Put flesh on your bones 
+Put it on the long finger 
+Put one foot in front of the other 
+Put some muscle into it 
+Put words into someone's mouth 
+Put your best foot forward 
+Put your brain in gear 
+Put your finger on it 
+Put your finger on the button 
+Put your foot down 
+Put your foot in it 
+Put your foot in your mouth 
+Put your hand in your pocket 
+Put your hand to the plough 
+Put your head above the parapet 
+Put your head into the lion's mouth 
+Put your head on the block 
+Put your money where your mouth is 
+Put your nose out of joint 
+Put your nose where its not wanted 
+Puts hair on your chest 
+Right hand man
+Rub someone's nose in it 
+Rub your nose in it 
+Run off at the mouth 
+Scared stiff 
+Serious as a heart attack 
+Set foot in 
+Set your hair on fire 
+Set your heart on something 
+Shake a leg 
+Shift your arse 
+Shoot your mouth off 
+Shoot yourself in the foot 
+Shot in the arm 
+Shoulder responsibility 
+Shoulder surf 
+Shoulder to shoulder 
+Shoulder to the grindstone 
+Shove it down someone's throat 
+Show a leg 
+Show a little leg 
+Show your hand 
+Sick to the stomach 
+Skeleton in the cupboard 
+Skeleton key 
+Skeleton staff 
+Sleepy head 
+Sleight of hand 
+Smart arse 
+Smiling from ear to ear 
+Snap someone's head off 
+Sob your heart out 
+Soft in the head 
+Stand it on its head 
+Steal someone's heart 
+Stick your chin out 
+Stick your neck out 
+Sticks in your throat 
+Stiff competition 
+Straight from the horse's mouth 
+Straight from the shoulder 
+Strengthen your hand 
+Strong in the arm and thick in the head 
+Strong stomach 
+Sweet tooth 
+Take it into your head 
+Take it on the chin 
+Take it to heart 
+Take the bread out of someone's mouth 
+Take the words out of my mouth 
+Take your hand in marriage 
+Talk over your head 
+Talk to the hand 
+Talking head 
+Tear your hair out 
+Tell them about the honey, mummy
+The answer is at hand 
+The body is still warm 
+The body of evidence 
+The boot is on the other foot 
+The boot's on the other foot 
+The hand is quicker than the eye 
+The hand that rocks the cradle rules the world 
+The heart has its reasons 
+The long arm of the law 
+The matter in hand 
+The right hand doesn't know what the left hand is doing 
+The shoe's on the other foot 
+The spirit is willing but the flesh is weak 
+The way of all flesh 
+The way to a man's heart is through his stomach 
+There are no pockets in a shroud 
+There's many a slip twixt cup and lip 
+Thick ear 
+This neck of the woods 
+Thorn in the flesh 
+Three Finger
+Throw your arms in horror 
+Thumb your nose 
+Thumbnail sketch 
+Tin ear 
+Tits up 
+To the heart of Seoul and beyond ( Asiana Airlines advertising slogan ) 
+Toe the line 
+Tongue in cheek 
+Tooth and nail 
+Treasure chest 
+Try your hand 
+Turn the other cheek 
+Turn to ashes in your mouth 
+Turn your nose up at 
+Turn your stomach 
+Twist around your little finger 
+Twist your arm 
+Uneasy lies the head that wears a crown 
+Up in arms 
+Up to your neck in trouble 
+Upon your head be it 
+Upper hand 
+Van Gogh's ear for music 
+Vital statistics 
+Warms the cockles of my heart 
+Wash your mouth out with soap and water 
+Watch your mouth 
+We found the weapons of mass destruction 
+We know where the bodies are buried 
+Weapons of mass destruction 
+Wear your heart on your sleeve 
+Well turned calf 
+Wet the baby's head 
+What a cheek 
+What we have here is a failure to communicate
+Whip hand 
+White knuckle ride 
+Who's finger do you want on the trigger? 
+Wild at heart 
+Win by a head 
+Win by a neck 
+Win by a nose 
+Wind your neck in 
+With open arms 
+With your nose in the air 
+Without a leg to stand on 
+Word in your ear 
+Word of mouth 
+Work the rabbit's foot on 
+Wrapped around your little finger 
+Yorkshire born in Yorkshire bred, strong in the arm and weak in the head 
+You can't make a silk purse from a sow's ear
+You would forget your head if it weren't screwed on 
+You're all heart 
+You're pulling my leg 
+Young at heart 
+Your eyes are bigger than your stomach 
+Zip your lip 
 Famous for fifteen minutes
-       Famous last words (dying statements of famous people - a list)
-        Famous last words (the ironic phrase)
 Fancy free
 Fancy pants
 Sweet Fanny Adams
@@ -707,13 +1397,12 @@ Fly off the handle
 Fly on the wall
 Foam at the mouth
 Fobbed off
-Folk Etymology - The Nonsense Nine
-Fool and his money are soon parted - A
+A fool and his money are soon parted
 Fools rush in where angels fear to tread
 Fools' gold
-Fool's paradise - A
-Foot in the door - A
-Foot of our stairs - The
+A fool's paradise
+A foot in the door
+The foot of our stairs
 For all intents and purposes
 For crying out loud
 For ever and a day
@@ -731,19 +1420,19 @@ Foul play
 Four by two
 Four corners of the earth
 Frailty, thy name is woman
-Freeze the balls off a brass monkey - cold enough to
+Cold enough to freeze the balls off a brass monkey
 Freezing temperatures
 French phrases
 Friday afternoon car
-Friend in need is a friend indeed - A
+A friend in need is a friend indeed
 Friends, Romans, Countrymen, lend me your ears
-Frog in the throat - A
-Frog's hair- as fine as
+A frog in the throat
+As fine as frog's hair
 From sea to shining sea
 From strength to strength
 Fruits of your loins
 Fuddy-duddy
-Full Monty - The
+The full Monty
 Full of piss and vinegar
 Full tilt
 Full to the gunwales
@@ -751,8 +1440,8 @@ Funny farm
 Fuzzy wuzzy
 Gad zooks 
 gadzooks
-Game is afoot - The
-Game is up - The
+The game is afoot
+The game is up
 Game of two halves
 Gee whiz
 Generation X
@@ -825,7 +1514,7 @@ Goody two-shoes
 Gordon Bennett
 Got my mojo working
 Grace of God - There but for ...
-(Take with a) grain of salt
+Take with a grain of salt
 Grand slam
 Grandfather clock
 Granny dumping
@@ -834,7 +1523,7 @@ Grass up
 Graveyard shift
 Greased lightning
 Great minds think alike
-Great unwashed - the
+The great unwashed
 Green eyed monster
 Gregory Peck
 Gridlock
@@ -919,19 +1608,19 @@ Hocus pocus
 Hoi polloi
 Hoist with your own petard
 Hoity-toity
-(Can't) hold a candle to
+Can't hold a candle to
 Hold your horses
 Homonyms
 Honesty is the best policy
 Hooray Henry
 Horse and cart
 Horse feathers
-Horse, a horse, my kingdom for a horse - A
+A horse, a horse, my kingdom for a horse
 Horse's mouth - straight from the
 Hot-blooded
 Hot off the press
 Hot on the heels
-House divided against itself cannot stand - A
+A house divided against itself cannot stand
 Household words
 Houston, we have a problem
 How are the mighty fallen?
@@ -954,7 +1643,7 @@ I told you is was ill
 I will swing for you
 I will wear my heart upon my sleeve
 Identity theft
-(Beware the) Ides of March
+Beware the Ides of March
 If I had my druthers
 If it ain't broke, don't fix it
 If music be the food of love, play on
@@ -1126,7 +1815,6 @@ Lickety-split
 Lie low
 Lies, damned lies and statistics
 Life begins at forty
-            Life in the 1500s - folk etymologies
 Life of Riley
 Life's not all beer and skittles
 Life's too short
@@ -1260,7 +1948,45 @@ Name and shame
 Name is mud
 Nasty, brutish and short
 A nation of shopkeepers
-     nautical phrases
+A shot across the bows
+All at sea
+Anchors aweigh
+Batten down the hatches
+Between the Devil and the deep blue sea
+Broad in the beam
+By and large
+Chock-a-block
+Close quarters
+Copper-bottomed
+Cut and run
+Edging forward
+Fathom out
+Full to the gunwales
+Get underway
+Give a wide berth
+Go by the board
+Hand over fist
+Hard and fast
+High and dry
+In the offing
+Know the ropes
+Loose cannon
+Mal de mer
+On your beam ends
+Panic stations
+Plain sailing
+Push the boat out
+Shipshape and Bristol fashion
+Shake a leg
+Shiver my timbers
+Slush fund
+Taken aback
+Tell it to the marines
+The bitter end
+The cut of your jib
+Three sheets to the wind
+Tide over
+Walk the plank
 Necessity is the mother of invention
 Ne'er cast a clout till May be out
 Ne'er do well
@@ -1444,7 +2170,6 @@ Pond life
 Pony and trap
 Pony up
 Pop goes the weasel
-      Popular fallacies - The Nonsense Nine
 Pork pies
 Port out, starboard home
 The pot calling the kettle black
@@ -1463,8 +2188,541 @@ Prick up your ears
 Prime time
 Primrose path
 The proof of the pudding is in the eating
-       Proverbs - A list of
-Pull in your horns
+A bird in the hand is worth two in the bush
+A cat may look at a king
+A chain is only as strong as its weakest link
+A change is as good as a rest
+A dog is a man's best friend
+A drowning man will clutch at a straw
+A fish always rots from the head down
+A fool and his money are soon parted
+A friend in need is a friend indeed
+A golden key can open any door
+A good beginning makes a good ending
+A good man is hard to find
+A house divided against itself cannot stand
+A house is not a home
+A journey of a thousand miles begins with a single step
+A leopard cannot change its spots
+A little knowledge is a dangerous thing
+A little learning is a dangerous thing
+A little of what you fancy does you good
+A man who is his own lawyer has a fool for his client
+A miss is as good as a mile
+A new broom sweeps clean
+A nod's as good as a wink to a blind horse
+A penny saved is a penny earned
+A person is known by the company he keeps
+A picture paints a thousand words
+A place for everything and everything in its place
+A poor workman always blames his tools
+A problem shared is a problem halved
+A prophet is not recognized in his own land
+A rising tide lifts all boats
+A rolling stone gathers no moss
+A soft answer turneth away wrath
+A stitch in time saves nine
+A swarm in May is worth a load of hay; a swarm in June is worth a silver spoon; but a swarm in July is not worth a fly
+A thing of beauty is a joy forever
+A trouble shared is a trouble halved
+A volunteer is worth twenty pressed men
+A watched pot never boils
+A woman's place is in the home
+A woman's work is never done
+A word to the wise is enough
+Absence makes the heart grow fonder
+Absolute power corrupts absolutely
+Accidents will happen
+Actions speak louder than words
+Adversity makes strange bedfellows
+After a storm comes a calm
+All good things come to he who waits
+All good things must come to an end
+All is grist that comes to the mill
+All publicity is good publicity
+All roads lead to Rome
+All that glisters is not gold
+All that glitters is not gold
+All the world loves a lover
+All things come to those who wait
+All things must pass
+All work and no play makes Jack a dull boy
+All you need is love
+All's fair in love and war
+All's for the best in the best of all possible worlds
+All's well that ends well
+A miss is as good as a mile
+An apple a day keeps the doctor away
+An army marches on its stomach
+An Englishman's home is his castle
+An eye for an eye, a tooth for a tooth
+An ounce of prevention is worth a pound of cure
+Another day, another dollar
+Any port in a storm
+April showers bring forth May flowers
+As thick as thieves
+As you make your bed, so you must lie upon it
+As you sow so shall you reap
+Ashes to ashes dust to dust
+Ask a silly question and you'll get a silly answer
+Ask no questions and hear no lies
+Attack is the best form of defence
+Bad money drives out good
+Bad news travels fast
+Barking dogs seldom bite
+Beat swords into ploughshares
+Beauty is in the eye of the beholder
+Beauty is only skin deep
+Beggars should not be choosers
+Behind every great man there's a great woman
+Better late than never
+Better safe than sorry
+Better the Devil you know than the Devil you don't
+Better to have loved and lost than never to have loved at all
+Better to light a candle than to curse the darkness
+Better to remain silent and be thought a fool that to speak and remove all doubt
+Beware of Greeks bearing gifts
+Beware the Ides of March
+Big fish eat little fish
+Birds of a feather flock together
+Blessed are the peacemakers
+Blood is thicker than water
+Boys will be boys
+Brevity is the soul of wit
+Business before pleasure
+Caesar's wife must be above suspicion
+Carpe diem 
+Pluck the day
+Seize the day
+Charity begins at home
+Cheats never prosper
+Children should be seen and not heard
+Cleanliness is next to godliness
+Clothes make the man
+Cold hands, warm heart
+Comparisons are odious
+Count your blessings
+Cowards may die many times before their death
+Crime doesn't pay
+Cut your coat to suit your cloth
+Dead men tell no tales
+Devil take the hindmost
+Discretion is the better part of valour
+Distance lends enchantment to the view
+Do as I say, not as I do
+Do as you would be done by
+Do unto others as you would have them do to you
+Don't bite the hand that feeds you
+Don't burn your bridges behind you
+Don't cast your pearls before swine
+Don't change horses in midstream
+Don't count your chickens before they are hatched
+Don't cross the bridge till you come to it
+Don't cut off your nose to spite your face
+Don't keep a dog and bark yourself
+Don't let the bastards grind you down
+Don't look a gift horse in the mouth
+Don't meet troubles half-way
+Don't put all your eggs in one basket
+Don't put the cart before the horse
+Don't put new wine into old bottles
+Don't rock the boat
+Don't spoil the ship for a ha'porth of tar
+Don't throw pearls to swine
+Don't teach your Grandma to suck eggs
+Don't throw the baby out with the bathwater
+Don't try to walk before you can crawl
+Don't upset the apple-cart
+Don't wash your dirty linen in public
+Doubt is the beginning not the end of wisdom
+Early to bed and early to rise, makes a man healthy, wealthy and wise
+East is east, and west is west
+East, west, home's best
+Easy come, easy go
+Eat, drink and be merry, for tomorrow we die
+Empty vessels make the most noise
+Enough is as good as a feast
+Enough is enough
+Even a worm will turn
+Every cloud has a silver lining
+Every dog has its day
+Every Jack has his Jill
+Every little helps
+Every man for himself, and the Devil take the hindmost
+Every man has his price
+Every picture tells a story
+Every stick has two ends
+Everyone wants to go to heaven but nobody wants to die
+Everything comes to him who waits
+Failing to plan is planning to fail
+Faint heart never won fair lady
+Fair exchange is no robbery
+Faith will move mountains
+Familiarity breeds contempt
+Feed a cold and starve a fever
+Fight fire with fire
+Fight the good fight
+Finders keepers, losers weepers
+Fine words butter no parsnips
+First come, first served
+First impressions are the most lasting
+First things first
+Fish always stink from the head down
+Fish and guests smell after three days
+Flattery will get you nowhere
+Fools rush in where angels fear to tread
+For everything there is a season
+For want of a nail the shoe was lost; for want of a shoe the horse was lost; and for want of a horse the man was lost
+Forewarned is forearmed
+Forgive and forget
+Fortune favours the brave
+From the sublime to the ridiculous is only one step
+Genius is an infinite capacity for taking pains
+Genius is one percent inspiration, ninety-nine percent perspiration
+Give a dog a bad name and hang him
+Give a man a fish and you will feed him for a day...
+Give a man enough rope and he will hang himself
+Give credit where credit is due
+Go the extra mile
+God helps those who help themselves
+Good fences make good neighbours
+Good talk saves the food
+Good things come to those who wait
+Great minds think alike
+Half a loaf is better than no bread
+Handsome is as handsome does
+Hard cases make bad law
+Hard work never did anyone any harm
+Haste makes waste
+He that goes a-borrowing, goes a-sorrowing
+He who can does, he who cannot, teaches
+He who fights and runs away, may live to fight another day
+He who hesitates is lost
+He who laughs last laughs longest
+He who lives by the sword shall die by the sword
+He who pays the piper calls the tune
+He who sups with the Devil should have a long spoon
+Hell hath no fury like a woman scorned
+Hindsight is always twenty-twenty
+History repeats itself
+Home is where the heart is
+Honesty is the best policy
+Hope springs eternal
+Horses for courses
+If anything can go wrong, it will
+If a job is worth doing it is worth doing well
+If at first you don't succeed try, try and try again
+If God had meant us to fly he'd have given us wings
+If ifs and ands were pots and pans there'd be no work for tinkers
+If it ain't broke, don't fix it
+If life deals you lemons, make lemonade
+If the cap fits, wear it
+If the mountain won't come to Mohammed, then Mohammed must go to the mountain
+If the shoe fits, wear it
+If wishes were horses, beggars would ride
+If you can't be good, be careful
+If you can't beat em, join em
+If you can't stand the heat get out of the kitchen
+If you lie down with dogs, you will get up with fleas
+If you pay peanuts, you get monkeys
+If you want a thing done well, do it yourself
+Ignorance is bliss
+Imitation is the sincerest form of flattery
+In for a penny, in for a pound
+In the kingdom of the blind the one eyed man is king
+In the midst of life we are in death
+Into every life a little rain must fall
+It ain't over till the fat lady sings
+It goes without saying
+It is best to be on the safe side
+It is better to give than to receive
+It is easy to be wise after the event
+It never rains but it pours
+It takes a thief to catch a thief
+It takes all sorts to make a world
+It takes one to know one
+It takes two to tango
+It's all grist to the mill
+It's an ill wind that blows no one any good
+It's better to give than to receive
+It's better to have loved and lost than never to have loved at all
+It's better to light a candle than curse the darkness
+It's better to travel hopefully than to arrive
+It's never too late
+It's no use crying over spilt milk
+It's no use locking the stable door after the horse has bolted
+It's the early bird that catches the worm
+It's the empty can that makes the most noise
+It's the squeaky wheel that gets the grease
+Jack of all trades, master of none
+Judge not, that ye be not judged
+Keep your chin up
+Keep your friends close and your enemies closer
+Keep your powder dry
+Laugh and the world laughs with you, weep and you weep alone
+Laughter is the best medicine
+Least said, soonest mended
+Less is more
+Let bygones be bygones
+Let not the sun go down on your wrath
+Let sleeping dogs lie
+Let the buyer beware
+Let the dead bury the dead
+Let the punishment fit the crime
+Let well alone
+Life begins at forty
+Life is just a bowl of cherries
+Life is what you make it
+Life's not all beer and skittles
+Lightning never strikes twice in the same place
+Like father, like son
+Little pitchers have big ears
+Little strokes fell great oaks
+Little things please little minds
+Live for today for tomorrow never comes
+Look before you leap
+Love of money is the root of all evil
+Love is blind
+Love makes the world go round
+Love thy neighbour as thyself
+Love will find a way
+Make hay while the sun shines
+Make love not war
+Man does not live by bread alone
+Manners maketh man
+Many a little makes a mickle
+Many a mickle makes a muckle
+Many a true word is spoken in jest
+Many are called but few are chosen
+Many hands make light work
+March comes in like a lion, and goes out like a lamb
+March winds and April showers bring forth May flowers
+Marriages are made in heaven
+Marry in haste, repent at leisure
+Might is right
+Mighty oaks from little acorns grow
+Misery loves company
+Moderation in all things
+Money doesn't grow on trees
+Money is the root of all evil
+Money isn't everything
+Money makes the world go round
+Money talks
+More haste, less speed
+Music has charms to soothe the savage breast
+Nature abhors a vacuum
+Necessity is the mother of invention
+Needs must when the devil drives
+Ne'er cast a clout till May be out
+Never give a sucker an even break
+Never go to bed on an argument
+Never judge a book by its cover
+Never let the sun go down on your anger
+Never look a gift horse in the mouth
+Never put off until tomorrow what you can do today
+Never speak ill of the dead
+Never tell tales out of school
+Nine tailors make a man
+No man can serve two masters
+No man is an island
+No names, no pack-drill
+No news is good news
+No one can make you feel inferior without your consent
+No pain, no gain
+No rest for the wicked
+Nothing new under the sun
+Nothing is certain but death and taxes
+Nothing succeeds like success
+Nothing venture, nothing gain
+Oil and water don't mix
+Old soldiers never die, they just fade away
+Once a thief, always a thief
+Once bitten, twice shy
+One good turn deserves another
+One half of the world does not know how the other half lives
+One hand washes the other
+One man's meat is another man's poison
+One might as well be hanged for a sheep as a lamb
+One law for the rich and another for the poor
+One swallow does not make a summer
+One volunteer is worth ten pressed men
+One year's seeding makes seven years weeding
+Only fools and horses work
+Opportunity never knocks twice at any man's door
+Out of sight, out of mind
+Parsley seed goes nine times to the Devil
+Patience is a virtue
+Pearls of wisdom
+Penny wise and pound foolish
+People who live in glass houses shouldn't throw stones
+Physician, heal thyself
+Possession is nine points of the law
+Power corrupts; absolute power corrupts absolutely
+Practice makes perfect
+Practice what you preach
+Prevention is better than cure
+Pride goes before a fall
+Procrastination is the thief of time
+Put your best foot forward
+Rain before seven, fine before eleven
+Red sky at night shepherd's delight; red sky in the morning, shepherd's warning
+Revenge is a dish best served cold
+Revenge is sweet
+Rob Peter to pay Paul
+Rome wasn't built in a day
+See a pin and pick it up, all the day you'll have good luck; see a pin and let it lie, bad luck you'll have all day
+See no evil, hear no evil, speak no evil
+Seeing is believing
+Seek and ye shall find
+Set a thief to catch a thief
+Share and share alike
+Shrouds have no pockets
+Silence is golden
+Slow but sure
+Softly, softly, catchee monkey
+Spare the rod and spoil the child
+Speak as you find
+Speak softly and carry a big stick
+Sticks and stones may break my bones, but words will never hurt me
+Still waters run deep
+Strike while the iron is hot
+Stupid is as stupid does
+Success has many fathers, while failure is an orphan
+Take care of the pence and the pounds will take care of themselves
+Talk is cheap
+Talk of the Devil, and he is bound to appear
+Tell the truth and shame the Devil
+That which does not kill us makes us stronger
+The age of miracles is past
+The apple never falls far from the tree
+The best defence is a good offence
+The best-laid schemes of mice and men gang aft agley
+The best things in life are free
+The bigger they are, the harder they fall
+The bottom line is the bottom line
+The boy is father to the man
+The bread always falls buttered side down
+The child is the father of the man
+The cobbler always wears the worst shoes
+The course of true love never did run smooth
+The customer is always right
+The darkest hour is just before the dawn
+The devil finds work for idle hands to do
+The devil looks after his own
+The early bird catches the worm
+The end justifies the means
+The exception which proves the rule
+The female of the species is more deadly than the male
+The fruit does not fall far from the tree
+The good die young
+The grass is always greener on the other side of the fence
+The hand that rocks the cradle rules the world
+The husband is always the last to know
+The labourer is worthy of his hire
+The law is an ass
+The leopard does not change his spots
+The longest journey starts with a single step
+The more the merrier
+The more things change, the more they stay the same
+The only good Indian is a dead Indian
+The opera ain't over till the fat lady sings
+The pen is mightier than sword
+The price of liberty is eternal vigilance
+The proof of the pudding is in the eating
+The road to hell is paved with good intentions
+The shoemaker's son always goes barefoot
+The squeaking wheel gets the grease
+The truth will out
+The wages of sin is death
+The way to a man's heart is through his stomach
+There are more ways of killing a cat than choking it with cream
+There are none so blind as those, that will not see
+There are two sides to every question
+There but for the grace of God, go I
+There's a time and a place for everything
+There's an exception to every rule
+There's always more fish in the sea
+There's honour among thieves
+There's many a good tune played on an old fiddle
+There's many a slip 'twixt cup and lip
+There's more than one way to skin a cat
+There's no accounting for tastes
+There's no fool like an old fool
+There's no place like home
+There's no smoke without fire
+There's no such thing as a free lunch
+There's no such thing as bad publicity
+There's no time like the present
+There's none so blind as those who will not see
+There's none so deaf as those who will not hear
+There's nowt so queer as folk
+There's one born every minute
+There's safety in numbers
+They that sow the wind, shall reap the whirlwind
+Third time lucky
+Those who do not learn from history are doomed to repeat it
+Those who live in glass houses shouldn't throw stones
+Those who sleep with dogs will rise with fleas
+Thou shalt not kill
+Time and tide wait for no man
+Time flies
+Time is a great healer
+Time is money
+Time will tell
+'tis better to have loved and lost, than never to have loved at all
+To err is human; to forgive divine
+To every thing there is a season
+To the victor go the spoils
+To travel hopefully is a better thing than to arrive
+Tomorrow is another day
+Tomorrow never comes
+Too many cooks spoil the broth
+Truth is stranger than fiction
+Truth will out
+Two blacks don't make a white
+Two heads are better than one
+Two is company, but three's a crowd
+Two wrongs don't make a right
+Variety is the spice of life
+Virtue is its own reward
+Walls have ears
+Walnuts and pears you plant for your heirs
+Waste not want not
+What can't be cured must be endured
+What goes up must come down
+What you lose on the swings you gain on the roundabouts
+What's sauce for the goose is sauce for the gander
+When in Rome, do as the Romans do
+When the cat's away the mice will play
+When the going gets tough, the tough get going
+When the oak is before the ash, then you will only get a splash; when the ash is before the oak, then you may expect a soak
+What the eye doesn't see, the heart doesn't grieve over
+Where there's a will there's a way
+Where there's muck there's brass
+While there's life there's hope
+Whom the Gods love die young
+Why keep a dog and bark yourself?
+Women and children first
+Wonders will never cease
+Work expands so as to fill the time available
+Worrying never did anyone any good
+You are never too old to learn
+You are what you eat
+You can have too much of a good thing
+You can lead a horse to water, but you can't make it drink
+You can't have your cake and eat it
+You can't get blood out of a stone
+You can't make a silk purse from a sow's ear
+You can't make an omelette without breaking eggs
+You can't make bricks without straw
+You can't run with the hare and hunt with the hounds
+You can't teach an old dog new tricks
+You can't judge a book by its cover
+You can't win them all
+You catch more flies with honey than with vinegar
+You pays your money and you takes your choice
+You reap what you sow
+Youth is wasted on the youngPull in your horns
 Pull out all the stops
 Pull the wool over your eyes
 Pull up stakes
@@ -1577,7 +2835,19 @@ Say cheese
 Say goodnight Gracie
 Scarper
 Scot free
-          Scott (Sir Walter - phrases coined by)
+Caught red-handed
+Cold Shoulder
+Blood is thicker than water 
+Flotsam and jetsam 
+Go berserk 
+Infra dig 
+Lock, stock and barrel
+Savoir faire 
+Strain at the leash 
+The apple of my eye
+The back of beyond 
+Tongue in cheek 
+Wide berth
 Screw your courage to the sticking place
 'Scuse me while I kiss this guy
 Sea change
@@ -1600,8 +2870,164 @@ The whole shebang
 Shaggy dog story
 Shake a leg
 Shakers and movers
-          Shakespeare (phrases and sayings of)
+A countenance more in sorrow than in anger
+A Daniel come to judgement
+A dish fit for the gods
+A fool's paradise
+A foregone conclusion
+A horse, a horse, my kingdom for a horse
+A ministering angel shall my sister be
+A plague on both your houses
+A rose by any other name would smell as sweet
+A sea change
+A sorry sight
+Age cannot wither her, nor custom stale her infinite variety
+Alas, poor Yorick! I knew him, Horatio
+All corners of the world
+All of a sudden
+All one to me
+All that glitters is not gold / All that glisters is not gold
+All the world's a stage, and all the men and women merely players
+All's well that ends well
+An ill-favoured thing sir, but mine own
+And shining morning face, creeping like a snail unwillingly to school
+And thereby hangs a tale
+As cold as any stone
+As dead as a doornail
+As good luck would have it
+As merry as the day is long
+As pure as the driven snow
+At one fell swoop
+Bag and baggage
+Be all and end all
+Beast with two backs
+Beware the ides of March
+Blow, winds, and crack your cheeks
+Brevity is the soul of wit
+But screw your courage to the sticking-place
+But, for my own part, it was Greek to me
+Come the three corners of the world in arms
+Come what come may
+Comparisons are odorous
+Cry havoc and let slip the dogs of war
+Dash to pieces
+Discretion is the better part of valour
+Double, double toil and trouble, fire burn, and cauldron bubble
+Eaten out of house and home
+Et tu, Brute
+Even at the turning of the tide
+Exceedingly well read
+Eye of newt and toe of frog, wool of bat and tongue of dog
+Fair play
+Fancy free
+Fie, foh, and fum, I smell the blood of a British man
+Fight fire with fire
+For ever and a day
+Frailty, thy name is woman
+Foul play
+Friends, Romans, Countrymen, lend me your ears
+Good men and true
+Good riddance
+Green eyed monster
+Hark, hark! the lark at heaven's gate sings
+He will give the Devil his due
+Heart's content
+High time
+His beard was as white as snow
+Hoist by your own petard
+Hot-blooded
+Household words
+How sharper than a serpent's tooth it is to have a thankless child
+I bear a charmed life
+I have not slept one wink
+I see you stand like greyhounds in the slips
+I will wear my heart upon my sleeve
+If music be the food of love, play on
+In a pickle
+In my mind's eye, Horatio
+In stitches
+In the twinkling of an eye
+Is this a dagger which I see before me?
+It beggar'd all description
+It is meat and drink to me
+Lay it on with a trowel
+Lie low
+Like the Dickens
+Lily-livered
+Love is blind
+Make your hair stand on end
+Men's evil manners live in brass; their virtues we write in water
+Milk of human kindness
+Misery acquaints a man with strange bedfellows
+More fool you
+More honoured in the breach than in the observance
+Much Ado about Nothing
+My salad days
+Neither a borrower nor a lender be
+Night owl
+No more cakes and ale?
+Now is the winter of our discontent
+O Romeo, Romeo! wherefore art thou Romeo
+Off with his head
+Oh, that way madness lies
+Once more unto the breach, dear friends, once more
+Out of the jaws of death
+Pound of flesh
+Primrose path
+Rhyme nor reason
+Salad days
+Sans teeth, sans eyes, sans taste, sans everything
+Screw your courage to the sticking place
+Sea change
+Send him packing
+Set your teeth on edge
 Shall I compare thee to a summer's day?
+Short shrift
+Shuffle off this mortal coil
+Smooth runs the water where the brook is deep
+Some are born great, some achieve greatness, and some have greatness thrust upon 'em
+Something is rotten in the state of Denmark
+Star crossed lovers
+Stiffen the sinews
+Stony hearted
+Such stuff as dreams are made on
+The be all and end all
+The course of true love never did run smooth
+The crack of doom
+The Devil incarnate
+The game is afoot
+The game is up
+The quality of mercy is not strained
+The Queen's English
+The slings and arrows of outrageous fortune
+The smallest worm will turn, being trodden on
+There's method in my madness
+Thereby hangs a tale
+This is the short and the long of it
+This is very midsummer madness
+This precious stone set in the silver sea, this sceptered isle
+Though this be madness, yet there is method in it
+Thus far into the bowels of the land
+To be or not to be, that is the question
+To gild refined gold, to paint the lily
+To sleep: perchance to dream: ay, there's the rub
+Too much of a good thing
+Truth will out
+Under the greenwood tree
+Uneasy lies the head that wears a crown
+Up in arms
+Vanish into thin air
+We few, we happy few, we band of brothers
+We have seen better days
+Wear your heart on your sleeve
+What a piece of work is man
+What's in a name? That which we call a rose by any other name would smell as sweet
+When sorrows come, they come not single spies, but in battalions
+Where the bee sucks, there suck I
+While you live, tell truth and shame the Devil!
+Who wooed in haste, and means to wed at leisure
+Wild goose chase
+Woe is meShall I compare thee to a summer's day?
 Shambles
 Shanks' mare
 Shanks' pony
@@ -1628,7 +3054,6 @@ A sight for sore eyes
 Silly Billy
 Silly season
 Every cloud has a silver lining
-               Sir Walter Scott (phrases coined by)
 Silence is golden
 Silver bullet
 Similes
@@ -1852,7 +3277,7 @@ A Thing of beauty is a joy forever
 Things that go bump in the night
 Think outside the box
 Thinking cap
-Third degree - The
+The third degree
 Third time lucky
 Thorn in the flesh
 Thou shalt not kill
@@ -1930,10 +3355,10 @@ Two heads are better than one
 Two peas in a pod
 Under the thumb
 Keep it under your hat
-Get - underway
+Get underway
 Uneasy lies the head that wears a crown
-The great - unwashed
-The - unkindest cut of all
+The great unwashed
+The unkindest cut of all
 Up a blind alley
 Up a gum tree
 Up shit creek without a paddle
@@ -2039,7 +3464,6 @@ Word association football
 Word for word
 A word in edgeways
 A word in your shell-like
-            Words ending in gry
 Worse for wear
 Worth one's salt
 Wotcher
