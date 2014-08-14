@@ -60,7 +60,7 @@ public class Shakespeare extends ListenerAdapter {
                     event.getBot().sendIRC().message(event.getChannel().getName(), GavinInsult(it));
                     break;
                 case 5:
-                    event.getBot().sendIRC().message(event.getChannel().getName(), it + " " + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
+                    event.getBot().sendIRC().message(event.getChannel().getName(), it + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
                     break;
             }
 //            event.getBot().sendIRC().message(event.getChannel().getName(), BasicInsult(it));
@@ -70,12 +70,12 @@ public class Shakespeare extends ListenerAdapter {
             String it;
             String[] check = message.split(" ");
             if (check.length!=2){
-                it = "Thou";
+                it = "Thou ";
             }
             else {
-                it = check[1] + ", thou";
+                it = check[1] + ", thou ";
             }
-            event.getBot().sendIRC().message(event.getChannel().getName(), it + " " + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
+            event.getBot().sendIRC().message(event.getChannel().getName(), it + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
         }
     }
     public String BasicInsult(String insult){
@@ -272,7 +272,6 @@ public class Shakespeare extends ListenerAdapter {
         first.add("fishified");
         first.add("Wart-necked");
         
-        //    first.add("");
         return first;
     }
     public ArrayList<String> ShakespeareEnd(){
