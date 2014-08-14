@@ -100,8 +100,10 @@ public class Definitions extends ListenerAdapter {
             File fnew=new File("definitions.txt");
             try {
                 FileWriter f2 = new FileWriter(fnew, false);
-                for (int i=0;i<definitions.size();i++)
+                for (int i=0;i<definitions.size()-1;i++)
                     f2.write(definitions.get(i)+"\n");
+                
+                f2.write(definitions.get(definitions.size()-1));
                 f2.close();
             } catch (IOException e) {
                 e.printStackTrace();
