@@ -20,7 +20,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
- * 
+ *
  * Activate Commands With
  *      [definition]?
  *          respond with the definition of that word/phrase (if there is a definition in the db)
@@ -40,7 +40,7 @@ public class Definitions extends ListenerAdapter {
     ArrayList<String> words = getWordsFromDefs(definitions);
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-
+        
         if (message.equalsIgnoreCase("!randef")||message.equalsIgnoreCase("!randdef")){
             int randNum = (int) (Math.random()*definitions.size()-1);
             event.getBot().sendIRC().message(event.getChannel().getName(),definitions.get(randNum).split("@")[0].trim()+": "+definitions.get(randNum).split("@")[1].trim());
@@ -59,9 +59,8 @@ public class Definitions extends ListenerAdapter {
             }
             event.getBot().sendIRC().message(event.getUser().getNick(),wordList);
         }
-        
         // ADDING DEFINITIONS
-        if((message.startsWith("!adddef")||message.startsWith("!addef"))&&message.split("@").length==2&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        if((message.startsWith("!adddef")||message.startsWith("!addef"))&&message.split("@").length==2&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)&&!containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
             String filename = "definitions.txt";
             String addition = message.split(" ",2)[1];
             
@@ -85,15 +84,18 @@ public class Definitions extends ListenerAdapter {
             definitions = getDefinitions();
             words = getWordsFromDefs(definitions);
         }
-        else if(message.startsWith("!adddef")&&!(message.split("@").length==2)&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        else if (event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+            event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition already exists");
+        }
+        else if((message.startsWith("!adddef")||message.startsWith("!addef"))&&!(message.split("@").length==2)&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command");
         }
-        else if (message.startsWith("!adddef")){
+        else if (message.startsWith("!adddef")||message.startsWith("!addef")){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
         }
         
         // REMOVING DEFINITIONS
-        if((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&words.contains(message.split(" ",2)[1])&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        if((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&containsIgnoreCase(words,message.split(" ",2)[1])&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
             int index = indexOfIgnoreCase(words, message.split(" ",2)[1]);
             definitions.remove(index);
             words.remove(index);
@@ -107,13 +109,40 @@ public class Definitions extends ListenerAdapter {
                 f2.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: DEF NOT DELETED");
+            }
+        }
+        else if ((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+            event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition not found");
+        }
+        else if (message.startsWith("!deldef")||message.startsWith("!deletedef")){
+            event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
+        }
+        
+        // Updating definitions already in the db
+        if((message.startsWith("!updatedef")||message.startsWith("!updef"))&&message.split("@").length==2&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+            int index = indexOfIgnoreCase(words, message.split(" ",2)[1].split("@")[0].trim());
+            definitions.remove(index);
+            words.remove(index);
+            definitions.add(message.split(" ",2)[1].trim());
+            words = getWordsFromDefs(definitions);
+            File fnew=new File("definitions.txt");
+            try {
+                FileWriter f2 = new FileWriter(fnew, false);
+                for (int i=0;i<definitions.size()-1;i++)
+                    f2.write(definitions.get(i)+"\n");
+                
+                f2.write(definitions.get(definitions.size()-1));
+                f2.close();
+            } catch (IOException e) {
+                e.printStackTrace();
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
             }
         }
-        else if (message.startsWith("!deldef")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
-            event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition not found");
+        else if ((message.startsWith("!updatedef")||message.startsWith("!updef"))&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+            event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed update command");
         }
-        else if (message.startsWith("!deldef")){
+        else if (message.startsWith("!updatedef")||message.startsWith("!updef")){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
         }
     }
