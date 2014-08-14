@@ -12,7 +12,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
 /**
- * Shakespeare    Provides shakespearean era insults.
+ * Shakespeare    Provides insults.
  * @author Steve-O
  * original bot = Matrapter
  * matlab based IRC bot written by Steve-O
@@ -21,8 +21,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          http://www.pangloss.com/seidel/shake_rule.html
  *          http://m.imgur.com/gallery/gUnGqDI
  *          http://i.imgur.com//reyuFY3.jpg
- * shakespeare(it) insults the provided object.
- * shakespeare, by itself, insults 'thou'.
+ * 
+ * Activate Commands With
+ *      !shakespeare [it] 
+ *          insults the provided object, if no object is give, it insults 'thou'
+ *      !insult [it]
+ *      !slander [it]
+ *          insults the given object or 'you' if no object is given, using a 
+ *          random insult generated from one of the built in methods
  */
 public class Shakespeare extends ListenerAdapter {
     ArrayList<String> first = ShakespeareFront();
@@ -31,7 +37,7 @@ public class Shakespeare extends ListenerAdapter {
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if(message.startsWith("!insult")){
+        if(message.startsWith("!insult")||message.startsWith("!slander")){
             String it;
             String[] check = message.split(" ");
             if (check.length!=2){
@@ -40,7 +46,25 @@ public class Shakespeare extends ListenerAdapter {
             else {
                 it = check[1] + ", you ";
             }
-            event.getBot().sendIRC().message(event.getChannel().getName(), BasicInsult(it));
+            switch((int) (Math.random()*5+1)) {
+                case 1:
+                    event.getBot().sendIRC().message(event.getChannel().getName(), BasicInsult(it));
+                    break;
+                case 2:
+                    event.getBot().sendIRC().message(event.getChannel().getName(), GavinInsult(it));
+                    break;
+                case 3:
+                    event.getBot().sendIRC().message(event.getChannel().getName(), BasicInsult(it));
+                    break;
+                case 4:
+                    event.getBot().sendIRC().message(event.getChannel().getName(), GavinInsult(it));
+                    break;
+                case 5:
+                    event.getBot().sendIRC().message(event.getChannel().getName(), it + " " + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
+                    break;
+            }
+//            event.getBot().sendIRC().message(event.getChannel().getName(), BasicInsult(it));
+//            event.getBot().sendIRC().message(event.getChannel().getName(), GavinInsult(it));
         }
         if (message.startsWith("!shakespeare"))    {
             String it;
@@ -51,17 +75,7 @@ public class Shakespeare extends ListenerAdapter {
             else {
                 it = check[1] + ", thou";
             }
-//            if (first == null)
-//                first = ShakespeareFront();
-//            if (mid == null)
-//                mid = ShakespeareMid();
-//            if (ending == null)
-//                ending = ShakespeareEnd();
-            
-//            if (it.equals("Thou"))
             event.getBot().sendIRC().message(event.getChannel().getName(), it + " " + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
-//            else
-//                event.getBot().sendIRC().message(event.getChannel().getName(), event.getBot().getUserChannelDao().getUser(it).getNick() + ", thou " + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
         }
     }
     public String BasicInsult(String insult){
@@ -140,6 +154,57 @@ public class Shakespeare extends ListenerAdapter {
             }
         }
         insult = insult + b.get((int) (Math.random()*b.size()-1)) + " " +c.get((int) (Math.random()*c.size()-1));
+        return(insult);
+    }
+    
+    public String GavinInsult(String insult){
+        ArrayList<String> a = new ArrayList<String>(); //Begenning part of insult
+        ArrayList<String> b = new ArrayList<String>(); //Middle of insult
+        a.add("gobby");
+        a.add("gammy");
+        a.add("gumpy");
+        a.add("mungy");
+        a.add("buggy");
+        a.add("pricky");
+        a.add("gebby");
+        a.add("muggy");
+        a.add("pissy");
+        a.add("dopy");
+        a.add("spinning");
+        a.add("spunky");
+        a.add("toppy");
+        a.add("goffy");
+        a.add("drippy");
+        a.add("biffy");
+        a.add("absolute");
+        a.add("douchey");
+        a.add("jammy");
+        a.add("wallar");
+        a.add("chuffy");
+        
+        b.add("donut");
+        b.add("munge");
+        b.add("geck");
+        b.add("bitch");
+        b.add("minge");
+        b.add("gob");
+        b.add("anus");
+        b.add("gub");
+        b.add("guff");
+        b.add("knob");
+        b.add("git");
+        b.add("bugger");
+        b.add("spap");
+        b.add("bip");
+        b.add("prick");
+        b.add("mug");
+        b.add("gump");
+        b.add("sausage");
+        b.add("mugget");
+        b.add("peem");
+        b.add("pleb");
+        
+        insult =insult + a.get((int) (Math.random()*a.size()-1)) +" lit'le "+ b.get((int) (Math.random()*b.size()-1));
         return(insult);
     }
     public ArrayList<String> ShakespeareFront(){
