@@ -84,7 +84,7 @@ public class Definitions extends ListenerAdapter {
             definitions = getDefinitions();
             words = getWordsFromDefs(definitions);
         }
-        else if (event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+        else if (event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)&&(message.startsWith("!adddef")||message.startsWith("!addef"))&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition already exists");
         }
         else if((message.startsWith("!adddef")||message.startsWith("!addef"))&&!(message.split("@").length==2)&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
