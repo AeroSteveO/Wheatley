@@ -55,12 +55,12 @@ public class MarkovInterface extends ListenerAdapter{
         
         //Toggle off Markov Chain Talking
         if (Pattern.matches(Global.MainNick + ", (shutup|shut\\s+up)",message)||message.equalsIgnoreCase("!mute")||Pattern.matches("(shutup|shut\\s+up)\\s+"+Global.MainNick,message)){
-            Global.Channels.get(channelIndex).speak = false;
+            Global.Channels.get(channelIndex).setSpeakValue(false);
         }
         
         //Toggle on Markov Chain Talking
         if (message.equalsIgnoreCase(Global.MainNick + ", speak up")||message.equalsIgnoreCase("!speak")){
-            Global.Channels.get(channelIndex).speak = true;
+            Global.Channels.get(channelIndex).setSpeakValue(true);
         }
         
         //||event.getChannel().isOwner(event.getUser())
@@ -68,7 +68,7 @@ public class MarkovInterface extends ListenerAdapter{
             String[] chanceSplit = message.split(" ");
             int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
             if (inputChance>0)
-                Global.Channels.get(channelIndex).chance = inputChance;
+                Global.Channels.get(channelIndex).setChanceValue(inputChance);
             else
                 event.getBot().sendIRC().message(currentChan, "Chance must be an integer value greater than 0");
         }
@@ -94,11 +94,11 @@ public class MarkovInterface extends ListenerAdapter{
             }
             
             //Automatically speak with a 1/chance probability
-            if (Global.Channels.get(channelIndex).chance==((int) (Math.random()*Global.Channels.get(channelIndex).chance)+1)&&Global.Channels.get(channelIndex).speak){
+            if (Global.Channels.get(channelIndex).getChance()==((int) (Math.random()*Global.Channels.get(channelIndex).getChance())+1)&&Global.Channels.get(channelIndex).canSpeak()){
                 String reply = Borg.generateReply(message);
                 event.getBot().sendIRC().message(currentChan, reply);
             }
-            Global.Channels.get(channelIndex).previousMessage = message;
+            Global.Channels.get(channelIndex).setPreviousMessage(message);
         }
         
         //Command Wheatley to save his lines
@@ -109,9 +109,9 @@ public class MarkovInterface extends ListenerAdapter{
         
         //Command Wheatley to speak a line
         if (message.equalsIgnoreCase("!line")){
-            String reply = Borg.generateReply(Global.Channels.get(channelIndex).previousMessage);
+            String reply = Borg.generateReply(Global.Channels.get(channelIndex).getPreviousMessage());
             event.getBot().sendIRC().message(currentChan, reply);
-            Global.Channels.get(channelIndex).previousMessage = message;
+            Global.Channels.get(channelIndex).setPreviousMessage(message);
         }
     }
     
@@ -152,7 +152,7 @@ public class MarkovInterface extends ListenerAdapter{
     public int getChanIdx(String toCheck){
         int idx = -1;
         for(int i = 0; i < Global.Channels.size(); i++) {
-            if (Global.Channels.get(i).name.equalsIgnoreCase(toCheck)) {
+            if (Global.Channels.get(i).getChanName().equalsIgnoreCase(toCheck)) {
                 idx = i;
                 break;
             }

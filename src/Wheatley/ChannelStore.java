@@ -18,13 +18,15 @@ import java.util.Vector;
  * ->primarily oriented towards markov interface
  */
 public class ChannelStore {
-    String name;                             // The name of the channel
-    int chance;                              // The chance of markov spamming lines to that channel (1/chance)
-    boolean speak;                           // will markov speak?
-    String previousMessage;                  // previous message sent in this channel
-    String lastUrl;                          // last url seen in this channel
-    String secondLastUrl;                    // second last url seen in this channel
-    private List<String> msgLog = new ArrayList<>(); // for use in s/find/replace commands
+    private String name;                             // The name of the channel
+    private int chance;                              // The chance of markov spamming lines to that channel (1/chance)
+    private boolean speak;                           // will markov speak?
+    private String previousMessage;                  // previous message sent in this channel
+    private String lastUrl;                          // last url seen in this channel
+    private String secondLastUrl;                    // second last url seen in this channel
+    private List<String> msgLog = new ArrayList<>();                       // for use in s/find/replace commands
+    private ArrayList<String> gameChanBlocks = getBlockedGameChannels();   // List of channels that games are blocked from
+    private boolean gamesBlocked;                                          // Are games currently blocked in this channel
     
     ChannelStore(String aName) {
         this.name = aName;
@@ -34,6 +36,7 @@ public class ChannelStore {
         this.lastUrl = "";
         this.secondLastUrl = "";
         this.msgLog.add("");
+        this.gamesBlocked = isChanBlocked();
     }
     @Override
     public String toString(){
@@ -46,12 +49,68 @@ public class ChannelStore {
             this.msgLog.remove(0);
         }
     }
+    public boolean canSpeak(){
+        return(this.speak);
+    }
+    public int getChance(){
+        return(this.chance);
+    }
+    public String getChanName(){
+        return(this.name);
+    }
+    public String getPreviousMessage(){
+        return(this.previousMessage);
+    }
+    public void setSpeakValue(boolean val){
+        this.speak=val;
+    }
+    public void setLastUrl(String Url){
+        this.lastUrl = Url;
+    }
+    public void setSecondLastUrl(String Url){
+        this.secondLastUrl = Url;
+    }
+    public void setPreviousMessage(String newMessage){
+        this.previousMessage = newMessage;
+    }
+    public String getSecondLastUrl(){
+        return(this.secondLastUrl);
+    }
+    public String getLastUrl(){
+        return(this.lastUrl);
+    }
+    public void setChanceValue(int val){
+        this.chance = val;
+    }
     public int getMessageLogSize(){
         return(this.msgLog.size());
     }
     public String getMessage(int i){
         return(this.msgLog.get(i));
     }
+    public boolean getGameBlockStatus(){
+        return(this.gamesBlocked);
+    }
+    private ArrayList<String> getBlockedGameChannels() {
+        ArrayList<String> channelsBlocked = new ArrayList<String>();
+        
+        channelsBlocked.add("#dtella");
+        channelsBlocked.add("#dtella2.0");
+        
+        return(channelsBlocked);
+    }
+    public void addBlockedChannel(String channelName){
+        this.gameChanBlocks.add(channelName);
+    }
+
+    private boolean isChanBlocked() {
+        if(gameChanBlocks.contains(this.name))
+            return(true);
+        else{
+            return(false);
+        }
+    }
+    
     public static class ChannelArray extends Vector<ChannelStore>{
         public int getChanIdx(String toCheck){
             int idx = -1;
@@ -80,6 +139,9 @@ public class ChannelStore {
                 idx = this.size();
             }
             return (this.get(idx));
+        }
+        public boolean areGamesBlocked(String channel){
+            return(getChan(channel).getGameBlockStatus());            
         }
     }
 }

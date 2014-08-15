@@ -40,21 +40,19 @@ public class SRSBSNS extends ListenerAdapter {
             for( String item : parts ) try {
                 URL url = new URL(item);
                 // If possible then replace with anchor...
-                Global.Channels.getChan(currentChan).secondLastUrl = Global.Channels.getChan(currentChan).lastUrl;
-                Global.Channels.getChan(currentChan).lastUrl = item;
-            } catch (MalformedURLException e) {
-                // If there was an URL that was not it!...
-                //System.out.print( item + " " );
+                Global.Channels.getChan(currentChan).setSecondLastUrl(Global.Channels.getChan(currentChan).getLastUrl());
+                Global.Channels.getChan(currentChan).setLastUrl(item);
+            } catch (MalformedURLException e) { // If exception happens, then its not a URL
             }
             if (message.equalsIgnoreCase("!lasturl")){
-                if (!Global.Channels.getChan(currentChan).lastUrl.equals(""))
-                    event.getBot().sendIRC().action(currentChan,"Last URL: "+Global.Channels.getChan(currentChan).lastUrl);
+                if (!Global.Channels.getChan(currentChan).getLastUrl().equals(""))
+                    event.getBot().sendIRC().action(currentChan,"Last URL: "+Global.Channels.getChan(currentChan).getLastUrl());
                 else
                     event.getBot().sendIRC().action(currentChan,"No previous URL found");
             }
             if (message.equalsIgnoreCase("!secondlasturl")){
-                if (!Global.Channels.getChan(currentChan).secondLastUrl.equals(""))
-                    event.getBot().sendIRC().action(currentChan,"Second to last URL: "+Global.Channels.getChan(currentChan).secondLastUrl);
+                if (!Global.Channels.getChan(currentChan).getSecondLastUrl().equals(""))
+                    event.getBot().sendIRC().action(currentChan,"Second to last URL: "+Global.Channels.getChan(currentChan).getSecondLastUrl());
                 else
                     event.getBot().sendIRC().action(currentChan,"Currently less than 2 URLs found");
             }
