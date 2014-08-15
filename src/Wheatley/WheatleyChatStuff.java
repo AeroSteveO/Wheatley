@@ -52,8 +52,8 @@ public class WheatleyChatStuff extends ListenerAdapter {
         if (message.equalsIgnoreCase("!Wheatley"))
             event.getBot().sendIRC().message(event.getChannel().getName(),"My command list --> http://bit.ly/QWAKdE");
         
-        if (message.equalsIgnoreCase("!Wheatley?"))
-            event.getBot().sendIRC().message(event.getChannel().getName(),"Okay. What you're doing there is jumping. You just... you just jumped. But nevermind.");
+//        if (message.equalsIgnoreCase("!Wheatley?"))
+//            event.getBot().sendIRC().message(event.getChannel().getName(),"Okay. What you're doing there is jumping. You just... you just jumped. But nevermind.");
         
         if (message.equalsIgnoreCase("Oh. Hi.")||message.equalsIgnoreCase("potato?"))
             event.getBot().sendIRC().message(event.getChannel().getName(),"Oh. Hi. So. How are you holding up? BECASUSE I'M A POTATO.");
@@ -64,8 +64,8 @@ public class WheatleyChatStuff extends ListenerAdapter {
         if (Pattern.matches(Global.MainNick+",?\\s+(youre|you're|you\\s+are)\\s+a?\\s*moron.*",message))
             event.getBot().sendIRC().message(event.getChannel().getName(),"I AM NOT A MORON");
         
-        if (message.equalsIgnoreCase("Wheatley?"))
-            event.respond("He's not just a regular moron. He's the product of the greatest minds of a generation working together with the express purpose of building the dumbest moron who ever lived. | My command list --> http://bit.ly/QWAKdE");
+//        if (message.equalsIgnoreCase("Wheatley?"))
+//            event.respond("He's not just a regular moron. He's the product of the greatest minds of a generation working together with the express purpose of building the dumbest moron who ever lived. | My command list --> http://bit.ly/QWAKdE");
         
         if (message.equalsIgnoreCase("GLaDOS?"))
             event.respond("What a nasty piece of work she was, honestly. Like a proper maniac. You know who ended up, do you know who ended up taking her down in the end? You're not going to believe this. A human. I know! I know, I wouldn't have believe it either.");
