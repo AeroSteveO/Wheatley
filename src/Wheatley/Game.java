@@ -51,6 +51,7 @@ public class Game {
     private String solution;
     private int chosenNum;
     private ArrayList<Integer> chosenNumArray;
+    private ArrayList<String> blockedChannels = getBlockedChannels();
     
     Game(String channel, String mod, String type) throws FileNotFoundException{
         this.channelName = channel;
@@ -135,6 +136,28 @@ public class Game {
     public String getChannelName(){
         return(this.channelName);
     }
+
+    private ArrayList<String> getBlockedChannels() {
+        ArrayList<String> blocked = new ArrayList<String>();
+        blocked.add("#dtella");
+        blocked.add("#dtella2.0");
+        
+        return blocked;
+    }
+    
+    private boolean isChanBlocked() {
+        if (this.blockedChannels.contains(this.channelName))
+                return (true);
+        else
+            return(false);
+    }
+    public boolean isChanBlocked(String channel) {
+        if (this.blockedChannels.contains(channel))
+                return (true);
+        else
+            return(false);
+    }
+    
     public  class TimedWaitForQueue extends WaitForQueue{
         int time;
         private QueueTime runnable = null;
