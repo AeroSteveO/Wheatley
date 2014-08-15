@@ -30,6 +30,8 @@ public class BotControl extends ListenerAdapter{
             GameHangman.activeGame.clear();
             GameReverse.activeGame.clear();
             GameAltReverse.activeGame.clear();
+            GameMasterMind.activeGame.clear();
+            GameGuessTheNumber.activeGame.clear();
             Blarghlebot.poop = "null";
             BadWords.badwords = null;
         }
