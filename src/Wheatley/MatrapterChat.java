@@ -22,6 +22,19 @@ import org.pircbotx.hooks.events.MessageEvent;
  *      !bane [word 1] [word 2] [word 3]
  *      !bane [word 1] [word 2] [word 3] [word 4]
  *          Sends banes speech either as he said it, or replacing "darkness", "dark" and "light" with the given words
+ *      !penis
+ *          responds with ascii penis
+ *      !botd
+ *      !boobs
+ *      !melons
+ *          responds with random ascii boobs
+ *      !meatlab
+ *          responds with saying
+ *      !matlab
+ *          responds with matrab
+ *      !meatpod
+ *      meatpod
+ *          responds with link to meatspin
  */
 public class MatrapterChat extends ListenerAdapter {
     
@@ -54,7 +67,7 @@ public class MatrapterChat extends ListenerAdapter {
         
         //Meatpod Functions
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("meatpod")).contains(event.getChannel())) {
-            if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod")||message.equalsIgnoreCase("meatpod?"))
+            if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod"))
                 event.getBot().sendIRC().message(currentChan, "http://meatspin.cc");
             if (message.equalsIgnoreCase("fuck"))
                 event.getBot().sendIRC().message(currentChan, "you");

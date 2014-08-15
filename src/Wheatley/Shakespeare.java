@@ -12,10 +12,11 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
 /**
- * Shakespeare    Provides insults.
+ * 
  * @author Steve-O
- * original bot = Matrapter
+ * Original Bot = Matrapter
  * matlab based IRC bot written by Steve-O
+ * 
  * Source:  http://www.tastefullyoffensive.com/2011/10/shakespeare-insult-kit.html
  *          http://imgur.com/gallery/q4UXODX
  *          http://www.pangloss.com/seidel/shake_rule.html
@@ -31,13 +32,13 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          random insult generated from one of the built in methods
  */
 public class Shakespeare extends ListenerAdapter {
-    ArrayList<String> first = ShakespeareFront();
-    ArrayList<String> mid = ShakespeareMid();
-    ArrayList<String> ending = ShakespeareEnd();
+//    ArrayList<String> first = shakespeareFront();
+//    ArrayList<String> mid = shakespeareMid();
+//    ArrayList<String> ending = shakespeareEnd();
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if(message.startsWith("!insult")||message.startsWith("!slander")){
+        if((message.startsWith("!insult")&&!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("Pankeiko")).contains(event.getChannel()))||message.startsWith("!slander")){
             String it;
             String[] check = message.split(" ");
             if (check.length!=2){
@@ -48,23 +49,21 @@ public class Shakespeare extends ListenerAdapter {
             }
             switch((int) (Math.random()*5+1)) {
                 case 1:
-                    event.getBot().sendIRC().message(event.getChannel().getName(), BasicInsult(it));
+                    event.getBot().sendIRC().message(event.getChannel().getName(), basicInsult(it));
                     break;
                 case 2:
-                    event.getBot().sendIRC().message(event.getChannel().getName(), GavinInsult(it));
+                    event.getBot().sendIRC().message(event.getChannel().getName(), gavinInsult(it));
                     break;
                 case 3:
-                    event.getBot().sendIRC().message(event.getChannel().getName(), BasicInsult(it));
+                    event.getBot().sendIRC().message(event.getChannel().getName(), basicInsult(it));
                     break;
                 case 4:
-                    event.getBot().sendIRC().message(event.getChannel().getName(), GavinInsult(it));
+                    event.getBot().sendIRC().message(event.getChannel().getName(), gavinInsult(it));
                     break;
                 case 5:
-                    event.getBot().sendIRC().message(event.getChannel().getName(), it + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
+                    event.getBot().sendIRC().message(event.getChannel().getName(), shakespeareInsult(it));
                     break;
             }
-//            event.getBot().sendIRC().message(event.getChannel().getName(), BasicInsult(it));
-//            event.getBot().sendIRC().message(event.getChannel().getName(), GavinInsult(it));
         }
         if (message.startsWith("!shakespeare"))    {
             String it;
@@ -75,10 +74,18 @@ public class Shakespeare extends ListenerAdapter {
             else {
                 it = check[1] + ", thou ";
             }
-            event.getBot().sendIRC().message(event.getChannel().getName(), it + first.get((int) (Math.random()*first.size()-1)) + " " + mid.get((int) (Math.random()*mid.size()-1)) + " " + ending.get((int) (Math.random()*ending.size()-1)));
+            event.getBot().sendIRC().message(event.getChannel().getName(), shakespeareInsult(it));
         }
     }
-    public String BasicInsult(String insult){
+    private String shakespeareInsult(String insult){
+        ArrayList<String> a = shakespeareFront();  //Begenning part of insult
+        ArrayList<String> b = shakespeareMid();    //Middle of insult
+        ArrayList<String> c = shakespeareEnd();    //End of insult
+        insult = insult +a.get((int) (Math.random()*a.size()-1))+" "+ b.get((int) (Math.random()*b.size()-1)) + " " +c.get((int) (Math.random()*c.size()-1));
+        return(insult);
+    }
+    
+    private String basicInsult(String insult){
         ArrayList<String> a = new ArrayList<String>(); //Begenning part of insult
         ArrayList<String> b = new ArrayList<String>(); //Middle of insult
         ArrayList<String> c = new ArrayList<String>(); //End of insult
@@ -157,7 +164,7 @@ public class Shakespeare extends ListenerAdapter {
         return(insult);
     }
     
-    public String GavinInsult(String insult){
+    private String gavinInsult(String insult){
         ArrayList<String> a = new ArrayList<String>(); //Begenning part of insult
         ArrayList<String> b = new ArrayList<String>(); //Middle of insult
         a.add("gobby");
@@ -207,7 +214,7 @@ public class Shakespeare extends ListenerAdapter {
         insult =insult + a.get((int) (Math.random()*a.size()-1)) +" lit'le "+ b.get((int) (Math.random()*b.size()-1));
         return(insult);
     }
-    public ArrayList<String> ShakespeareFront(){
+    private ArrayList<String> shakespeareFront(){
         ArrayList<String> first = new ArrayList<String>();
         first.add("artless");
         first.add("bawdy");
@@ -274,7 +281,7 @@ public class Shakespeare extends ListenerAdapter {
         
         return first;
     }
-    public ArrayList<String> ShakespeareEnd(){
+    private ArrayList<String> shakespeareEnd(){
         ArrayList<String> end = new ArrayList<String>();
         end.add("apple-john");
         end.add("boar-pig");
@@ -339,7 +346,7 @@ public class Shakespeare extends ListenerAdapter {
         end.add("Basket-Cockle");
         return end;
     }
-    public ArrayList<String> ShakespeareMid(){
+    private ArrayList<String> shakespeareMid(){
         ArrayList<String> mid = new ArrayList<String>();
         mid.add("base-court");
         mid.add("bat-fowling");
@@ -407,4 +414,3 @@ public class Shakespeare extends ListenerAdapter {
         return mid;
     }
 }
-

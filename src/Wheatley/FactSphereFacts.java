@@ -14,9 +14,13 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
- * !fact returns a random fact originally said by the fact sphere
  * Quotes from Portal 2's personality sphere; Fact Sphere (or Fact Core)
- * Via: http://theportalwiki.com/wiki/List_of_Fact_Sphere_facts
+ * Source: http://theportalwiki.com/wiki/List_of_Fact_Sphere_facts
+ * 
+ * Activate Commands With
+ *      !fact
+ *          returns a random fact originally said by the fact sphere
+ * 
  */
 public class FactSphereFacts extends ListenerAdapter {
     ArrayList<String> quotels = getQuoteList();

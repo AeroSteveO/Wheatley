@@ -27,7 +27,6 @@ import org.json.simple.parser.ParseException;
  * Previous Bot: Poopsock by khwain
  * --created the russian roulette/throttling in the original randchan function
  * 
- * This function requires the json-simple-1.1.1 library and KeyFinder.java
  * Besides the one specialty library, this is plug and play
  * 
  * Activate Commands with:
@@ -35,6 +34,11 @@ import org.json.simple.parser.ParseException;
  *          responds with a link to a random 4chan image in the given board,
  *          if no board is given, then it responds with a random image from a 
  *          random board
+ * 
+ * Requires:
+ *      json-simple-1.1.1
+ *      KeyFinder.java
+ * 
  */
 public class RandChan extends ListenerAdapter {
     

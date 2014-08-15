@@ -16,8 +16,13 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  * Quotes from Portal 2's Cave Johnson
- * http://theportalwiki.com/wiki/Cave_Johnson_voice_lines
- * http://www.cavejohnsonhere.com/
+ * Source: http://theportalwiki.com/wiki/Cave_Johnson_voice_lines
+ *         http://www.cavejohnsonhere.com/
+ * 
+ * Activate Commands With
+ *      !cave
+ *          responds with a quote by Cave Johnson
+ * 
  */
 public class CaveJohnson extends ListenerAdapter {
     List<String> a = getQuoteList();

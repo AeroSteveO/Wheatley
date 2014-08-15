@@ -20,12 +20,15 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  * Source: http://www.phrases.org.uk/meanings/phrases-and-sayings-list.html
  *
- * Activate Commands With
+ * Activate Commands With:
  *      !saying
  *          responds with a random saying using a randomly chosen type
  *      !saying [, . -]
  *          responds with a random saying using the specified type, comma separated saying (,),
  *          hyphenated saying (-), or a straight up saying (.)
+ * 
+ * Requires: 
+ *      englishsayings.txt
  *
  */
 public class EnglishSayings extends ListenerAdapter {

@@ -1,7 +1,7 @@
 /*
 * LASER(it) adds lasers to the provided object.
 * Please embellish or modify this function to suit your own tastes.
-* and open the template in the editor.
+* 
 */
 
 package Wheatley;
@@ -17,7 +17,12 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  * original bot = Matrapter
  * MATLAB based IRC bot written by Steve-O
- * 
+ *
+ * Activate Commands With
+ *      !laser [it]
+ *          puts lasers on the input object in a randomly generated way, if nothing is input,
+ *          the object becomes "it"
+ *
  */
 public class Laser extends ListenerAdapter {
     @Override
