@@ -20,7 +20,8 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
- *
+ * Original Bot = SRSBSNS
+ * 
  * Activate Commands With
  *      [definition]?
  *          respond with the definition of that word/phrase (if there is a definition in the db)
@@ -48,7 +49,7 @@ public class Definitions extends ListenerAdapter {
         
         if (message.endsWith("?")){
             if (containsIgnoreCase(words,message.split("\\?")[0])){
-                event.getBot().sendIRC().message(event.getChannel().getName(),message.split("\\?")[0].toLowerCase()+": "+definitions.get(indexOfIgnoreCase(words,message.split("\\?")[0])).split("@")[1].trim());
+                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+message.split("\\?")[0].toLowerCase()+Colors.NORMAL+": "+definitions.get(indexOfIgnoreCase(words,message.split("\\?")[0])).split("@")[1].trim());
             }
         }
         
@@ -170,13 +171,13 @@ public class Definitions extends ListenerAdapter {
         }
         return words;
     }
-    public boolean containsIgnoreCase(ArrayList<String> o,String thing) {
+    private boolean containsIgnoreCase(ArrayList<String> o,String thing) {
         for (String s : o) {
             if (thing.equalsIgnoreCase(s)) return true;
         }
         return false;
     }
-    public int indexOfIgnoreCase(ArrayList<String> o,String thing) {
+    private int indexOfIgnoreCase(ArrayList<String> o,String thing) {
         for (int i=0;i<o.size();i++) {
             if (thing.equalsIgnoreCase(o.get(i))) return i;
         }
