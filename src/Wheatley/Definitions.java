@@ -21,7 +21,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  * Original Bot = SRSBSNS
- * 
+ *
  * Activate Commands With
  *      [definition]?
  *          respond with the definition of that word/phrase (if there is a definition in the db)
@@ -67,7 +67,6 @@ public class Definitions extends ListenerAdapter {
             
             try{
                 File file =new File(filename);
-                
                 //if file doesnt exists, then create it
                 if(!file.exists()){
                     file.createNewFile();
@@ -98,10 +97,23 @@ public class Definitions extends ListenerAdapter {
         // REMOVING DEFINITIONS
         if((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&containsIgnoreCase(words,message.split(" ",2)[1])&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
             int index = indexOfIgnoreCase(words, message.split(" ",2)[1]);
+            try{
+                File log = new File("definitionLog.txt");
+                if(!log.exists()){
+                    log.createNewFile();
+                }
+                FileWriter fileWritter = new FileWriter(log.getName(),true);
+                BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+                bufferWritter.write("\n"+definitions.get(index));
+                bufferWritter.close();
+            }catch (Exception e){
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: LOG NOT UPDATED");
+            }
+            
             definitions.remove(index);
             words.remove(index);
             File fnew=new File("definitions.txt");
-            try {
+            try{
                 FileWriter f2 = new FileWriter(fnew, false);
                 for (int i=0;i<definitions.size()-1;i++)
                     f2.write(definitions.get(i)+"\n");
@@ -125,6 +137,18 @@ public class Definitions extends ListenerAdapter {
         // Updating definitions already in the db
         if((message.startsWith("!updatedef")||message.startsWith("!updef"))&&message.split("@").length==2&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
             int index = indexOfIgnoreCase(words, message.split(" ",2)[1].split("@")[0].trim());
+            try{
+                File log = new File("definitionLog.txt");
+                if(!log.exists()){
+                    log.createNewFile();
+                }
+                FileWriter fileWritter = new FileWriter(log.getName(),true);
+                BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+                bufferWritter.write("\n"+definitions.get(index));
+                bufferWritter.close();
+            }catch (Exception e){
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: LOG NOT UPDATED");
+            }
             definitions.remove(index);
             words.remove(index);
             definitions.add(message.split(" ",2)[1].trim());
