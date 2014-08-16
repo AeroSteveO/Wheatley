@@ -32,7 +32,7 @@ public class Laser extends ListenerAdapter {
             String it;
             String a="";
             String[] parts = null;
-            String[] check = message.split(" ");
+            String[] check = message.split(" ",2);
             if (check.length!=2){
                 it = "it";
             }

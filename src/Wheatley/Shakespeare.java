@@ -40,7 +40,7 @@ public class Shakespeare extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if((message.startsWith("!insult")&&!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("Pankeiko")).contains(event.getChannel()))||message.startsWith("!slander")){
             String it;
-            String[] check = message.split(" ");
+            String[] check = message.split(" ",2);
             if (check.length!=2){
                 it = "You ";
             }
@@ -67,7 +67,7 @@ public class Shakespeare extends ListenerAdapter {
         }
         if (message.startsWith("!shakespeare"))    {
             String it;
-            String[] check = message.split(" ");
+            String[] check = message.split(" ",2);
             if (check.length!=2){
                 it = "Thou ";
             }
