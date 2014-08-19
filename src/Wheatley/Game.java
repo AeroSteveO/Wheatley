@@ -51,7 +51,7 @@ public class Game {
     private String solution;
     private int chosenNum;
     private ArrayList<Integer> chosenNumArray;
-    private ArrayList<String> blockedChannels = getBlockedChannels();
+    //private ArrayList<String> blockedChannels = getBlockedChannels();
     
     Game(String channel, String mod, String type) throws FileNotFoundException{
         this.channelName = channel;
@@ -81,8 +81,6 @@ public class Game {
         else if (mod.equalsIgnoreCase("int")){
             this.chosenNum = createInt(charSize,length); //when creating a general integer, charSize and length are used as lower and upper bounds
         }
-        
-        
     }
     public int getInt(){
         return this.chosenNum;
@@ -145,18 +143,18 @@ public class Game {
         return blocked;
     }
     
-    private boolean isChanBlocked() {
-        if (this.blockedChannels.contains(this.channelName))
-                return (true);
-        else
-            return(false);
-    }
-    public boolean isChanBlocked(String channel) {
-        if (this.blockedChannels.contains(channel))
-                return (true);
-        else
-            return(false);
-    }
+//    private boolean isChanBlocked() {
+//        if (this.blockedChannels.contains(this.channelName))
+//                return (true);
+//        else
+//            return(false);
+//    }
+//    public boolean isChanBlocked(String channel) {
+//        if (this.blockedChannels.contains(channel))
+//                return (true);
+//        else
+//            return(false);
+//    }
     
     public  class TimedWaitForQueue extends WaitForQueue{
         int time;

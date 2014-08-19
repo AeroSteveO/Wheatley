@@ -32,7 +32,7 @@ public class GameReverse extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String gameChan = event.getChannel().getName();
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
-        if (message.equalsIgnoreCase("!reverse")&&!event.getChannel().getName().equals(blockedChan)) {
+        if (message.equalsIgnoreCase("!reverse")&&!Global.Channels.areGamesBlocked(gameChan)) {
             // get the list of words only if theres nothing in the list alread
             
             if (!activeGame.isGameActive(gameChan, "reverse", "reverse", time)){

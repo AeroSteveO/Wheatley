@@ -38,7 +38,7 @@ public class GameHangman extends ListenerAdapter {
             String message = Colors.removeFormattingAndColors(event.getMessage());
             String gameChan = event.getChannel().getName();
             int currentIndex=0;
-            if (message.equalsIgnoreCase("!hangman")&&!gameChan.equals(blockedChan)) {
+            if (message.equalsIgnoreCase("!hangman")&&!Global.Channels.areGamesBlocked(gameChan)) {
                 
                 if (!activeGame.isGameActive(gameChan, "hangman", "blank", time)){
                     // Choose a random word from the list

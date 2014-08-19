@@ -31,25 +31,25 @@ public class GameOmgword extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException{
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        String currentChan = event.getChannel().getName();
+        String gameChan = event.getChannel().getName();
         int currentIndex=0;
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
-        if (message.equalsIgnoreCase("!omgword")&&!currentChan.equals(blockedChan)) {
+        if (message.equalsIgnoreCase("!omgword")&&!Global.Channels.areGamesBlocked(gameChan)) {
             
-            if (!activeGame.isGameActive(currentChan, "omgword", "shuffle", time)){
+            if (!activeGame.isGameActive(gameChan, "omgword", "shuffle", time)){
                 //get and shuffle the word
                 boolean running = true;
-                currentIndex = activeGame.getGameIdx(currentChan,"omgword");
+                currentIndex = activeGame.getGameIdx(gameChan,"omgword");
                 String chosenword = activeGame.get(currentIndex).getChosenWord();
                 String scrambled = activeGame.get(currentIndex).getSolution();
                 event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
                 int key=(int) (Math.random()*100000+1);
-                TimedWaitForQueue timedQueue = activeGame.getGame(currentChan,"omgword").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                TimedWaitForQueue timedQueue = activeGame.getGame(gameChan,"omgword").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                 while (running){ 
                     try {
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                         if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
-                            event.getBot().sendIRC().message(currentChan,"You did not guess the solution in time, the correct answer would have been "+chosenword.toUpperCase());
+                            event.getBot().sendIRC().message(gameChan,"You did not guess the solution in time, the correct answer would have been "+chosenword.toUpperCase());
                             running = false;
                             timedQueue.end();
                         }
@@ -67,7 +67,7 @@ public class GameOmgword extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
-                activeGame.remove(activeGame.getGameIdx(currentChan,"omgword"));
+                activeGame.remove(activeGame.getGameIdx(gameChan,"omgword"));
             }
         }
     }

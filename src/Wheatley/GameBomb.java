@@ -39,7 +39,7 @@ public class GameBomb extends ListenerAdapter {
         if (colorls == null) {
             colorls = getColorList();
         }
-        if (message.equalsIgnoreCase("!bomb")&&!event.getChannel().getName().equals(blockedChan)){
+        if (message.equalsIgnoreCase("!bomb")&&!Global.Channels.areGamesBlocked(event.getChannel().getName())){
             String player = event.getUser().getNick();
             List<String> colours = new ArrayList<>();
             String colorlist = "";
