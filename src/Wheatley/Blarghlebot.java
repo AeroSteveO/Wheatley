@@ -148,6 +148,7 @@ public class Blarghlebot extends ListenerAdapter {
             
             //Functions Using REGEX
             if (Pattern.matches("!hm[m]+", message.toLowerCase()))
+                //<BlarghleBot> Vanilla, the old what for quite so cheerio good chap good sir why certainly old bean
                 event.getBot().sendIRC().message(event.getChannel().getName(), event.getUser().getNick()+", good sir old bean good chap verily mm why certainly the old what for");//indeed good chap the old what for ah yes hm yes good sir old bean
             
             if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("trolo[lo]+", message.toLowerCase()))
