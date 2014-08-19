@@ -19,6 +19,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.pircbotx.Colors;
 
 /**
  *
@@ -40,19 +41,17 @@ import org.json.simple.parser.ParseException;
  *      KeyFinder.java
  * 
  */
-public class RandChan extends ListenerAdapter {
+public class Urban extends ListenerAdapter {
     
     private LinkedList<Long> timeLog = new LinkedList<Long>();
     private static final int MAX_LOG = 3;
-    private static final long MAX_TIME = 30*1000;
-    List<String> boardList = getBoardList();
+    private static final long MAX_TIME = 60*1000;
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         try{
-            if(event.getMessage().trim().matches("!randchan(\\s+\\p{Alnum}+)?")) {
-                
-                //Little bit of throttling up in here
+            String message = Colors.removeFormattingAndColors(event.getMessage().trim());
+            if(message.matches("!udict[\\sA-Za-z0-9]*")) {
                 Date d = new Date();
                 long currentTime = d.getTime();
                 if(timeLog.size() > MAX_LOG) {
@@ -64,32 +63,20 @@ public class RandChan extends ListenerAdapter {
                         return;
                     }
                 }
-                //Russian roulette up in here
-                if(((int)(Math.random()*6))==0) {
-                    event.getChannel().send().kick(event.getUser(), "No soup for you");
-                    return;
-                }
-                String[] splitString = event.getMessage().split("\\s+");
+                String[] splitString = message.split("\\s+",2);
                 if(splitString.length>1) {
-                    if(boardList.contains(splitString[1])) {
-                        timeLog.addFirst(d.getTime());
-                        event.respond(get4ChanImage(splitString[1]));
-                    }
-                    else {
-                        event.getChannel().send().kick(event.getUser(), "Die");
-                    }
-//                    get4ChanImage(splitString[1]);
+                    event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1]));
                 }
                 else {
                     timeLog.addFirst(d.getTime());
-                    event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
+                    event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(""));
                 }
             }
         }
         catch(Exception ex){
             ex.printStackTrace();
             System.out.println(ex.getMessage());
-            event.respond("http://i.imgur.com/JaKGGo7.jpg"); // Throws hanson if theres an error
+            event.respond("Error: Definition Not Found"); // Throws hanson if theres an error
         }
     }
     
@@ -110,50 +97,43 @@ public class RandChan extends ListenerAdapter {
                 reader.close();
         }
     }
-    
-    //Gets a full list of 4Chan boards using the 4chan json
-    private List<String> getBoardList(){
+    private String getDefinition(String term){
         JSONParser parser = new JSONParser();
-        List<String> boards = new ArrayList<>();
         try{
-            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
-            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
-            for (int i=0; i<boardsTemp.size(); i++) {
-                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
-                boards.add((String) jsonObject.get("board"));
-            }
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-            System.out.println(ex.getMessage());
-        }
-        return(boards);
-    }
-    
-    private String get4ChanImage(String board) throws Exception {
-        String image = new String();
-        List<String> threads = new ArrayList<>();
-        List<String> filename = new ArrayList<>();
-        List<String> extension = new ArrayList<>();
-        
-        String jsonText = readUrl("http://a.4cdn.org/"+board+"/threads.json");
-        threads = JSONKeyFinder(jsonText,"no");
-        while(extension.isEmpty()){ //If theres nothing added into the extension list, then there must not be any images in that thread
+            String jsonObject = (readUrl("http://api.urbandictionary.com/v0/define?term="+term.trim().replaceAll(" ", "%20")));
+            jsonObject = jsonObject.replaceAll("(\\r|\\n)", "");
+            //JSONString directLink = (JSONString) jsonObject.get("permalink");
+            List<String> directLink = JSONKeyFinder(jsonObject,"permalink");
+            List<String> word = JSONKeyFinder(jsonObject,"word");
+            List<String> definition = JSONKeyFinder(jsonObject,"definition");
+            List<String> example = JSONKeyFinder(jsonObject,"example");
+            List<String> results = JSONKeyFinder(jsonObject,"result_type");
+            String slimmedDef;
+            String slimmedExample;
             
-            String threadNumber = threads.get((int) (Math.random()*threads.size()-1));
-            jsonText = readUrl("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
-            try{
-                filename = JSONKeyFinder(jsonText,"tim");
-                extension = JSONKeyFinder(jsonText,"ext");
-                int filenum = (int) (Math.random()*filename.size());
-                image = "http://i.4cdn.org/"+board+"/"+filename.get(filenum)+extension.get(filenum);
-            }
-            catch(ParseException pe){
-                pe.printStackTrace();
-                image="http://i.imgur.com/JaKGGo7.jpg"; // Throw Hanson if theres an error
-            }
+            System.out.println(example.get(0));
+            
+            if(results.get(0).equalsIgnoreCase("no_results"))
+                return("Error: Definition Not Found");
+            
+            if (definition.get(0).length()>150)
+             slimmedDef = definition.get(0).replace("\\", "").replace("\"", "").substring(0,Math.min(definition.get(0).length(),150))+"...";
+            else
+                slimmedDef = definition.get(0);
+            
+            if (example.get(0).length()>150)
+             slimmedExample = example.get(0).replace("\\", "").replace("\"", "").substring(0,Math.min(example.get(0).length(),150))+"... ";
+            else
+                slimmedExample = example.get(0)+" ";
+            
+            System.out.println(slimmedExample);
+            
+            return(Colors.BOLD+word.get(0)+Colors.NORMAL+" : "+slimmedDef+" "+Colors.BOLD+"Example : "+Colors.NORMAL+slimmedExample + directLink.get(0));
+        }catch (Exception e){
+             e.printStackTrace();
+            return("Error: Definition Not Found");
+           
         }
-        return(image);
     }
     
     //Finds the given key in the json string using keyfinder.java
