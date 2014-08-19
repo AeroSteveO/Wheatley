@@ -35,10 +35,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Sends a PM with all the defs available
  *      !randdef
  *          Responds with a random definition form the DB
+ * 
  */
 public class Definitions extends ListenerAdapter {
     ArrayList<String> definitions = getDefinitions();
     ArrayList<String> words = getWordsFromDefs(definitions);
+    String definitionsFileName = "definitions.txt";
+    String definitionLogName   = "definitionLog.txt";
+    
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
@@ -47,7 +51,7 @@ public class Definitions extends ListenerAdapter {
             event.getBot().sendIRC().message(event.getChannel().getName(),definitions.get(randNum).split("@")[0].trim()+": "+definitions.get(randNum).split("@")[1].trim());
         }
         
-        if (message.endsWith("?")){
+        if (message.endsWith("?")&&message.split("\\?",2)[0].length()>0){
             if (containsIgnoreCase(words,message.split("\\?")[0])){
                 event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+message.split("\\?")[0].toLowerCase()+Colors.NORMAL+": "+definitions.get(indexOfIgnoreCase(words,message.split("\\?")[0])).split("@")[1].trim());
             }
@@ -62,11 +66,10 @@ public class Definitions extends ListenerAdapter {
         }
         // ADDING DEFINITIONS
         if((message.startsWith("!adddef")||message.startsWith("!addef"))&&message.split("@").length==2&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)&&!containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
-            String filename = "definitions.txt";
             String addition = message.split(" ",2)[1];
             
             try{
-                File file =new File(filename);
+                File file =new File(definitionsFileName);
                 //if file doesnt exists, then create it
                 if(!file.exists()){
                     file.createNewFile();
@@ -76,7 +79,7 @@ public class Definitions extends ListenerAdapter {
                 BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                 bufferWritter.write("\n"+addition);
                 bufferWritter.close();
-                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+addition+" was added to "+ filename);
+                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+addition+" was added to "+ definitionsFileName);
             }catch(IOException e){
                 e.printStackTrace();
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
@@ -98,7 +101,7 @@ public class Definitions extends ListenerAdapter {
         if((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&containsIgnoreCase(words,message.split(" ",2)[1])&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
             int index = indexOfIgnoreCase(words, message.split(" ",2)[1]);
             try{
-                File log = new File("definitionLog.txt");
+                File log = new File(definitionLogName);
                 if(!log.exists()){
                     log.createNewFile();
                 }
@@ -112,7 +115,7 @@ public class Definitions extends ListenerAdapter {
             
             definitions.remove(index);
             words.remove(index);
-            File fnew=new File("definitions.txt");
+            File fnew=new File(definitionsFileName);
             try{
                 FileWriter f2 = new FileWriter(fnew, false);
                 for (int i=0;i<definitions.size()-1;i++)
@@ -120,7 +123,7 @@ public class Definitions extends ListenerAdapter {
                 
                 f2.write(definitions.get(definitions.size()-1));
                 f2.close();
-                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+message.split(" ",2)[1]+" was removed from definitions.txt");
+                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+message.split(" ",2)[1]+" was removed from "+definitionsFileName);
             } catch (IOException e) {
                 e.printStackTrace();
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: DEF NOT DELETED");
@@ -138,7 +141,7 @@ public class Definitions extends ListenerAdapter {
         if((message.startsWith("!updatedef")||message.startsWith("!updef"))&&message.split("@").length==2&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
             int index = indexOfIgnoreCase(words, message.split(" ",2)[1].split("@")[0].trim());
             try{
-                File log = new File("definitionLog.txt");
+                File log = new File(definitionLogName);
                 if(!log.exists()){
                     log.createNewFile();
                 }
@@ -153,7 +156,7 @@ public class Definitions extends ListenerAdapter {
             words.remove(index);
             definitions.add(message.split(" ",2)[1].trim());
             words = getWordsFromDefs(definitions);
-            File fnew=new File("definitions.txt");
+            File fnew=new File(definitionsFileName);
             try {
                 FileWriter f2 = new FileWriter(fnew, false);
                 for (int i=0;i<definitions.size()-1;i++)
@@ -161,7 +164,7 @@ public class Definitions extends ListenerAdapter {
                 
                 f2.write(definitions.get(definitions.size()-1));
                 f2.close();
-                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+message.split(" ",2)[1].split("@")[0].trim()+" was updated in definitions.txt");
+                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+message.split(" ",2)[1].split("@")[0].trim()+" was updated in "+definitionsFileName);
             } catch (IOException e) {
                 e.printStackTrace();
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
