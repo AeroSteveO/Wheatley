@@ -37,7 +37,7 @@ public class EnglishSayings extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.equalsIgnoreCase("!saying")){
+        if (message.equalsIgnoreCase("!saying")||message.equalsIgnoreCase("you know what they say")||message.equalsIgnoreCase(Global.MainNick+", you know what they say")){
             switch((int) (Math.random()*3+1)) {
                 case 1:
                     event.getBot().sendIRC().message(event.getChannel().getName(),sayings.get((int) (Math.random()*sayings.size()-1)));
