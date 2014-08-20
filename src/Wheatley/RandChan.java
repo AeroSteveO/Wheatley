@@ -44,7 +44,7 @@ import org.pircbotx.Colors;
 public class RandChan extends ListenerAdapter {
     
     private LinkedList<Long> timeLog = new LinkedList<Long>();
-    private static final int MAX_LOG = 3;
+    private static final int MAX_LOG = 9;
     private static final long MAX_TIME = 30*1000;
     List<String> boardList = getBoardList();
     List<String> boardTitles = getBoardTitles();
@@ -71,29 +71,31 @@ public class RandChan extends ListenerAdapter {
                         timeLog.pollLast();
                     }
                     if(timeLog.size()>MAX_LOG) {
-                        event.getChannel().send().kick( event.getUser(), "DIAF");
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "DIAF");
                         return;
                     }
                 }
-                //Russian roulette up in here
-                if(((int)(Math.random()*6))==0) {
-                    event.getChannel().send().kick(event.getUser(), "No soup for you");
-                    return;
-                }
-                String[] splitString = event.getMessage().split("\\s+");
-                if(splitString.length>1) {
-                    if(boardList.contains(splitString[1])) {
-                        timeLog.addFirst(d.getTime());
-                        event.respond(get4ChanImage(splitString[1]));
+                else{
+                    //Russian roulette up in here
+                    if(((int)(Math.random()*6))==0) {
+                        event.getChannel().send().kick(event.getUser(), "No soup for you");
+                        return;
+                    }
+                    String[] splitString = event.getMessage().split("\\s+");
+                    if(splitString.length>1) {
+                        if(boardList.contains(splitString[1])) {
+                            timeLog.addFirst(d.getTime());
+                            event.respond(get4ChanImage(splitString[1]));
+                        }
+                        else {
+                            timeLog.addFirst(d.getTime());
+                            event.getChannel().send().kick(event.getUser(), "Die");
+                        }
                     }
                     else {
-                        event.getChannel().send().kick(event.getUser(), "Die");
+                        timeLog.addFirst(d.getTime());
+                        event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
                     }
-//                    get4ChanImage(splitString[1]);
-                }
-                else {
-                    timeLog.addFirst(d.getTime());
-                    event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
                 }
             }
         }
