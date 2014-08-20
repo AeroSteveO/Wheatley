@@ -15,8 +15,6 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.pircbotx.Colors;
@@ -25,27 +23,27 @@ import org.pircbotx.Colors;
  *
  * @author Steve-O
  * --created the json grabbing and parsing parts
- * Previous Bot: Poopsock by khwain
- * --created the russian roulette/throttling in the original randchan function
- * 
+ * Previous Bot: SRSBSNS
+ * --utilizes the randchan function from poopsock/khwain as a base
+ *
  * Besides the one specialty library, this is plug and play
- * 
+ *
  * Activate Commands with:
- *      !randchan [board]
- *          responds with a link to a random 4chan image in the given board,
- *          if no board is given, then it responds with a random image from a 
- *          random board
- * 
+ *      !udict [word]
+ *          responds with the urban dictionary reference to the given word
+ *          includes the first definition, example, and link to the page
+ *
  * Requires:
  *      json-simple-1.1.1
  *      KeyFinder.java
- * 
+ *
  */
 public class Urban extends ListenerAdapter {
     
     private LinkedList<Long> timeLog = new LinkedList<Long>();
-    private static final int MAX_LOG = 3;
-    private static final long MAX_TIME = 60*1000;
+    private static final int MAX_LOG = 2;
+    private static final long MAX_TIME = 30*1000;
+    private int defNum = 0;
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -59,17 +57,20 @@ public class Urban extends ListenerAdapter {
                         timeLog.pollLast();
                     }
                     if(timeLog.size()>MAX_LOG) {
-                        event.getChannel().send().kick( event.getUser(), "DIAF");
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "DIAF");
                         return;
                     }
                 }
+                else{
                 String[] splitString = message.split("\\s+",2);
                 if(splitString.length>1) {
+                    timeLog.addFirst(d.getTime());
                     event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1]));
                 }
                 else {
                     timeLog.addFirst(d.getTime());
                     event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(""));
+                }
                 }
             }
         }
@@ -101,7 +102,7 @@ public class Urban extends ListenerAdapter {
         JSONParser parser = new JSONParser();
         try{
             String jsonObject = (readUrl("http://api.urbandictionary.com/v0/define?term="+term.trim().replaceAll(" ", "%20")));
-            jsonObject = jsonObject.replaceAll("(\\r|\\n)", "");
+            //jsonObject = jsonObject.replaceAll("(\\r|\\n)", "");
             //JSONString directLink = (JSONString) jsonObject.get("permalink");
             List<String> directLink = JSONKeyFinder(jsonObject,"permalink");
             List<String> word = JSONKeyFinder(jsonObject,"word");
@@ -111,28 +112,29 @@ public class Urban extends ListenerAdapter {
             String slimmedDef;
             String slimmedExample;
             
-            System.out.println(example.get(0));
+            System.out.println(definition.get(defNum));
+            System.out.println(example.get(defNum));
             
-            if(results.get(0).equalsIgnoreCase("no_results"))
+            if(results.get(defNum).equalsIgnoreCase("no_results"))
                 return("Error: Definition Not Found");
             
-            if (definition.get(0).length()>150)
-             slimmedDef = definition.get(0).replace("\\", "").replace("\"", "").substring(0,Math.min(definition.get(0).length(),150))+"...";
+            if (definition.get(defNum).length()>150)
+                slimmedDef = definition.get(defNum).replaceAll("[\t\r\n]", "").substring(0,Math.min(definition.get(defNum).length(),150))+"...";
             else
-                slimmedDef = definition.get(0);
+                slimmedDef = definition.get(defNum);
             
-            if (example.get(0).length()>150)
-             slimmedExample = example.get(0).replace("\\", "").replace("\"", "").substring(0,Math.min(example.get(0).length(),150))+"... ";
+            if (example.get(defNum).length()>150)
+                slimmedExample = example.get(defNum).replaceAll("[\t\r\n]", "").substring(0,Math.min(example.get(defNum).length(),150))+"... ";
             else
-                slimmedExample = example.get(0)+" ";
+                slimmedExample = example.get(defNum)+" ";
             
             System.out.println(slimmedExample);
             
-            return(Colors.BOLD+word.get(0)+Colors.NORMAL+" : "+slimmedDef+" "+Colors.BOLD+"Example : "+Colors.NORMAL+slimmedExample + directLink.get(0));
+            return(Colors.BOLD+word.get(defNum)+Colors.NORMAL+" : "+slimmedDef+" "+Colors.BOLD+"Example : "+Colors.NORMAL+slimmedExample + directLink.get(defNum));
         }catch (Exception e){
-             e.printStackTrace();
+            e.printStackTrace();
             return("Error: Definition Not Found");
-           
+            
         }
     }
     
