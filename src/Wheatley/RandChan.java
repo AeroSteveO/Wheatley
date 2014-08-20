@@ -19,6 +19,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.pircbotx.Colors;
 
 /**
  *
@@ -26,19 +27,19 @@ import org.json.simple.parser.ParseException;
  * --created the json grabbing and parsing parts
  * Previous Bot: Poopsock by khwain
  * --created the russian roulette/throttling in the original randchan function
- * 
+ *
  * Besides the one specialty library, this is plug and play
- * 
+ *
  * Activate Commands with:
  *      !randchan [board]
  *          responds with a link to a random 4chan image in the given board,
- *          if no board is given, then it responds with a random image from a 
+ *          if no board is given, then it responds with a random image from a
  *          random board
- * 
+ *
  * Requires:
  *      json-simple-1.1.1
  *      KeyFinder.java
- * 
+ *
  */
 public class RandChan extends ListenerAdapter {
     
@@ -46,12 +47,22 @@ public class RandChan extends ListenerAdapter {
     private static final int MAX_LOG = 3;
     private static final long MAX_TIME = 30*1000;
     List<String> boardList = getBoardList();
+    List<String> boardTitles = getBoardTitles();
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
+        String message = Colors.removeFormattingAndColors(event.getMessage().trim());
         try{
-            if(event.getMessage().trim().matches("!randchan(\\s+\\p{Alnum}+)?")) {
-                
+            if (message.equalsIgnoreCase("!randchan dict")||message.equalsIgnoreCase("!randchan dictionary")||message.equalsIgnoreCase("!randchan list")){
+                String boards = Colors.RED+boardList.get(0)+": "+Colors.NORMAL+boardTitles.get(0)+", ";
+                for(int i=1;i<boardList.size()-1;i++){
+                    boards = boards+Colors.RED+boardList.get(i)+": "+Colors.NORMAL+boardTitles.get(i)+", ";
+                }
+                event.getBot().sendIRC().message(event.getUser().getNick(),boards);
+            }
+            
+            
+            if(message.matches("!randchan(\\s+\\p{Alnum}+)?")) {
                 //Little bit of throttling up in here
                 Date d = new Date();
                 long currentTime = d.getTime();
@@ -129,6 +140,27 @@ public class RandChan extends ListenerAdapter {
         }
         return(boards);
     }
+    
+    
+    //Gets a full list of 4Chan board titles using the 4chan json
+    private List<String> getBoardTitles(){
+        JSONParser parser = new JSONParser();
+        List<String> titles = new ArrayList<>();
+        try{
+            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
+            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
+            for (int i=0; i<boardsTemp.size(); i++) {
+                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
+                titles.add((String) jsonObject.get("title"));
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        return(titles);
+    }
+    
     
     private String get4ChanImage(String board) throws Exception {
         String image = new String();
