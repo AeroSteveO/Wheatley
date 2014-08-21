@@ -121,12 +121,12 @@ public class Urban extends ListenerAdapter {
             if (definition.get(defNum).length()>150)
                 slimmedDef = definition.get(defNum).replaceAll("[\t\r\n]", "").substring(0,Math.min(definition.get(defNum).length(),150))+"...";
             else
-                slimmedDef = definition.get(defNum);
+                slimmedDef = definition.get(defNum).replaceAll("[\t\r\n]", "");
             
             if (example.get(defNum).length()>150)
                 slimmedExample = example.get(defNum).replaceAll("[\t\r\n]", "").substring(0,Math.min(example.get(defNum).length(),150))+"... ";
             else
-                slimmedExample = example.get(defNum)+" ";
+                slimmedExample = example.get(defNum).replaceAll("[\t\r\n]", "")+" ";
             
             System.out.println(slimmedExample);
             
