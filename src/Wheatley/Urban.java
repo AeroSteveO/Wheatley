@@ -41,38 +41,53 @@ import org.pircbotx.Colors;
 public class Urban extends ListenerAdapter {
     
     private LinkedList<Long> timeLog = new LinkedList<Long>();
-    private static final int MAX_LOG = 2;
-    private static final long MAX_TIME = 30*1000;
+    private int maxLog = 2;
+    private long maxTime = 30*1000;
     private int defNum = 0;
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         try{
             String message = Colors.removeFormattingAndColors(event.getMessage().trim());
-            if(message.matches("!udict[\\sA-Za-z0-9]*")) {
+            if(message.toLowerCase().matches("!udict[\\sA-Za-z0-9]*")) {
                 Date d = new Date();
                 long currentTime = d.getTime();
-                if(timeLog.size() > MAX_LOG) {
-                    while(timeLog.size()>0 && currentTime - timeLog.getLast() > MAX_TIME) {
+                if(timeLog.size() > maxLog) {
+                    while(timeLog.size()>0 && currentTime - timeLog.getLast() > maxTime) {
                         timeLog.pollLast();
                     }
-                    if(timeLog.size()>MAX_LOG) {
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "DIAF");
+                    if(timeLog.size()>maxLog) {
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Please Wait Before Sending Another Call for Udict");
                         return;
                     }
                 }
                 else{
-                String[] splitString = message.split("\\s+",2);
-                if(splitString.length>1) {
-                    timeLog.addFirst(d.getTime());
-                    event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1]));
-                }
-                else {
-                    timeLog.addFirst(d.getTime());
-                    event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(""));
-                }
+                    String[] splitString = message.split("\\s+",2);
+                    if(splitString.length>1) {
+                        timeLog.addFirst(d.getTime());
+                        event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1]));
+                    }
+                    else {
+                        timeLog.addFirst(d.getTime());
+                        event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(""));
+                    }
                 }
             }
+            if (message.toLowerCase().matches("!set ucall [0-9]*")){
+                maxLog = Integer.parseInt(message.split(" ")[2]);
+                long sec = maxTime/1000;
+                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+            }
+            if (message.toLowerCase().matches("!set utime [0-9]*")){
+                maxTime = Integer.parseInt(message.split(" ")[2])*1000;
+                long sec = maxTime/1000;
+                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+            }
+            if (message.equalsIgnoreCase("!set ucall")||message.equalsIgnoreCase("!set utime")){
+                long sec = maxTime/1000;
+                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+            }
+                
         }
         catch(Exception ex){
             ex.printStackTrace();
