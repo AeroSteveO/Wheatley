@@ -44,8 +44,8 @@ import org.pircbotx.Colors;
 public class RandChan extends ListenerAdapter {
     
     private LinkedList<Long> timeLog = new LinkedList<Long>();
-    private static final int MAX_LOG = 9;
-    private static final long MAX_TIME = 30*1000;
+    private int maxLog = 5;
+    private long maxTime = 10*1000;
     List<String> boardList = getBoardList();
     List<String> boardTitles = getBoardTitles();
     
@@ -60,18 +60,16 @@ public class RandChan extends ListenerAdapter {
                 }
                 event.getBot().sendIRC().message(event.getUser().getNick(),boards);
             }
-            
-            
-            if(message.matches("!randchan(\\s+\\p{Alnum}+)?")) {
+            else if(message.toLowerCase().matches("!randchan(\\s+\\p{Alnum}+)?")) {
                 //Little bit of throttling up in here
                 Date d = new Date();
                 long currentTime = d.getTime();
-                if(timeLog.size() > MAX_LOG) {
-                    while(timeLog.size()>0 && currentTime - timeLog.getLast() > MAX_TIME) {
+                if(timeLog.size() > maxLog) {
+                    while(timeLog.size()>0 && currentTime - timeLog.getLast() > maxTime) {
                         timeLog.pollLast();
                     }
-                    if(timeLog.size()>MAX_LOG) {
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "DIAF");
+                    if(timeLog.size()>maxLog) {
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
                         return;
                     }
                 }
@@ -79,6 +77,7 @@ public class RandChan extends ListenerAdapter {
                     //Russian roulette up in here
                     if(((int)(Math.random()*6))==0) {
                         event.getChannel().send().kick(event.getUser(), "No soup for you");
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "NO SOUP FOR YOU");
                         return;
                     }
                     String[] splitString = event.getMessage().split("\\s+");
@@ -97,6 +96,20 @@ public class RandChan extends ListenerAdapter {
                         event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
                     }
                 }
+            }
+            if (message.toLowerCase().matches("!set rcall [0-9]*")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+                maxLog = Integer.parseInt(message.split(" ")[2]);
+                long sec = maxTime/1000;
+                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+            }
+            if (message.toLowerCase().matches("!set rtime [0-9]*")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+                maxTime = Integer.parseInt(message.split(" ")[2])*1000;
+                long sec = maxTime/1000;
+                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+            }
+            if (message.equalsIgnoreCase("!set rcall")||message.equalsIgnoreCase("!set utime")){
+                long sec = maxTime/1000;
+                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
             }
         }
         catch(Exception ex){

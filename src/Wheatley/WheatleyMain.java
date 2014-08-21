@@ -127,6 +127,8 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new Ping())
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
+//                    .addListener(new WeatherModule())
+//                    .addListener(new Urban())
                     .addListener(new BadWords())
                     .addListener(new MarkovInterface())
                     .addListener(new TextModification())
