@@ -88,6 +88,9 @@ public class ChannelStore {
     public String getMessage(int i){
         return(this.msgLog.get(i));
     }
+    public String getMessage(){
+        return(this.msgLog.get(this.msgLog.size()-1));
+    }
     public boolean getGameBlockStatus(){
         return(this.gamesBlocked);
     }
