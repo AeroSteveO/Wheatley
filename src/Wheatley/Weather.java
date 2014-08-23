@@ -18,10 +18,10 @@ import org.json.simple.parser.ParseException;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-            //event.respond(searchURL);
-            //  "http://api.wunderground.com/api/***REMOVED***/conditions/q/in/west_lafayette.json";
-            //http://api.wunderground.com/api/***REMOVED***/alerts/q/IA/Des_Moines.json
-            //http://api.wunderground.com/api/***REMOVED***/forecast/q/CA/San_Francisco.json
+//event.respond(searchURL);
+//  "http://api.wunderground.com/api/***REMOVED***/conditions/q/in/west_lafayette.json";
+//http://api.wunderground.com/api/***REMOVED***/alerts/q/IA/Des_Moines.json
+//http://api.wunderground.com/api/***REMOVED***/forecast/q/CA/San_Francisco.json
 
 /**
  *
@@ -37,10 +37,10 @@ public class Weather extends ListenerAdapter{
         if (message.toLowerCase().matches("!w [a-zA-Z ]\\, [a-zA-Z]{2}")||message.toLowerCase().matches("!weather [a-zA-Z ]\\, [a-zA-Z]{2}")){
             String[] tmp = message.split(" ",2);
             String[] cityState = tmp[1].split(",");
-            event.respond((getCurrentWeather(readUrl(makeUrl(cityState[1].replaceAll(" ", "_")+"/"+cityState[0])))));
+            event.respond((getCurrentWeather(readUrl(currentWeatherUrl(cityState[1].replaceAll(" ", "_")+"/"+cityState[0])))));
         }
         if (message.toLowerCase().matches("!w [0-9]{5}")||message.toLowerCase().matches("!weather [0-9]{5}")){
-            event.respond((getCurrentWeather(readUrl(makeUrl(message.split(" ",2)[1])))));
+            event.respond((getCurrentWeather(readUrl(currentWeatherUrl(message.split(" ",2)[1])))));
             //String weatherData = readUrl(searchURL);
         }
         if (message.toLowerCase().matches("!f [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")||message.toLowerCase().matches("!forecast [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")){
@@ -57,12 +57,17 @@ public class Weather extends ListenerAdapter{
         }
         
     }
-        private String makeUrl(String inputLocation){
-            String url = "http://api.wunderground.com/api/"+key+"/forecast/q/"+inputLocation+".json";
-            return(url);
-        }
+    private String currentWeatherUrl(String inputLocation){
+        String url = "http://api.wunderground.com/api/"+key+"/forecast/q/"+inputLocation+".json";
+        return(url);
+    }
+    private String forecastUrl(String inputLocation){
+        String searchURL = "http://api.wunderground.com/api/"+key+"/forecast/q/"+inputLocation+".json";
+        return searchURL;
+    }
     
-        private String getCurrentWeather(String jsonData) throws ParseException{
+    
+    private String getCurrentWeather(String jsonData) throws ParseException{
         JSONParser parser = new JSONParser();
         List<String> boards = new ArrayList<>();
         String zip = "Unavailable";
@@ -71,23 +76,23 @@ public class Weather extends ListenerAdapter{
         String observationTime = "";
         String weather = "";
         String humidity = "";
-        String high = "";
+        String high = ""; //Still have to figure out high and low temp
+        String low = "";
         String windDir = "";
         String windMPH = "";
         String windKPH = "";
         
         try{
+            
+            // GRABBING ALL THE LOCATION DATA
             JSONObject jsonObject = (JSONObject) parser.parse(jsonData);
             JSONObject boardsTemp = (JSONObject) jsonObject.get("current_observation");
             JSONObject locationData = (JSONObject) boardsTemp.get("display_location");
-//            JSONObject weatherCond = (JSONObject) parser.parse(boardsTemp.toString());
-            
             zip =  ((String) locationData.get("zip"));
             cityState = (String)locationData.get("full");
-             
             
+            // GRABBING ALL THE WEATHER DATA
             JSONObject currentWeather = (JSONObject) boardsTemp.get("estimated");
-            
             tempString =(String) currentWeather.get("temperature_string");
             weather =(String) currentWeather.get("weather");
             windDir =(String) currentWeather.get("wind_dir");
@@ -97,11 +102,6 @@ public class Weather extends ListenerAdapter{
             observationTime =(String) currentWeather.get("observation_time");
             humidity =(String) currentWeather.get("relative_humidity");
             humidity =(String) currentWeather.get("relative_humidity");
-            
-//            for (int i=0; i<boardsTemp.size(); i++) {
-//                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
-//                boards.add((String) jsonObject.get("board"));
-//            }
         }
         catch(Exception ex){
             ex.printStackTrace();
