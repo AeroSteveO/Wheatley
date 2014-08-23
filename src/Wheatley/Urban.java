@@ -32,6 +32,13 @@ import org.pircbotx.Colors;
  *      !udict [word]
  *          responds with the urban dictionary reference to the given word
  *          includes the first definition, example, and link to the page
+ *      !set ucall
+ *          Changes the number of udict calls that can be made per specified 
+ *          amount of time, if no value is input, gives the current settings
+ *      !set utime
+ *          Changes the amount of time between udict call flushes, udict 
+ *          is stopped when # of calls > ucall over the course of utime, if 
+ *          no value is input, gives the current settings
  *
  * Requires:
  *      json-simple-1.1.1

@@ -35,7 +35,14 @@ import org.pircbotx.Colors;
  *          responds with a link to a random 4chan image in the given board,
  *          if no board is given, then it responds with a random image from a
  *          random board
- *
+ *      !set rcall
+ *          Changes the number of randchan calls that can be made per specified 
+ *          amount of time, if no value is input, gives the current settings
+ *      !set rtime
+ *          Changes the amount of time between randchan call flushes, randchan 
+ *          is stopped when # of calls > rcall over the course of rtime, if 
+ *          no value is input, gives the current settings
+ * 
  * Requires:
  *      json-simple-1.1.1
  *      KeyFinder.java
