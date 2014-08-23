@@ -31,7 +31,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          insults the given object or 'you' if no object is given, using a 
  *          random insult generated from one of the built in methods
  */
-public class Shakespeare extends ListenerAdapter {
+public class Insult extends ListenerAdapter {
 //    ArrayList<String> first = shakespeareFront();
 //    ArrayList<String> mid = shakespeareMid();
 //    ArrayList<String> ending = shakespeareEnd();
