@@ -44,7 +44,7 @@ public class Blarghlebot extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         int idx = Global.Channels.getChanIdx(event.getChannel().getName());
-        Global.Channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message);
+        Global.Channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message.toLowerCase());
         
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
             String[] messageArray = message.split(" ");
@@ -52,7 +52,7 @@ public class Blarghlebot extends ListenerAdapter {
             //<Evidlo> Whenever python sees \/, it changes it to \\/
             //<Evidlo> So thats why theres \\\\
             if (message.toLowerCase().startsWith("s/")||message.toLowerCase().startsWith("sed/")){
-                String[] findNreplace = Colors.removeFormattingAndColors(event.getMessage()).split("/");
+                String[] findNreplace = Colors.removeFormattingAndColors(message.toLowerCase()).split("/");
                 Pattern findThis = Pattern.compile(findNreplace[1]);
                 String reply = "";
                 int i=Global.Channels.get(idx).getMessageLogSize()-2;
@@ -149,6 +149,7 @@ public class Blarghlebot extends ListenerAdapter {
             //Functions Using REGEX
             if (Pattern.matches("!hm[m]+", message.toLowerCase()))
                 //<BlarghleBot> Vanilla, the old what for quite so cheerio good chap good sir why certainly old bean
+                //<BlarghleBot> Steve-O, hm yes good sir quite so cheerio the old what for why certainly good chap
                 event.getBot().sendIRC().message(event.getChannel().getName(), event.getUser().getNick()+", good sir old bean good chap verily mm why certainly the old what for");//indeed good chap the old what for ah yes hm yes good sir old bean
             
             if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("trolo[lo]+", message.toLowerCase()))
@@ -157,11 +158,7 @@ public class Blarghlebot extends ListenerAdapter {
             if (Pattern.matches("![0-9]+", message))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
             
-            if (Pattern.matches("!bash [0-9]+", message))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://bash.org/?"+message.split(" ")[1]);
             
-            if (Pattern.matches("!xkcdb [0-9]+", message))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.xkcdb.com/"+message.split(" ")[1]);
             
             //OTHER Functions
             if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why")&&message.endsWith("?"))){
@@ -242,8 +239,6 @@ public class Blarghlebot extends ListenerAdapter {
             if (message.equalsIgnoreCase("!rimshot"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.instantrimshot.com/");
             
-            if (message.equalsIgnoreCase("!dropthebass"))
-                event.getBot().sendIRC().message(event.getChannel().getName(),"WUB WUB WUBWUBWUBWUB WUB WUB");
             
             if (message.equalsIgnoreCase("!vuvuzela"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
@@ -251,6 +246,15 @@ public class Blarghlebot extends ListenerAdapter {
             if (message.equalsIgnoreCase("ba dum")||message.equalsIgnoreCase("badum"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "psh");
         }
+        if (Pattern.matches("!bash [0-9]+", message))
+            event.getBot().sendIRC().message(event.getChannel().getName(), "http://bash.org/?"+message.split(" ")[1]);
+        
+        if (Pattern.matches("!xkcdb [0-9]+", message))
+            event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.xkcdb.com/"+message.split(" ")[1]);
+        
+        if (message.equalsIgnoreCase("!dropthebass"))
+            event.getBot().sendIRC().message(event.getChannel().getName(),"WUB WUB WUBWUBWUBWUB WUB WUB");
+        
     }
     private String findReplace(int i, String[] findNreplace, Pattern findThis, int idx){
         String reply="";
