@@ -26,46 +26,98 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Stephen
+ * 
+ * 
+ * <LilWayne> West Lafayette, IN Forecast (High/Low); Updated: 10:04 PM EDT; Friday: 
+ * Thunderstorm, 90/72°F (32/22°C); Saturday: Thunderstorm, 88/68°F (31/20°C); Sunday: 
+ * Thunderstorm, 86/72°F (30/22°C); Monday: Partly Cloudy, 90/72°F (32/22°C); Tuesday: 
+ * Partly Cloudy, 93/72°F (34/22°C); Wednesday: Chance of a Thunderstorm, 86/59°F (30/15°C); 
+ * 
+ * <LilWayne> West Lafayette, IN; Updated: 9:54 PM EDT; Conditions: Clear; Temperature: 
+ * 74°F (23°C); Humidity: 97%; High/Low: 90/68°F (32/20°C); Wind: Calm; 
  */
 public class Weather extends ListenerAdapter{
     String key = "***REMOVED***";
     String stockZip = "47906";
+    String location = null;
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.toLowerCase().matches("!w [a-zA-Z ]\\, [a-zA-Z]{2}")||message.toLowerCase().matches("!weather [a-zA-Z ]\\, [a-zA-Z]{2}")){
-            String[] tmp = message.split(" ",2);
-            String[] cityState = tmp[1].split(",");
-            event.respond((getCurrentWeather(readUrl(currentWeatherUrl(cityState[1].replaceAll(" ", "_")+"/"+cityState[0])))));
+        if (message.toLowerCase().startsWith("!w")){
+            if (message.equalsIgnoreCase("!w")||message.equalsIgnoreCase("!weather")){
+                location = stockZip;
+                // event.respond((getCurrentWeather(readUrl(weatherUrl(stockZip)))));
+            }
+            else if(message.toLowerCase().matches("!w [a-zA-Z ]\\, [a-zA-Z]{2}")||message.toLowerCase().matches("!weather [a-zA-Z ]\\, [a-zA-Z]{2}")){
+                String[] tmp = message.split(" ",2);
+                String[] cityState = tmp[1].split(",");
+                location = cityState[1].replaceAll(" ", "_")+"/"+cityState[0];
+            }
+            else if(message.toLowerCase().matches("!w [0-9]{5}")||message.toLowerCase().matches("!weather [0-9]{5}")){
+                location = message.split(" ",2)[1];
+            }
+            if (location != null){
+                weatherUrl(location);
+            }
+            
         }
-        if (message.toLowerCase().matches("!w [0-9]{5}")||message.toLowerCase().matches("!weather [0-9]{5}")){
-            event.respond((getCurrentWeather(readUrl(currentWeatherUrl(message.split(" ",2)[1])))));
-            //String weatherData = readUrl(searchURL);
-        }
-        if (message.toLowerCase().matches("!f [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")||message.toLowerCase().matches("!forecast [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")){
-            String[] tmp = message.split(" ",2);
-            String[] cityState = tmp[1].split(",");
-            String searchURL = "http://api.wunderground.com/api/"+key+"/forecast/q/"+cityState[1].replaceAll(" ", "_")+"/"+cityState[0]+".json";
-            //String weatherData = readUrl(searchURL);
-        }
-        if (message.toLowerCase().matches("!f [0-9]{5}")||message.toLowerCase().matches("!forecast [0-9]{5}")){
-            String zip = message.split(" ",2)[1];
-            String searchURL = "http://api.wunderground.com/api/"+key+"/forecast/q/"+zip+".json";
-            //event.respond(searchURL);
-            //String weatherData = readUrl(searchURL);
+        if (message.toLowerCase().startsWith("!f")){
+            if (message.equalsIgnoreCase("!f")||message.equalsIgnoreCase("!forecast")){
+                location = stockZip;
+                //event.respond(getCurrentForecast(readUrl(forecastUrl(stockZip))));
+            }
+            else if(message.toLowerCase().matches("!f [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")||message.toLowerCase().matches("!forecast [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")){
+                String[] tmp = message.split(" ",2);
+                String[] cityState = tmp[1].split(",");
+                location = cityState[1].replaceAll(" ", "_")+"/"+cityState[0];
+            }
+            else if(message.toLowerCase().matches("!f [0-9]{5}")||message.toLowerCase().matches("!forecast [0-9]{5}")){
+                location = message.split(" ",2)[1];
+                
+            }
+            if (location != null){
+                forecastUrl(location);
+            }
         }
         
+        
+        
+//        if (message.toLowerCase().matches("!w [a-zA-Z ]\\, [a-zA-Z]{2}")||message.toLowerCase().matches("!weather [a-zA-Z ]\\, [a-zA-Z]{2}")){
+//            String[] tmp = message.split(" ",2);
+//            String[] cityState = tmp[1].split(",");
+//            event.respond((getCurrentWeather(readUrl(weatherUrl(cityState[1].replaceAll(" ", "_")+"/"+cityState[0])))));
+//        }
+//        if (message.toLowerCase().matches("!w [0-9]{5}")||message.toLowerCase().matches("!weather [0-9]{5}")){
+//            event.respond((getCurrentWeather(readUrl(weatherUrl(message.split(" ",2)[1])))));
+//            //String weatherData = readUrl(searchURL);
+//        }
+//        if (message.toLowerCase().matches("!f [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")||message.toLowerCase().matches("!forecast [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")){
+//            String[] tmp = message.split(" ",2);
+//            String[] cityState = tmp[1].split(",");
+//            String searchURL = "http://api.wunderground.com/api/"+key+"/forecast/q/"+cityState[1].replaceAll(" ", "_")+"/"+cityState[0]+".json";
+//            //String weatherData = readUrl(searchURL);
+//        }
+//        if (message.toLowerCase().matches("!f [0-9]{5}")||message.toLowerCase().matches("!forecast [0-9]{5}")){
+//            String zip = message.split(" ",2)[1];
+//            String searchURL = "http://api.wunderground.com/api/"+key+"/forecast/q/"+zip+".json";
+//            //event.respond(searchURL);
+//            //String weatherData = readUrl(searchURL);
+//        }
+        
     }
-    private String currentWeatherUrl(String inputLocation){
-        String url = "http://api.wunderground.com/api/"+key+"/forecast/q/"+inputLocation+".json";
-        return(url);
+    private String weatherUrl(String inputLocation){
+        return("http://api.wunderground.com/api/"+key+"/forecast/q/"+inputLocation+".json");
     }
     private String forecastUrl(String inputLocation){
-        String searchURL = "http://api.wunderground.com/api/"+key+"/forecast/q/"+inputLocation+".json";
-        return searchURL;
+        return ("http://api.wunderground.com/api/"+key+"/forecast/q/"+inputLocation+".json");
     }
-    
+    private String getCurrentForecast(String jsonData){
+        
+        
+        
+        return("");
+    }
     
     private String getCurrentWeather(String jsonData) throws ParseException{
         JSONParser parser = new JSONParser();
@@ -106,6 +158,7 @@ public class Weather extends ListenerAdapter{
         catch(Exception ex){
             ex.printStackTrace();
             System.out.println(ex.getMessage());
+            //return(false);
         }
         return(zip);
     }
