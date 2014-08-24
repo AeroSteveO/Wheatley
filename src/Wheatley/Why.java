@@ -26,7 +26,7 @@ public class Why extends ListenerAdapter {
     public void onMessage(MessageEvent event) {
         String a = new String();
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.equalsIgnoreCase("!Why")||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why")&&message.endsWith("?"))){//||message.equalsIgnoreCase("why?")||(message.toLowerCase().startsWith("why")&&message.endsWith("?"))
+        if (message.equalsIgnoreCase("!Why")||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why"))){//||message.equalsIgnoreCase("why?")||(message.toLowerCase().startsWith("why")&&message.endsWith("?"))&&message.endsWith("?")
             switch((int) (Math.random()*10+1)) {
                 case 1:
                     a=special_case();
