@@ -28,15 +28,21 @@ import Wheatley.WeatherLog.WeatherCache;
 /**
  *
  * @author Stephen
+ *      Original Bot: LilWayne by: i dunno who
  *
- *
- * <LilWayne> West Lafayette, IN Forecast (High/Low); Updated: 10:04 PM EDT; Friday:
- * Thunderstorm, 90/72°F (32/22°C); Saturday: Thunderstorm, 88/68°F (31/20°C); Sunday:
- * Thunderstorm, 86/72°F (30/22°C); Monday: Partly Cloudy, 90/72°F (32/22°C); Tuesday:
- * Partly Cloudy, 93/72°F (34/22°C); Wednesday: Chance of a Thunderstorm, 86/59°F (30/15°C);
- *
- * <LilWayne> West Lafayette, IN; Updated: 9:54 PM EDT; Conditions: Clear; Temperature:
- * 74°F (23°C); Humidity: 97%; High/Low: 90/68°F (32/20°C); Wind: Calm;
+ * Activate Command with:
+ *      !w [zip]
+ *      !weather [zip]
+ *      !w [city, state 2 digit code]
+ *      !weather [city, state 2 digit code]
+ *          responds with the weather for that city, if nothing is input,
+ *          responds with the weather for the stock zip code
+ *      !f [zip]
+ *      !forecast [zip]
+ *      !f [city, state 2 digit code]
+ *      !forecast [city, state 2 digit code]
+ *          responds with the 7 day forecast for that city, if nothing is input,
+ *          responds with the 7 day forecast for the stock zip code
  */
 public class Weather extends ListenerAdapter{
     String key = "***REMOVED***";
@@ -44,6 +50,15 @@ public class Weather extends ListenerAdapter{
     String location = null;
     WeatherCache localCache = new WeatherCache();
     @Override
+    /**
+     * <LilWayne> West Lafayette, IN Forecast (High/Low); Updated: 10:04 PM EDT; Friday:
+     * Thunderstorm, 90/72°F (32/22°C); Saturday: Thunderstorm, 88/68°F (31/20°C); Sunday:
+     * Thunderstorm, 86/72°F (30/22°C); Monday: Partly Cloudy, 90/72°F (32/22°C); Tuesday:
+     * Partly Cloudy, 93/72°F (34/22°C); Wednesday: Chance of a Thunderstorm, 86/59°F (30/15°C);
+     *
+     * <LilWayne> West Lafayette, IN; Updated: 9:54 PM EDT; Conditions: Clear; Temperature:
+     * 74°F (23°C); Humidity: 97%; High/Low: 90/68°F (32/20°C); Wind: Calm;
+     */
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage().toLowerCase());
         
@@ -55,25 +70,25 @@ public class Weather extends ListenerAdapter{
                 String[] tmp = message.split(" ",2);
                 String[] cityState = tmp[1].split(",");
                 location = cityState[1].trim()+"/"+cityState[0].trim().replaceAll(" ", "_");
-                System.out.println(location);
+                //System.out.println(location);
             }
             else if(message.matches("!w [0-9]{5}")||message.matches("!weather [0-9]{5}")){
                 location = message.split(" ",2)[1];
             }
             if (location != null){
                 String search;
+                localCache.purge();
                 if(location.matches("[0-9]{5}"))
                     search = location;
                 else
                     search = location.replaceAll("_", " ").replace("/",", ");
                 if(localCache.size()>0&&localCache.containsEntry(search,"weather")){
-                    event.respond(localCache.getCacheEntry(search,"weather").getFormattedWeather());
+                    event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"weather").getFormattedWeather());
                 }
                 else{
-                    event.respond(getCurrentWeather(readUrl(weatherUrl(location))));
+                    event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentWeather(readUrl(weatherUrl(location))));
                 }
             }
-            
         }
         if (message.toLowerCase().startsWith("!f")){
             if (message.equalsIgnoreCase("!f")||message.equalsIgnoreCase("!forecast")){
@@ -86,11 +101,10 @@ public class Weather extends ListenerAdapter{
             }
             else if(message.toLowerCase().matches("!f [0-9]{5}")||message.toLowerCase().matches("!forecast [0-9]{5}")){
                 location = message.split(" ",2)[1];
-                
             }
             if (location != null){
                 String search;
-                
+                localCache.purge();
                 if(location.matches("[0-9]{5}"))
                     search = location;
                 else
@@ -98,34 +112,53 @@ public class Weather extends ListenerAdapter{
                 
                 if(localCache.size()>0&&localCache.containsEntry(search,"forecast")){
                     System.out.println("local cache contains entry");
-                    event.respond(localCache.getCacheEntry(search,"forecast").getFormattedWeather());
+                    event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"forecast").getFormattedForecast());
                 }
                 else{
-                    event.respond(getCurrentForecast(readUrl(forecastUrl(location))));
+                    event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentForecast(readUrl(forecastUrl(location))));
                 }
             }
         }
-//        if (message.toLowerCase().matches("!w [a-zA-Z ]\\, [a-zA-Z]{2}")||message.toLowerCase().matches("!weather [a-zA-Z ]\\, [a-zA-Z]{2}")){
-//            String[] tmp = message.split(" ",2);
-//            String[] cityState = tmp[1].split(",");
-//            event.respond((getCurrentWeather(readUrl(weatherUrl(cityState[1].replaceAll(" ", "_")+"/"+cityState[0])))));
-//        }
-//        if (message.toLowerCase().matches("!w [0-9]{5}")||message.toLowerCase().matches("!weather [0-9]{5}")){
-//            event.respond((getCurrentWeather(readUrl(weatherUrl(message.split(" ",2)[1])))));
-//            //String weatherData = readUrl(searchURL);
-//        }
-//        if (message.toLowerCase().matches("!f [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")||message.toLowerCase().matches("!forecast [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")){
-//            String[] tmp = message.split(" ",2);
-//            String[] cityState = tmp[1].split(",");
-//            String searchURL = "http://api.wunderground.com/api/"+key+"/forecast/q/"+cityState[1].replaceAll(" ", "_")+"/"+cityState[0]+".json";
-//            //String weatherData = readUrl(searchURL);
-//        }
-//        if (message.toLowerCase().matches("!f [0-9]{5}")||message.toLowerCase().matches("!forecast [0-9]{5}")){
-//            String zip = message.split(" ",2)[1];
-//            String searchURL = "http://api.wunderground.com/api/"+key+"/forecast/q/"+zip+".json";
-//            //event.respond(searchURL);
-//            //String weatherData = readUrl(searchURL);
-//        }
+        if (message.toLowerCase().startsWith("!a")){
+            if (message.equalsIgnoreCase("!a")||message.equalsIgnoreCase("!alerts")){
+                location = stockZip;
+            }
+            else if(message.matches("!a [a-zA-Z\\s]+\\,\\s[a-zA-Z]{2}")||message.matches("!alerts [a-zA-Z\\s]+\\,\\s[a-zA-Z]{2}")){
+                String[] tmp = message.split(" ",2);
+                String[] cityState = tmp[1].split(",");
+                location = cityState[1].trim()+"/"+cityState[0].trim().replaceAll(" ", "_");
+            }
+            else if(message.matches("!a [0-9]{5}")||message.matches("!alerts [0-9]{5}")){
+                location = message.split(" ",2)[1];
+            }
+            if (location != null){
+                String search;
+                localCache.purge();
+                if(location.matches("[0-9]{5}"))
+                    search = location;
+                else
+                    search = location.replaceAll("_", " ").replace("/",", ");
+                if(localCache.size()>0&&localCache.containsEntry(search,"alerts")){
+                    String[] alertResponse = localCache.getCacheEntry(search,"alerts").getFormattedResponse().split("~");
+                    for (int i=0;i<alertResponse.length;i++){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
+                    }
+                }
+                else{
+                    //getCurrentAlerts(readUrl(alertUrl(location)));
+                    String[] alertResponse = getCurrentAlerts(readUrl(alertUrl(location))).split("!");
+                    //event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[0]);
+                    if (alertResponse[0].equalsIgnoreCase("Error Parsing Alerts")||alertResponse[0].equalsIgnoreCase("No Current Weather Alerts")){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),alertResponse[0].trim());
+                    }else{
+                        for (int i=0;i<alertResponse.length;i++){
+                            System.out.println(alertResponse[i]);
+                            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
+                        }
+                    }
+                }
+            }
+        }
     }
     private String weatherUrl(String inputLocation){
         return("http://api.wunderground.com/api/"+key+"/conditions/q/"+inputLocation+".json");
@@ -135,6 +168,41 @@ public class Weather extends ListenerAdapter{
     }
     private String geoLookupUrl(String inputLocation){
         return ("http://api.wunderground.com/api/"+key+"/geolookup/q/"+inputLocation+".json");
+    }
+    private String alertUrl(String inputLocation){
+        return("http://api.wunderground.com/api/"+key+"/alerts/q/"+inputLocation+".json");
+    }
+    
+    private String getCurrentAlerts(String jsonData) {
+        JSONParser parser = new JSONParser();
+        String response;
+        ArrayList<String> alertType = new ArrayList<>();
+        ArrayList<String> alertExpiration = new ArrayList<>();
+        try{
+            JSONObject alertJSON = (JSONObject) parser.parse(jsonData);
+            JSONArray alertArrayJSON = (JSONArray) alertJSON.get("alerts");
+            if (!alertArrayJSON.isEmpty()){
+                for (int i=0;i<alertArrayJSON.size();i++){
+                    JSONObject alert = (JSONObject) alertArrayJSON.get(i);
+                    alertType.add((String) alert.get("description"));
+                    alertExpiration.add((String) alert.get("expires"));
+                    System.out.println(alertType.get(alertType.size()-1));
+                }
+                
+                ArrayList<String> locationData = getLocationData();
+                String cityState = locationData.get(0)+", "+locationData.get(1);
+                WeatherLog alert = new WeatherLog( cityState,  locationData.get(2),alertType,alertExpiration);
+                localCache.add(alert);
+                return(alert.getFormattedResponse());
+            }
+            else
+                return("No Current Weather Alerts");
+            
+            
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return("Error Parsing Alerts");
+        }
     }
     private String getCurrentForecast(String jsonData) throws ParseException{
         JSONParser parser = new JSONParser();
@@ -148,18 +216,17 @@ public class Weather extends ListenerAdapter{
         String date = "";
         //simpleforecast
         try{
-            JSONObject jsonObject = (JSONObject) parser.parse(jsonData);
-            //System.out.println(jsonObject.toString());
-            jsonObject = (JSONObject) jsonObject.get("forecast");
-            JSONObject forecastTemp = (JSONObject) jsonObject.get("simpleforecast");
-            //System.out.println(forecastTemp.toString());
-            JSONArray forecastDay = (JSONArray) forecastTemp.get("forecastday");
+            JSONObject forecastJSON = (JSONObject) parser.parse(jsonData);
+            forecastJSON = (JSONObject) forecastJSON.get("forecast");
+            forecastJSON = (JSONObject) forecastJSON.get("simpleforecast");
+            JSONArray forecastDay = (JSONArray) forecastJSON.get("forecastday");
             JSONObject day = (JSONObject) forecastDay.get(0);
             day = (JSONObject) day.get("date");
             date = (String) day.get("pretty");
-            //System.out.println(forecastDay.get(1).toString());
             weekDay = JSONKeyFinder(forecastDay.toString(),"weekday"); //all thats needed for the weekday array
-            //System.out.println(weekDay.toString());
+            
+            //int max = forecastDay.size();
+            
             for (int i=0;i<forecastDay.size();i++){
                 JSONObject period = (JSONObject) forecastDay.get(i);
                 JSONObject high = (JSONObject) period.get("high");
@@ -170,11 +237,9 @@ public class Weather extends ListenerAdapter{
                 lowC.add((String) high.get("celsius"));
                 forecastConditions.add((String) period.get("conditions"));
             }
+            
             ArrayList<String> locationData = getLocationData();
             String cityState = locationData.get(0)+", "+locationData.get(1);
-            System.out.println(cityState);
-            System.out.println(locationData.get(2));
-            System.out.println(date);
             WeatherLog forecast = new WeatherLog( cityState,  locationData.get(2),  highF, lowF, highC, lowC, forecastConditions, weekDay, date);
             response = forecast.getFormattedForecast();
             localCache.add(forecast);
@@ -223,7 +288,6 @@ public class Weather extends ListenerAdapter{
     }
     private String getCurrentWeather(String jsonData) throws ParseException{
         JSONParser parser = new JSONParser();
-//        List<String> boards = new ArrayList<>();
         String zip = "Unavailable";
         String cityState = "";
         String tempString = "";
@@ -256,18 +320,13 @@ public class Weather extends ListenerAdapter{
             observationTime =(String) currentWeather.get("observation_time").toString().split("Last Updated on",2)[1];
             WeatherLog weatherData = new WeatherLog(cityState,zip, weather, humidity, tempString, windMPH, windKPH, windDir, observationTime);
             localCache.add(weatherData);
-//            String response = (cityState+"; Updated: "+observationTime+"; "+"Conditions: "+weather+"; "+
-//                    Colors.BOLD+"Temperature: "+tempString+"; "+"Humidity: "+humidity+"; "+"Wind: "+windMPH+" ("+windKPH+") "+windDir);
-//            System.out.println(response);
             return(weatherData.getFormattedWeather());
         }
         catch(Exception ex){
             ex.printStackTrace();
             System.out.println(ex.getMessage());
             return("ERROR");
-            //return(false);
         }
-        //return(weatherData.getFormattedWeather());
     }
     
     //converts URL to string, primarily used to string-ify json text
