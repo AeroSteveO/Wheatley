@@ -36,7 +36,7 @@ public class Ping extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if ((message.startsWith("!ping"))) { 
+        if ((message.toLowerCase().startsWith("!ping"))) { 
             String[] totalip = event.getMessage().split(" ");
             String[] pingresponse = new String[2];
             String[] address = new String[2];
