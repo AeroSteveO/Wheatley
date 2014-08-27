@@ -149,10 +149,11 @@ public class Blarghlebot extends ListenerAdapter {
             //Functions Using REGEX
             if (Pattern.matches("!hm[m]+", message.toLowerCase()))
                 //<BlarghleBot> Vanilla, the old what for quite so cheerio good chap good sir why certainly old bean
+                //<BlarghleBot> Vanilla, I say good chap indeed verily why certainly old bean good sir
                 //<BlarghleBot> Steve-O, hm yes good sir quite so cheerio the old what for why certainly good chap
                 event.getBot().sendIRC().message(event.getChannel().getName(), event.getUser().getNick()+", good sir old bean good chap verily mm why certainly the old what for");//indeed good chap the old what for ah yes hm yes good sir old bean
             
-            if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("trolo[lo]+", message.toLowerCase()))
+            if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("!trolo[lo]+", message.toLowerCase()))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "http://youtu.be/v1PBptSDIh8");
             // REGEX for creating IRC quote links
             if (Pattern.matches("![0-9]+", message))
@@ -161,7 +162,7 @@ public class Blarghlebot extends ListenerAdapter {
             
             
             //OTHER Functions
-            if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why")&&message.endsWith("?"))){
+            if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.MainNick+", what do you think of")&&message.endsWith("?"))){
                 //Messages from : http://en.wikipedia.org/wiki/Magic_8-Ball
                 List<String> magic = new ArrayList<>();
                 magic.add( "It is certain" );
