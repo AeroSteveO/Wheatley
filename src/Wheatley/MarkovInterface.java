@@ -21,20 +21,20 @@ import org.pircbotx.Colors;
 /**
  *
  * @author Steve-O
- Jborg markov chain integration, based off seeborg which is based on pyborg
- 
- Activate Commands With
-      !mute
-      !speak
-          To turn on and off the random response markov generator
-      !set chance [num]
-          To set the chance of the markov generator to respond (1/[num] chance)
-      !save lines
-          To save the current lines used in markov chain generation
-      !line
-          To command the bot to respond with a line
-      [botnick], what do you think of [item]
-          To force a seed word into the generator and command a reply
+ *Jborg markov chain integration, based off seeborg which is based on pyborg
+ *
+ *Activate Commands With
+ *     !mute
+ *     !speak
+ *         To turn on and off the random response markov generator
+ *     !set chance [num]
+ *         To set the chance of the markov generator to respond (1/[num] chance)
+ *     !save lines
+ *         To save the current lines used in markov chain generation
+ *     !line
+ *         To command the bot to respond with a line
+ *     [botnick], what do you think of [item]
+ *         To force a seed word into the generator and command a reply
  *
  */
 public class MarkovInterface extends ListenerAdapter{
@@ -148,19 +148,4 @@ public class MarkovInterface extends ListenerAdapter{
         }
         return(bot);
     }
-    
-//    public int getChanIdx(String toCheck){
-//        int idx = -1;
-//        for(int i = 0; i < Global.Channels.size(); i++) {
-//            if (Global.Channels.get(i).getChanName().equalsIgnoreCase(toCheck)) {
-//                idx = i;
-//                break;
-//            }
-//        }
-//        if (idx==-1){
-//            Global.Channels.add(new ChannelStore(toCheck));
-//            idx = Global.Channels.size();
-//        }
-//        return (idx);
-//    }
 }
