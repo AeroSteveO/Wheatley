@@ -55,8 +55,9 @@ public class WheatleyMain extends ListenerAdapter {
     }
     @Override
     // Joins channels it has been invited to
-    public void onInvite(InviteEvent e) {
-        e.getBot().sendIRC().joinChannel(e.getChannel()); 
+    public void onInvite(InviteEvent event) {
+        event.getBot().sendIRC().joinChannel(event.getChannel());
+        Global.Channels.add(new ChannelStore(event.getChannel())); //think this will work?
     }
     @Override
     // Something from the example script that has continued to stay in my bots code
