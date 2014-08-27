@@ -91,7 +91,7 @@ public class Definitions extends ListenerAdapter {
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition already exists");
         }
         else if((message.startsWith("!adddef")||message.startsWith("!addef"))&&!(message.split("@").length==2)&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
-            event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command");
+            event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: !adddef word or phrase @ definition phrase");
         }
         else if (message.startsWith("!adddef")||message.startsWith("!addef")){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
@@ -171,7 +171,7 @@ public class Definitions extends ListenerAdapter {
             }
         }
         else if ((message.startsWith("!updatedef")||message.startsWith("!updef"))&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
-            event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed update command");
+            event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed update command: !updef word phrase @ definition phrase");
         }
         else if (message.startsWith("!updatedef")||message.startsWith("!updef")){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
