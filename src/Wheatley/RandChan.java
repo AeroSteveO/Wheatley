@@ -114,7 +114,7 @@ public class RandChan extends ListenerAdapter {
                 long sec = maxTime/1000;
                 event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
             }
-            if (message.equalsIgnoreCase("!set rcall")||message.equalsIgnoreCase("!set utime")){
+            if (message.equalsIgnoreCase("!set rcall")||message.equalsIgnoreCase("!set rtime")){
                 long sec = maxTime/1000;
                 event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
             }
