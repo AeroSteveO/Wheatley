@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +18,7 @@ import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import Wheatley.WeatherLog.WeatherCache;
+import org.pircbotx.PircBotX;
 
 //event.respond(searchURL);
 //  "http://api.wunderground.com/api/***REMOVED***/conditions/q/in/west_lafayette.json";
@@ -43,13 +43,24 @@ import Wheatley.WeatherLog.WeatherCache;
  *      !forecast [city, state 2 digit code]
  *          responds with the 7 day forecast for that city, if nothing is input,
  *          responds with the 7 day forecast for the stock zip code
+ *      !a [zip]
+ *      !alerts [zip]
+ *      !a [city, state 2 digit code]
+ *      !alerts [city, state 2 digit code]
+ *          responds with the any available weather alerts for that city, if nothing is input,
+ *          responds with the any available weather alerts for the stock zip code
  */
 public class Weather extends ListenerAdapter{
     String key = "***REMOVED***";
     String stockZip = "47906";
     String location = null;
     WeatherCache localCache = new WeatherCache();
-    @Override
+    AlertTime alertUpdater = new AlertTime(Global.bot);
+    
+    Thread t = new Thread(alertUpdater);
+    boolean started = startAlertTime(t);
+    //Runner parallel = new Runner(Global.bot);
+    
     /**
      * <LilWayne> West Lafayette, IN Forecast (High/Low); Updated: 10:04 PM EDT; Friday:
      * Thunderstorm, 90/72°F (32/22°C); Saturday: Thunderstorm, 88/68°F (31/20°C); Sunday:
@@ -59,22 +70,31 @@ public class Weather extends ListenerAdapter{
      * <LilWayne> West Lafayette, IN; Updated: 9:54 PM EDT; Conditions: Clear; Temperature:
      * 74°F (23°C); Humidity: 97%; High/Low: 90/68°F (32/20°C); Wind: Calm;
      */
-    public void onMessage(final MessageEvent event) throws Exception {
+    @Override
+    public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage().toLowerCase());
         
-        if (message.toLowerCase().startsWith("!w")){
-            if (message.equalsIgnoreCase("!w")||message.equalsIgnoreCase("!weather")){
+        if (message.toLowerCase().startsWith("!w")||message.toLowerCase().startsWith("!f")||message.toLowerCase().startsWith("!a")){
+            String[] msgSplit = message.split(" ",2);
+            String command;
+            if (msgSplit.length>1)
+                command = msgSplit[1];
+            else
+                command="";
+            if (command.equalsIgnoreCase("")){ //dunno if this works yet
                 location = stockZip;
             }
-            else if(message.matches("!w [a-zA-Z\\s]+\\,\\s[a-zA-Z]{2}")||message.matches("!weather [a-zA-Z\\s]+\\,\\s[a-zA-Z]{2}")){
-                String[] tmp = message.split(" ",2);
-                String[] cityState = tmp[1].split(",");
+            else if(command.matches("[a-zA-Z\\s]+\\,\\s[a-zA-Z]{2}")){
+                String[] cityState = command.split(",");
                 location = cityState[1].trim()+"/"+cityState[0].trim().replaceAll(" ", "_");
-                //System.out.println(location);
             }
-            else if(message.matches("!w [0-9]{5}")||message.matches("!weather [0-9]{5}")){
-                location = message.split(" ",2)[1];
+            else if(command.matches("[0-9]{5}")){
+                location = command;
             }
+            // end of location reuse setup, hopefully
+            
+        }
+        if (message.toLowerCase().startsWith("!w")){
             if (location != null){
                 String search;
                 localCache.purge();
@@ -83,25 +103,33 @@ public class Weather extends ListenerAdapter{
                 else
                     search = location.replaceAll("_", " ").replace("/",", ");
                 if(localCache.size()>0&&localCache.containsEntry(search,"weather")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"weather").getFormattedWeather());
+                    event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"weather").getFormattedResponse());
+                    
+                    
                 }
                 else{
                     event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentWeather(readUrl(weatherUrl(location))));
                 }
+                
+                
+                if(localCache.size()>0&&localCache.containsEntry(search,"alerts")){
+                    String[] alertResponse = localCache.getCacheEntry(search,"alerts").getFormattedResponse().split("~");
+                    for (int i=0;i<alertResponse.length;i++){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
+                    }
+                }
+                else{
+                    String[] alertResponse = getCurrentAlerts(readUrl(alertUrl(location))).split("!");
+                    if (!alertResponse[0].equalsIgnoreCase("Error Parsing Alerts")&&!alertResponse[0].equalsIgnoreCase("No Current Weather Alerts")){
+                        for (int i=0;i<alertResponse.length;i++){
+                            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
+                        }
+                    }
+                }
+                
             }
         }
         if (message.toLowerCase().startsWith("!f")){
-            if (message.equalsIgnoreCase("!f")||message.equalsIgnoreCase("!forecast")){
-                location = stockZip;
-            }
-            else if(message.toLowerCase().matches("!f [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")||message.toLowerCase().matches("!forecast [a-zA-Z\\s]\\,\\s[a-zA-Z]{2}")){
-                String[] tmp = message.split(" ",2);
-                String[] cityState = tmp[1].split(",");
-                location = cityState[1].replaceAll(" ", "_")+"/"+cityState[0].replaceAll(" ", "_");
-            }
-            else if(message.toLowerCase().matches("!f [0-9]{5}")||message.toLowerCase().matches("!forecast [0-9]{5}")){
-                location = message.split(" ",2)[1];
-            }
             if (location != null){
                 String search;
                 localCache.purge();
@@ -111,8 +139,7 @@ public class Weather extends ListenerAdapter{
                     search = location.replaceAll("_", " ").replace("/",", ");
                 
                 if(localCache.size()>0&&localCache.containsEntry(search,"forecast")){
-                    System.out.println("local cache contains entry");
-                    event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"forecast").getFormattedForecast());
+                    event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"forecast").getFormattedResponse());
                 }
                 else{
                     event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentForecast(readUrl(forecastUrl(location))));
@@ -120,17 +147,6 @@ public class Weather extends ListenerAdapter{
             }
         }
         if (message.toLowerCase().startsWith("!a")){
-            if (message.equalsIgnoreCase("!a")||message.equalsIgnoreCase("!alerts")){
-                location = stockZip;
-            }
-            else if(message.matches("!a [a-zA-Z\\s]+\\,\\s[a-zA-Z]{2}")||message.matches("!alerts [a-zA-Z\\s]+\\,\\s[a-zA-Z]{2}")){
-                String[] tmp = message.split(" ",2);
-                String[] cityState = tmp[1].split(",");
-                location = cityState[1].trim()+"/"+cityState[0].trim().replaceAll(" ", "_");
-            }
-            else if(message.matches("!a [0-9]{5}")||message.matches("!alerts [0-9]{5}")){
-                location = message.split(" ",2)[1];
-            }
             if (location != null){
                 String search;
                 localCache.purge();
@@ -145,9 +161,7 @@ public class Weather extends ListenerAdapter{
                     }
                 }
                 else{
-                    //getCurrentAlerts(readUrl(alertUrl(location)));
                     String[] alertResponse = getCurrentAlerts(readUrl(alertUrl(location))).split("!");
-                    //event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[0]);
                     if (alertResponse[0].equalsIgnoreCase("Error Parsing Alerts")||alertResponse[0].equalsIgnoreCase("No Current Weather Alerts")){
                         event.getBot().sendIRC().message(event.getChannel().getName(),alertResponse[0].trim());
                     }else{
@@ -156,6 +170,59 @@ public class Weather extends ListenerAdapter{
                             event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
                         }
                     }
+                }
+            }
+            
+        }
+        location = null;
+    }
+    private boolean startAlertTime(Thread t){
+        try{
+            //Thread t = new Thread(alertUpdater);
+            alertUpdater.giveT(t);
+            t.start();
+            return(true);
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            return(false);
+        }
+    }
+    public  class AlertTime implements Runnable {
+        int time = 1*10; // 15 min converted to seconds
+        String channel = "#dtella";
+        boolean updateAlerts = true;
+        //int key;
+        PircBotX bot;// = Global.bot;
+        Thread t;
+        
+        AlertTime(PircBotX bot) {
+            this.bot=bot;
+            //AlertTime runnable = new AlertTime();
+            //this.t = new Thread(this);
+            //this.giveT(t);
+            //t.start();
+        }
+        public void end() throws InterruptedException{
+            //this.t.close(); //Close this EventQueue
+            this.updateAlerts = false;
+            t.join(1000); //Ensure the thread also closes
+        }
+        
+        public void giveT(Thread t) {
+            this.t = t;
+        }
+        
+        @Override
+        public void run() {
+            while(updateAlerts){
+                try { // No need to loop for this thread
+                    
+                    Thread.sleep(time*1000);
+                    this.bot.sendIRC().message("#dtella", "STUFF");
+                    
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         }
@@ -175,7 +242,6 @@ public class Weather extends ListenerAdapter{
     
     private String getCurrentAlerts(String jsonData) {
         JSONParser parser = new JSONParser();
-        String response;
         ArrayList<String> alertType = new ArrayList<>();
         ArrayList<String> alertExpiration = new ArrayList<>();
         try{
@@ -241,7 +307,7 @@ public class Weather extends ListenerAdapter{
             ArrayList<String> locationData = getLocationData();
             String cityState = locationData.get(0)+", "+locationData.get(1);
             WeatherLog forecast = new WeatherLog( cityState,  locationData.get(2),  highF, lowF, highC, lowC, forecastConditions, weekDay, date);
-            response = forecast.getFormattedForecast();
+            response = forecast.getFormattedResponse();
             localCache.add(forecast);
             return(response);
             
@@ -320,7 +386,7 @@ public class Weather extends ListenerAdapter{
             observationTime =(String) currentWeather.get("observation_time").toString().split("Last Updated on",2)[1];
             WeatherLog weatherData = new WeatherLog(cityState,zip, weather, humidity, tempString, windMPH, windKPH, windDir, observationTime);
             localCache.add(weatherData);
-            return(weatherData.getFormattedWeather());
+            return(weatherData.getFormattedResponse());
         }
         catch(Exception ex){
             ex.printStackTrace();
