@@ -143,19 +143,6 @@ public class Game {
         return blocked;
     }
     
-//    private boolean isChanBlocked() {
-//        if (this.blockedChannels.contains(this.channelName))
-//                return (true);
-//        else
-//            return(false);
-//    }
-//    public boolean isChanBlocked(String channel) {
-//        if (this.blockedChannels.contains(channel))
-//                return (true);
-//        else
-//            return(false);
-//    }
-    
     public  class TimedWaitForQueue extends WaitForQueue{
         int time;
         private QueueTime runnable = null;
