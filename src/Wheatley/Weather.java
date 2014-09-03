@@ -18,7 +18,6 @@ import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import Wheatley.WeatherLog.WeatherCache;
-import org.pircbotx.PircBotX;
 
 //event.respond(searchURL);
 //  "http://api.wunderground.com/api/***REMOVED***/conditions/q/in/west_lafayette.json";
@@ -51,15 +50,19 @@ import org.pircbotx.PircBotX;
  *          responds with the any available weather alerts for the stock zip code
  */
 public class Weather extends ListenerAdapter{
-    String key = "***REMOVED***";
-    String stockZip = "47906";
-    String location = null;
-    WeatherCache localCache = new WeatherCache();
-    AlertTime alertUpdater = new AlertTime(Global.bot);
+    String key = "***REMOVED***";    // API KEY, DO NOT LOSE
+    String stockZip = "47906";          // Stock location for weather/alerts/forecast/auto alerts
+    String location = null;             
+    WeatherCache localCache = new WeatherCache(); // Initiate cache of weather data
     
-    Thread t = new Thread(alertUpdater);
-    boolean started = startAlertTime(t);
-    //Runner parallel = new Runner(Global.bot);
+    
+    // Initiate Auto-Alert System
+    String alertChannel = "#dtella";              // Channel to send weather alert updates to
+    int alertUpdateTime = 15*60;                  // 15 min converted to seconds
+    boolean updateAlerts = true;                  // True if the bot should send weather alert updates
+    AlertTime alertUpdater = new AlertTime(alertChannel,updateAlerts,alertUpdateTime);     // Initiate auto-alert object
+    Thread t = new Thread(alertUpdater);          // Give it a thread to run in
+    boolean started = startAlertTime(t);          // Start the auto-alert thread
     
     /**
      * <LilWayne> West Lafayette, IN Forecast (High/Low); Updated: 10:04 PM EDT; Friday:
@@ -81,7 +84,7 @@ public class Weather extends ListenerAdapter{
                 command = msgSplit[1];
             else
                 command="";
-            if (command.equalsIgnoreCase("")){ //dunno if this works yet
+            if (command.equalsIgnoreCase("")){
                 location = stockZip;
             }
             else if(command.matches("[a-zA-Z\\s]+\\,\\s[a-zA-Z]{2}")){
@@ -91,7 +94,6 @@ public class Weather extends ListenerAdapter{
             else if(command.matches("[0-9]{5}")){
                 location = command;
             }
-            // end of location reuse setup, hopefully
             
         }
         if (message.toLowerCase().startsWith("!w")){
@@ -104,8 +106,6 @@ public class Weather extends ListenerAdapter{
                     search = location.replaceAll("_", " ").replace("/",", ");
                 if(localCache.size()>0&&localCache.containsEntry(search,"weather")){
                     event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"weather").getFormattedResponse());
-                    
-                    
                 }
                 else{
                     event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentWeather(readUrl(weatherUrl(location))));
@@ -126,7 +126,6 @@ public class Weather extends ListenerAdapter{
                         }
                     }
                 }
-                
             }
         }
         if (message.toLowerCase().startsWith("!f")){
@@ -172,15 +171,14 @@ public class Weather extends ListenerAdapter{
                     }
                 }
             }
-            
         }
         location = null;
     }
-    private boolean startAlertTime(Thread t){
+    private boolean startAlertTime(Thread alertThread){
         try{
             //Thread t = new Thread(alertUpdater);
-            alertUpdater.giveT(t);
-            t.start();
+            alertUpdater.giveT(alertThread);
+            alertThread.start();
             return(true);
         }
         catch(Exception ex){
@@ -189,19 +187,15 @@ public class Weather extends ListenerAdapter{
         }
     }
     public  class AlertTime implements Runnable {
-        int time = 1*10; // 15 min converted to seconds
-        String channel = "#dtella";
-        boolean updateAlerts = true;
-        //int key;
-        PircBotX bot;// = Global.bot;
-        Thread t;
+        Thread t;                     // Thread for weather alert updates
+        boolean updateAlerts;
+        String channel;
+        int time;
         
-        AlertTime(PircBotX bot) {
-            this.bot=bot;
-            //AlertTime runnable = new AlertTime();
-            //this.t = new Thread(this);
-            //this.giveT(t);
-            //t.start();
+        AlertTime(String chan, boolean update, int interval) {
+            this.time = interval;
+            this.updateAlerts = update;
+            this.channel=chan;
         }
         public void end() throws InterruptedException{
             //this.t.close(); //Close this EventQueue
@@ -219,11 +213,62 @@ public class Weather extends ListenerAdapter{
                 try { // No need to loop for this thread
                     
                     Thread.sleep(time*1000);
-                    this.bot.sendIRC().message("#dtella", "STUFF");
+                    //System.out.println("SEND MESSAGE NAO");
+                    boolean updated = updateCurrentAlerts(readUrl(alertUrl(stockZip)));
+                    // Global.bot.sendIRC().message("#rapterverse", "STUFF");
                     
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+            }
+        }
+        private boolean updateCurrentAlerts(String jsonData) {
+            JSONParser parser = new JSONParser();
+            ArrayList<String> alertType = new ArrayList<>();
+            ArrayList<String> alertExpiration = new ArrayList<>();
+            try{
+                JSONObject alertJSON = (JSONObject) parser.parse(jsonData);
+                JSONArray alertArrayJSON = (JSONArray) alertJSON.get("alerts");
+                if (!alertArrayJSON.isEmpty()){
+                    for (int i=0;i<alertArrayJSON.size();i++){
+                        JSONObject alert = (JSONObject) alertArrayJSON.get(i);
+                        alertType.add((String) alert.get("description"));
+                        alertExpiration.add((String) alert.get("expires"));
+                        //System.out.println(alertType.get(alertType.size()-1));
+                    }
+                    
+                    ArrayList<String> locationData = getLocationData(stockZip);
+                    String cityState = locationData.get(0)+", "+locationData.get(1);
+                    String zip = locationData.get(2);
+                    
+                    
+                    
+                    if (!localCache.containsEntry( zip,"alert")){
+                        WeatherLog alert = new WeatherLog( cityState,  zip,alertType,alertExpiration);
+                        localCache.add(alert);
+                        Global.bot.sendIRC().message(channel, Colors.RED+Colors.BOLD+alert.getFormattedResponse());
+                    }
+                    WeatherLog oldAlert = localCache.getCacheEntry(zip, "alert");
+                    for (int i=0;i<alertType.size();i++){
+                        
+                        if (oldAlert.getAlertType().contains(alertType.get(i))){
+                            for (int j=0;i<oldAlert.getAlertType().size();i++){
+                                localCache.getCacheEntry(zip, "alert").updateExpiration(j,alertExpiration.get(i));
+                            }
+                        }
+                        else if (!oldAlert.getAlertType().contains(alertType.get(i))){
+                            localCache.getCacheEntry(zip, "alert").addAlert(alertType.get(i), alertExpiration.get(i));
+                            String response = Colors.RED+Colors.BOLD+"WEATHER ALERT FOR: " + Colors.NORMAL+cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+alertType.get(i)+Colors.BOLD+" Ending: "+Colors.NORMAL+alertExpiration.get(i);
+                            Global.bot.sendIRC().message(channel, response);
+                        }
+                    }
+                    return(true);
+                }
+                else
+                    return(false);
+            }catch (Exception ex){
+                ex.printStackTrace();
+                return(false);
             }
         }
     }
@@ -255,7 +300,7 @@ public class Weather extends ListenerAdapter{
                     System.out.println(alertType.get(alertType.size()-1));
                 }
                 
-                ArrayList<String> locationData = getLocationData();
+                ArrayList<String> locationData = getLocationData(location);
                 String cityState = locationData.get(0)+", "+locationData.get(1);
                 WeatherLog alert = new WeatherLog( cityState,  locationData.get(2),alertType,alertExpiration);
                 localCache.add(alert);
@@ -299,12 +344,12 @@ public class Weather extends ListenerAdapter{
                 highF.add((String) high.get("fahrenheit"));
                 highC.add((String) high.get("celsius"));
                 JSONObject low = (JSONObject) period.get("low");
-                lowF.add((String) high.get("fahrenheit"));
-                lowC.add((String) high.get("celsius"));
+                lowF.add((String) low.get("fahrenheit"));
+                lowC.add((String) low.get("celsius"));
                 forecastConditions.add((String) period.get("conditions"));
             }
             
-            ArrayList<String> locationData = getLocationData();
+            ArrayList<String> locationData = getLocationData(location);
             String cityState = locationData.get(0)+", "+locationData.get(1);
             WeatherLog forecast = new WeatherLog( cityState,  locationData.get(2),  highF, lowF, highC, lowC, forecastConditions, weekDay, date);
             response = forecast.getFormattedResponse();
@@ -317,7 +362,26 @@ public class Weather extends ListenerAdapter{
             return("Error: Forecast not found");
         }
     }
-    private ArrayList<String> getLocationData() throws Exception{
+//    private ArrayList<String> getLocationData() throws Exception{
+//        JSONParser parser = new JSONParser();
+//        ArrayList<String> locationData = new ArrayList<>();
+//        String jsonData = readUrl(geoLookupUrl(location));
+//        try{
+//            JSONObject jsonObject = (JSONObject) parser.parse(jsonData);
+//            JSONObject locationJSON = (JSONObject) jsonObject.get("location");
+//            locationData.add((String) locationJSON.get("city"));
+//            locationData.add((String) locationJSON.get("state"));
+//            locationData.add((String) locationJSON.get("zip"));
+//            
+//        }catch (Exception ex){
+//            ex.printStackTrace();
+//            locationData.add("Error");
+//            locationData.add("Error");
+//            locationData.add("Error");
+//        }
+//        return(locationData);
+//    }
+    private ArrayList<String> getLocationData(String location) throws Exception{
         JSONParser parser = new JSONParser();
         ArrayList<String> locationData = new ArrayList<>();
         String jsonData = readUrl(geoLookupUrl(location));
