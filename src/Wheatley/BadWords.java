@@ -40,7 +40,7 @@ public class BadWords extends ListenerAdapter{
             // UPDATING THE BADWORD LIST
             if (badwords == null)
                 badwords = getBadWords();
-            if (message.toLowerCase().startsWith("!update badwordlist"))
+            if (message.toLowerCase().startsWith("!update badwords"))
                 if (message.split(" ").length==3)
                     badwords.add(message.split(" ")[2]);
             
@@ -72,7 +72,7 @@ public class BadWords extends ListenerAdapter{
     
     public ArrayList<String> getBadWords() throws FileNotFoundException{
         try{
-            Scanner wordfile = new Scanner(new File("badwordlist.txt"));
+            Scanner wordfile = new Scanner(new File("badwords.txt"));
             ArrayList<String> wordls = new ArrayList<String>();
             while (wordfile.hasNext()){
                 wordls.add(wordfile.next());

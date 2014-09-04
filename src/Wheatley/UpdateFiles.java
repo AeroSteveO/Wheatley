@@ -21,7 +21,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * 
  * Activate commands with
  *      !update [filename] [singleWordItem]
- *          !update badwordlist defenetely
+ *          !update badwords defenetely
  */
 public class UpdateFiles extends ListenerAdapter{
     
