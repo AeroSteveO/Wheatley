@@ -1,6 +1,6 @@
 *.netbeans_automatic_build
 *.class
-/bin/*
-/nbproject/private/*
-/build/*
-/dist/*
+/bin/
+/nbproject/private/
+/build/
+/dist/
