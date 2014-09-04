@@ -23,18 +23,24 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * Activate Command with:
  *      !lasturl
- *          pulls up the last url seen in the current channel
+ *          Pulls up the last url seen in the current channel
  *      !secondlasturl
- *          pulls up the second last url seen in the current channel
+ *          Pulls up the second last url seen in the current channel
+ *      !christmas
+ *          Outputs the current number of days till Christmas
+ *      !summon [user]
+ *          Sends a PM to the user stating that they have been summoned
+ *      !tell [user] [statement]
+ *          Sends the given statement to the user via PM
  *
  */
 public class SRSBSNS extends ListenerAdapter {
     List<String> UrlHistory = new ArrayList<>();
     
-//    <srsbsns> srsbsns: srsbsns supports: !srsbsns (responds: wat), 
-//    !whodef (who defined), !whatis (definition), !explain (definition), 
-//    !randomdef (random definition), !rt (rotten tomatoes movie rating), 
-//    !udict (urban dictionary), !imdb (imdb movie search), !metacritic (metacritic.com rating), 
+//    <srsbsns> srsbsns: srsbsns supports: !srsbsns (responds: wat),
+//    !whodef (who defined), !whatis (definition), !explain (definition),
+//    !randomdef (random definition), !rt (rotten tomatoes movie rating),
+//    !udict (urban dictionary), !imdb (imdb movie search), !metacritic (metacritic.com rating),
 //    !lasturl (analyzes the last url posted), !summon (person), !christmas (countdown to Christmas)
     
     
@@ -99,6 +105,20 @@ public class SRSBSNS extends ListenerAdapter {
                 }
                 else {
                     event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"user not in channel");
+                }
+            }
+        }
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("Hermes")).contains(event.getChannel())) {
+            if(message.toLowerCase().startsWith("!tell")&&message.split(" ").length>2) {
+                String target = message.split("\\s+")[1];
+                String tell = message.split(target)[1];
+                if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(target))) {
+                    //If the user is in the same channel as the summon
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!tell "+Colors.NORMAL+target+" has been PMed");
+                    event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(target).getNick(), event.getUser().getNick() + " wants me to tell you: "+tell);
+                }
+                else {
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!tell "+Colors.NORMAL+"user not in channel");
                 }
             }
         }
