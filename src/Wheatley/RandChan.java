@@ -60,7 +60,7 @@ public class RandChan extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage().trim());
         try{
-            if (message.equalsIgnoreCase("!randchan dict")||message.equalsIgnoreCase("!randchan dictionary")||message.equalsIgnoreCase("!randchan list")){
+            if (message.equalsIgnoreCase("!randchan dict")||message.equalsIgnoreCase("!list boards")||message.equalsIgnoreCase("!randchan list")){
                 String boards = Colors.RED+boardList.get(0)+": "+Colors.NORMAL+boardTitles.get(0)+", ";
                 for(int i=1;i<boardList.size()-1;i++){
                     boards = boards+Colors.RED+boardList.get(i)+": "+Colors.NORMAL+boardTitles.get(i)+", ";
@@ -95,7 +95,7 @@ public class RandChan extends ListenerAdapter {
                         }
                         else {
                             timeLog.addFirst(d.getTime());
-                            event.getChannel().send().kick(event.getUser(), "Die");
+                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Board is not allowed/Does not exist");
                         }
                     }
                     else {
@@ -104,12 +104,12 @@ public class RandChan extends ListenerAdapter {
                     }
                 }
             }
-            if (message.toLowerCase().matches("!set rcall [0-9]*")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+            if (message.toLowerCase().matches("!set rcall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
                 maxLog = Integer.parseInt(message.split(" ")[2]);
                 long sec = maxTime/1000;
                 event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
             }
-            if (message.toLowerCase().matches("!set rtime [0-9]*")&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+            if (message.toLowerCase().matches("!set rtime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
                 maxTime = Integer.parseInt(message.split(" ")[2])*1000;
                 long sec = maxTime/1000;
                 event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
