@@ -35,7 +35,9 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Sends a PM with all the defs available
  *      !randdef
  *          Responds with a random definition form the DB
- * 
+ *      tell [user] about [definition]
+ *          Sends a pm to the user with the definition of the give word/phrase
+ *
  */
 public class Definitions extends ListenerAdapter {
     ArrayList<String> definitions = getDefinitions();
@@ -57,13 +59,36 @@ public class Definitions extends ListenerAdapter {
             }
         }
         
-        if (message.equalsIgnoreCase("!listdefs")){
+        if (message.equalsIgnoreCase("!list defs")){
             String wordList = "";
             for (int i=0;i<words.size();i++){
                 wordList = wordList + words.get(i)+", ";
             }
             event.getBot().sendIRC().message(event.getUser().getNick(),wordList);
         }
+        
+        if (message.toLowerCase().startsWith("tell ")&&message.toLowerCase().split(" ")[2].toLowerCase().startsWith("about")){
+            String user = message.split(" ")[1];
+            if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(user))) {
+                //If the user is in the same channel as the summon
+                String defWord = message.split("about")[1].trim();//.split(" ",2)[2];
+                if (containsIgnoreCase(words,defWord)){
+                    String def = definitions.get(indexOfIgnoreCase(words,defWord)).split("@")[1].trim();
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),user+" has been PMed");
+                    event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(user).getNick(),event.getUser().getNick()+" wants me to tell you about: "+Colors.BOLD+defWord+Colors.NORMAL+ ": "+Colors.NORMAL+def);
+                }
+                else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"definition not found");
+                }
+            }
+            else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
+                event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"user not in channel");
+            }
+           
+            //!tell user :<Hermes> Steve-O wants me to tell you: about penis
+            //tell user about :<srsbsns> tell from Pyro: boobs: the best things ever
+        }
+        
         // ADDING DEFINITIONS
         if((message.startsWith("!adddef")||message.startsWith("!addef"))&&message.split("@").length==2&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)&&!containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
             String addition = message.split(" ",2)[1];
