@@ -81,32 +81,38 @@ public class EnglishSayings extends ListenerAdapter {
         ArrayList<String> end = new ArrayList<String>();
         
         for (int i=0;i<sayings.size();i++){
-            if (Pattern.matches("[a-zA-Z]+\\-[a-zA-Z]+", sayings.get(i))){
+            if (Pattern.matches("[-a-zA-Z]+", sayings.get(i))){
                 String[] grabbedSaying = sayings.get(i).split("-");
                 
                 if (grabbedSaying.length==2){
                     start.add(grabbedSaying[0]);
                     end.add(grabbedSaying[1]);
                 }
-//                else{
-//                    start.add(grabbedSaying[0]);
-//                    end.add(grabbedSaying[grabbedSaying.length-1]);
-//                    for(int c=1;c<grabbedSaying.length-1;i++){
+                else if (grabbedSaying.length>2){
+//                    System.out.println("three part hyphenated saying");
+                    start.add(grabbedSaying[0]);
+                    end.add(grabbedSaying[grabbedSaying.length-1]);
+//                    for(int c=1;c<grabbedSaying.length-2;i++){
 //                        middle.add(grabbedSaying[c]);
-//                        System.out.print(grabbedSaying[c]);
+//                        System.out.println(grabbedSaying[c]);
 //                    }
-//                }
-//                System.out.print(sayings.get(i));
+                    middle.add(grabbedSaying[1]);
+                }
+//                System.out.println(sayings.get(i));
             }
         }
         saying = start.get((int) (Math.random()*start.size()-1))+"-";
+        int size = (int) (Math.random()*110-1);
 //        int mid = (int) (Math.random()*3-1);
 //        int index;
 //        for (int i=0; i<=mid;i++){
 //            index = (int) (Math.random()*middle.size()-1);
 //            saying = saying + middle.get(index)+"-";
-//            middle.remove(index);
+//            //middle.remove(index);
 //        }
+        if (size>90)
+            saying = saying+middle.get((int) (Math.random()*middle.size()-1))+"-";
+        
         saying = saying+end.get((int) (Math.random()*end.size()-1));
         return (saying);
         
