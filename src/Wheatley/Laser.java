@@ -1,7 +1,7 @@
 /*
 * LASER(it) adds lasers to the provided object.
 * Please embellish or modify this function to suit your own tastes.
-* 
+*
 */
 
 package Wheatley;
@@ -27,36 +27,38 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class Laser extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) {
-        String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.toLowerCase().startsWith("!laser")){
-            String it;
-            String a="";
-            String[] parts = null;
-            String[] check = message.split(" ",2);
-            if (check.length!=2){
-                it = "it";
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("matrapter")).contains(event.getChannel())) {
+            String message = Colors.removeFormattingAndColors(event.getMessage());
+            if (message.toLowerCase().startsWith("!laser")){
+                String it;
+                String a="";
+                String[] parts = null;
+                String[] check = message.split(" ",2);
+                if (check.length!=2){
+                    it = "it";
+                }
+                else {
+                    it = check[1];
+                }
+                switch((int) (Math.random()*4+1)) {
+                    case 1:
+                        parts = setup1();
+                        a = parts[0] + " " + it + " " + parts[1] + " lasers";
+                        break;
+                    case 2:
+                        parts = setup2();
+                        a = parts[0] + " lasers " + parts[1] + " " + it;
+                        break;
+                    case 3:
+                        parts = setup2();
+                        a = parts[0] + " lasers " + parts[1] + " " + it;
+                        break;
+                    case 4:
+                        a = "laser cut " + it + " into a " + shape();
+                        break;
+                }
+                event.getBot().sendIRC().message(event.getChannel().getName(), a.toUpperCase());
             }
-            else {
-                it = check[1];
-            }
-            switch((int) (Math.random()*4+1)) {
-                case 1:
-                    parts = setup1();
-                    a = parts[0] + " " + it + " " + parts[1] + " lasers";
-                    break;
-                case 2:
-                    parts = setup2();
-                    a = parts[0] + " lasers " + parts[1] + " " + it;
-                    break;
-                case 3:
-                    parts = setup2();
-                    a = parts[0] + " lasers " + parts[1] + " " + it;
-                    break;
-                case 4:
-                    a = "laser cut " + it + " into a " + shape();
-                    break;
-            }
-            event.getBot().sendIRC().message(event.getChannel().getName(), a.toUpperCase());
         }
     }
     public static String[] setup1() {

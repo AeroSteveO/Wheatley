@@ -19,47 +19,49 @@ import org.pircbotx.hooks.events.MessageEvent;
  * well, ported from that easter egg
  * pretty much the exact same code, minus some additions to make it more extensible
  * and some changes to make it run better in IRC
- * 
+ *
  */
 public class Why extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) {
-        String a = new String();
-        String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.equalsIgnoreCase("!Why")||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why"))){//||message.equalsIgnoreCase("why?")||(message.toLowerCase().startsWith("why")&&message.endsWith("?"))&&message.endsWith("?")
-            switch((int) (Math.random()*10+1)) {
-                case 1:
-                    a=special_case();
-                    break;
-                case 2:
-                    a=phrase();
-                    break;
-                case 3:
-                    a=phrase();
-                    break;
-                case 4:
-                    a=phrase();
-                    break;
-                case 5:
-                    a=sentence();
-                    break;
-                case 6:
-                    a=sentence();
-                    break;
-                case 7:
-                    a=sentence();
-                    break;
-                case 8:
-                    a=sentence();
-                    break;
-                case 9:
-                    a=sentence();
-                    break;
-                case 10:
-                    a=sentence();
-                    break;
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("matrapter")).contains(event.getChannel())) {
+            String a = new String();
+            String message = Colors.removeFormattingAndColors(event.getMessage());
+            if (message.equalsIgnoreCase("!Why")||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why"))){//||message.equalsIgnoreCase("why?")||(message.toLowerCase().startsWith("why")&&message.endsWith("?"))&&message.endsWith("?")
+                switch((int) (Math.random()*10+1)) {
+                    case 1:
+                        a=special_case();
+                        break;
+                    case 2:
+                        a=phrase();
+                        break;
+                    case 3:
+                        a=phrase();
+                        break;
+                    case 4:
+                        a=phrase();
+                        break;
+                    case 5:
+                        a=sentence();
+                        break;
+                    case 6:
+                        a=sentence();
+                        break;
+                    case 7:
+                        a=sentence();
+                        break;
+                    case 8:
+                        a=sentence();
+                        break;
+                    case 9:
+                        a=sentence();
+                        break;
+                    case 10:
+                        a=sentence();
+                        break;
+                }
+                event.getBot().sendIRC().message(event.getChannel().getName(), a);
             }
-            event.getBot().sendIRC().message(event.getChannel().getName(), a);
         }
     }
     private static String special_case() {
