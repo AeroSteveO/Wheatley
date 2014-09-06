@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import Wheatley.Game.GameArray;
 import Wheatley.Game.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import org.pircbotx.Colors;
@@ -43,7 +42,7 @@ public class GameReverse extends ListenerAdapter {
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +reversed.toUpperCase() + Colors.NORMAL);
                 //setup amount of given time
                 int key=(int) (Math.random()*100000+1);
-                TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "reverse").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "reverse").new TimedWaitForQueue(event,time,key);
                 boolean running = true;
                 while (running){
                     try {

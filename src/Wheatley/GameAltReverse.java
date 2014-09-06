@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import Wheatley.Game.GameArray;
 import Wheatley.Game.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class GameAltReverse extends ListenerAdapter {
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +chosenword.toUpperCase() + Colors.NORMAL);
                 //setup amount of given time
                 int key=(int) (Math.random()*100000+1);
-                TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "altreverse").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "altreverse").new TimedWaitForQueue(event,time,key);
                 while (running){ 
                     try {
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);

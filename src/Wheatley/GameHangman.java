@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import Wheatley.Game.GameArray;
 import Wheatley.Game.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
@@ -49,7 +48,7 @@ public class GameHangman extends ListenerAdapter {
                     event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);
                     boolean running=true;
                     int key=(int) (Math.random()*100000+1);
-                    TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "hangman").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                    TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "hangman").new TimedWaitForQueue(event,time,key);
                     
                     while (running){
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);

@@ -56,7 +56,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                 
                 boolean running=true;
                 int key=(int) (Math.random()*100000+1);
-                Game.TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "guessthenumber").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                Game.TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "guessthenumber").new TimedWaitForQueue(event,time,key);
                 event.respond("Try to correctly guess the number (1-"+Integer.toString(length)+")");
 
                 while (running){

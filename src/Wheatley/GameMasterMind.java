@@ -86,7 +86,7 @@ public class GameMasterMind extends ListenerAdapter {
                 
                 boolean running=true;
                 int key=(int) (Math.random()*100000+1);
-                Game.TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "mastermind").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                Game.TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "mastermind").new TimedWaitForQueue(event,time,key);
                 event.respond("Try to correctly guess a "+length+" digit code (0-"+Integer.toString(charSize-1)+")");
                 //event.respond(""+Integer.toString(solutionArray.size()) + "  "+ solution);
                 

@@ -134,14 +134,6 @@ public class Game {
     public String getChannelName(){
         return(this.channelName);
     }
-
-    private ArrayList<String> getBlockedChannels() {
-        ArrayList<String> blocked = new ArrayList<String>();
-        blocked.add("#dtella");
-        blocked.add("#dtella2.0");
-        
-        return blocked;
-    }
     
     public  class TimedWaitForQueue extends WaitForQueue{
         int time;
@@ -151,6 +143,14 @@ public class Game {
             super(bot);
             this.time=time;
             QueueTime runnable = new QueueTime(Global.bot,time,chan,user,key);
+            this.t = new Thread(runnable);
+            runnable.giveT(t);
+            t.start();
+        }
+        public TimedWaitForQueue(MessageEvent event, int time, int key) throws InterruptedException {
+            super(event.getBot());
+            this.time=time;
+            QueueTime runnable = new QueueTime(Global.bot,time,event.getChannel(),event.getUser(),key);
             this.t = new Thread(runnable);
             runnable.giveT(t);
             t.start();
@@ -320,6 +320,12 @@ public class Game {
                 }
             }
             return(isActive);
+        }
+        public void closeAllGames(){
+            for (int i=0;i>this.size()-1;i++){
+                
+                
+            }
         }
     }
 }
