@@ -28,7 +28,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class GameGuessTheNumber extends ListenerAdapter {
     String blockedChan = "#dtella";
-    static Game.GameArray activeGame = new Game.GameArray();
+    //static Game.GameArray activeGame = new Game.GameArray();
     
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
@@ -37,7 +37,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
         
         if ((message.split(" ")[0].equalsIgnoreCase("!GuessTheNumber")||message.split(" ")[0].equalsIgnoreCase("!guessnumber"))&&!Global.Channels.areGamesBlocked(gameChan)) {
             
-            if (!activeGame.isGameActive(gameChan, "mastermind")){
+            if (!Global.activeGame.isGameActive(gameChan, "guessthenumber")){
                 String[] options = message.split(" ");
                 int length = 100;
                 
@@ -50,13 +50,13 @@ public class GameGuessTheNumber extends ListenerAdapter {
                 int lives = length / 10;
                 int time = 30+(length)/5;
                 
-                activeGame.add(new Game( gameChan, "guessthenumber", "int", length, 1, time));
-                currentIndex = activeGame.getGameIdx(gameChan,"guessthenumber");
-                String solution = Integer.toString(activeGame.get(currentIndex).getInt());
+                Global.activeGame.add(new Game( gameChan, "guessthenumber", "int", length, 1, time));
+                currentIndex = Global.activeGame.getGameIdx(gameChan,"guessthenumber");
+                String solution = Integer.toString(Global.activeGame.get(currentIndex).getInt());
                 
                 boolean running=true;
                 int key=(int) (Math.random()*100000+1);
-                Game.TimedWaitForQueue timedQueue = activeGame.getGame(gameChan, "guessthenumber").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                Game.TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "guessthenumber").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                 event.respond("Try to correctly guess the number (1-"+Integer.toString(length)+")");
 
                 while (running){
@@ -94,7 +94,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                         }
                     }
                 }
-                activeGame.remove(activeGame.getGameIdx(gameChan,"guessthenumber")); //updated current index of the game
+                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"guessthenumber")); //updated current index of the game
             }
         }
     }

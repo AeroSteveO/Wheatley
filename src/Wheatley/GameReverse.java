@@ -24,7 +24,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  */
 public class GameReverse extends ListenerAdapter {
-    static GameArray activeGame = new GameArray();
+//    static GameArray activeGame = new GameArray();
     int time = 20;
     String blockedChan = "#dtella";
     @Override
@@ -35,15 +35,15 @@ public class GameReverse extends ListenerAdapter {
         if (message.equalsIgnoreCase("!reverse")&&!Global.Channels.areGamesBlocked(gameChan)) {
             // get the list of words only if theres nothing in the list alread
             
-            if (!activeGame.isGameActive(gameChan, "reverse", "reverse", time)){
+            if (!Global.activeGame.isGameActive(gameChan, "reverse", "reverse", time)){
                 //get and shuffle the word
-                int currentIndex = activeGame.getGameIdx(gameChan,"reverse");
-                String chosenword = activeGame.get(currentIndex).getChosenWord();
-                String reversed = activeGame.get(currentIndex).getSolution();
+                int currentIndex = Global.activeGame.getGameIdx(gameChan,"reverse");
+                String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
+                String reversed = Global.activeGame.get(currentIndex).getSolution();
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +reversed.toUpperCase() + Colors.NORMAL);
                 //setup amount of given time
                 int key=(int) (Math.random()*100000+1);
-                TimedWaitForQueue timedQueue = activeGame.getGame(gameChan, "reverse").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "reverse").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                 boolean running = true;
                 while (running){
                     try {
@@ -69,7 +69,7 @@ public class GameReverse extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
-                activeGame.remove(activeGame.getGameIdx(gameChan,"reverse"));
+                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"reverse"));
             }
         }
     }

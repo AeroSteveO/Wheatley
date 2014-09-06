@@ -27,7 +27,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class GameAltReverse extends ListenerAdapter {
     static ArrayList<String> wordls = null;
     static ArrayList<String> activechan = new ArrayList<String>();
-    static GameArray activeGame = new GameArray();
+//    static GameArray activeGame = new GameArray();
     
     boolean isactive = false;
     String blockedChan = "#dtella";
@@ -39,16 +39,16 @@ public class GameAltReverse extends ListenerAdapter {
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
         if ((message.equalsIgnoreCase("!altreverse")||message.equalsIgnoreCase("esrever!"))&&!Global.Channels.areGamesBlocked(gameChan)) {
             
-            if (!activeGame.isGameActive(gameChan, "altreverse", "reverse", time)){
+            if (!Global.activeGame.isGameActive(gameChan, "altreverse", "reverse", time)){
                 //get and shuffle the word
-                int currentIndex = activeGame.getGameIdx(gameChan,"altreverse");
-                String chosenword = activeGame.get(currentIndex).getChosenWord();
-                String reversed = activeGame.get(currentIndex).getSolution();
+                int currentIndex = Global.activeGame.getGameIdx(gameChan,"altreverse");
+                String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
+                String reversed = Global.activeGame.get(currentIndex).getSolution();
                 boolean running = true;
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +chosenword.toUpperCase() + Colors.NORMAL);
                 //setup amount of given time
                 int key=(int) (Math.random()*100000+1);
-                TimedWaitForQueue timedQueue = activeGame.getGame(gameChan, "altreverse").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "altreverse").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                 while (running){ 
                     try {
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
@@ -73,7 +73,7 @@ public class GameAltReverse extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
-                activeGame.remove(activeGame.getGameIdx(gameChan,"altreverse"));
+                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"altreverse"));
             }
             else
                 isactive=false;

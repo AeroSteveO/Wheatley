@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Wheatley.ChannelStore.ChannelArray;
+import Wheatley.Game.GameArray;
 import org.pircbotx.PircBotX;
 
 /**
@@ -22,4 +23,6 @@ public class Global {
     public static boolean reconnect = true;
     public static PircBotX bot;
     public static ChannelArray Channels = new ChannelArray();
+    public static String commandPrefix = "!";       // Not implemented yet in other functions
+    static GameArray activeGame = new GameArray();  // To be implemented in games
 }

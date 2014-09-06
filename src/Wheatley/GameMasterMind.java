@@ -32,7 +32,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class GameMasterMind extends ListenerAdapter {
     
     String blockedChan = "#dtella";
-    static Game.GameArray activeGame = new Game.GameArray();
+//    static Game.GameArray activeGame = new Game.GameArray();
     
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         
@@ -41,7 +41,7 @@ public class GameMasterMind extends ListenerAdapter {
         int currentIndex=0;
         if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!Global.Channels.areGamesBlocked(gameChan)) {
             
-            if (!activeGame.isGameActive(gameChan, "mastermind")){
+            if (!Global.activeGame.isGameActive(gameChan, "mastermind")){
                 String[] options = message.split(" ");
                 int length = 5;
                 int charSize = 2;
@@ -78,15 +78,15 @@ public class GameMasterMind extends ListenerAdapter {
                 int time = 30+(charSize+length)*10;
                 int scorePositionValue = 0;
                 int scoreValue = 0;
-                activeGame.add(new Game( gameChan, "mastermind", "int array", length, charSize, time));
-                currentIndex = activeGame.getGameIdx(gameChan,"mastermind");
+                Global.activeGame.add(new Game( gameChan, "mastermind", "int array", length, charSize, time));
+                currentIndex = Global.activeGame.getGameIdx(gameChan,"mastermind");
                 
-                ArrayList<Integer> solutionArray = activeGame.get(currentIndex).getIntArray();
-                String solution = activeGame.get(currentIndex).convertIntToString();
+                ArrayList<Integer> solutionArray = Global.activeGame.get(currentIndex).getIntArray();
+                String solution = Global.activeGame.get(currentIndex).convertIntToString();
                 
                 boolean running=true;
                 int key=(int) (Math.random()*100000+1);
-                Game.TimedWaitForQueue timedQueue = activeGame.getGame(gameChan, "mastermind").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                Game.TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "mastermind").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                 event.respond("Try to correctly guess a "+length+" digit code (0-"+Integer.toString(charSize-1)+")");
                 //event.respond(""+Integer.toString(solutionArray.size()) + "  "+ solution);
                 
@@ -143,7 +143,7 @@ public class GameMasterMind extends ListenerAdapter {
                         scorePositionValue = 0;
                     }
                 }
-                activeGame.remove(activeGame.getGameIdx(gameChan,"mastermind")); //updated current index of the game
+                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"mastermind")); //updated current index of the game
             }
         }
     }

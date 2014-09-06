@@ -29,7 +29,7 @@ public class GameHangman extends ListenerAdapter {
     int changed = 0;
     int lives = baselives;
     int time = 60;
-    static GameArray activeGame = new GameArray();
+//    static GameArray activeGame = new GameArray();
     String blockedChan = "#dtella";
     int correct = 0;
     @Override
@@ -40,16 +40,16 @@ public class GameHangman extends ListenerAdapter {
             int currentIndex=0;
             if (message.equalsIgnoreCase("!hangman")&&!Global.Channels.areGamesBlocked(gameChan)) {
                 
-                if (!activeGame.isGameActive(gameChan, "hangman", "blank", time)){
+                if (!Global.activeGame.isGameActive(gameChan, "hangman", "blank", time)){
                     // Choose a random word from the list
-                    currentIndex = activeGame.getGameIdx(gameChan,"hangman");
-                    String chosenword = activeGame.get(currentIndex).getChosenWord();
-                    String guess = activeGame.get(currentIndex).getSolution();
+                    currentIndex = Global.activeGame.getGameIdx(gameChan,"hangman");
+                    String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
+                    String guess = Global.activeGame.get(currentIndex).getSolution();
                     char[] characters = chosenword.toCharArray();
                     event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);
                     boolean running=true;
                     int key=(int) (Math.random()*100000+1);
-                    TimedWaitForQueue timedQueue = activeGame.getGame(gameChan, "hangman").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                    TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "hangman").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                     
                     while (running){
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
@@ -105,7 +105,7 @@ public class GameHangman extends ListenerAdapter {
                     correct = 0;
                     changed = 0;
                     lives = baselives;
-                    activeGame.remove(activeGame.getGameIdx(gameChan,"hangman")); //updated current index of the game
+                    Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"hangman")); //updated current index of the game
                 }
             }
         }

@@ -26,7 +26,7 @@ public class GameOmgword extends ListenerAdapter {
     // Initialize needed variables
     String blockedChan = "#dtella";
     int time = 30;
-    static GameArray activeGame = new GameArray();
+//    static GameArray activeGame = new GameArray();
 
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException{
@@ -36,15 +36,15 @@ public class GameOmgword extends ListenerAdapter {
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
         if (message.equalsIgnoreCase("!omgword")&&!Global.Channels.areGamesBlocked(gameChan)) {
             
-            if (!activeGame.isGameActive(gameChan, "omgword", "shuffle", time)){
+            if (!Global.activeGame.isGameActive(gameChan, "omgword", "shuffle", time)){
                 //get and shuffle the word
                 boolean running = true;
-                currentIndex = activeGame.getGameIdx(gameChan,"omgword");
-                String chosenword = activeGame.get(currentIndex).getChosenWord();
-                String scrambled = activeGame.get(currentIndex).getSolution();
+                currentIndex = Global.activeGame.getGameIdx(gameChan,"omgword");
+                String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
+                String scrambled = Global.activeGame.get(currentIndex).getSolution();
                 event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
                 int key=(int) (Math.random()*100000+1);
-                TimedWaitForQueue timedQueue = activeGame.getGame(gameChan,"omgword").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
+                TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan,"omgword").new TimedWaitForQueue(Global.bot,time,event.getChannel(),event.getUser(),key);
                 while (running){ 
                     try {
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
@@ -67,7 +67,7 @@ public class GameOmgword extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
-                activeGame.remove(activeGame.getGameIdx(gameChan,"omgword"));
+                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"omgword"));
             }
         }
     }
