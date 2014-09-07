@@ -109,9 +109,17 @@ public class MarkovInterface extends ListenerAdapter{
         
         //Command Wheatley to speak a line
         if (message.equalsIgnoreCase("!line")){
-            String reply = borg.generateReply(Global.Channels.get(channelIndex).getPreviousMessage());
-            event.getBot().sendIRC().message(currentChan, reply);
-            Global.Channels.get(channelIndex).setPreviousMessage(message);
+            ArrayList<String> reply = new ArrayList<>();
+            String response = " ";
+            for (int i=0;i<3;i++){
+                reply.add(borg.generateReply(Global.Channels.get(channelIndex).getPreviousMessage()));
+            }
+            for (int i=0;i<3;i++){
+                if (response.length()<reply.get(i).length())
+                    response = reply.get(i);
+            }
+            event.getBot().sendIRC().message(currentChan, response);
+            Global.Channels.get(channelIndex).setPreviousMessage(response);
         }
     }
     
