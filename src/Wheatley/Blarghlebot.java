@@ -162,7 +162,7 @@ public class Blarghlebot extends ListenerAdapter {
             
             
             //OTHER Functions
-            if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.MainNick+", what do you think of")&&message.endsWith("?"))){
+            if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", what do you think of")&&message.endsWith("?"))){
                 //Messages from : http://en.wikipedia.org/wiki/Magic_8-Ball
                 List<String> magic = new ArrayList<>();
                 magic.add( "It is certain" );
@@ -264,7 +264,7 @@ public class Blarghlebot extends ListenerAdapter {
         
         while (i>=0&&!found){
             if (findThis.matcher(Global.Channels.get(idx).getMessage(i).split(" ",2)[1]).find()){
-                String[] temp = reply.split(" ",2);
+//                String[] temp = reply.split(" ",2);
                 reply = Global.Channels.get(idx).getMessage(i).split(" ",2)[0]+" "+Global.Channels.get(idx).getMessage(i).split(" ",2)[1].replaceAll(findNreplace[1],findNreplace[2]);
                 backReply = reply.split(" ");
                 if (backReply.length>1){
