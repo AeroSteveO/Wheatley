@@ -27,12 +27,12 @@ public class BotControl extends ListenerAdapter{
 //        int index = Global.Channels.getChanIdx(event.getChannel().getName().toString());
         
         if (message.equalsIgnoreCase("!flush")&&event.getUser().getNick().equals(Global.BotOwner)){
-            GameOmgword.activeGame.clear();
-            GameHangman.activeGame.clear();
-            GameReverse.activeGame.clear();
-            GameAltReverse.activeGame.clear();
-            GameMasterMind.activeGame.clear();
-            GameGuessTheNumber.activeGame.clear();
+//            GameOmgword.activeGame.clear();
+//            GameHangman.activeGame.clear();
+//            GameReverse.activeGame.clear();
+//            GameAltReverse.activeGame.clear();
+//            GameMasterMind.activeGame.clear();     NEED NEW WAY TO KILL ALL TEH GAMES
+//            GameGuessTheNumber.activeGame.clear();
             Blarghlebot.poop = "null";
             BadWords.badwords = null;
         }
@@ -93,7 +93,7 @@ public class BotControl extends ListenerAdapter{
                     Global.Channels.remove(Global.Channels.getChanIdx("#"+chan[1]));
                 }
             } // command the bot to part the current channel that the command was sent from
-            else if ((event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equals(Global.BotOwner))&&(message.endsWith("leave")||message.equalsIgnoreCase("!part"))){
+            else if ((event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equals(Global.BotOwner))&&(message.endsWith("leave"))){//||message.equalsIgnoreCase("!part"))){
                 
                 event.getChannel().send().part("Goodbye");
                 Global.Channels.remove(Global.Channels.getChanIdx(event.getChannel().getName().toString()));
