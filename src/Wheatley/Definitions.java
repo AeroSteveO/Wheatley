@@ -84,9 +84,6 @@ public class Definitions extends ListenerAdapter {
             else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"user not in channel");
             }
-           
-            //!tell user :<Hermes> Steve-O wants me to tell you: about penis
-            //tell user about :<srsbsns> tell from Pyro: boobs: the best things ever
         }
         
         // ADDING DEFINITIONS
@@ -104,7 +101,7 @@ public class Definitions extends ListenerAdapter {
                 BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                 bufferWritter.write("\n"+addition);
                 bufferWritter.close();
-                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+addition+" was added to "+ definitionsFileName);
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+addition+" was added to "+ definitionsFileName);
             }catch(IOException e){
                 e.printStackTrace();
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
@@ -148,7 +145,7 @@ public class Definitions extends ListenerAdapter {
                 
                 f2.write(definitions.get(definitions.size()-1));
                 f2.close();
-                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+message.split(" ",2)[1]+" was removed from "+definitionsFileName);
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+message.split(" ",2)[1]+" was removed from "+definitionsFileName);
             } catch (IOException e) {
                 e.printStackTrace();
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: DEF NOT DELETED");
@@ -189,7 +186,7 @@ public class Definitions extends ListenerAdapter {
                 
                 f2.write(definitions.get(definitions.size()-1));
                 f2.close();
-                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+message.split(" ",2)[1].split("@")[0].trim()+" was updated in "+definitionsFileName);
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+message.split(" ",2)[1].split("@")[0].trim()+" was updated in "+definitionsFileName);
             } catch (IOException e) {
                 e.printStackTrace();
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
