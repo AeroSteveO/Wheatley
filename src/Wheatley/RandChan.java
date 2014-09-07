@@ -79,12 +79,13 @@ public class RandChan extends ListenerAdapter {
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
                         return;
                     }
+//                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
                 }
-                else{
+//                else{
                     //Russian roulette up in here
                     if(((int)(Math.random()*6))==0) {
-                        event.getChannel().send().kick(event.getUser(), "No soup for you");
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "NO SOUP FOR YOU");
+//                        event.getChannel().send().kick(event.getUser(), "No soup for you");
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Randchan call blocked for no apparent reason");
                         return;
                     }
                     String[] splitString = event.getMessage().split("\\s+");
@@ -102,7 +103,7 @@ public class RandChan extends ListenerAdapter {
                         timeLog.addFirst(d.getTime());
                         event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
                     }
-                }
+//                }
             }
             if (message.toLowerCase().matches("!set rcall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
                 maxLog = Integer.parseInt(message.split(" ")[2]);
