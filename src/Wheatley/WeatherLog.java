@@ -143,7 +143,6 @@ public class WeatherLog {
                 for (int i=0;i<alertText.size();i++){
                     response = response + "Alert Full Text: "+Colors.NORMAL+response+alertText.get(i)+ " !";
                 }
-                System.out.println(response);
             }
             else
                 response = alertType.get(0);
@@ -191,7 +190,6 @@ public class WeatherLog {
     public static class WeatherCache extends ArrayList<WeatherLog>{
         public WeatherLog getCacheEntry(String locationString, String type){
             int idx = -1;
-            System.out.println(locationString);
             for(int i = 0; i < this.size(); i++) {
                 if ((this.get(i).zip.equalsIgnoreCase(locationString)||this.get(i).cityState.equalsIgnoreCase(locationString))&&this.get(i).cacheType.equalsIgnoreCase(type)) {
                     idx = i;
@@ -211,7 +209,7 @@ public class WeatherLog {
         }
         public boolean containsEntry(String locationString,String type){
             System.out.println(locationString);
-            for(int i = 0; i < this.size(); i++) {     
+            for(int i = 0; i < this.size(); i++) {
                 System.out.println(this.get(i).cityState);
                 System.out.println(this.get(i).zip);
                 System.out.println(this.get(i).cacheType);
