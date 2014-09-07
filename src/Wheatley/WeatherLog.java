@@ -15,6 +15,14 @@ import org.joda.time.DateTime;
  * Weather Log object for use with Weather Module
  * Allows for caching and removing old cache copies of weather
  *
+ * There are 3 Types of supported cache types
+ *      Weather
+ *          General weather conditions for the day
+ *      Forecast
+ *          7 day forecast with low/high temp and conditions
+ *      Alert
+ *          Currently active weather alerts
+ *
  */
 public class WeatherLog {
     private String conditions;
@@ -36,6 +44,7 @@ public class WeatherLog {
     private ArrayList<String> forecastConditions;
     private ArrayList<String> alertType;
     private ArrayList<String> alertExpires;
+    private ArrayList<String> alertText;
     
     // WEATHER TYPE LOG ENTRY
     public WeatherLog(String inputLocation,String inputZip, String inputWeather, String hum, String tmp, String windImperial, String windMetric, String windDirection, String obsTime) {
@@ -66,20 +75,21 @@ public class WeatherLog {
         this.expiration = new DateTime().plusMinutes(60);
     }
     // ALERT TYPE LOG ENTRY
-    public WeatherLog(String inputLocation, String inputZip, ArrayList<String> alertDescription, ArrayList<String> alertExpiration){
+    public WeatherLog(String inputLocation, String inputZip, ArrayList<String> alertDescription, ArrayList<String> alertExpiration, ArrayList<String> alertText){
         this.cityState = inputLocation;
         this.zip = inputZip;
         this.alertType = alertDescription;
         this.alertExpires = alertExpiration;
         this.cacheType = "alert";
         this.expiration = new DateTime().plusMinutes(30);
+        this.alertText = alertText;
     }
 //    public WeatherLog(String locationSearch, String type){
 //        this.searchLocation = locationSearch;
 //        this.cacheType = type;
 //        weatherLogger();
-//        
-//        
+//
+//
 //    }
     
     private void weatherLogger(){  // Part of work to move more code into the object and make implementing it easier
@@ -102,15 +112,17 @@ public class WeatherLog {
             
         }
     }
-
+    
     public void removeAlert(int index){
         this.alertType.remove(index);
         this.alertExpires.remove(index);
+        this.alertText.remove(index);
     }
-    public void addAlert(String alert, String expiration){
+    public void addAlert(String alert, String expiration, String fullText){
         this.alertType.add(alert);
         this.alertExpires.add(expiration);
         this.expiration = new DateTime().plusMinutes(30);
+        this.alertText.add(fullText);
     }
     public void updateExpiration(int index, String expiration){
         this.alertExpires.add(index, expiration);
@@ -124,7 +136,22 @@ public class WeatherLog {
     public void updateExpiration(){
         this.expiration = new DateTime().plusMinutes(30);
     }
-
+    public String getLongResponse(){
+        String response = "";
+        if (this.cacheType.equalsIgnoreCase("alert")){
+            if (!this.alertType.get(0).equalsIgnoreCase("Error Parsing Alerts")||this.alertType.get(0).equalsIgnoreCase("No Current Weather Alerts")){
+                for (int i=0;i<alertText.size();i++){
+                    response = response + "Alert Full Text: "+Colors.NORMAL+response+alertText.get(i)+ " !";
+                }
+                System.out.println(response);
+            }
+            else
+                response = alertType.get(0);
+        }
+        else
+            response = "Formatted Response Unavailable for this type of Weather Log";
+        return (response);
+    }
     //GETS FORMATTED STRING FOR IRC
     public String getFormattedResponse(){
         String response = "";
@@ -162,20 +189,34 @@ public class WeatherLog {
         return(false);
     }
     public static class WeatherCache extends ArrayList<WeatherLog>{
-        public WeatherLog getCacheEntry(String zip, String type){
+        public WeatherLog getCacheEntry(String locationString, String type){
             int idx = -1;
+            System.out.println(locationString);
             for(int i = 0; i < this.size(); i++) {
-                if ((this.get(i).zip.equalsIgnoreCase(zip)&&this.get(i).cacheType.equalsIgnoreCase(type))||(this.get(i).cityState.equalsIgnoreCase(zip)&&this.get(i).cacheType.equalsIgnoreCase(type))) {
+                if ((this.get(i).zip.equalsIgnoreCase(locationString)||this.get(i).cityState.equalsIgnoreCase(locationString))&&this.get(i).cacheType.equalsIgnoreCase(type)) {
                     idx = i;
-                    //System.out.println("Found Cached Entry");
-                    break;
+                    return(this.get(idx));
                 }
             }
             return(this.get(idx));
         }
-        public boolean containsEntry(String location,String type){
+        public int totalEntriesWithType( String type){
+            int numEntries = 0;
             for(int i = 0; i < this.size(); i++) {
-                if ((this.get(i).zip.equalsIgnoreCase(location)&&this.get(i).cacheType.equalsIgnoreCase(type))||(this.get(i).cityState.equalsIgnoreCase(location)&&this.get(i).cacheType.equalsIgnoreCase(type))) {
+                if (this.get(i).cacheType.equalsIgnoreCase(type)) {
+                    numEntries++;
+                }
+            }
+            return(numEntries);
+        }
+        public boolean containsEntry(String locationString,String type){
+            System.out.println(locationString);
+            for(int i = 0; i < this.size(); i++) {     
+                System.out.println(this.get(i).cityState);
+                System.out.println(this.get(i).zip);
+                System.out.println(this.get(i).cacheType);
+                if ((this.get(i).zip.equalsIgnoreCase(locationString)||this.get(i).cityState.equalsIgnoreCase(locationString))&&this.get(i).cacheType.equalsIgnoreCase(type)) {
+                    System.out.println("Found Cached Entry " + this.get(i).cacheType);
                     return(true);
                 }
             }
@@ -187,6 +228,12 @@ public class WeatherLog {
                     this.remove(i);
                     i--;
                 }
+            }
+        }
+        public void nuke(){
+            for (int i=0;i<this.size();i++){
+                this.remove(i);
+                i--;
             }
         }
     }
