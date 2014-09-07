@@ -32,17 +32,20 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Sends a PM to the user stating that they have been summoned
  *      !tell [user] [statement]
  *          Sends the given statement to the user via PM
+ *      !srsbsns
+ *          wat
  *
  */
 public class SRSBSNS extends ListenerAdapter {
     List<String> UrlHistory = new ArrayList<>();
     
-//    <srsbsns> srsbsns: srsbsns supports: !srsbsns (responds: wat),
 //    !whodef (who defined), !whatis (definition), !explain (definition),
-//    !randomdef (random definition), !rt (rotten tomatoes movie rating),
-//    !udict (urban dictionary), !imdb (imdb movie search), !metacritic (metacritic.com rating),
-//    !lasturl (analyzes the last url posted), !summon (person), !christmas (countdown to Christmas)
+//    !rt (rotten tomatoes movie rating),
+//    !imdb (imdb movie search), !metacritic (metacritic.com rating),
     
+    
+//    !lasturl (analyzes the last url posted), !summon (person), !christmas (countdown to Christmas)
+//    !udict (urban dictionary), !randomdef (random definition), !srsbsns (responds: wat), 
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -71,6 +74,9 @@ public class SRSBSNS extends ListenerAdapter {
                 else
                     event.getBot().sendIRC().action(currentChan,"Currently less than 2 URLs found");
             }
+            if (message.equalsIgnoreCase("!srsbsns"))
+                event.getBot().sendIRC().action(currentChan,"wat");
+            
             if(message.equalsIgnoreCase("!christmas")) {
                 GregorianCalendar now = new GregorianCalendar();
                 GregorianCalendar christmas = new GregorianCalendar();
