@@ -4,8 +4,9 @@
 * and open the template in the editor.
 */
 
-package Wheatley;
+package Objects;
 
+import Wheatley.Global;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 import org.pircbotx.Channel;
+import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.WaitForQueue;
@@ -53,7 +55,7 @@ public class Game {
     private ArrayList<Integer> chosenNumArray;
     //private ArrayList<String> blockedChannels = getBlockedChannels();
     
-    Game(String channel, String mod, String type) throws FileNotFoundException{
+    public Game(String channel, String mod, String type) throws FileNotFoundException{
         this.channelName = channel;
         this.modifier = mod;
         this.timeLimit = 10;
@@ -61,7 +63,7 @@ public class Game {
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
     }
-    Game(String channel, String game, String mod, int time) throws FileNotFoundException{
+    public Game(String channel, String game, String mod, int time) throws FileNotFoundException{
         this.channelName=channel;
         this.gameType = game;
         this.modifier = mod;
@@ -69,7 +71,7 @@ public class Game {
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
     }
-    Game(String channel, String game, String mod, int length, int charSize, int time) throws FileNotFoundException{
+    public Game(String channel, String game, String mod, int length, int charSize, int time) throws FileNotFoundException{
         this.channelName=channel;
         this.gameType = game;
         this.modifier = mod;
@@ -150,7 +152,7 @@ public class Game {
         public TimedWaitForQueue(MessageEvent event, int time, int key) throws InterruptedException {
             super(event.getBot());
             this.time=time;
-            QueueTime runnable = new QueueTime(Global.bot,time,event.getChannel(),event.getUser(),key);
+            QueueTime runnable = new QueueTime(Global.bot,time,event.getChannel(),event.getBot().getUserBot(),key);
             this.t = new Thread(runnable);
             runnable.giveT(t);
             t.start();
@@ -178,7 +180,12 @@ public class Game {
         public void giveT(Thread t) {
             this.t = t;
         }
-        
+        public void onMessage(final MessageEvent event) throws Exception {
+            // in case something should be done here
+            String message = Colors.removeFormattingAndColors(event.getMessage());
+            if (message.equalsIgnoreCase("!flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)))
+                bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
+        }
         @Override
         public void run() {
             try { // No need to loop for this thread

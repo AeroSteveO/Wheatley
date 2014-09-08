@@ -4,11 +4,14 @@
 * and open the template in the editor.
 */
 
-package Wheatley;
+package Objects;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
+import Objects.Throttle.ThrottleArray;
 
 /**
  *
@@ -27,8 +30,9 @@ public class ChannelStore {
     private List<String> msgLog = new ArrayList<>();                       // for use in s/find/replace commands
     private ArrayList<String> gameChanBlocks = getBlockedGameChannels();   // List of channels that games are blocked from
     private boolean gamesBlocked;                                          // Are games currently blocked in this channel
+    private ThrottleArray throttle = new ThrottleArray();
     
-    ChannelStore(String aName) {
+    public ChannelStore(String aName) {
         this.name = aName;
         this.chance = 100;
         this.speak = true;
@@ -105,7 +109,7 @@ public class ChannelStore {
     public void addBlockedChannel(String channelName){
         this.gameChanBlocks.add(channelName);
     }
-
+    
     private boolean isChanBlocked() {
         if(gameChanBlocks.contains(this.name))
             return(true);
@@ -113,8 +117,15 @@ public class ChannelStore {
             return(false);
         }
     }
-    
+    public void addThrottleSetting(String type){
+        this.throttle.add(new Throttle(type));
+    }
     public static class ChannelArray extends Vector<ChannelStore>{
+        public void addThrottleToAll(String throttleType){
+            for(int i = 0; i < this.size(); i++) {
+                this.get(i).addThrottleSetting(throttleType);
+            }
+        }
         public int getChanIdx(String toCheck){
             int idx = -1;
             for(int i = 0; i < this.size(); i++) {
@@ -144,7 +155,28 @@ public class ChannelStore {
             return (this.get(idx));
         }
         public boolean areGamesBlocked(String channel){
-            return(getChan(channel).getGameBlockStatus());            
+            return(getChan(channel).getGameBlockStatus());
+        }
+        public boolean containsChan(String toCheck){
+            for(int i = 0; i < this.size(); i++) {
+                if (this.get(i).name.equalsIgnoreCase(toCheck)) {
+                    return(true);
+                }
+            }
+            return (false);
+        }
+        public void safeAdd(String chan){
+            if (!containsChan(chan)){
+                this.add(new ChannelStore(chan));
+            }
+        }
+        public void safeRemove(String chan){
+            for(int i = 0; i < this.size(); i++) {
+                if (this.get(i).name.equalsIgnoreCase(chan)) {
+                    this.remove(i);
+                    i--;
+                }
+            }
         }
     }
 }

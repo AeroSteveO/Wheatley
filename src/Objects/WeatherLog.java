@@ -2,7 +2,7 @@
 * To change this template, choose Tools | Templates
 * and open the template in the editor.
 */
-package Wheatley;
+package Objects;
 
 import java.util.ArrayList;
 import org.pircbotx.Colors;
@@ -228,11 +228,12 @@ public class WeatherLog {
                 }
             }
         }
-        public void nuke(){
-            for (int i=0;i<this.size();i++){
-                this.remove(i);
-                i--;
-            }
-        }
+//        public void nuke(){
+//            this.clear();
+////            for (int i=0;i<this.size();i++){
+////                this.remove(i);
+////                i--;
+////            }
+//        }
     }
 }

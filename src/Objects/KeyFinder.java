@@ -4,7 +4,7 @@
 * and open the template in the editor.
 */
 
-package Wheatley;
+package Objects;
 
 import java.io.IOException;
 import org.json.simple.parser.ContentHandler;
