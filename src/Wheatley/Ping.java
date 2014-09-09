@@ -86,7 +86,7 @@ public class Ping extends ListenerAdapter {
                     ex.printStackTrace();
                 }
             }
-            else if (totalip.length < 2) {
+            else if (totalip.length < 2&& !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SamwiseGamgee")).contains(event.getChannel())) {
                 event.getBot().sendIRC().notice(event.getUser().getNick(), "You didn't enter a vaild lookup. Enter !ping <HOSTNAME OR IP> <PORT>");
             }
             else {
