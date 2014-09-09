@@ -6,6 +6,8 @@
 
 package Wheatley;
 
+import Objects.WeatherLog;
+import Objects.KeyFinder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -17,7 +19,7 @@ import org.json.simple.parser.ParseException;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-import Wheatley.WeatherLog.WeatherCache;
+import Objects.WeatherLog.WeatherCache;
 
 //event.respond(searchURL);
 //  "http://api.wunderground.com/api/***REMOVED***/conditions/q/in/west_lafayette.json";
@@ -92,7 +94,7 @@ public class Weather extends ListenerAdapter{
         location = null;
         String message = Colors.removeFormattingAndColors(event.getMessage().toLowerCase());
         if (message.equalsIgnoreCase("!nuke local cache")){
-            localCache.nuke();
+            localCache.clear();
             event.respond("Local Cache Nuked");
         }
         if ((message.equalsIgnoreCase("!w")||message.equalsIgnoreCase("!weather")||message.equalsIgnoreCase("!f")||message.equalsIgnoreCase("!forecast")||message.equalsIgnoreCase("!a")||message.equalsIgnoreCase("!alerts")||message.equalsIgnoreCase("!alert"))){

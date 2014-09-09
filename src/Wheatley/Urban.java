@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Objects.KeyFinder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;

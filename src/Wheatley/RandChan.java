@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Objects.KeyFinder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -51,8 +52,8 @@ import org.pircbotx.Colors;
 public class RandChan extends ListenerAdapter {
     
     private LinkedList<Long> timeLog = new LinkedList<Long>();
-    private int maxLog = 5;
-    private long maxTime = 10*1000;
+    private int maxLog = 2;
+    private long maxTime = 100*1000;
     List<String> boardList = getBoardList();
     List<String> boardTitles = getBoardTitles();
     

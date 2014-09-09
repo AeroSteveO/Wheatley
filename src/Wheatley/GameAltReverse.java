@@ -6,7 +6,7 @@
 
 package Wheatley;
 
-import Wheatley.Game.TimedWaitForQueue;
+import Objects.Game.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import org.pircbotx.Colors;

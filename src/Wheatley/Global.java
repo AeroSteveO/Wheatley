@@ -6,8 +6,8 @@
 
 package Wheatley;
 
-import Wheatley.ChannelStore.ChannelArray;
-import Wheatley.Game.GameArray;
+import Objects.ChannelStore.ChannelArray;
+import Objects.Game.GameArray;
 import org.pircbotx.PircBotX;
 
 /**

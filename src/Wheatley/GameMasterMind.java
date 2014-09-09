@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Objects.Game;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;

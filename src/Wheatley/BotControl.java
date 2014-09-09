@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Objects.ChannelStore;
 import java.util.Random;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
