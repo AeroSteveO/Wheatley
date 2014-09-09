@@ -1,10 +1,11 @@
-/**
- *
- *
- *
- */
+ /**
+  *
+  *
+  *
+  */
 package Wheatley;
 
+import Objects.ChannelStore;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.dcc.ReceiveChat;
@@ -28,24 +29,27 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  *      theTardis   -- by theDoctor
  *      RoyalBot    -- by http://www.msclemens.com/royaldev/royalbot
  *      SrsBsns     -- by
+ *      LilWayne    -- by
+ *      Hermes      -- by aaahhh
  *      Poopsock    -- by khwain
  *
  * @author Steve-O
  * often by siphoning code from other bots by tangd, and Vanilla, and theDoctor
  * or by converting code from other bots to Wheatley/pircbotx2.0
+ * and by mirroring or re-making commands for theTardis/Wheatley
  *
  */
 public class WheatleyMain extends ListenerAdapter {
     
-    @Override
-    public void onMessage(final MessageEvent event) throws Exception {
-// in case something should be done here        
-    }
+//    @Override
+//    public void onMessage(final MessageEvent event) throws Exception {
+//// in case something should be done here
+//    }
     @Override
     // Rejoin on Kick
     public void onKick(KickEvent event) throws Exception {
         if (event.getRecipient().getNick().equals(event.getBot().getNick())) {
-            event.getBot().sendIRC().joinChannel(event.getChannel().getName()); 
+            event.getBot().sendIRC().joinChannel(event.getChannel().getName());
         }
     }
     @Override
@@ -66,7 +70,7 @@ public class WheatleyMain extends ListenerAdapter {
         ReceiveChat chat = event.accept();
         //Read lines from the server
         String line;
-        while ((line = chat.readLine()) != null)
+        while ((line = chat.readLine()) != null) {
             if (line.equalsIgnoreCase("done")) {
                 //Shut down the chat
                 chat.close();
@@ -76,6 +80,7 @@ public class WheatleyMain extends ListenerAdapter {
                 int lineLength = line.length();
                 chat.sendLine("Line '" + line + "' contains " + lineLength + " characters");
             }
+        }
     }
     
     @SuppressWarnings("CallToThreadDumpStack")
@@ -93,10 +98,10 @@ public class WheatleyMain extends ListenerAdapter {
             Global.BotOwner = baseElement.getElementsByTagName("botowner").item(0).getTextContent();
             
             BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
-
+            
             //   Configuration configuration;
             Configuration.Builder configuration = new Configuration.Builder()
-                    .setName(Global.MainNick) 
+                    .setName(Global.MainNick)
                     .setLogin(baseElement.getElementsByTagName("login").item(0).getTextContent()) //login part of hostmask, eg name:login@host
                     .setNickservPassword(Global.NickPass)
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use
@@ -113,6 +118,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameBomb())           //bomb game listener
                     .addListener(new GameMasterMind())     //mastermind game listener
                     .addListener(new GameGuessTheNumber()) //guess the number game listener
+//                    .addListener(new Game.QueueTime())
                     .addListener(new GameAltReverse())     //alternate reverse game listener
                     .addListener(new Why())                // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
@@ -128,33 +134,33 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new Ping())
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
-//                    .addListener(new Weather())
-//                    .addListener(new Urban())
+                    .addListener(new Weather())
+                    .addListener(new Urban())
                     .addListener(new BadWords())
-                    .addListener(new MarkovInterface())
+//                    .addListener(new MarkovInterface())
                     .addListener(new TextModification())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
                     .addListener(new RandChan())             // generates random 4chan image links
                     .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent());
             
-                    BackgroundListener.addListener(new Logger(),true); //Add logger background listener
-                    
-                    for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++) //Add channels from XML and load into Channels Object
-                    {
-                        configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
-                        Global.Channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
-                    }
-                    Configuration config = configuration.buildConfiguration();
+            BackgroundListener.addListener(new Logger(),true); //Add logger background listener
+            
+            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++) //Add channels from XML and load into Channels Object
+            {
+                configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
+                Global.Channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
+            }
+            Configuration config = configuration.buildConfiguration();
 //            Global.bot = new PircBotX(config);
-                    //bot.connect throws various exceptions for failures
-                    Global.bot = new PircBotX(config);
+            //bot.connect throws various exceptions for failures
+            Global.bot = new PircBotX(config);
 //            bot.startBot();
             try {
-                    Runner parallel = new Runner(Global.bot);
-                    Thread t = new Thread(parallel);
-                    parallel.giveT(t);
-                    t.start();
+                Runner parallel = new Runner(Global.bot);
+                Thread t = new Thread(parallel);
+                parallel.giveT(t);
+                t.start();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.out.printf("Failed to start bot\n");
