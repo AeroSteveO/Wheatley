@@ -50,7 +50,7 @@ public class Definitions extends ListenerAdapter {
         
         if (message.equalsIgnoreCase("!randef")||message.equalsIgnoreCase("!randdef")){
             int randNum = (int) (Math.random()*definitions.size()-1);
-            event.getBot().sendIRC().message(event.getChannel().getName(),definitions.get(randNum).split("@")[0].trim()+": "+definitions.get(randNum).split("@")[1].trim());
+            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+definitions.get(randNum).split("@")[0].trim()+": "+Colors.NORMAL+definitions.get(randNum).split("@")[1].trim());
         }
         
         if (message.endsWith("?")&&message.split("\\?",2)[0].length()>0){
