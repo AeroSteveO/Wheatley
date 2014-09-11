@@ -97,7 +97,7 @@ public class Weather extends ListenerAdapter{
             localCache.clear();
             event.respond("Local Cache Nuked");
         }
-        if ((message.equalsIgnoreCase("!w")||message.equalsIgnoreCase("!weather")||message.equalsIgnoreCase("!f")||message.equalsIgnoreCase("!forecast")||message.equalsIgnoreCase("!a")||message.equalsIgnoreCase("!alerts")||message.equalsIgnoreCase("!alert"))){
+        if ((message.equalsIgnoreCase("!w")||message.equalsIgnoreCase("!weather")||message.equalsIgnoreCase("!f")||message.equalsIgnoreCase("!forecast")||message.equalsIgnoreCase("!a")||message.equalsIgnoreCase("!alerts")||message.equalsIgnoreCase("!alert")||message.equalsIgnoreCase("!a full")||message.equalsIgnoreCase("!alerts full")||message.equalsIgnoreCase("!alert full"))){
             location = stockZip;
         }
         else if (message.matches("(!weather|!w)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")||message.matches("(!forecast|!f)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")||message.matches("(!alerts|!alert|!a)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")){
