@@ -7,7 +7,12 @@
 package Wheatley;
 
 import Objects.ChannelStore;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Random;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -18,12 +23,27 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *
  * @author Steve-O
  * Part code from RoyalBot -- http://www.royalcraft.org/royaldev/royalbot
+ * Rest of the code is Wheatley Original
+ * 
+ * Activate Commands with:
+ *      Wheatley, join #[channel]
+ *          Makes the bot join the given channel
+ *      Wheatley, part #[channel]
+ *          Makes the bot part the given channel
+ *      Wheatley, leave
+ *          Makes the bot part the channel its currently in
+ *      Wheatley, fix yourself
+ *          Ghosts/Recovers nick, rejoins channels it was disconnected from
+ *      Wheatley, whats your IP
+ *          Gives the current external IP address of the bot
+ *      Wheatley, shutdown
+ *          Shuts down the bot
  *
  */
 public class BotControl extends ListenerAdapter{
     
     @Override
-    public void onMessage(MessageEvent event) throws InterruptedException {
+    public void onMessage(MessageEvent event) throws InterruptedException, Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
 //        int index = Global.Channels.getChanIdx(event.getChannel().getName().toString());
         
@@ -34,6 +54,7 @@ public class BotControl extends ListenerAdapter{
 //            GameAltReverse.activeGame.clear();
 //            GameMasterMind.activeGame.clear();     NEED NEW WAY TO KILL ALL TEH GAMES
 //            GameGuessTheNumber.activeGame.clear();
+            Global.Channels.removeDupes();
             Blarghlebot.poop = "null";
             BadWords.badwords = null;
         }
@@ -46,6 +67,7 @@ public class BotControl extends ListenerAdapter{
             Thread.sleep(5000); // wait between killing the ghost to changing nick and registering
             event.getBot().sendIRC().changeNick(Global.MainNick);
             event.getBot().sendIRC().message("NickServ", "identify " + Global.NickPass);
+            Global.Channels.removeDupes();
             for (int i=0;i<Global.Channels.size();i++){
                 event.getBot().sendIRC().joinChannel(Global.Channels.get(i).toString());
             }
@@ -100,6 +122,20 @@ public class BotControl extends ListenerAdapter{
                 Global.Channels.remove(Global.Channels.getChanIdx(event.getChannel().getName().toString()));
             }
         }
+        if((message.equalsIgnoreCase(Global.MainNick+", whats your ip")||message.equalsIgnoreCase("!ip"))&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+            String ipInfo = readUrl("http://ipinfo.io/json");
+            JSONParser parser = new JSONParser();
+            try{
+                JSONObject ipJSON = (JSONObject) parser.parse(ipInfo);
+                String ipAddress = (String) ipJSON.get("ip");
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "Current IP Address is: "+ipAddress);
+            }
+            catch (Exception ex){
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "ERROR PARSING IP ADDRESS");
+            }
+        }
     }
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) throws InterruptedException{
@@ -115,6 +151,23 @@ public class BotControl extends ListenerAdapter{
             for (int i=0;i<Global.Channels.size();i++){
                 event.getBot().sendIRC().joinChannel(Global.Channels.get(i).toString());
             }
+        }
+    }
+    //converts URL to string, primarily used to string-ify json text
+    private static String readUrl(String urlString) throws Exception {
+        BufferedReader reader = null;
+        try {
+            URL url = new URL(urlString);
+            reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            StringBuffer buffer = new StringBuffer();
+            int read;
+            char[] chars = new char[1024];
+            while ((read = reader.read(chars)) != -1)
+                buffer.append(chars, 0, read);
+            return buffer.toString();
+        } finally {
+            if (reader != null)
+                reader.close();
         }
     }
 }
