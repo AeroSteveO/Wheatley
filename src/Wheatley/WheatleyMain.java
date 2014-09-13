@@ -23,10 +23,10 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  *
  * Wheatley, the derp bot
  *  With Functions from
- *      Blarghlebot -- by Blarghedy
- *      Matrapter   -- by Steve-O
- *      Bellagio    -- by http://casinobot.codeplex.com/
  *      theTardis   -- by theDoctor
+ *      Matrapter   -- by Steve-O
+ *      Blarghlebot -- by Blarghedy
+ *      Bellagio    -- by http://casinobot.codeplex.com/
  *      RoyalBot    -- by http://www.msclemens.com/royaldev/royalbot
  *      SrsBsns     -- by
  *      LilWayne    -- by
@@ -136,6 +136,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new BlarghleRandom())
                     .addListener(new Weather())
                     .addListener(new Urban())
+                    .addListener(new RottenTomato())
                     .addListener(new BadWords())
 //                    .addListener(new MarkovInterface())
                     .addListener(new TextModification())
