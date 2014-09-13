@@ -45,7 +45,7 @@ public class SRSBSNS extends ListenerAdapter {
     
     
 //    !lasturl (analyzes the last url posted), !summon (person), !christmas (countdown to Christmas)
-//    !udict (urban dictionary), !randomdef (random definition), !srsbsns (responds: wat), 
+//    !udict (urban dictionary), !randomdef (random definition), !srsbsns (responds: wat),
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -126,6 +126,16 @@ public class SRSBSNS extends ListenerAdapter {
                 else {
                     event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!tell "+Colors.NORMAL+"user not in channel");
                 }
+            }
+        }
+        if(message.equalsIgnoreCase("mein leader, i summon thee")) {
+            if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser("theDoctor"))) {
+                //If the user is in the same channel as the summon
+                event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"theDoctor has been PMed");
+                event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser("theDoctor").getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"you have been summoned by "+event.getUser().getNick()+" from "+event.getChannel().getName());
+            }
+            else {
+                event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"user not in channel");
             }
         }
     }
