@@ -22,7 +22,9 @@ public class Throttle {
     String type;
     public Throttle (String name){
         this.type = name;
-        
+    }
+    public Throttle (){
+        this.type = "general";
     }
     public void setMaxLog(int maxCalls){
         this.maxLog=maxCalls;
@@ -74,6 +76,31 @@ public class Throttle {
                 }
             }
             return(typesContained);
+        }
+        public void safeAdd(String type){
+            if (!containsType(type)){
+                this.add(new Throttle(type));
+            }
+        }
+        public void safeRemove(String type){
+            for(int i = 0; i < this.size(); i++) {
+                if (this.get(i).type.equalsIgnoreCase(type)) {
+                    this.remove(i);
+                    i--;
+                }
+            }
+        }
+        public void removeDupes(){
+            ArrayList<String> typesContained = new ArrayList<>();
+            for(int i = 0; i < this.size(); i++) {
+                if (!typesContained.contains(this.get(i).type)) {
+                    typesContained.add(this.get(i).type);
+                }
+                else if (typesContained.contains(this.get(i).type)){
+                    this.remove(i);
+                    i--;
+                }
+            }
         }
     }
 }

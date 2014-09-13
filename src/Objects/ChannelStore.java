@@ -7,8 +7,6 @@
 package Objects;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 import Objects.Throttle.ThrottleArray;
@@ -173,6 +171,18 @@ public class ChannelStore {
         public void safeRemove(String chan){
             for(int i = 0; i < this.size(); i++) {
                 if (this.get(i).name.equalsIgnoreCase(chan)) {
+                    this.remove(i);
+                    i--;
+                }
+            }
+        }
+        public void removeDupes(){
+            ArrayList<String> typesContained = new ArrayList<>();
+            for(int i = 0; i < this.size(); i++) {
+                if (!typesContained.contains(this.get(i).name)) {
+                    typesContained.add(this.get(i).name);
+                }
+                else if (typesContained.contains(this.get(i).name)){
                     this.remove(i);
                     i--;
                 }
