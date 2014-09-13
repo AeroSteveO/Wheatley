@@ -29,7 +29,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
         if (message.toLowerCase().startsWith("!hack")){
-            if(event.getUser().getNick().equals(Global.BotOwner)||event.getChannel().isOwner(event.getUser())){
+            if(event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser())){
                 String[] kill = message.split(" ");
                 event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Wheatley has killed you in his attempt to plug your brain into a computer");
             }
@@ -38,7 +38,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
             }
         }
         if (message.toLowerCase().startsWith("!smash")){
-            if(event.getUser().getNick().equals(Global.BotOwner)||event.getUser().getNick().equals("fluke42")||event.getChannel().isOwner(event.getUser())){
+            if(event.getUser().getNick().equals(Global.botOwner)||event.getUser().getNick().equals("fluke42")||event.getChannel().isOwner(event.getUser())){
                 String[] kill = message.split(" ");
                 event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Aristotle vs MASHY-SPIKE-PLATE");
             }
@@ -61,7 +61,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
         if (message.equalsIgnoreCase("THIS STATEMENT IS FALSE"))
             event.getBot().sendIRC().message(event.getChannel().getName(),"Um. 'True'. I'll go 'true'.");
         
-        if (Pattern.matches(Global.MainNick+",?\\s+(youre|you're|you\\s+are)\\s+a?\\s*moron.*",message))
+        if (Pattern.matches(Global.mainNick+",?\\s+(youre|you're|you\\s+are)\\s+a?\\s*moron.*",message))
             event.getBot().sendIRC().message(event.getChannel().getName(),"I AM NOT A MORON");
         
 //        if (message.equalsIgnoreCase("Wheatley?"))

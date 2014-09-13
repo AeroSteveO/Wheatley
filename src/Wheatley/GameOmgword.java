@@ -33,7 +33,7 @@ public class GameOmgword extends ListenerAdapter {
         String gameChan = event.getChannel().getName();
         int currentIndex=0;
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
-        if (message.equalsIgnoreCase("!omgword")&&!Global.Channels.areGamesBlocked(gameChan)) {
+        if (message.equalsIgnoreCase("!omgword")&&!Global.channels.areGamesBlocked(gameChan)) {
             
             if (!Global.activeGame.isGameActive(gameChan, "omgword", "shuffle", time)){
                 //get and shuffle the word

@@ -40,7 +40,7 @@ public class GameMasterMind extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String gameChan = event.getChannel().getName();
         int currentIndex=0;
-        if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!Global.Channels.areGamesBlocked(gameChan)) {
+        if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!Global.channels.areGamesBlocked(gameChan)) {
             
             if (!Global.activeGame.isGameActive(gameChan, "mastermind")){
                 String[] options = message.split(" ");

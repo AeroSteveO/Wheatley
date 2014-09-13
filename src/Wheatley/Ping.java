@@ -42,7 +42,7 @@ public class Ping extends ListenerAdapter {
             String[] address = new String[2];
             String pingmessage = new String();
             System.setProperty("java.net.preferIPv4Stack" , "true");
-            if (totalip.length==3&&totalip[1].equalsIgnoreCase("check")&&event.getUser().getNick().equals(Global.BotOwner)&&!event.getChannel().getName().equals("#dtella")){
+            if (totalip.length==3&&totalip[1].equalsIgnoreCase("check")&&event.getUser().getNick().equals(Global.botOwner)&&!event.getChannel().getName().equals("#dtella")){
                 try{
                     File fXmlFile = new File("SettingPing.xml");
                     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

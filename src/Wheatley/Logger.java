@@ -31,12 +31,12 @@ public class Logger extends ListenerAdapter{
     public void onMessage(MessageEvent event) throws IOException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         log.add("<"+event.getUser().getNick()+"> "+message);
-        if((log.size()>100||message.equalsIgnoreCase("!save logs")||message.equalsIgnoreCase("!save all"))&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        if((log.size()>100||message.equalsIgnoreCase("!save logs")||message.equalsIgnoreCase("!save all"))&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
             success = saveToFile(log);
             if(!success)
-                event.getBot().sendIRC().notice(Global.BotOwner,"Log file failed to save");
+                event.getBot().sendIRC().notice(Global.botOwner,"Log file failed to save");
             else if (message.equalsIgnoreCase("!save all")||message.equalsIgnoreCase("!save logs"))
-                event.getBot().sendIRC().notice(Global.BotOwner,"Log file saved");
+                event.getBot().sendIRC().notice(Global.botOwner,"Log file saved");
             log.clear();
         }
     }

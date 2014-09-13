@@ -106,12 +106,12 @@ public class RandChan extends ListenerAdapter {
                     }
 //                }
             }
-            if (message.toLowerCase().matches("!set rcall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
+            if (message.toLowerCase().matches("!set rcall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
                 maxLog = Integer.parseInt(message.split(" ")[2])-1;
                 long sec = maxTime/1000;
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
             }
-            if (message.toLowerCase().matches("!set rtime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
+            if (message.toLowerCase().matches("!set rtime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
                 maxTime = Integer.parseInt(message.split(" ")[2])*1000;
                 long sec = maxTime/1000;
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");

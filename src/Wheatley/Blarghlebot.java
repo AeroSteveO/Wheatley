@@ -43,8 +43,8 @@ public class Blarghlebot extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        int idx = Global.Channels.getChanIdx(event.getChannel().getName());
-        Global.Channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message.toLowerCase());
+        int idx = Global.channels.getChanIdx(event.getChannel().getName());
+        Global.channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message.toLowerCase());
         
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
             String[] messageArray = message.split(" ");
@@ -55,16 +55,16 @@ public class Blarghlebot extends ListenerAdapter {
                 String[] findNreplace = Colors.removeFormattingAndColors(message.toLowerCase()).split("/");
                 Pattern findThis = Pattern.compile(findNreplace[1]);
                 String reply = "";
-                int i=Global.Channels.get(idx).getMessageLogSize()-2;
+                int i=Global.channels.get(idx).getMessageLogSize()-2;
                 reply = findReplace(i, findNreplace, findThis, idx);
                 if (!reply.equalsIgnoreCase("")){
                     event.getBot().sendIRC().message(event.getChannel().getName(),reply);
-                    Global.Channels.get(idx).addMessageToLog(reply);
+                    Global.channels.get(idx).addMessageToLog(reply);
                 }
             }
             
             //KICKS ON KICKS ON KICKS
-            if ((message.equalsIgnoreCase("Blarghlebot, transform and rollout"))||(message.equalsIgnoreCase(Global.MainNick+", transform and rollout"))) {
+            if ((message.equalsIgnoreCase("Blarghlebot, transform and rollout"))||(message.equalsIgnoreCase(Global.mainNick+", transform and rollout"))) {
                 switch((int) (Math.random()*3+1)) {
                     case 1:
                         event.getBot().sendIRC().action(event.getChannel().getName(),"transforms into CherryBot");
@@ -98,7 +98,7 @@ public class Blarghlebot extends ListenerAdapter {
                 event.getChannel().send().kick(event.getUser(), "you += dead");
             
             if (message.toLowerCase().startsWith("!troll")){
-                if(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equalsIgnoreCase("Blarghedy")){
+                if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equalsIgnoreCase("Blarghedy")){
                     String[] kill = message.split(" ");
                     event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"YOO GAWT TROLLED " + kill[1]);
                 }
@@ -162,7 +162,7 @@ public class Blarghlebot extends ListenerAdapter {
             
             
             //OTHER Functions
-            if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", what do you think of")&&message.endsWith("?"))){
+            if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")&&message.endsWith("?"))){
                 //Messages from : http://en.wikipedia.org/wiki/Magic_8-Ball
                 List<String> magic = new ArrayList<>();
                 magic.add( "It is certain" );
@@ -263,9 +263,9 @@ public class Blarghlebot extends ListenerAdapter {
         Boolean found = false;
         
         while (i>=0&&!found){
-            if (findThis.matcher(Global.Channels.get(idx).getMessage(i).split(" ",2)[1]).find()){
+            if (findThis.matcher(Global.channels.get(idx).getMessage(i).split(" ",2)[1]).find()){
 //                String[] temp = reply.split(" ",2);
-                reply = Global.Channels.get(idx).getMessage(i).split(" ",2)[0]+" "+Global.Channels.get(idx).getMessage(i).split(" ",2)[1].replaceAll(findNreplace[1],findNreplace[2]);
+                reply = Global.channels.get(idx).getMessage(i).split(" ",2)[0]+" "+Global.channels.get(idx).getMessage(i).split(" ",2)[1].replaceAll(findNreplace[1],findNreplace[2]);
                 backReply = reply.split(" ");
                 if (backReply.length>1){
                     if(backReply[1].startsWith("s/")||backReply[1].startsWith("sed/")){

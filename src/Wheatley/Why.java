@@ -27,7 +27,7 @@ public class Why extends ListenerAdapter {
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("matrapter")).contains(event.getChannel())) {
             String a = new String();
             String message = Colors.removeFormattingAndColors(event.getMessage());
-            if (message.equalsIgnoreCase("!Why")||(message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", why"))){//||message.equalsIgnoreCase("why?")||(message.toLowerCase().startsWith("why")&&message.endsWith("?"))&&message.endsWith("?")
+            if (message.equalsIgnoreCase("!Why")||(message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why"))){//||message.equalsIgnoreCase("why?")||(message.toLowerCase().startsWith("why")&&message.endsWith("?"))&&message.endsWith("?")
                 switch((int) (Math.random()*10+1)) {
                     case 1:
                         a=special_case();

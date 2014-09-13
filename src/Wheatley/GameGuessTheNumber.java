@@ -36,7 +36,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
         String gameChan = event.getChannel().getName();
         int currentIndex=0;
         
-        if ((message.split(" ")[0].equalsIgnoreCase("!GuessTheNumber")||message.split(" ")[0].equalsIgnoreCase("!guessnumber"))&&!Global.Channels.areGamesBlocked(gameChan)) {
+        if ((message.split(" ")[0].equalsIgnoreCase("!GuessTheNumber")||message.split(" ")[0].equalsIgnoreCase("!guessnumber"))&&!Global.channels.areGamesBlocked(gameChan)) {
             
             if (!Global.activeGame.isGameActive(gameChan, "guessthenumber")){
                 String[] options = message.split(" ");

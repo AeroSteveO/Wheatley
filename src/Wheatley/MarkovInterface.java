@@ -51,28 +51,28 @@ public class MarkovInterface extends ListenerAdapter{
     public void onMessage(MessageEvent event) throws FileNotFoundException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String currentChan = event.getChannel().getName();
-        int channelIndex = Global.Channels.getChanIdx(currentChan);
+        int channelIndex = Global.channels.getChanIdx(currentChan);
         
         //Toggle off Markov Chain Talking
-        if (Pattern.matches(Global.MainNick + ", (shutup|shut\\s+up)",message)||message.equalsIgnoreCase("!mute")||Pattern.matches("(shutup|shut\\s+up)\\s+"+Global.MainNick,message)){
-            Global.Channels.get(channelIndex).setSpeakValue(false);
+        if (Pattern.matches(Global.mainNick + ", (shutup|shut\\s+up)",message)||message.equalsIgnoreCase("!mute")||Pattern.matches("(shutup|shut\\s+up)\\s+"+Global.mainNick,message)){
+            Global.channels.get(channelIndex).setSpeakValue(false);
         }
         
         //Toggle on Markov Chain Talking
-        if (message.equalsIgnoreCase(Global.MainNick + ", speak up")||message.equalsIgnoreCase("!speak")){
-            Global.Channels.get(channelIndex).setSpeakValue(true);
+        if (message.equalsIgnoreCase(Global.mainNick + ", speak up")||message.equalsIgnoreCase("!speak")){
+            Global.channels.get(channelIndex).setSpeakValue(true);
         }
         
         //||event.getChannel().isOwner(event.getUser())
-        if (message.toLowerCase().startsWith("!set chance ")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)||event.getChannel().isOwner(event.getUser()))){
+        if (message.toLowerCase().startsWith("!set chance ")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))){
             String[] chanceSplit = message.split(" ");
             int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
             if (inputChance>0)
-                Global.Channels.get(channelIndex).setChanceValue(inputChance);
+                Global.channels.get(channelIndex).setChanceValue(inputChance);
             else
                 event.getBot().sendIRC().message(currentChan, "Chance must be an integer value greater than 0");
         }
-        if (message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", what do you think of")){
+        if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")){
             String[] keyWord = message.replace("?","").split(" ");
             event.getBot().sendIRC().message(currentChan, borg.generateReply(keyWord[keyWord.length-1]));
         }
@@ -83,7 +83,7 @@ public class MarkovInterface extends ListenerAdapter{
                 !Pattern.matches("[a-zA-Z_0-9]+\\++", message.toLowerCase())&&
                 !Pattern.matches("[0-9]+", message.toLowerCase())&&
                 !(message.split(" ").length==1)&&
-                !message.toLowerCase().startsWith(Global.MainNick.toLowerCase()+", ")){
+                !message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")){
             borg.learn(message);
             newLines++;
             
@@ -94,15 +94,15 @@ public class MarkovInterface extends ListenerAdapter{
             }
             
             //Automatically speak with a 1/chance probability
-            if (Global.Channels.get(channelIndex).getChance()==((int) (Math.random()*Global.Channels.get(channelIndex).getChance())+1)&&Global.Channels.get(channelIndex).canSpeak()){
+            if (Global.channels.get(channelIndex).getChance()==((int) (Math.random()*Global.channels.get(channelIndex).getChance())+1)&&Global.channels.get(channelIndex).canSpeak()){
                 String reply = borg.generateReply(message);
                 event.getBot().sendIRC().message(currentChan, reply);
             }
-            Global.Channels.get(channelIndex).setPreviousMessage(message);
+            Global.channels.get(channelIndex).setPreviousMessage(message);
         }
         
         //Command Wheatley to save his lines
-        if ((message.equalsIgnoreCase("!save lines")||message.equalsIgnoreCase("!save all"))&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        if ((message.equalsIgnoreCase("!save lines")||message.equalsIgnoreCase("!save all"))&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
             newLines = 0;
             borg.saveWords(markovFile);
         }
@@ -112,14 +112,14 @@ public class MarkovInterface extends ListenerAdapter{
             ArrayList<String> reply = new ArrayList<>();
             String response = " ";
             for (int i=0;i<3;i++){
-                reply.add(borg.generateReply(Global.Channels.get(channelIndex).getPreviousMessage()));
+                reply.add(borg.generateReply(Global.channels.get(channelIndex).getPreviousMessage()));
             }
             for (int i=0;i<3;i++){
                 if (response.length()<reply.get(i).length())
                     response = reply.get(i);
             }
             event.getBot().sendIRC().message(currentChan, response);
-            Global.Channels.get(channelIndex).setPreviousMessage(response);
+            Global.channels.get(channelIndex).setPreviousMessage(response);
         }
     }
     

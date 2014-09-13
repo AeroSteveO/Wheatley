@@ -36,7 +36,7 @@ public class GameAltReverse extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String gameChan = event.getChannel().getName();
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
-        if ((message.equalsIgnoreCase("!altreverse")||message.equalsIgnoreCase("esrever!"))&&!Global.Channels.areGamesBlocked(gameChan)) {
+        if ((message.equalsIgnoreCase("!altreverse")||message.equalsIgnoreCase("esrever!"))&&!Global.channels.areGamesBlocked(gameChan)) {
             
             if (!Global.activeGame.isGameActive(gameChan, "altreverse", "reverse", time)){
                 //get and shuffle the word

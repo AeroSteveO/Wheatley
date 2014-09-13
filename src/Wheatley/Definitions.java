@@ -87,7 +87,7 @@ public class Definitions extends ListenerAdapter {
         }
         
         // ADDING DEFINITIONS
-        if((message.startsWith("!adddef")||message.startsWith("!addef"))&&message.split("@").length==2&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)&&!containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+        if((message.startsWith("!adddef")||message.startsWith("!addef"))&&message.split("@").length==2&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&!containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
             String addition = message.split(" ",2)[1];
             
             try{
@@ -109,10 +109,10 @@ public class Definitions extends ListenerAdapter {
             definitions = getDefinitions();
             words = getWordsFromDefs(definitions);
         }
-        else if (event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)&&(message.startsWith("!adddef")||message.startsWith("!addef"))&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+        else if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&(message.startsWith("!adddef")||message.startsWith("!addef"))&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition already exists");
         }
-        else if((message.startsWith("!adddef")||message.startsWith("!addef"))&&!(message.split("@").length==2)&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        else if((message.startsWith("!adddef")||message.startsWith("!addef"))&&!(message.split("@").length==2)&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: !adddef word or phrase @ definition phrase");
         }
         else if (message.startsWith("!adddef")||message.startsWith("!addef")){
@@ -120,7 +120,7 @@ public class Definitions extends ListenerAdapter {
         }
         
         // REMOVING DEFINITIONS
-        if((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&containsIgnoreCase(words,message.split(" ",2)[1])&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        if((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&containsIgnoreCase(words,message.split(" ",2)[1])&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
             int index = indexOfIgnoreCase(words, message.split(" ",2)[1]);
             try{
                 File log = new File(definitionLogName);
@@ -152,7 +152,7 @@ public class Definitions extends ListenerAdapter {
             }
             
         }
-        else if ((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        else if ((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition not found");
         }
         else if (message.startsWith("!deldef")||message.startsWith("!deletedef")){
@@ -160,7 +160,7 @@ public class Definitions extends ListenerAdapter {
         }
         
         // Updating definitions already in the db
-        if((message.startsWith("!updatedef")||message.startsWith("!updef"))&&message.split("@").length==2&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        if((message.startsWith("!updatedef")||message.startsWith("!updef"))&&message.split("@").length==2&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
             int index = indexOfIgnoreCase(words, message.split(" ",2)[1].split("@")[0].trim());
             try{
                 File log = new File(definitionLogName);
@@ -192,7 +192,7 @@ public class Definitions extends ListenerAdapter {
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
             }
         }
-        else if ((message.startsWith("!updatedef")||message.startsWith("!updef"))&&event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)){
+        else if ((message.startsWith("!updatedef")||message.startsWith("!updef"))&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed update command: !updef word phrase @ definition phrase");
         }
         else if (message.startsWith("!updatedef")||message.startsWith("!updef")){

@@ -58,19 +58,19 @@ public class SRSBSNS extends ListenerAdapter {
             for( String item : parts ) try {
                 URL url = new URL(item);
                 // If possible then replace with anchor...
-                Global.Channels.getChan(currentChan).setSecondLastUrl(Global.Channels.getChan(currentChan).getLastUrl());
-                Global.Channels.getChan(currentChan).setLastUrl(item);
+                Global.channels.getChan(currentChan).setSecondLastUrl(Global.channels.getChan(currentChan).getLastUrl());
+                Global.channels.getChan(currentChan).setLastUrl(item);
             } catch (MalformedURLException e) { // If exception happens, then its not a URL
             }
             if (message.equalsIgnoreCase("!lasturl")){
-                if (!Global.Channels.getChan(currentChan).getLastUrl().equals(""))
-                    event.getBot().sendIRC().action(currentChan,"Last URL: "+Global.Channels.getChan(currentChan).getLastUrl());
+                if (!Global.channels.getChan(currentChan).getLastUrl().equals(""))
+                    event.getBot().sendIRC().action(currentChan,"Last URL: "+Global.channels.getChan(currentChan).getLastUrl());
                 else
                     event.getBot().sendIRC().action(currentChan,"No previous URL found");
             }
             if (message.equalsIgnoreCase("!secondlasturl")){
-                if (!Global.Channels.getChan(currentChan).getSecondLastUrl().equals(""))
-                    event.getBot().sendIRC().action(currentChan,"Second to last URL: "+Global.Channels.getChan(currentChan).getSecondLastUrl());
+                if (!Global.channels.getChan(currentChan).getSecondLastUrl().equals(""))
+                    event.getBot().sendIRC().action(currentChan,"Second to last URL: "+Global.channels.getChan(currentChan).getSecondLastUrl());
                 else
                     event.getBot().sendIRC().action(currentChan,"Currently less than 2 URLs found");
             }

@@ -183,7 +183,7 @@ public class Game {
         public void onMessage(final MessageEvent event) throws Exception {
             // in case something should be done here
             String message = Colors.removeFormattingAndColors(event.getMessage());
-            if (message.equalsIgnoreCase("!flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.BotOwner)))
+            if (message.equalsIgnoreCase("!flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)))
                 bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
         }
         @Override

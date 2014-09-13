@@ -29,7 +29,7 @@ public class UpdateFiles extends ListenerAdapter{
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.toLowerCase().startsWith("!update ")&&event.getUser().getNick().equals(Global.BotOwner)){
+        if (message.toLowerCase().startsWith("!update ")&&event.getUser().getNick().equals(Global.botOwner)){
             String[] properties = message.split(" ");
             if (properties.length== 3){
                 String filename = properties[1];

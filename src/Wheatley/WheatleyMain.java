@@ -61,7 +61,7 @@ public class WheatleyMain extends ListenerAdapter {
     // Joins channels it has been invited to
     public void onInvite(InviteEvent event) {
         event.getBot().sendIRC().joinChannel(event.getChannel());
-        Global.Channels.add(new ChannelStore(event.getChannel())); //think this will work?
+        Global.channels.add(new ChannelStore(event.getChannel())); //think this will work?
     }
     @Override
     // Something from the example script that has continued to stay in my bots code
@@ -93,17 +93,17 @@ public class WheatleyMain extends ListenerAdapter {
             Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
             int test = Integer.parseInt(baseElement.getElementsByTagName("test").item(0).getTextContent());
             Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(test);
-            Global.MainNick = baseElement.getElementsByTagName("nick").item(0).getTextContent();
-            Global.NickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
-            Global.BotOwner = baseElement.getElementsByTagName("botowner").item(0).getTextContent();
+            Global.mainNick = baseElement.getElementsByTagName("nick").item(0).getTextContent();
+            Global.nickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
+            Global.botOwner = baseElement.getElementsByTagName("botowner").item(0).getTextContent();
             
             BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
             
             //   Configuration configuration;
             Configuration.Builder configuration = new Configuration.Builder()
-                    .setName(Global.MainNick)
+                    .setName(Global.mainNick)
                     .setLogin(baseElement.getElementsByTagName("login").item(0).getTextContent()) //login part of hostmask, eg name:login@host
-                    .setNickservPassword(Global.NickPass)
+                    .setNickservPassword(Global.nickPass)
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use
                     .setCapEnabled(true)     //Enable CAP features
                     .setAutoReconnect(true)
@@ -147,10 +147,10 @@ public class WheatleyMain extends ListenerAdapter {
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
             
-            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++) //Add channels from XML and load into Channels Object
+            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++) //Add channels from XML and load into channels Object
             {
                 configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
-                Global.Channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
+                Global.channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
             }
             Configuration config = configuration.buildConfiguration();
 //            Global.bot = new PircBotX(config);
