@@ -22,43 +22,86 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  *      Original Bot: SRSBSNS by: i dunno who
+ * 
+ * IMDb searches implement the OMDb API
+ * http://www.omdbapi.com/
+ * Rotten Tomato searches implement the Rotten Tomato API
  *
  * Activate Command with:
  *      !rt [movie]
  *          Responds with the rotten tomato ratings for the input movie
  *      !recommend [movie]
  *          Responds with a list of movies similar to the one input
- *
+ *      !imdb [movie]
+ *          Responds with the IMDB ratings for the input movie
+ *      !imdb [movie] [year]
+ *          Responds with the IMDB ratings for the input movie
+ * 
+ * 
  */
 public class RottenTomato extends ListenerAdapter {
+    boolean wideSearch = false;
     private String key = "***REMOVED***";
     
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage().trim());
-        if(message.toLowerCase().startsWith("!rt ")){
+        if (message.toLowerCase().matches("!imdb\\s[a-z\\s]+\\s[0-9]{4}")){
+            String[] msgSplit = message.split(" ");
+            String year = msgSplit[msgSplit.length-1];
+            String movieTitle = message.split(" ",2)[1].split(year)[0];
+            event.getBot().sendIRC().message(event.getChannel().getName(),parseImdbMovieSearch(imdbUrlWithYear(movieTitle,year)));
+            
+        }
+        else if (message.toLowerCase().startsWith("!imdb ")){
+            String movieTitle = message.split(" ",2)[1];
+            event.getBot().sendIRC().message(event.getChannel().getName(),parseImdbMovieSearch(imdbUrl(movieTitle)));
+        }
+        else if(message.toLowerCase().startsWith("!rt ")){
             String search = message.split(" ",2)[1];
-            //String movieInformation = getMovieSearchURL(search);
-            String movieInformation = parseMovieSearch(getMovieSearchURL(search));
+            //String movieInformation = rottentMovieSearchURL(search);
+            String movieInformation = parseRottenMovieSearch(rottentMovieSearchURL(search));
             event.getBot().sendIRC().message(event.getChannel().getName(), movieInformation);
         }
-        if (message.toLowerCase().startsWith("!recommend ")){
+        else if (message.toLowerCase().startsWith("!recommend ")){
             String search = message.split(" ",2)[1];
-            String id = getMovieID(getMovieSearchURL(search));
+            String id = getRottenMovieID(rottentMovieSearchURL(search));
             if (!id.equalsIgnoreCase("Error")&&!id.equalsIgnoreCase("Movie Not Found")){
-                event.getBot().sendIRC().message(event.getChannel().getName(), parseSimilarMovies(id));
+                event.getBot().sendIRC().message(event.getChannel().getName(), parseRottenSimilarMovies(id));
             }
             else
-                event.respond(id);
+                event.respond(id); // Sends Error Recieved to chan
         }
+//        else if (message.toLowerCase().startsWith("!rating ")){
+//            wideSearch = true;
+//            String movie = message.split(" ",2)[1];
+//            if ((movie.toLowerCase().matches("[a-z\\s]+\\s[0-9]{4}"))){
+//                String[] msgSplit = message.split(" ");
+//                String year = msgSplit[msgSplit.length-1];
+//                String movieTitle = movie.split(year)[0];
+//                
+//            }
+//            else{
+//                
+//                
+//                
+//            }
+//            wideSearch = false;
+//        }
     }
-    private String getMovieSimilarURL(String search) {
+    private String rottenMovieSimilarURL(String search) {
         return "http://api.rottentomatoes.com/api/public/v1.0/movies/"+search+"/similar.json?limit=5&apikey="+key;
     }
-    private String getMovieSearchURL(String search) throws UnsupportedEncodingException{
+    private String rottentMovieSearchURL(String search) throws UnsupportedEncodingException{
         return "http://api.rottentomatoes.com/api/public/v1.0/movies.json?q="+URLEncoder.encode(search, "UTF-8")+"&page_limit=10&page=1&apikey="+key;
     }
-    private String parseSimilarMovies(String id) throws Exception{
-        String similarJSON = readUrl(getMovieSimilarURL(id));
+    private String imdbUrl(String movieTitle) throws UnsupportedEncodingException{
+        return ("http://www.omdbapi.com/?t="+URLEncoder.encode(movieTitle, "UTF-8"));
+    }
+    private String imdbUrlWithYear(String movieTitle, String year) throws UnsupportedEncodingException{
+        return ("http://www.omdbapi.com/?t="+URLEncoder.encode(movieTitle, "UTF-8")+"&y="+URLEncoder.encode(year, "UTF-8"));
+    }
+    private String parseRottenSimilarMovies(String id) throws Exception{
+        String similarJSON = readUrl(rottenMovieSimilarURL(id));
         JSONParser parser = new JSONParser();
 //        ArrayList<String> movieTitles = new ArrayList<>();
 //        ArrayList<String> movieYears = new ArrayList<>();
@@ -102,7 +145,7 @@ public class RottenTomato extends ListenerAdapter {
             return("Error");
         }
     }
-    private String getMovieID(String url) throws Exception{
+    private String getRottenMovieID(String url) throws Exception{
         String movieSearchJSON = readUrl(url);
         JSONParser parser = new JSONParser();
         
@@ -113,11 +156,11 @@ public class RottenTomato extends ListenerAdapter {
             if (total>0){
                 JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
                 JSONObject movieMatched = (JSONObject) movieMatches.get(0);
-                JSONObject movieLinks = (JSONObject) movieMatched.get("links");
+//                JSONObject movieLinks = (JSONObject) movieMatched.get("links");
 //                System.out.println(movieMatched);
-                String movieLink = (String) movieLinks.get("alternate");
+//                String movieLink = (String) movieLinks.get("alternate");
 //                System.out.println(movieLink);
-                String movieTitle = (String) movieMatched.get("title");
+//                String movieTitle = (String) movieMatched.get("title");
                 String movieId = (String) movieMatched.get("id");
 //                System.out.println(movieId);
                 
@@ -132,7 +175,7 @@ public class RottenTomato extends ListenerAdapter {
         }
         
     }
-    private String parseMovieSearch(String url) throws Exception{
+    private String parseRottenMovieSearch(String url) throws Exception{
         String movieSearchJSON = readUrl(url);
         JSONParser parser = new JSONParser();
         
@@ -185,7 +228,54 @@ public class RottenTomato extends ListenerAdapter {
             ex.printStackTrace();
             return("Error");
         }
+    }
+    
+    
+    private String parseImdbMovieSearch(String url) throws Exception{
+        String movieSearchJSON = readUrl(url);
+        JSONParser parser = new JSONParser();
         
+        try{
+            JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
+            String title = (String) (String) movieJSON.get("Title");
+//            String year = (String) (String) movieJSON.get("Year");
+            String mpaaRating = (String) (String) movieJSON.get("Rated");
+            String imdbRating = (String) (String) movieJSON.get("imdbRating");
+            String id = (String) (String) movieJSON.get("imdbID");
+            String release = (String) (String) movieJSON.get("Released");
+            String link = "http://imdb.com/title/"+id+"/";
+            String response = Colors.BOLD+title+": "+Colors.NORMAL+"("+mpaaRating+") "+Colors.BOLD+"IMDb: "+Colors.NORMAL+imdbRating+"/10 "+Colors.BOLD+"Release Date: "+Colors.NORMAL+formatImdbDate(release)+Colors.BOLD+" Link: "+Colors.NORMAL+link;
+            return(response);
+        }
+        catch (Exception ex){
+            try{
+                JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
+                String error = (String) (String) movieJSON.get("Error");
+                return(error);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                return("ERROR");
+            }
+        }
+    }
+    private String parseImdbRating(String url) throws Exception{
+        String movieSearchJSON = readUrl(url);
+        JSONParser parser = new JSONParser();
+        
+        try{
+            JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
+            String imdbRating = (String) (String) movieJSON.get("imdbRating");
+            return(imdbRating);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            return("");
+        }
+    }
+    private String formatImdbDate(String date){
+        String[] dateSplit = date.split(" ");
+        return(dateSplit[1]+" "+dateSplit[0]+", "+dateSplit[2]);
     }
     
     //converts URL to string, primarily used to string-ify json text
