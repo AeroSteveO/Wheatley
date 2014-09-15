@@ -19,7 +19,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
- *      Original Bot: SRSBSNS by: i dunno who
+ *      Original Bot: SRSBSNS by: Saigon
  *
  * Activate Command with:
  *      !lasturl
@@ -37,15 +37,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  */
 public class SRSBSNS extends ListenerAdapter {
-    List<String> UrlHistory = new ArrayList<>();
     
 //    !whodef (who defined), !whatis (definition), !explain (definition),
-//    !rt (rotten tomatoes movie rating),
 //    !imdb (imdb movie search), !metacritic (metacritic.com rating),
     
     
 //    !lasturl (analyzes the last url posted), !summon (person), !christmas (countdown to Christmas)
-//    !udict (urban dictionary), !randomdef (random definition), !srsbsns (responds: wat),
+//    !udict (urban dictionary), !randomdef (random definition), !srsbsns (responds: wat), 
+//    !rt (rotten tomatoes movie rating),
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -56,7 +55,7 @@ public class SRSBSNS extends ListenerAdapter {
             String [] parts = message.split("\\s");
             // Attempt to convert each item into an URL.
             for( String item : parts ) try {
-                URL url = new URL(item);
+                URL url = new URL(item);  // If this fails, the string is not a URL
                 // If possible then replace with anchor...
                 Global.channels.getChan(currentChan).setSecondLastUrl(Global.channels.getChan(currentChan).getLastUrl());
                 Global.channels.getChan(currentChan).setLastUrl(item);
@@ -132,11 +131,14 @@ public class SRSBSNS extends ListenerAdapter {
             if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser("theDoctor"))) {
                 //If the user is in the same channel as the summon
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"theDoctor has been PMed");
-                event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser("theDoctor").getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"you have been summoned by "+event.getUser().getNick()+" from "+event.getChannel().getName());
+                event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser("theDoctor").getNick(), "mein leader, your humble servent "+event.getUser().getNick()+" hath summoned you to the place known as "+event.getChannel().getName());
             }
             else {
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"user not in channel");
             }
+        }
+        if (message.equalsIgnoreCase("!pickaport")){
+            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*65534-1025+1)));
         }
     }
 }

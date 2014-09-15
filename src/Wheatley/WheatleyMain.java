@@ -28,8 +28,8 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  *      Blarghlebot -- by Blarghedy
  *      Bellagio    -- by http://casinobot.codeplex.com/
  *      RoyalBot    -- by http://www.msclemens.com/royaldev/royalbot
- *      SrsBsns     -- by
- *      LilWayne    -- by
+ *      SrsBsns     -- by saigon
+ *      LilWayne    -- by 
  *      Hermes      -- by aaahhh
  *      Poopsock    -- by khwain
  *
@@ -137,6 +137,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new Weather())
                     .addListener(new Urban())
                     .addListener(new RottenTomato())
+//                    .addListener(new IMDB())
                     .addListener(new BadWords())
 //                    .addListener(new MarkovInterface())
                     .addListener(new TextModification())
