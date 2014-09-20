@@ -90,13 +90,13 @@ public class GameHangman extends ListenerAdapter {
                                 }
                             }
                             else if (correct == chosenword.length()){
-                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD + chosenword.toUpperCase() + Colors.NORMAL);
+                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD +Colors.RED+ chosenword.toUpperCase() + Colors.NORMAL);
                                 running = false;
                                 timedQueue.end();
                             }
                         }
                         else if ((CurrentEvent.getMessage().equals("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(gameChan)){
-                            CurrentEvent.respond("You have given up! Correct answer was " + chosenword.toUpperCase());
+                            CurrentEvent.respond("You have given up! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
                             running = false;
                             timedQueue.end();
                         }
