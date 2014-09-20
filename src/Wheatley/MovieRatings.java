@@ -21,7 +21,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
- *      Original Bot: SRSBSNS by: i dunno who
+ *      Original Bot: SRSBSNS by: saigon
  *
  * IMDb searches implement the OMDb API
  * http://www.omdbapi.com/
@@ -33,13 +33,15 @@ import org.pircbotx.hooks.events.MessageEvent;
  *      !recommend [movie]
  *          Responds with a list of movies similar to the one input
  *      !imdb [movie]
- *          Responds with the IMDB ratings for the input movie
  *      !imdb [movie] [year]
  *          Responds with the IMDB ratings for the input movie
+ *      !rating [movie]
+ *      !rating [movie] [year]
+ *          Responds with the IMDB and rotten tomato ratings for the input movie
  *
  *
  */
-public class RottenTomato extends ListenerAdapter {
+public class MovieRatings extends ListenerAdapter {
     boolean wideSearch = false;
     private String key = "***REMOVED***";
     
@@ -59,12 +61,12 @@ public class RottenTomato extends ListenerAdapter {
             String[] msgSplit = message.split(" ");
             String year = msgSplit[msgSplit.length-1];
             String movieTitle = message.split(" ",2)[1].split(year)[0];
-            event.getBot().sendIRC().message(event.getChannel().getName(),parseRottenMovieSearchWithYear(rottentMovieSearchURL(movieTitle),year));
+            event.getBot().sendIRC().message(event.getChannel().getName(),parseRottenMovieSearch(rottentMovieSearchURL(movieTitle),year));
         }
         else if(message.toLowerCase().startsWith("!rt ")){
             String search = message.split(" ",2)[1];
             //String movieInformation = rottentMovieSearchURL(search);
-            String movieInformation = parseRottenMovieSearch(rottentMovieSearchURL(search));
+            String movieInformation = parseRottenMovieSearch(rottentMovieSearchURL(search),null);
             event.getBot().sendIRC().message(event.getChannel().getName(), movieInformation);
         }
         else if (message.toLowerCase().startsWith("!recommend ")){
@@ -76,22 +78,28 @@ public class RottenTomato extends ListenerAdapter {
             else
                 event.respond(id); // Sends Error Recieved to chan
         }
-//        else if (message.toLowerCase().startsWith("!rating ")){
-//            wideSearch = true;
-//            String movie = message.split(" ",2)[1];
-//            if ((movie.toLowerCase().matches("[a-z\\s]+\\s[0-9]{4}"))){
-//                String[] msgSplit = message.split(" ");
-//                String year = msgSplit[msgSplit.length-1];
-//                String movieTitle = movie.split(year)[0];
-//                
-//            }
-//            else{
-//                
-//                
-//                
-//            }
-//            wideSearch = false;
-//        }
+        else if (message.toLowerCase().startsWith("!rating ")){
+            wideSearch = true;
+            String movie = message.split(" ",2)[1];
+            String rotten;
+            String imdb;
+            if ((movie.toLowerCase().matches("[a-z\\s]+\\s[0-9]{4}"))){
+                String[] msgSplit = message.split(" ");
+                String year = msgSplit[msgSplit.length-1];
+                String movieTitle = movie.split(year)[0];
+                imdb = parseImdbRating(imdbUrlWithYear(movieTitle,year));
+                rotten = parseRottenMovieSearch(rottentMovieSearchURL(movieTitle),year);
+            }
+            else {
+                System.out.println("rating no year");
+//                String movieTitle = message.split(" ",2)[1];
+                imdb = parseImdbRating(imdbUrl(movie));
+                rotten = parseRottenMovieSearch(rottentMovieSearchURL(movie),null);
+            }
+            String response = rotten.replace("#&#",Colors.BOLD+"IMDb: "+Colors.NORMAL+imdb+"/10");
+            event.getBot().sendIRC().message(event.getChannel().getName(), response);
+            wideSearch = false;
+        }
     }
     private String rottenMovieSimilarURL(String search) {
         return "http://api.rottentomatoes.com/api/public/v1.0/movies/"+search+"/similar.json?limit=5&apikey="+key;
@@ -161,14 +169,7 @@ public class RottenTomato extends ListenerAdapter {
             if (total>0){
                 JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
                 JSONObject movieMatched = (JSONObject) movieMatches.get(0);
-//                JSONObject movieLinks = (JSONObject) movieMatched.get("links");
-//                System.out.println(movieMatched);
-//                String movieLink = (String) movieLinks.get("alternate");
-//                System.out.println(movieLink);
-//                String movieTitle = (String) movieMatched.get("title");
                 String movieId = (String) movieMatched.get("id");
-//                System.out.println(movieId);
-                
                 return(movieId);
             }
             else
@@ -180,62 +181,6 @@ public class RottenTomato extends ListenerAdapter {
         }
         
     }
-    private String parseRottenMovieSearch(String url) throws Exception{
-        String movieSearchJSON = readUrl(url);
-        JSONParser parser = new JSONParser();
-        
-        try{
-            
-            JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
-            long total = (long) movieJSON.get("total");
-            if (total>0){
-                JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
-                JSONObject movieMatched = (JSONObject) movieMatches.get(0);
-                JSONObject movieLinks = (JSONObject) movieMatched.get("links");
-//                System.out.println(movieMatched);
-                String movieLink = (String) movieLinks.get("alternate");
-//                System.out.println(movieLink);
-                String movieTitle = (String) movieMatched.get("title");
-//                System.out.println(movieTitle);
-                long movieYear = (long) movieMatched.get("year");
-                System.out.println(movieYear);
-                String movieMpaaRating = (String) movieMatched.get("mpaa_rating");
-//                System.out.println(movieMpaaRating);
-                
-                
-                JSONObject movieRatings = (JSONObject) movieMatched.get("ratings");
-//                System.out.println(movieRatings);
-                
-                
-                String criticRating = (String) movieRatings.get("critics_rating");
-                long criticScore  = (long) movieRatings.get("critics_score");
-                long audienceScore = (long) movieRatings.get("audience_score");
-//                System.out.println(criticRating);
-//                System.out.println(criticScore);
-//                System.out.println(audienceScore);
-                String response = Colors.BOLD+movieTitle+Colors.NORMAL+" ("+movieYear+", "+movieMpaaRating+") ";
-                if(criticRating!=null){
-                    response = response + Colors.BOLD+"Critic Rating:"+Colors.NORMAL+" \""+criticRating+"\" ";
-                }
-                if(criticRating!=null&&criticScore!=-1){
-                    response = response + Colors.BOLD+"Critic Score:"+Colors.NORMAL+" "+criticScore+" ";
-                }
-                if(audienceScore!=0){
-                    response = response + Colors.BOLD+"Audience Score:"+Colors.BOLD+" "+audienceScore+" ";
-                }
-                response = response + movieLink;
-                return(response);
-            }
-            else
-                return("Movie Not Found");
-        } catch(Exception ex){
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
-            return("Error");
-        }
-    }
-    
-    
     private String parseImdbMovieSearch(String url) throws Exception{
         String movieSearchJSON = readUrl(url);
         JSONParser parser = new JSONParser();
@@ -250,6 +195,7 @@ public class RottenTomato extends ListenerAdapter {
             String release = (String) (String) movieJSON.get("Released");
             String link = "http://imdb.com/title/"+id+"/";
             String response = Colors.BOLD+title+": "+Colors.NORMAL+"("+mpaaRating+") "+Colors.BOLD+"IMDb: "+Colors.NORMAL+imdbRating+"/10 "+Colors.BOLD+"Release Date: "+Colors.NORMAL+formatImdbDate(release)+Colors.BOLD+" Link: "+Colors.NORMAL+link;
+            
             return(response);
         }
         catch (Exception ex){
@@ -300,8 +246,13 @@ public class RottenTomato extends ListenerAdapter {
                 reader.close();
         }
     }
-    
-    private String parseRottenMovieSearchWithYear(String url, String year) throws Exception {
+    /*
+    * Set year to null to parse without using the year
+    * Otherwise set the year to whatever string you want to find
+    * If no year matches the input, the first entry in the array of movies
+    * will be the movie used in the response
+    */
+    private String parseRottenMovieSearch(String url, String year) throws Exception {
         String movieSearchJSON = readUrl(url);
         JSONParser parser = new JSONParser();
         
@@ -309,10 +260,22 @@ public class RottenTomato extends ListenerAdapter {
             
             JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
             long total = (long) movieJSON.get("total");
+//            System.out.println(total);
             if (total>0){
-                
+                int movieLocation = 0;
                 JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
-                JSONObject movieMatched = (JSONObject) movieMatches.get(0);
+                if (year!=null){
+                    for (int i=0;i<movieMatches.size();i++){
+                        JSONObject movieMatched = (JSONObject) movieMatches.get(i);
+                        long movieYear = (long) movieMatched.get("year");
+                        if (year.equalsIgnoreCase(String.valueOf(movieYear))){
+                            movieLocation=i;
+                            break;
+                        }
+                    }
+                }
+//                JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
+                JSONObject movieMatched = (JSONObject) movieMatches.get(movieLocation);
                 JSONObject movieLinks = (JSONObject) movieMatched.get("links");
                 String movieLink = (String) movieLinks.get("alternate");
                 String movieTitle = (String) movieMatched.get("title");
@@ -329,6 +292,9 @@ public class RottenTomato extends ListenerAdapter {
                 }
                 if(criticRating!=null&&criticScore!=-1){
                     response = response + Colors.BOLD+"Critic Score:"+Colors.NORMAL+" "+criticScore+" ";
+                    if (wideSearch==true){
+                        response = response+"#&# ";
+                    }
                 }
                 if(audienceScore!=0){
                     response = response + Colors.BOLD+"Audience Score:"+Colors.BOLD+" "+audienceScore+" ";
@@ -342,5 +308,6 @@ public class RottenTomato extends ListenerAdapter {
             System.out.println(ex.getMessage());
             ex.printStackTrace();
             return("Error");
-        }    }
+        }
+    }
 }
