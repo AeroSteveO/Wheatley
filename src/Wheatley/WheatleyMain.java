@@ -136,7 +136,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new BlarghleRandom())
                     .addListener(new Weather())
                     .addListener(new Urban())
-                    .addListener(new RottenTomato())
+                    .addListener(new MovieRatings())
 //                    .addListener(new IMDB())
                     .addListener(new BadWords())
 //                    .addListener(new MarkovInterface())
