@@ -22,7 +22,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  *      Original Bot: SRSBSNS by: i dunno who
- * 
+ *
  * IMDb searches implement the OMDb API
  * http://www.omdbapi.com/
  * Rotten Tomato searches implement the Rotten Tomato API
@@ -36,8 +36,8 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Responds with the IMDB ratings for the input movie
  *      !imdb [movie] [year]
  *          Responds with the IMDB ratings for the input movie
- * 
- * 
+ *
+ *
  */
 public class RottenTomato extends ListenerAdapter {
     boolean wideSearch = false;
@@ -50,11 +50,16 @@ public class RottenTomato extends ListenerAdapter {
             String year = msgSplit[msgSplit.length-1];
             String movieTitle = message.split(" ",2)[1].split(year)[0];
             event.getBot().sendIRC().message(event.getChannel().getName(),parseImdbMovieSearch(imdbUrlWithYear(movieTitle,year)));
-            
         }
         else if (message.toLowerCase().startsWith("!imdb ")){
             String movieTitle = message.split(" ",2)[1];
             event.getBot().sendIRC().message(event.getChannel().getName(),parseImdbMovieSearch(imdbUrl(movieTitle)));
+        }
+        if (message.toLowerCase().matches("!rt\\s[a-z\\s]+\\s[0-9]{4}")){
+            String[] msgSplit = message.split(" ");
+            String year = msgSplit[msgSplit.length-1];
+            String movieTitle = message.split(" ",2)[1].split(year)[0];
+            event.getBot().sendIRC().message(event.getChannel().getName(),parseRottenMovieSearchWithYear(rottentMovieSearchURL(movieTitle),year));
         }
         else if(message.toLowerCase().startsWith("!rt ")){
             String search = message.split(" ",2)[1];
@@ -95,10 +100,10 @@ public class RottenTomato extends ListenerAdapter {
         return "http://api.rottentomatoes.com/api/public/v1.0/movies.json?q="+URLEncoder.encode(search, "UTF-8")+"&page_limit=10&page=1&apikey="+key;
     }
     private String imdbUrl(String movieTitle) throws UnsupportedEncodingException{
-        return ("http://www.omdbapi.com/?t="+URLEncoder.encode(movieTitle, "UTF-8"));
+        return ("http://www.omdbapi.com/?t="+URLEncoder.encode(movieTitle.trim(), "UTF-8"));
     }
     private String imdbUrlWithYear(String movieTitle, String year) throws UnsupportedEncodingException{
-        return ("http://www.omdbapi.com/?t="+URLEncoder.encode(movieTitle, "UTF-8")+"&y="+URLEncoder.encode(year, "UTF-8"));
+        return ("http://www.omdbapi.com/?t="+URLEncoder.encode(movieTitle.trim(), "UTF-8")+"&y="+URLEncoder.encode(year.trim(), "UTF-8"));
     }
     private String parseRottenSimilarMovies(String id) throws Exception{
         String similarJSON = readUrl(rottenMovieSimilarURL(id));
@@ -295,4 +300,47 @@ public class RottenTomato extends ListenerAdapter {
                 reader.close();
         }
     }
+    
+    private String parseRottenMovieSearchWithYear(String url, String year) throws Exception {
+        String movieSearchJSON = readUrl(url);
+        JSONParser parser = new JSONParser();
+        
+        try{
+            
+            JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
+            long total = (long) movieJSON.get("total");
+            if (total>0){
+                
+                JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
+                JSONObject movieMatched = (JSONObject) movieMatches.get(0);
+                JSONObject movieLinks = (JSONObject) movieMatched.get("links");
+                String movieLink = (String) movieLinks.get("alternate");
+                String movieTitle = (String) movieMatched.get("title");
+                long movieYear = (long) movieMatched.get("year");
+                System.out.println(movieYear);
+                String movieMpaaRating = (String) movieMatched.get("mpaa_rating");
+                JSONObject movieRatings = (JSONObject) movieMatched.get("ratings");
+                String criticRating = (String) movieRatings.get("critics_rating");
+                long criticScore  = (long) movieRatings.get("critics_score");
+                long audienceScore = (long) movieRatings.get("audience_score");
+                String response = Colors.BOLD+movieTitle+Colors.NORMAL+" ("+movieYear+", "+movieMpaaRating+") ";
+                if(criticRating!=null){
+                    response = response + Colors.BOLD+"Critic Rating:"+Colors.NORMAL+" \""+criticRating+"\" ";
+                }
+                if(criticRating!=null&&criticScore!=-1){
+                    response = response + Colors.BOLD+"Critic Score:"+Colors.NORMAL+" "+criticScore+" ";
+                }
+                if(audienceScore!=0){
+                    response = response + Colors.BOLD+"Audience Score:"+Colors.BOLD+" "+audienceScore+" ";
+                }
+                response = response + movieLink;
+                return(response);
+            }
+            else
+                return("Movie Not Found");
+        } catch(Exception ex){
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+            return("Error");
+        }    }
 }
