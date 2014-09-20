@@ -29,6 +29,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * Activate Command with:
  *      !rt [movie]
+ *      !rt [movie] [year]
  *          Responds with the rotten tomato ratings for the input movie
  *      !recommend [movie]
  *          Responds with a list of movies similar to the one input
@@ -91,7 +92,7 @@ public class MovieRatings extends ListenerAdapter {
                 rotten = parseRottenMovieSearch(rottentMovieSearchURL(movieTitle),year);
             }
             else {
-                System.out.println("rating no year");
+//                System.out.println("rating no year");
 //                String movieTitle = message.split(" ",2)[1];
                 imdb = parseImdbRating(imdbUrl(movie));
                 rotten = parseRottenMovieSearch(rottentMovieSearchURL(movie),null);
@@ -280,7 +281,7 @@ public class MovieRatings extends ListenerAdapter {
                 String movieLink = (String) movieLinks.get("alternate");
                 String movieTitle = (String) movieMatched.get("title");
                 long movieYear = (long) movieMatched.get("year");
-                System.out.println(movieYear);
+//                System.out.println(movieYear);
                 String movieMpaaRating = (String) movieMatched.get("mpaa_rating");
                 JSONObject movieRatings = (JSONObject) movieMatched.get("ratings");
                 String criticRating = (String) movieRatings.get("critics_rating");
@@ -288,18 +289,27 @@ public class MovieRatings extends ListenerAdapter {
                 long audienceScore = (long) movieRatings.get("audience_score");
                 String response = Colors.BOLD+movieTitle+Colors.NORMAL+" ("+movieYear+", "+movieMpaaRating+") ";
                 if(criticRating!=null){
-                    response = response + Colors.BOLD+"Critic Rating:"+Colors.NORMAL+" \""+criticRating+"\" ";
+                    if (wideSearch)
+                        response = response + Colors.BOLD+"RT Critic Rating:"+Colors.NORMAL+" \""+criticRating+"\" ";
+                    else
+                        response = response + Colors.BOLD+"Critic Rating:"+Colors.NORMAL+" \""+criticRating+"\" ";
                 }
                 if(criticRating!=null&&criticScore!=-1){
-                    response = response + Colors.BOLD+"Critic Score:"+Colors.NORMAL+" "+criticScore+" ";
-                    if (wideSearch==true){
-                        response = response+"#&# ";
-                    }
+                    if (wideSearch)
+                        response = response + Colors.BOLD+"RT Critic Score:"+Colors.NORMAL+" "+criticScore+" ";
+                    else
+                        response = response + Colors.BOLD+"Critic Score:"+Colors.NORMAL+" "+criticScore+" ";
                 }
                 if(audienceScore!=0){
-                    response = response + Colors.BOLD+"Audience Score:"+Colors.BOLD+" "+audienceScore+" ";
+                    if (wideSearch)
+                        response = response + Colors.BOLD+"RT Audience Score:"+Colors.BOLD+" "+audienceScore+" ";
+                    else
+                        response = response + Colors.BOLD+"Audience Score:"+Colors.BOLD+" "+audienceScore+" ";
                 }
-                response = response + movieLink;
+                if (!wideSearch)
+                    response = response + movieLink;
+                else
+                    response = response+"#&# ";
                 return(response);
             }
             else
