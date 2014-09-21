@@ -74,10 +74,13 @@ public class MarkovInterface extends ListenerAdapter{
         }
         if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")){
             String[] keyWord = message.replace("?","").split(" ");
-            event.getBot().sendIRC().message(currentChan, borg.generateReply(keyWord[keyWord.length-1]));
+            String response = borg.generateReply(keyWord[keyWord.length-1]);
+            event.getBot().sendIRC().message(currentChan, response);
+            Global.channels.get(channelIndex).setPreviousMessage(response);
         }
         
-        if (!message.startsWith("!")&&!message.startsWith(".")&&!isBot(event.getUser().getNick().toString())&&
+        if (!message.startsWith("!")&&!message.startsWith(".")&&
+                !isBot(event.getUser().getNick().toString())&&
                 !Pattern.matches("[a-zA-Z_0-9]+?", message.toLowerCase())&&
                 !Pattern.matches("[a-zA-Z]{1}", message)&&
                 !Pattern.matches("[a-zA-Z_0-9]+\\++", message.toLowerCase())&&
@@ -141,19 +144,17 @@ public class MarkovInterface extends ListenerAdapter{
             return(null);
         }
     }
-    
+   
     public boolean isBot(String nick) throws FileNotFoundException {
-        boolean bot = false;
         if (botList==null){
             botList = getBotList();
         }
-        int i=0;
-        while(bot==false&&i<botList.size()){
+        
+        for(int i=0;i<botList.size();i++){
             if (nick.equalsIgnoreCase(botList.get(i))){
-                bot=true;
+                return (true);
             }
-            i++;
         }
-        return(bot);
+        return(false);
     }
 }
