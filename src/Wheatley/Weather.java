@@ -283,12 +283,8 @@ public class Weather extends ListenerAdapter{
         public void run() {
             while(updateAlerts){
                 try { // No need to loop for this thread
-                    
                     Thread.sleep(time*1000);
-                    //System.out.println("SEND MESSAGE NAO");
                     boolean updated = updateCurrentAlerts(readUrl(alertUrl(stockZip)));
-                    // Global.bot.sendIRC().message("#rapterverse", "STUFF");
-                    
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -318,7 +314,11 @@ public class Weather extends ListenerAdapter{
                     if (!localCache.containsEntry( zip,"alert")){
                         WeatherLog alert = new WeatherLog( cityState,  zip,alertType,alertExpiration, alertText);
                         localCache.add(alert);
-                        Global.bot.sendIRC().message(channel, Colors.RED+Colors.BOLD+alert.getFormattedResponse());
+                        String[] alertResponse = alert.getFormattedResponse().split("!");
+                        for (int i=0;i<alertResponse.length;i++){
+                                Global.bot.sendIRC().message(channel,Colors.BOLD+Colors.RED+alertResponse[i].trim());
+                        }
+//                        Global.bot.sendIRC().message(channel, Colors.RED+Colors.BOLD+response);
                     }
                     WeatherLog oldAlert = localCache.getCacheEntry(zip, "alert");
                     for (int i=0;i<alertType.size();i++){
@@ -331,6 +331,10 @@ public class Weather extends ListenerAdapter{
                         else if (!oldAlert.getAlertType().contains(alertType.get(i))){
                             localCache.getCacheEntry(zip, "alert").addAlert(alertType.get(i), alertExpiration.get(i), alertText.get(i));
                             String response = Colors.RED+Colors.BOLD+"WEATHER ALERT FOR: " + Colors.NORMAL+cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+alertType.get(i)+Colors.BOLD+" Ending: "+Colors.NORMAL+alertExpiration.get(i);
+//                            String[] alertResponse = localCache.getCacheEntry(search,"alert").getFormattedResponse().split("!");
+//                            for (int i=0;i<alertResponse.length;i++){
+//                                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
+//                            }
                             Global.bot.sendIRC().message(channel, response);
                         }
                     }
