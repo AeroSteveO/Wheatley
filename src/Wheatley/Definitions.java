@@ -31,6 +31,9 @@ import org.pircbotx.hooks.events.MessageEvent;
  *      !delDef [word/phrase]
  *      !deleteDef [word/phrase]
  *          Removes the corresponding def from the database
+ *      !updef [word/phrase/ @ [word/phrase]
+ *      !updatedef [word/phrase/ @ [word/phrase]
+ *          Updates the input def to the input phrase
  *      !listDefs
  *          Sends a PM with all the defs available
  *      !randdef

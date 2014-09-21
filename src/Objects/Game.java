@@ -284,8 +284,6 @@ public class Game {
                 isChan = true;
         return(isChan);
     }
-    
-    
     public static class GameArray extends Vector<Game>{
         public int getGameIdx(String channel,String game){
             int idx = -1;
@@ -330,7 +328,6 @@ public class Game {
         }
         public void closeAllGames(){
             for (int i=0;i>this.size()-1;i++){
-                
                 
             }
         }
