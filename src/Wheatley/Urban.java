@@ -34,11 +34,11 @@ import org.pircbotx.Colors;
  *          responds with the urban dictionary reference to the given word
  *          includes the first definition, example, and link to the page
  *      !set ucall
- *          Changes the number of udict calls that can be made per specified 
+ *          Changes the number of udict calls that can be made per specified
  *          amount of time, if no value is input, gives the current settings
  *      !set utime
- *          Changes the amount of time between udict call flushes, udict 
- *          is stopped when # of calls > ucall over the course of utime, if 
+ *          Changes the amount of time between udict call flushes, udict
+ *          is stopped when # of calls > ucall over the course of utime, if
  *          no value is input, gives the current settings
  *
  * Requires:
@@ -55,52 +55,54 @@ public class Urban extends ListenerAdapter {
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
-        try{
-            String message = Colors.removeFormattingAndColors(event.getMessage().trim());
-            if(message.toLowerCase().matches("!udict[\\sA-Za-z0-9]*")) {
-                Date d = new Date();
-                long currentTime = d.getTime();
-                if(timeLog.size() > maxLog) {
-                    while(timeLog.size()>0 && currentTime - timeLog.getLast() > maxTime) {
-                        timeLog.pollLast();
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SRSBSNS")).contains(event.getChannel())) {
+            try{
+                String message = Colors.removeFormattingAndColors(event.getMessage().trim());
+                if(message.toLowerCase().matches("!udict[\\sA-Za-z0-9]*")) {
+                    Date d = new Date();
+                    long currentTime = d.getTime();
+                    if(timeLog.size() > maxLog) {
+                        while(timeLog.size()>0 && currentTime - timeLog.getLast() > maxTime) {
+                            timeLog.pollLast();
+                        }
+                        if(timeLog.size()>maxLog) {
+                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Please Wait Before Sending Another Call for Udict");
+                            return;
+                        }
                     }
-                    if(timeLog.size()>maxLog) {
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Please Wait Before Sending Another Call for Udict");
-                        return;
+                    else{
+                        String[] splitString = message.split("\\s+",2);
+                        if(splitString.length>1) {
+                            timeLog.addFirst(d.getTime());
+                            event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1]));
+                        }
+                        else {
+                            timeLog.addFirst(d.getTime());
+                            event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(""));
+                        }
                     }
                 }
-                else{
-                    String[] splitString = message.split("\\s+",2);
-                    if(splitString.length>1) {
-                        timeLog.addFirst(d.getTime());
-                        event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1]));
-                    }
-                    else {
-                        timeLog.addFirst(d.getTime());
-                        event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(""));
-                    }
+                if (message.toLowerCase().matches("!set ucall [0-9]*")){
+                    maxLog = Integer.parseInt(message.split(" ")[2]);
+                    long sec = maxTime/1000;
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
                 }
-            }
-            if (message.toLowerCase().matches("!set ucall [0-9]*")){
-                maxLog = Integer.parseInt(message.split(" ")[2]);
-                long sec = maxTime/1000;
-                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
-            }
-            if (message.toLowerCase().matches("!set utime [0-9]*")){
-                maxTime = Integer.parseInt(message.split(" ")[2])*1000;
-                long sec = maxTime/1000;
-                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
-            }
-            if (message.equalsIgnoreCase("!set ucall")||message.equalsIgnoreCase("!set utime")){
-                long sec = maxTime/1000;
-                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
-            }
+                if (message.toLowerCase().matches("!set utime [0-9]*")){
+                    maxTime = Integer.parseInt(message.split(" ")[2])*1000;
+                    long sec = maxTime/1000;
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+                }
+                if (message.equalsIgnoreCase("!set ucall")||message.equalsIgnoreCase("!set utime")){
+                    long sec = maxTime/1000;
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+                }
                 
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-            System.out.println(ex.getMessage());
-            event.respond("Error: Definition Not Found"); // Throws hanson if theres an error
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+                System.out.println(ex.getMessage());
+                event.respond("Error: Definition Not Found"); // Throws hanson if theres an error
+            }
         }
     }
     

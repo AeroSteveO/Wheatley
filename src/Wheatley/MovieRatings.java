@@ -47,59 +47,61 @@ public class MovieRatings extends ListenerAdapter {
     private String key = "***REMOVED***";
     
     public void onMessage(MessageEvent event) throws Exception {
-        String message = Colors.removeFormattingAndColors(event.getMessage().trim());
-        if (message.toLowerCase().matches("!imdb\\s[a-z\\s]+\\s[0-9]{4}")){
-            String[] msgSplit = message.split(" ");
-            String year = msgSplit[msgSplit.length-1];
-            String movieTitle = message.split(" ",2)[1].split(year)[0];
-            event.getBot().sendIRC().message(event.getChannel().getName(),parseImdbMovieSearch(imdbUrlWithYear(movieTitle,year)));
-        }
-        else if (message.toLowerCase().startsWith("!imdb ")){
-            String movieTitle = message.split(" ",2)[1];
-            event.getBot().sendIRC().message(event.getChannel().getName(),parseImdbMovieSearch(imdbUrl(movieTitle)));
-        }
-        if (message.toLowerCase().matches("!rt\\s[a-z\\s]+\\s[0-9]{4}")){
-            String[] msgSplit = message.split(" ");
-            String year = msgSplit[msgSplit.length-1];
-            String movieTitle = message.split(" ",2)[1].split(year)[0];
-            event.getBot().sendIRC().message(event.getChannel().getName(),parseRottenMovieSearch(rottentMovieSearchURL(movieTitle),year));
-        }
-        else if(message.toLowerCase().startsWith("!rt ")){
-            String search = message.split(" ",2)[1];
-            //String movieInformation = rottentMovieSearchURL(search);
-            String movieInformation = parseRottenMovieSearch(rottentMovieSearchURL(search),null);
-            event.getBot().sendIRC().message(event.getChannel().getName(), movieInformation);
-        }
-        else if (message.toLowerCase().startsWith("!recommend ")){
-            String search = message.split(" ",2)[1];
-            String id = getRottenMovieID(rottentMovieSearchURL(search));
-            if (!id.equalsIgnoreCase("Error")&&!id.equalsIgnoreCase("Movie Not Found")){
-                event.getBot().sendIRC().message(event.getChannel().getName(), parseRottenSimilarMovies(id));
-            }
-            else
-                event.respond(id); // Sends Error Recieved to chan
-        }
-        else if (message.toLowerCase().startsWith("!rating ")){
-            wideSearch = true;
-            String movie = message.split(" ",2)[1];
-            String rotten;
-            String imdb;
-            if ((movie.toLowerCase().matches("[a-z\\s]+\\s[0-9]{4}"))){
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SRSBSNS")).contains(event.getChannel())) {
+            String message = Colors.removeFormattingAndColors(event.getMessage().trim());
+            if (message.toLowerCase().matches("!imdb\\s[a-z\\s]+\\s[0-9]{4}")){
                 String[] msgSplit = message.split(" ");
                 String year = msgSplit[msgSplit.length-1];
-                String movieTitle = movie.split(year)[0];
-                imdb = parseImdbRating(imdbUrlWithYear(movieTitle,year));
-                rotten = parseRottenMovieSearch(rottentMovieSearchURL(movieTitle),year);
+                String movieTitle = message.split(" ",2)[1].split(year)[0];
+                event.getBot().sendIRC().message(event.getChannel().getName(),parseImdbMovieSearch(imdbUrlWithYear(movieTitle,year)));
             }
-            else {
+            else if (message.toLowerCase().startsWith("!imdb ")){
+                String movieTitle = message.split(" ",2)[1];
+                event.getBot().sendIRC().message(event.getChannel().getName(),parseImdbMovieSearch(imdbUrl(movieTitle)));
+            }
+            if (message.toLowerCase().matches("!rt\\s[a-z\\s]+\\s[0-9]{4}")){
+                String[] msgSplit = message.split(" ");
+                String year = msgSplit[msgSplit.length-1];
+                String movieTitle = message.split(" ",2)[1].split(year)[0];
+                event.getBot().sendIRC().message(event.getChannel().getName(),parseRottenMovieSearch(rottentMovieSearchURL(movieTitle),year));
+            }
+            else if(message.toLowerCase().startsWith("!rt ")){
+                String search = message.split(" ",2)[1];
+                //String movieInformation = rottentMovieSearchURL(search);
+                String movieInformation = parseRottenMovieSearch(rottentMovieSearchURL(search),null);
+                event.getBot().sendIRC().message(event.getChannel().getName(), movieInformation);
+            }
+            else if (message.toLowerCase().startsWith("!recommend ")){
+                String search = message.split(" ",2)[1];
+                String id = getRottenMovieID(rottentMovieSearchURL(search));
+                if (!id.equalsIgnoreCase("Error")&&!id.equalsIgnoreCase("Movie Not Found")){
+                    event.getBot().sendIRC().message(event.getChannel().getName(), parseRottenSimilarMovies(id));
+                }
+                else
+                    event.respond(id); // Sends Error Recieved to chan
+            }
+            else if (message.toLowerCase().startsWith("!rating ")){
+                wideSearch = true;
+                String movie = message.split(" ",2)[1];
+                String rotten;
+                String imdb;
+                if ((movie.toLowerCase().matches("[a-z\\s]+\\s[0-9]{4}"))){
+                    String[] msgSplit = message.split(" ");
+                    String year = msgSplit[msgSplit.length-1];
+                    String movieTitle = movie.split(year)[0];
+                    imdb = parseImdbRating(imdbUrlWithYear(movieTitle,year));
+                    rotten = parseRottenMovieSearch(rottentMovieSearchURL(movieTitle),year);
+                }
+                else {
 //                System.out.println("rating no year");
 //                String movieTitle = message.split(" ",2)[1];
-                imdb = parseImdbRating(imdbUrl(movie));
-                rotten = parseRottenMovieSearch(rottentMovieSearchURL(movie),null);
+                    imdb = parseImdbRating(imdbUrl(movie));
+                    rotten = parseRottenMovieSearch(rottentMovieSearchURL(movie),null);
+                }
+                String response = rotten.replace("#&#",Colors.BOLD+"IMDb: "+Colors.NORMAL+imdb+"/10");
+                event.getBot().sendIRC().message(event.getChannel().getName(), response);
+                wideSearch = false;
             }
-            String response = rotten.replace("#&#",Colors.BOLD+"IMDb: "+Colors.NORMAL+imdb+"/10");
-            event.getBot().sendIRC().message(event.getChannel().getName(), response);
-            wideSearch = false;
         }
     }
     private String rottenMovieSimilarURL(String search) {
