@@ -21,11 +21,6 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import Objects.WeatherLog.WeatherCache;
 
-//event.respond(searchURL);
-//  "http://api.wunderground.com/api/***REMOVED***/conditions/q/in/west_lafayette.json";
-//http://api.wunderground.com/api/***REMOVED***/alerts/q/IA/Des_Moines.json
-//http://api.wunderground.com/api/***REMOVED***/forecast/q/CA/San_Francisco.json
-
 /**
  *
  * @author Stephen
@@ -67,6 +62,10 @@ import Objects.WeatherLog.WeatherCache;
  *      !nuke local cache
  *          Clears the local cache of weather, alerts, and forecast data
  *          Can help clear up errors
+ *
+ * Latent Functionality
+ *      Automatically updates the main channel with weather alerts
+ *
  */
 public class Weather extends ListenerAdapter{
     String key = "***REMOVED***";    // API KEY, DO NOT LOSE
@@ -93,125 +92,140 @@ public class Weather extends ListenerAdapter{
     public void onMessage(MessageEvent event) throws Exception {
         location = null;
         String message = Colors.removeFormattingAndColors(event.getMessage().toLowerCase());
-        if (message.equalsIgnoreCase("!nuke local cache")){
-            localCache.clear();
-            event.respond("Local Cache Nuked");
-        }
-        if ((message.equalsIgnoreCase("!w")||message.equalsIgnoreCase("!weather")||message.equalsIgnoreCase("!f")||message.equalsIgnoreCase("!forecast")||message.equalsIgnoreCase("!a")||message.equalsIgnoreCase("!alerts")||message.equalsIgnoreCase("!alert")||message.equalsIgnoreCase("!a full")||message.equalsIgnoreCase("!alerts full")||message.equalsIgnoreCase("!alert full"))){
-            location = stockZip;
-        }
-        else if (message.matches("(!weather|!w)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")||message.matches("(!forecast|!f)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")||message.matches("(!alerts|!alert|!a)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")){
-            parseLocationFromMessage(message);
-        }
-        else if (message.matches("(!alerts\\sfull|!alert\\sfull|!a\\sfull)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")){
-            parseLocationFromMessage(message.split(" ",2)[1]);
-        }
-        else if (message.matches("(!alerts|!alert|!a)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))(\\sfull)")){
-            parseLocationFromMessage(message.split("full")[0].trim());
-        }
-        else if ((message.startsWith("!w ")||message.startsWith("!weather ")||message.startsWith("!f ")||message.startsWith("!forecast ")||message.startsWith("!a ")||message.startsWith("!alerts ")||message.startsWith("!alert "))){
-            String[] msgSplit = message.split(" ",2);
-            ArrayList<String> locationData = getLocationData(msgSplit[1].trim().replaceAll(" ", "_"));
-            location = locationData.get(1).trim()+"/"+locationData.get(0).trim().replaceAll(" ", "_");
-        }
-        if (message.startsWith("!w")){
-            if (location != null){
-                String search;
-                localCache.purge();
-//                if(location.matches("[0-9]{5}"))
-                search = getSearchStringForCacheSearch(location);
-//                else
-//                    search = location.replaceAll("_", " ").replace("/",", ");
-                if(localCache.size()>0&&localCache.containsEntry(search,"weather")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"weather").getFormattedResponse());
-                }
-                else{
-                    event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentWeather(readUrl(weatherUrl(location))));
-                }
-                
-                
-                if(localCache.size()>0&&localCache.containsEntry(search,"alert")){
-                    String[] alertResponse = localCache.getCacheEntry(search,"alert").getFormattedResponse().split("!");
-                    for (int i=0;i<alertResponse.length;i++){
-                        event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
-                    }
-                }
-                else{
-                    String[] alertResponse = getCurrentAlerts(readUrl(alertUrl(location))).split("!");
-                    if (!alertResponse[0].equalsIgnoreCase("Error Parsing Alerts")&&!alertResponse[0].equalsIgnoreCase("No Current Weather Alerts")){
-                        for (int i=0;i<alertResponse.length;i++){
-                            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
-                        }
-                    }
-                }
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SRSBSNS")).contains(event.getChannel())) {
+            if (message.equalsIgnoreCase("!nuke local cache")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                localCache.clear();
+                event.respond("Local Cache Nuked");
             }
-        }
-        if (message.startsWith("!f")){
-            if (location != null){
-                String search;
-                localCache.purge();
-                search = getSearchStringForCacheSearch(location);
-//                if(location.matches("[0-9]{5}"))
-//                    search = location;
-//                else
-//                    search = location.replaceAll("_", " ").replace("/",", ");
-                
-                if(localCache.size()>0&&localCache.containsEntry(search,"forecast")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"forecast").getFormattedResponse());
-                }
-                else{
-                    event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentForecast(readUrl(forecastUrl(location))));
-                }
+            if ((message.equalsIgnoreCase("!w")||message.equalsIgnoreCase("!weather")
+                    ||message.equalsIgnoreCase("!f")||message.equalsIgnoreCase("!forecast")
+                    ||message.equalsIgnoreCase("!a")||message.equalsIgnoreCase("!alerts")
+                    ||message.equalsIgnoreCase("!alert")||message.equalsIgnoreCase("!a full")
+                    ||message.equalsIgnoreCase("!alerts full")||message.equalsIgnoreCase("!alert full"))){
+                location = stockZip;
             }
-        }
-        if (message.startsWith("!a")){
-            if (location != null){
-                String search;
-                localCache.purge();
-                search = getSearchStringForCacheSearch(location);
+            else if (message.matches("(!weather|!w)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")
+                    ||message.matches("(!forecast|!f)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")
+                    ||message.matches("(!alerts|!alert|!a)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")){
+                parseLocationFromMessage(message);
+            }
+            else if (message.matches("(!alerts\\sfull|!alert\\sfull|!a\\sfull)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")){
+                parseLocationFromMessage(message.split(" ",2)[1]);
+            }
+            else if (message.matches("(!alerts|!alert|!a)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))(\\sfull)")){
+                parseLocationFromMessage(message.split("full")[0].trim());
+            }
+            else if ((message.startsWith("!w ")||message.startsWith("!weather ")
+                    ||message.startsWith("!f ")||message.startsWith("!forecast ")
+                    ||message.startsWith("!a ")||message.startsWith("!alerts ")||message.startsWith("!alert "))){
+                String[] msgSplit = message.split(" ",2);
+                ArrayList<String> locationData = getLocationData(msgSplit[1].trim().replaceAll(" ", "_"));
+                location = locationData.get(1).trim()+"/"+locationData.get(0).trim().replaceAll(" ", "_");
+            }
+            if (message.startsWith("!w")){
+                if (location != null){
+                    String search;
+                    localCache.purge();
 //                if(location.matches("[0-9]{5}"))
-//                    search = location;
+                    search = getSearchStringForCacheSearch(location);
 //                else
 //                    search = location.replaceAll("_", " ").replace("/",", ");
-                
-                if(localCache.size()>0&&localCache.containsEntry(search,"alert")){
-                    if (!message.matches("(?i).*full.*")){
+                    if(localCache.size()>0&&localCache.containsEntry(search,"weather")){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"weather").getFormattedResponse());
+                    }
+                    else{
+                        event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentWeather(readUrl(weatherUrl(location))));
+                    }
+                    
+                    
+                    if(localCache.size()>0&&localCache.containsEntry(search,"alert")){
                         String[] alertResponse = localCache.getCacheEntry(search,"alert").getFormattedResponse().split("!");
-                        for (int i=0;i<alertResponse.length;i++){
+                        for (int i=0;i<alertResponse.length-1;i++){
                             event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
                         }
+                        event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[alertResponse.length-1].trim()+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alert full [zip]' for the full alert text");
                     }
-                    else {
-                        String[] alertFullText = localCache.getCacheEntry(search,"alert").getLongResponse().split("!");
-                        for (int i=0;i<alertFullText.length;i++){
-                            String[] alertLines = alertFullText[i].split("\\u000A");
-                            event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+Colors.RED+alertLines[0].trim());
-                            for (int c = 1;c<alertLines.length;c++){
-                                event.getBot().sendIRC().message(event.getUser().getNick(),alertLines[c].trim());
-                            }
-                        }
-                    }
-                }
-                else{
-                    if (!message.matches("(?i).*full.*")){
+                    else{
                         String[] alertResponse = getCurrentAlerts(readUrl(alertUrl(location))).split("!");
-                        if (alertResponse[0].equalsIgnoreCase("Error Parsing Alerts")||alertResponse[0].equalsIgnoreCase("No Current Weather Alerts")||alertResponse[0].equalsIgnoreCase("ERROR")){
-                            event.getBot().sendIRC().message(event.getChannel().getName(),alertResponse[0].trim());
-                        }
-                        else {
-                            for (int i=0;i<alertResponse.length;i++){
+                        if (!alertResponse[0].equalsIgnoreCase("Error Parsing Alerts")&&!alertResponse[0].equalsIgnoreCase("No Current Weather Alerts")){
+                            for (int i=0;i<alertResponse.length-1;i++){
                                 event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
                             }
+                            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[alertResponse.length-1].trim()+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alert full [zip]' for the full alert text");
                         }
                     }
-                    else {
-                        String derp = getCurrentAlerts(readUrl(alertUrl(location)));
-                        String[] alertFullText = localCache.getCacheEntry(search,"alert").getLongResponse().split("!");
-                        for (int i=0;i<alertFullText.length;i++){
-                            String[] alertLines = alertFullText[i].split("\\u000A");
-                            event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+Colors.RED+alertLines[0].trim());
-                            for (int c = 1;c<alertLines.length;c++){
-                                event.getBot().sendIRC().message(event.getUser().getNick(),alertLines[c].trim());
+                }
+            }
+            if (message.startsWith("!f")){
+                if (location != null){
+                    String search;
+                    localCache.purge();
+                    search = getSearchStringForCacheSearch(location);
+//                if(location.matches("[0-9]{5}"))
+//                    search = location;
+//                else
+//                    search = location.replaceAll("_", " ").replace("/",", ");
+                    
+                    if(localCache.size()>0&&localCache.containsEntry(search,"forecast")){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"forecast").getFormattedResponse());
+                    }
+                    else{
+                        event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentForecast(readUrl(forecastUrl(location))));
+                    }
+                }
+            }
+            if (message.startsWith("!a")){
+                if (location != null){
+                    String search;
+                    localCache.purge();
+                    search = getSearchStringForCacheSearch(location);
+//                if(location.matches("[0-9]{5}"))
+//                    search = location;
+//                else
+//                    search = location.replaceAll("_", " ").replace("/",", ");
+                    
+                    if(localCache.size()>0&&localCache.containsEntry(search,"alert")){
+                        if (!message.matches("(?i).*full.*")){
+                            String[] alertResponse = localCache.getCacheEntry(search,"alert").getFormattedResponse().split("!");
+                            for (int i=0;i<alertResponse.length-1;i++){
+                                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
+                            }
+                            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[alertResponse.length-1].trim()+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alert full [zip]' for the full alert text");
+
+                        }
+                        else {
+                            String[] alertFullText = localCache.getCacheEntry(search,"alert").getLongResponse().split("!");
+                            for (int i=0;i<alertFullText.length;i++){
+                                String[] alertLines = alertFullText[i].split("\\u000A");
+                                event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+Colors.RED+alertLines[0].trim());
+                                for (int c = 1;c<alertLines.length;c++){
+                                    event.getBot().sendIRC().message(event.getUser().getNick(),alertLines[c].trim());
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        if (!message.matches("(?i).*full.*")){
+                            String[] alertResponse = getCurrentAlerts(readUrl(alertUrl(location))).split("!");
+                            if (alertResponse[0].equalsIgnoreCase("Error Parsing Alerts")||alertResponse[0].equalsIgnoreCase("No Current Weather Alerts")||alertResponse[0].equalsIgnoreCase("ERROR")){
+                                event.getBot().sendIRC().message(event.getChannel().getName(),alertResponse[0].trim());
+                            }
+                            else {
+                                for (int i=0;i<alertResponse.length-1;i++){
+                                    event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());
+                                }
+                                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[alertResponse.length-1].trim()+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alert full [zip]' for the full alert text");
+                            }
+                        }
+                        else {
+                            String derp = getCurrentAlerts(readUrl(alertUrl(location)));
+                            String[] alertFullText = localCache.getCacheEntry(search,"alert").getLongResponse().split("!");
+                            for (int i=0;i<alertFullText.length;i++){
+                                String[] alertLines = alertFullText[i].split("\\u000A");
+                                event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+Colors.RED+alertLines[0].trim());
+                                for (int c = 1;c<alertLines.length;c++){
+                                    event.getBot().sendIRC().message(event.getUser().getNick(),alertLines[c].trim());
+                                }
                             }
                         }
                     }
@@ -282,7 +296,7 @@ public class Weather extends ListenerAdapter{
         @Override
         public void run() {
             while(updateAlerts){
-                try { // No need to loop for this thread
+                try {
                     Thread.sleep(time*1000);
                     boolean updated = updateCurrentAlerts(readUrl(alertUrl(stockZip)));
                 } catch (Exception ex) {
@@ -315,9 +329,11 @@ public class Weather extends ListenerAdapter{
                         WeatherLog alert = new WeatherLog( cityState,  zip,alertType,alertExpiration, alertText);
                         localCache.add(alert);
                         String[] alertResponse = alert.getFormattedResponse().split("!");
-                        for (int i=0;i<alertResponse.length;i++){
-                                Global.bot.sendIRC().message(channel,Colors.BOLD+Colors.RED+alertResponse[i].trim());
+                        for (int i=0;i<alertResponse.length-1;i++){
+                            Global.bot.sendIRC().message(channel,Colors.BOLD+Colors.RED+alertResponse[i].trim());
                         }
+                        Global.bot.sendIRC().message(channel,Colors.BOLD+Colors.RED+alertResponse[alertResponse.length-1].trim()+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alert full [zip]' for the full alert text");
+
 //                        Global.bot.sendIRC().message(channel, Colors.RED+Colors.BOLD+response);
                     }
                     WeatherLog oldAlert = localCache.getCacheEntry(zip, "alert");
@@ -330,7 +346,7 @@ public class Weather extends ListenerAdapter{
                         }
                         else if (!oldAlert.getAlertType().contains(alertType.get(i))){
                             localCache.getCacheEntry(zip, "alert").addAlert(alertType.get(i), alertExpiration.get(i), alertText.get(i));
-                            String response = Colors.RED+Colors.BOLD+"WEATHER ALERT FOR: " + Colors.NORMAL+cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+alertType.get(i)+Colors.BOLD+" Ending: "+Colors.NORMAL+alertExpiration.get(i);
+                            String response = Colors.RED+Colors.BOLD+"WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+alertType.get(i)+Colors.BOLD+" Ending: "+Colors.NORMAL+alertExpiration.get(i)+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alert full [zip]' for the full alert text";
 //                            String[] alertResponse = localCache.getCacheEntry(search,"alert").getFormattedResponse().split("!");
 //                            for (int i=0;i<alertResponse.length;i++){
 //                                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+Colors.RED+alertResponse[i].trim());

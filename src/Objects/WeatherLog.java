@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 /**
  *
  * @author Steve-O
- *
+ * 
  * Weather Log object for use with Weather Module
  * Allows for caching and removing old cache copies of weather
  *
@@ -158,8 +158,12 @@ public class WeatherLog {
         if (this.cacheType.equalsIgnoreCase("alert")){
             if (!this.alertType.get(0).equalsIgnoreCase("Error Parsing Alerts")||this.alertType.get(0).equalsIgnoreCase("No Current Weather Alerts")){
                 for (int i=0;i<this.alertType.size();i++){
-                    response =response+ "WEATHER ALERT FOR: " + Colors.NORMAL+this.cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+this.alertType.get(i)+Colors.BOLD+" Ending: "+Colors.NORMAL+this.alertExpires.get(i) + " !";
+                    response =response+ "WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+this.cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+this.alertType.get(i)+Colors.BOLD+" Ending: "+Colors.NORMAL+this.alertExpires.get(i) + " !";
                 }
+//                if (response.length() > 0 && response.charAt(response.length()-1)=='!') {
+//                    response = response.substring(0, response.length()-1);
+//                }
+//                response = response + Colors.NORMAL+Colors.BOLD+"Type: "+Colors.NORMAL+"!alert full "+this.zip+" to view the full alert";
             }
             else
                 response = alertType.get(0);
