@@ -180,12 +180,12 @@ public class Game {
         public void giveT(Thread t) {
             this.t = t;
         }
-        public void onMessage(final MessageEvent event) throws Exception {
-            // in case something should be done here
-            String message = Colors.removeFormattingAndColors(event.getMessage());
-            if (message.equalsIgnoreCase("!flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)))
-                bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
-        }
+//        public void onMessage(final MessageEvent event) throws Exception {
+//            // in case something should be done here
+//            String message = Colors.removeFormattingAndColors(event.getMessage());
+//            if (message.equalsIgnoreCase("!flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)))
+//                bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
+//        }
         @Override
         public void run() {
             try { // No need to loop for this thread
