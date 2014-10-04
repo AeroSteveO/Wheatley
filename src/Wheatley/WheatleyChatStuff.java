@@ -38,7 +38,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
             }
         }
         if (message.toLowerCase().startsWith("!smash")){
-            if(event.getUser().getNick().equals(Global.botOwner)||event.getUser().getNick().equals("fluke42")||event.getChannel().isOwner(event.getUser())){
+            if(event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser())){//||event.getUser().getNick().equals("fluke42")
                 String[] kill = message.split(" ");
                 event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Aristotle vs MASHY-SPIKE-PLATE");
             }
