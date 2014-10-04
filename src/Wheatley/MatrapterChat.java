@@ -17,24 +17,26 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  *
  * Activate Commands With
- *      !bane
- *      !bane [word 1] [word 2]
- *      !bane [word 1] [word 2] [word 3]
- *      !bane [word 1] [word 2] [word 3] [word 4]
+ *      !Bane
+ *      !Bane [word 1] [word 2]
+ *      !Bane [word 1] [word 2] [word 3]
+ *      !Bane [word 1] [word 2] [word 3] [word 4]
  *          Sends banes speech either as he said it, or replacing "darkness", "dark", "light" and "blinding" with the given words
- *      !penis
- *          responds with ascii penis
- *      !botd
- *      !boobs
- *      !melons
- *          responds with random ascii boobs
- *      !meatlab
- *          responds with saying
- *      !matlab
- *          responds with matrab
- *      !meatpod
- *      meatpod
- *          responds with link to meatspin
+ *      !Penis
+ *          Responds with ascii penis
+ *      !Botd
+ *      !Boobs
+ *      !Melons
+ *          Responds with random ascii boobs
+ *      !Butt
+ *          Responds with a PM with ascii art of a butt
+ *      !Meatlab
+ *          Responds with saying
+ *      !Matlab
+ *          Responds with matrab
+ *      !Meatpod
+ *      Meatpod
+ *          Responds with link to meatspin
  */
 public class MatrapterChat extends ListenerAdapter {
     
@@ -70,8 +72,15 @@ public class MatrapterChat extends ListenerAdapter {
             if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("meatpod")).contains(event.getChannel())) {
                 if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod"))
                     event.getBot().sendIRC().message(currentChan, "http://meatspin.cc");
-                if (message.equalsIgnoreCase("fuck"))
-                    event.getBot().sendIRC().message(currentChan, "you");
+                if (message.equalsIgnoreCase("fuck")){
+                    int i = (int) (Math.random()*1000+1);
+                    if (i == 500)
+                        event.getBot().sendIRC().message(currentChan, "a duck");
+                    if (i == 1000)
+                        event.getBot().sendIRC().message(currentChan, "a dog in the ass");
+                    else
+                        event.getBot().sendIRC().message(currentChan, "you");
+                }
             }
             
             //Bane
@@ -114,6 +123,22 @@ public class MatrapterChat extends ListenerAdapter {
                 }
                 else
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Bane input should be '!bane [term1] [term2]'");
+            }
+            if (message.equalsIgnoreCase("!butt")){
+                ArrayList<String> butt = new ArrayList();
+                butt.add("     .         .");
+                butt.add("     |         |");
+                butt.add("     j    :    l");
+                butt.add("    /           \\ ");
+                butt.add("   /             \\");
+                butt.add("  Y       .       Y");
+                butt.add("  |       |       |");
+                butt.add("  l \"----~Y~----\" !");
+                butt.add("   \\      |      /");
+                butt.add("    Y     |     Y");
+                butt.add("    |     I     |");
+                for (int i=0;i<butt.size()-1;i++)
+                    event.getBot().sendIRC().message(event.getUser().getNick(),butt.get(i));
             }
         }
     }
