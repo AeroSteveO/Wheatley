@@ -74,7 +74,7 @@ public class BotControl extends ListenerAdapter{
         }
         
         if (message.equalsIgnoreCase(Global.mainNick+", please shutdown")||message.equalsIgnoreCase("!shutdown")||message.equalsIgnoreCase(Global.mainNick+", shutdown")) {
-            if (event.getUser().getNick().equals("Steve-O")){
+            if (event.getUser().getNick().equals(Global.botOwner)){
                 Global.reconnect = false;
                 event.getBot().sendIRC().message(event.getChannel().getName(), "Let go! Let go! I'm still connected. I can pull myself in. I can still fix this!");
                 Random generator = new Random();
