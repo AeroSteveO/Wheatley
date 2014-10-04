@@ -24,7 +24,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class GameReverse extends ListenerAdapter {
 //    static GameArray activeGame = new GameArray();
-    int time = 20;
+    int time = 20;  // Seconds
     String blockedChan = "#dtella";
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException{

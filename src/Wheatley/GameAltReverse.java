@@ -24,13 +24,12 @@ import org.pircbotx.hooks.events.MessageEvent;
  *      esrever!
  */
 public class GameAltReverse extends ListenerAdapter {
-    static ArrayList<String> wordls = null;
     static ArrayList<String> activechan = new ArrayList<String>();
 //    static GameArray activeGame = new GameArray();
     
     boolean isactive = false;
     String blockedChan = "#dtella";
-    int time = 20;
+    int time = 20;  // Seconds
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException{
         String message = Colors.removeFormattingAndColors(event.getMessage());

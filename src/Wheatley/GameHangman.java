@@ -27,7 +27,7 @@ public class GameHangman extends ListenerAdapter {
     int baselives = 10;
     int changed = 0;
     int lives = baselives;
-    int time = 60;
+    int time = 60;  // Seconds
 //    static GameArray activeGame = new GameArray();
     String blockedChan = "#dtella";
     int correct = 0;

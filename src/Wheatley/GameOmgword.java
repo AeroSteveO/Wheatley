@@ -24,7 +24,7 @@ import org.pircbotx.hooks.events.*;
 public class GameOmgword extends ListenerAdapter {
     // Initialize needed variables
     String blockedChan = "#dtella";
-    int time = 30;
+    int time = 30;  // Seconds
 //    static GameArray activeGame = new GameArray();
 
     @Override

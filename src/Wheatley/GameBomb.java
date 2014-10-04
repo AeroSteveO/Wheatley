@@ -28,7 +28,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class GameBomb extends ListenerAdapter {
     // Woohooo basic variables for junk
-    int time = 10;
+    int time = 10;  // Seconds
     String blockedChan = "#dtella";
     ArrayList<String> colorls = null;
     
