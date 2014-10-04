@@ -35,6 +35,12 @@ import org.pircbotx.Colors;
  *         To command the bot to respond with a line
  *     [botnick], what do you think of [item]
  *         To force a seed word into the generator and command a reply
+ * 
+ * ToDo:
+ *      Wheatley, go on
+ *          Makes Wheatley continue his current markov chain of thought, not sure
+ *          if it should continue using the current word, or use a word from the
+ *          previous message at random
  *
  */
 public class MarkovInterface extends ListenerAdapter{
