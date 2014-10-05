@@ -58,7 +58,7 @@ public class Blarghlebot extends ListenerAdapter {
                 int i=Global.channels.get(idx).getMessageLogSize()-2;
                 reply = findReplace(i, findNreplace, findThis, idx);
                 if (!reply.equalsIgnoreCase("")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),reply);
+                    event.getBot().sendIRC().message(event.getChannel().getName(),reply.substring(0,Math.min(reply.length(),400)));
                     Global.channels.get(idx).addMessageToLog(reply);
                 }
             }
