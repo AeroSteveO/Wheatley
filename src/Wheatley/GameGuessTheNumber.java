@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Objects.Game;
+import Objects.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
 import org.pircbotx.Colors;
@@ -57,7 +58,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                 
                 boolean running=true;
                 int key=(int) (Math.random()*100000+1);
-                Game.TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "guessthenumber").new TimedWaitForQueue(event,time,key);
+                TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
                 event.respond("Try to correctly guess the number (1-"+Integer.toString(length)+")");
 
                 while (running){
@@ -65,12 +66,12 @@ public class GameGuessTheNumber extends ListenerAdapter {
                     String guess = CurrentEvent.getMessage();
                     String currentChan = CurrentEvent.getChannel().getName();
                     if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
-                        event.getBot().sendIRC().message(gameChan,"Game over! You've run out of time. "+Colors.BOLD + solution + Colors.NORMAL + " would have been the solution.");
+                        event.getBot().sendIRC().message(gameChan,"Game over! You've run out of time. "+Colors.BOLD+Colors.RED + solution + Colors.NORMAL + " would have been the solution.");
                         running = false;
                         timedQueue.end();
                     }
                     else if ((CurrentEvent.getMessage().equals("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(gameChan)){
-                        CurrentEvent.respond("You have given up! Correct answer was " + solution);
+                        CurrentEvent.respond("You have given up! Correct answer was " +Colors.BOLD+Colors.RED+ solution);
                         running = false;
                         timedQueue.end();
                     }
@@ -81,7 +82,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                             timedQueue.end();
                         }
                         else if (guess.equalsIgnoreCase(solution)){
-                            event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the number: " + Colors.BOLD + solution + Colors.NORMAL);
+                            event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the number: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
                             running = false;
                             timedQueue.end();
                         }

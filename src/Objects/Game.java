@@ -52,6 +52,7 @@ public class Game {
     private String modifier;
     private String solution;
     private int chosenNum;
+    private String key;
     private ArrayList<Integer> chosenNumArray;
     //private ArrayList<String> blockedChannels = getBlockedChannels();
     
@@ -92,6 +93,9 @@ public class Game {
     }
     public ArrayList<Integer> getIntArray(){
         return this.chosenNumArray;
+    }
+    public String describeGame(){
+        return (Colors.BOLD+"Game: "+Colors.NORMAL+this.gameType+Colors.BOLD+" Channel: "+Colors.NORMAL+this.channelName);//Colors.BOLD+" Modifier: "+Colors.NORMAL+this.modifier+
     }
     private static ArrayList<Integer> createIntArray(int length, int charSize){
         ArrayList<Integer> numbers = new ArrayList<>();
@@ -308,6 +312,19 @@ public class Game {
         }
         public Game getGame(String channel,String game){
             return (this.get(this.getGameIdx(channel, game)));
+        }
+        public ArrayList<String> getCurrentGameDescriptions(){
+            ArrayList<String> gameDescriptions = new ArrayList<>();
+            
+            if (this.size()==0){
+                gameDescriptions.add("NO CURRENT GAMES");
+            }
+            else{
+                for (int i=0;i<this.size();i++){
+                    gameDescriptions.add(this.get(i).describeGame());
+                }
+            }
+            return gameDescriptions;
         }
         public boolean isGameActive(String currentChan,String GameType, String modification, int time) throws FileNotFoundException{
             boolean isActive=false;

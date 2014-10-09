@@ -6,7 +6,7 @@
 
 package Wheatley;
 
-import Objects.Game.TimedWaitForQueue;
+import Objects.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
 import org.pircbotx.Colors;
@@ -48,20 +48,20 @@ public class GameHangman extends ListenerAdapter {
                     event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);
                     boolean running=true;
                     int key=(int) (Math.random()*100000+1);
-                    TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "hangman").new TimedWaitForQueue(event,time,key);
+                    TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
                     
                     while (running){
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                         String currentChan = CurrentEvent.getChannel().getName();
                         changed = 0;
                         if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
-                            event.getBot().sendIRC().message(gameChan,"Game over! You've run out of time. "+Colors.BOLD + chosenword.toUpperCase() + Colors.NORMAL + " would have been the solution.");
+                            event.getBot().sendIRC().message(gameChan,"Game over! You've run out of time. "+Colors.BOLD+Colors.RED + chosenword.toUpperCase() + Colors.NORMAL + " would have been the solution.");
                             running = false;
                             timedQueue.end();
                         }
                         else if (Pattern.matches("[a-zA-Z]{2,}",CurrentEvent.getMessage())&&currentChan.equalsIgnoreCase(gameChan)){
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
-                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD + chosenword.toUpperCase() + Colors.NORMAL);
+                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD+Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
                                 running=false;
                                 timedQueue.end();
                             }

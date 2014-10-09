@@ -5,7 +5,7 @@
 */
 
 package Wheatley;
-import Objects.Game.TimedWaitForQueue;
+import Objects.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.*;
@@ -43,26 +43,26 @@ public class GameOmgword extends ListenerAdapter {
                 String scrambled = Global.activeGame.get(currentIndex).getSolution();
                 event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
                 int key=(int) (Math.random()*100000+1);
-                TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan,"omgword").new TimedWaitForQueue(event,time,key);
+                TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
                 while (running){ 
                     try {
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                         if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
-                            event.getBot().sendIRC().message(gameChan,"You did not guess the solution in time, the correct answer would have been "+chosenword.toUpperCase());
+                            event.getBot().sendIRC().message(gameChan,"You did not guess the solution in time, the correct answer would have been "+Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                             running = false;
                             timedQueue.end();
                         }
                         else if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
-                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + chosenword.toUpperCase());
+                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
                             running = false;
                             timedQueue.end();
                         }
                         else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
-                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + chosenword.toUpperCase());
+                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                             running = false;
                             timedQueue.end();
                         }
-                    } catch (InterruptedException ex) {
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }

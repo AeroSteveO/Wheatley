@@ -6,7 +6,7 @@
 
 package Wheatley;
 
-import Objects.Game.TimedWaitForQueue;
+import Objects.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
@@ -46,27 +46,27 @@ public class GameAltReverse extends ListenerAdapter {
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +chosenword.toUpperCase() + Colors.NORMAL);
                 //setup amount of given time
                 int key=(int) (Math.random()*100000+1);
-                TimedWaitForQueue timedQueue = Global.activeGame.getGame(gameChan, "altreverse").new TimedWaitForQueue(event,time,key);
+                TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
                 while (running){ 
                     try {
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                         String currentChan = CurrentEvent.getChannel().getName();
                         if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))&&currentChan.equalsIgnoreCase(gameChan)){
-                            event.getBot().sendIRC().message(currentChan,"You did not guess the solution in time, the correct answer would have been "+chosenword.toUpperCase());
+                            event.getBot().sendIRC().message(currentChan,"You did not guess the solution in time, the correct answer would have been "+Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                             running = false;
                             timedQueue.end();
                         }
                         else if (CurrentEvent.getMessage().equalsIgnoreCase(reversed)&&currentChan.equalsIgnoreCase(gameChan)){
-                            event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + reversed.toUpperCase());
+                            event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+reversed.toUpperCase());
                             running = false;
                             timedQueue.end();
                         }
                         else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(event.getChannel().getName())){
-                            event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + reversed.toUpperCase());
+                            event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " +Colors.BOLD+Colors.RED+ reversed.toUpperCase());
                             running = false;
                             timedQueue.end();
                         }
-                    } catch (InterruptedException ex) {
+                    } catch (Exception ex) {
                         //      activechan.remove(CurrentEvent.getChannel().getName());
                         ex.printStackTrace();
                     }
