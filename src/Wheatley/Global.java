@@ -8,7 +8,13 @@ package Wheatley;
 
 import Objects.ChannelStore.ChannelArray;
 import Objects.Game.GameArray;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 import org.pircbotx.PircBotX;
+import org.pircbotx.hooks.Event;
 
 /**
  *
@@ -22,7 +28,7 @@ import org.pircbotx.PircBotX;
  * bot           - Current PircBotX bot object
  * channels      - Array of settings for each channel the bot is in
  * activeGame    - Array of games currently active in channels the bot is in
- * 
+ *
  */
 public class Global {
     public static String botOwner = new String(); //Updated in the Main .java file from Setings.XML
@@ -33,4 +39,23 @@ public class Global {
     public static ChannelArray channels = new ChannelArray();
     public static String commandPrefix = "!";              // Not implemented yet in other functions
     public static GameArray activeGame = new GameArray();  // To be implemented in games
+    public static String phrasePrefix = new String();      //mainNick+", ";
+    public static ArrayList<String> botAdmin = new ArrayList<>();
+    
+    public static String getTimestamp(Event event){
+        TimeZone tz = TimeZone.getDefault();
+        Date timestamp = new Date(Long.parseLong(String.valueOf(event.getTimestamp())));
+        DateFormat timeFormat = new SimpleDateFormat("M/d/yy h:mm aa");
+        String tzShortString = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
+        String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
+        return outputTime;
+    }
+    public static String getTimestamp(String date) {
+        TimeZone tz = TimeZone.getDefault();
+        Date timestamp = new Date(Long.parseLong(date));
+        DateFormat timeFormat = new SimpleDateFormat("M/d/yy h:mm aa");
+        String tzShortString = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
+        String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
+        return outputTime;
+    }
 }
