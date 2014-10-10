@@ -20,6 +20,17 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  * 
+ * Simple logging listener, updates the log file every 100 lines of chat, so to not spam the file
+ * To use: 
+ * --Before the configuration lines
+ * BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
+ * 
+ * --In configuration
+ * .setListenerManager(BackgroundListener) //Put all your .addListener(new listener()) statements after this
+ * 
+ * --After configuration lines
+ * BackgroundListener.addListener(new Logger(),true);
+ * 
  * Activate commands with
  *      !save logs
  *          Saves all currently in ram lines to log
@@ -30,8 +41,11 @@ public class Logger extends ListenerAdapter{
     
     public void onMessage(MessageEvent event) throws IOException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        log.add("<"+event.getUser().getNick()+"> "+message);
-        if((log.size()>100||message.equalsIgnoreCase("!save logs")||message.equalsIgnoreCase("!save all"))&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        
+        if (!event.getUser().getNick().equalsIgnoreCase(event.getBot().getUserBot().getNick()))
+            log.add("<"+event.getUser().getNick()+"> "+message);
+        
+        if(log.size()>100||((message.equalsIgnoreCase("!save logs")||message.equalsIgnoreCase("!save all"))&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner))){
             success = saveToFile(log);
             if(!success)
                 event.getBot().sendIRC().notice(Global.botOwner,"Log file failed to save");
@@ -55,7 +69,7 @@ public class Logger extends ListenerAdapter{
                 FileWriter fileWritter = new FileWriter(file.getName(),true);
                 BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                 bufferWritter.write("\n"+addition);
-                bufferWritter.close();   
+                bufferWritter.close();
             }
             isSaved=true;
         }catch(IOException e){
