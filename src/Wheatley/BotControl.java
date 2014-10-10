@@ -45,15 +45,8 @@ public class BotControl extends ListenerAdapter{
     @Override
     public void onMessage(MessageEvent event) throws InterruptedException, Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-//        int index = Global.channels.getChanIdx(event.getChannel().getName().toString());
         
         if (message.equalsIgnoreCase("!flush")&&event.getUser().getNick().equals(Global.botOwner)){
-//            GameOmgword.activeGame.clear();
-//            GameHangman.activeGame.clear();
-//            GameReverse.activeGame.clear();
-//            GameAltReverse.activeGame.clear();
-//            GameMasterMind.activeGame.clear();     NEED NEW WAY TO KILL ALL TEH GAMES
-//            GameGuessTheNumber.activeGame.clear();
             Global.channels.removeDupes();
             Blarghlebot.poop = "null";
             BadWords.badwords = null;
@@ -112,7 +105,7 @@ public class BotControl extends ListenerAdapter{
                 }
                 else {
                     c.send().part();
-                    event.respond("Parted from " + chan[1] + ".");
+                    event.respond("Left #" + chan[1] + ".");
                     Global.channels.remove(Global.channels.getChanIdx("#"+chan[1]));
                 }
             } // command the bot to part the current channel that the command was sent from
@@ -148,6 +141,7 @@ public class BotControl extends ListenerAdapter{
             Thread.sleep(5000); // wait between killing the ghost to changing nick and registering
             event.getBot().sendIRC().changeNick(Global.mainNick);
             event.getBot().sendIRC().message("NickServ", "identify " + Global.nickPass);
+            Global.channels.removeDupes();
             for (int i=0;i<Global.channels.size();i++){
                 event.getBot().sendIRC().joinChannel(Global.channels.get(i).toString());
             }
