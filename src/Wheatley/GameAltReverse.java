@@ -47,7 +47,7 @@ public class GameAltReverse extends ListenerAdapter {
                 //setup amount of given time
                 int key=(int) (Math.random()*100000+1);
                 TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
-                while (running){ 
+                while (running){
                     try {
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                         String currentChan = CurrentEvent.getChannel().getName();
@@ -56,15 +56,17 @@ public class GameAltReverse extends ListenerAdapter {
                             running = false;
                             timedQueue.end();
                         }
-                        else if (CurrentEvent.getMessage().equalsIgnoreCase(reversed)&&currentChan.equalsIgnoreCase(gameChan)){
-                            event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+reversed.toUpperCase());
-                            running = false;
-                            timedQueue.end();
-                        }
-                        else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(event.getChannel().getName())){
-                            event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " +Colors.BOLD+Colors.RED+ reversed.toUpperCase());
-                            running = false;
-                            timedQueue.end();
+                        else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
+                            if (CurrentEvent.getMessage().equalsIgnoreCase(reversed)&&currentChan.equalsIgnoreCase(gameChan)){
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+reversed.toUpperCase());
+                                running = false;
+                                timedQueue.end();
+                            }
+                            else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(event.getChannel().getName())){
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " +Colors.BOLD+Colors.RED+ reversed.toUpperCase());
+                                running = false;
+                                timedQueue.end();
+                            }
                         }
                     } catch (Exception ex) {
                         //      activechan.remove(CurrentEvent.getChannel().getName());

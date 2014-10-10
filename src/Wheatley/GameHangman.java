@@ -59,46 +59,48 @@ public class GameHangman extends ListenerAdapter {
                             running = false;
                             timedQueue.end();
                         }
-                        else if (Pattern.matches("[a-zA-Z]{2,}",CurrentEvent.getMessage())&&currentChan.equalsIgnoreCase(gameChan)){
-                            if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
-                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD+Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
-                                running=false;
-                                timedQueue.end();
-                            }
-                            else{
-                                lives--;
-                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is incorrect. Lives left: " + lives );
-                            }
-                        }
-                        else if (Pattern.matches("[a-zA-Z]{1}", CurrentEvent.getMessage())&&currentChan.equalsIgnoreCase(gameChan)){
-                            for (int i = 0; i<chosenword.length(); i++){
-                                if (Character.toString(characters[i]).equalsIgnoreCase(CurrentEvent.getMessage())&&!Character.toString(guess.charAt(i)).equalsIgnoreCase(CurrentEvent.getMessage())){//Character.toString(blanks[i]).equalsIgnoreCase(CurrentEvent.getMessage())
-                                    String temp = guess.substring(0,i)+CurrentEvent.getMessage()+guess.substring(i+1);
-                                    guess = temp;
-                                    event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is correct! " + Colors.BOLD + guess.toUpperCase() + Colors.NORMAL + " Lives left: " +  lives );
-                                    correct++;
-                                    changed = 1;
+                        else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
+                            if (Pattern.matches("[a-zA-Z]{2,}",CurrentEvent.getMessage())){
+                                if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
+                                    event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD+Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
+                                    running=false;
+                                    timedQueue.end();
+                                }
+                                else{
+                                    lives--;
+                                    event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is incorrect. Lives left: " + lives );
                                 }
                             }
-                            if (changed ==0){
-                                lives--;
-                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is wrong or was already guessed. Lives left: " + lives );
-                                if(lives == 0){
-                                    event.getBot().sendIRC().message(gameChan, "You've run out of lives! The word we looked for was " + Colors.BOLD + Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
+                            else if (Pattern.matches("[a-zA-Z]{1}", CurrentEvent.getMessage())){
+                                for (int i = 0; i<chosenword.length(); i++){
+                                    if (Character.toString(characters[i]).equalsIgnoreCase(CurrentEvent.getMessage())&&!Character.toString(guess.charAt(i)).equalsIgnoreCase(CurrentEvent.getMessage())){//Character.toString(blanks[i]).equalsIgnoreCase(CurrentEvent.getMessage())
+                                        String temp = guess.substring(0,i)+CurrentEvent.getMessage()+guess.substring(i+1);
+                                        guess = temp;
+                                        event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is correct! " + Colors.BOLD + guess.toUpperCase() + Colors.NORMAL + " Lives left: " +  lives );
+                                        correct++;
+                                        changed = 1;
+                                    }
+                                }
+                                if (changed ==0){
+                                    lives--;
+                                    event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is wrong or was already guessed. Lives left: " + lives );
+                                    if(lives == 0){
+                                        event.getBot().sendIRC().message(gameChan, "You've run out of lives! The word we looked for was " + Colors.BOLD + Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
+                                        running = false;
+                                        timedQueue.end();
+                                    }
+                                }
+                                else if (correct == chosenword.length()){
+                                    event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD +Colors.RED+ chosenword.toUpperCase() + Colors.NORMAL);
                                     running = false;
                                     timedQueue.end();
                                 }
                             }
-                            else if (correct == chosenword.length()){
-                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD +Colors.RED+ chosenword.toUpperCase() + Colors.NORMAL);
+                            else if (CurrentEvent.getMessage().equals("!fuckthis")||CurrentEvent.getMessage().equalsIgnoreCase("I give up")){
+                                CurrentEvent.respond("You have given up! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
                                 running = false;
                                 timedQueue.end();
                             }
-                        }
-                        else if ((CurrentEvent.getMessage().equals("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(gameChan)){
-                            CurrentEvent.respond("You have given up! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
-                            running = false;
-                            timedQueue.end();
                         }
                     }
                     correct = 0;

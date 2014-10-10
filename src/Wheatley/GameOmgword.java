@@ -26,7 +26,7 @@ public class GameOmgword extends ListenerAdapter {
     String blockedChan = "#dtella";
     int time = 30;  // Seconds
 //    static GameArray activeGame = new GameArray();
-
+    
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException{
         String message = Colors.removeFormattingAndColors(event.getMessage());
@@ -44,7 +44,7 @@ public class GameOmgword extends ListenerAdapter {
                 event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
                 int key=(int) (Math.random()*100000+1);
                 TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
-                while (running){ 
+                while (running){
                     try {
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                         if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
@@ -52,22 +52,24 @@ public class GameOmgword extends ListenerAdapter {
                             running = false;
                             timedQueue.end();
                         }
-                        else if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
-                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
-                            running = false;
-                            timedQueue.end();
-                        }
-                        else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
-                            event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
-                            running = false;
-                            timedQueue.end();
+                        else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
+                            if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
+                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
+                                running = false;
+                                timedQueue.end();
+                            }
+                            else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
+                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
+                                running = false;
+                                timedQueue.end();
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
-                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"omgword"));
             }
+            Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"omgword"));
         }
     }
 }

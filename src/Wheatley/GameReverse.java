@@ -48,28 +48,29 @@ public class GameReverse extends ListenerAdapter {
                     try {
                         MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                         String currentChan = CurrentEvent.getChannel().getName();
-                        
                         if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
                             event.getBot().sendIRC().message(currentChan,"You did not guess the solution in time, the correct answer would have been "+Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                             running = false;
                             timedQueue.end();
                         }
-                        else if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)&&currentChan.equalsIgnoreCase(gameChan)){
-                            event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
-                            timedQueue.end();
-                            running = false;
-                        }
-                        else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(gameChan)){
-                            event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
-                            timedQueue.end();
-                            running = false;
+                        else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
+                            if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
+                                timedQueue.end();
+                                running = false;
+                            }
+                            else if (CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up"))){
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
+                                timedQueue.end();
+                                running = false;
+                            }
                         }
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
                 }
-                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"reverse"));
             }
+            Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"reverse"));
         }
     }
 }

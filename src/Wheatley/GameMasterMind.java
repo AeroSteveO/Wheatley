@@ -95,54 +95,55 @@ public class GameMasterMind extends ListenerAdapter {
                 while (running){
                     MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
                     String guess = CurrentEvent.getMessage();
-                    String currentChan = CurrentEvent.getChannel().getName();
                     if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
                         event.getBot().sendIRC().message(gameChan,"Game over! You've run out of time. "+Colors.BOLD+Colors.RED + solution + Colors.NORMAL + " would have been the solution.");
                         running = false;
                         timedQueue.end();
                     }
-                    else if ((CurrentEvent.getMessage().equals("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&currentChan.equals(gameChan)){
-                        CurrentEvent.respond("You have given up! Correct answer was "+Colors.BOLD+Colors.RED + solution);
-                        running = false;
-                        timedQueue.end();
-                    }
-                    else if (Pattern.matches("[0-9]{"+length+"}",guess)&&currentChan.equalsIgnoreCase(gameChan)){
-                        String[] temp = guess.split("(?!^)");
-                        ArrayList<Integer> guessArr = new ArrayList<Integer>();
-                        for (int i=0;i<temp.length;i++){
-                            guessArr.add(Integer.parseInt(temp[i]));
+                    else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
+                        if ((CurrentEvent.getMessage().equals("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))){
+                            CurrentEvent.respond("You have given up! Correct answer was "+Colors.BOLD+Colors.RED + solution);
+                            running = false;
+                            timedQueue.end();
                         }
-                        for (int i = 0;i<guessArr.size()&&i<solutionArray.size();i++){
-                            if (guessArr.get(i)==solutionArray.get(i))
-                                scorePositionValue++;
-                        }
-                        for (int i = 0;i<=charSize;i++){
-                            if (solutionArray.contains(i)&&guessArr.contains(i)){
-                                int solCount = characterCounter(solutionArray,i);
-                                int gueCount = characterCounter(guessArr,i);
-                                if(solCount>gueCount)
-                                    scoreValue = scoreValue + gueCount;
-                                else
-                                    scoreValue = scoreValue + solCount;
+                        else if (Pattern.matches("[0-9]{"+length+"}",guess)){
+                            String[] temp = guess.split("(?!^)");
+                            ArrayList<Integer> guessArr = new ArrayList<Integer>();
+                            for (int i=0;i<temp.length;i++){
+                                guessArr.add(Integer.parseInt(temp[i]));
                             }
+                            for (int i = 0;i<guessArr.size()&&i<solutionArray.size();i++){
+                                if (guessArr.get(i)==solutionArray.get(i))
+                                    scorePositionValue++;
+                            }
+                            for (int i = 0;i<=charSize;i++){
+                                if (solutionArray.contains(i)&&guessArr.contains(i)){
+                                    int solCount = characterCounter(solutionArray,i);
+                                    int gueCount = characterCounter(guessArr,i);
+                                    if(solCount>gueCount)
+                                        scoreValue = scoreValue + gueCount;
+                                    else
+                                        scoreValue = scoreValue + solCount;
+                                }
+                            }
+                            lives--;
+                            if (lives <= 0){
+                                CurrentEvent.respond("You've run out of lives, the solution was "+solution);
+                                running = false;
+                                timedQueue.end();
+                            }
+                            else if (scorePositionValue == length){
+                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the code: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
+                                running = false;
+                                timedQueue.end();
+                            }
+                            else{
+                                CurrentEvent.respond("Code has "+scorePositionValue+" digits correct in position and value | "+scoreValue+" digits correct in value | Lives left: "+lives);
+                            }
+                            
+                            scoreValue = 0;
+                            scorePositionValue = 0;
                         }
-                        lives--;
-                        if (lives <= 0){
-                            CurrentEvent.respond("You've run out of lives, the solution was "+solution);
-                            running = false;
-                            timedQueue.end();
-                        }
-                        else if (scorePositionValue == length){
-                            event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the code: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
-                            running = false;
-                            timedQueue.end();
-                        }
-                        else{
-                            CurrentEvent.respond("Code has "+scorePositionValue+" digits correct in position and value | "+scoreValue+" digits correct in value | Lives left: "+lives);
-                        }
-                        
-                        scoreValue = 0;
-                        scorePositionValue = 0;
                     }
                 }
                 Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"mastermind")); //updated current index of the game
