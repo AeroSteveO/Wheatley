@@ -96,7 +96,7 @@ public class WheatleyMain extends ListenerAdapter {
             Global.mainNick = baseElement.getElementsByTagName("nick").item(0).getTextContent();
             Global.nickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
             Global.botOwner = baseElement.getElementsByTagName("botowner").item(0).getTextContent();
-            
+            Global.phrasePrefix = Global.mainNick+", ";
             BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
             
             //   Configuration configuration;
@@ -108,7 +108,6 @@ public class WheatleyMain extends ListenerAdapter {
                     .setCapEnabled(true)     //Enable CAP features
                     .setAutoReconnect(true)
                     .setMaxLineLength(425)
-//                    .addCapHandler(new TLSCapHandler(new UtilSSLSocketFactory().trustAllCertificates(), true))
                     .setListenerManager(BackgroundListener)//Allow for logger background listener
                     .addListener(new WheatleyMain())       //This main class's listener
                     .addListener(new Blarghlebot())        //Trollbot Listener
@@ -118,7 +117,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameBomb())           //bomb game listener
                     .addListener(new GameMasterMind())     //mastermind game listener
                     .addListener(new GameGuessTheNumber()) //guess the number game listener
-//                    .addListener(new Game.QueueTime())
+                    .addListener(new GameControl())
                     .addListener(new GameAltReverse())     //alternate reverse game listener
                     .addListener(new Why())                // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
@@ -126,6 +125,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new EnglishSayings())
                     .addListener(new Definitions())
                     .addListener(new AutodlText())
+                    .addListener(new KickBanWatcher())
                     .addListener(new Ignite())
                     .addListener(new Laser())
                     .addListener(new FactSphereFacts())
@@ -137,9 +137,8 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new Weather())
                     .addListener(new Urban())
                     .addListener(new MovieRatings())
-//                    .addListener(new IMDB())
                     .addListener(new BadWords())
-//                    .addListener(new MarkovInterface())
+                    .addListener(new MarkovInterface())
                     .addListener(new TextModification())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
@@ -154,10 +153,8 @@ public class WheatleyMain extends ListenerAdapter {
                 Global.channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
             }
             Configuration config = configuration.buildConfiguration();
-//            Global.bot = new PircBotX(config);
-            //bot.connect throws various exceptions for failures
+            
             Global.bot = new PircBotX(config);
-//            bot.startBot();
             try {
                 Runner parallel = new Runner(Global.bot);
                 Thread t = new Thread(parallel);
@@ -165,7 +162,7 @@ public class WheatleyMain extends ListenerAdapter {
                 t.start();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                System.out.printf("Failed to start bot\n");
+                System.out.println("Failed to start bot");
             }
         }
         catch (Exception ex) {
