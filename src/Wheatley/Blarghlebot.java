@@ -240,6 +240,8 @@ public class Blarghlebot extends ListenerAdapter {
             if (message.equalsIgnoreCase("!rimshot"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.instantrimshot.com/");
             
+            if (message.equalsIgnoreCase("!clitoris"))
+                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1050");
             
             if (message.equalsIgnoreCase("!vuvuzela"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
