@@ -25,12 +25,12 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class GameHangman extends ListenerAdapter {
     // Woohooo basic variables for junk
     int baselives = 10;
-    int changed = 0;
-    int lives = baselives;
+//    int changed = 0;
+//    int lives = baselives;
     int time = 60;  // Seconds
 //    static GameArray activeGame = new GameArray();
     String blockedChan = "#dtella";
-    int correct = 0;
+//    int correct = 0;
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         {
@@ -40,7 +40,12 @@ public class GameHangman extends ListenerAdapter {
             if (message.equalsIgnoreCase("!hangman")&&!Global.channels.areGamesBlocked(gameChan)) {
                 
                 if (!Global.activeGame.isGameActive(gameChan, "hangman", "blank", time)){
-                    // Choose a random word from the list
+                    
+                    // Setup variables that will be needed through hangman
+                    int changed = 0;
+                    int correct = 0;
+                    int lives = baselives;
+                    
                     currentIndex = Global.activeGame.getGameIdx(gameChan,"hangman");
                     String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
                     String guess = Global.activeGame.get(currentIndex).getSolution();
@@ -103,9 +108,9 @@ public class GameHangman extends ListenerAdapter {
                             }
                         }
                     }
-                    correct = 0;
-                    changed = 0;
-                    lives = baselives;
+//                    correct = 0;
+//                    changed = 0;
+//                    lives = baselives;
                     Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"hangman")); //updated current index of the game
                 }
             }
