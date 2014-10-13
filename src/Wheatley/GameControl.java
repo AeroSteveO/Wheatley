@@ -39,12 +39,22 @@ public class GameControl extends ListenerAdapter {
             }
             
             else if (command.equalsIgnoreCase("score")){ // Get your current score
-                event.respond("Your current score is: "+scores.getScore(event.getUser().getNick()));
+                int userScore = scores.getScore(event.getUser().getNick());
+                if (userScore < 0){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
+                }
+                else
+                    event.respond("Your current score is: "+userScore);
             }
             
             else if (command.matches("score\\s[a-z\\|]+")){ // Get someone elses current score
                 String user = command.split(" ")[1];
-                event.respond(user+"'s current score is: "+scores.getScore(user));
+                int userScore = scores.getScore(user);
+                if (userScore < 0){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
+                }
+                else
+                    event.respond(user+"'s current score is: "+userScore);
             }
             
             else if(command.equalsIgnoreCase("list games")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
@@ -52,6 +62,13 @@ public class GameControl extends ListenerAdapter {
                 for (int i=0;i<descriptions.size();i++){
                     event.getBot().sendIRC().message(event.getChannel().getName(),descriptions.get(i));
                 }
+            }
+            
+            else if (command.toLowerCase().matches("set\\s[a-z\\|\\-\\`]\\s[0-9]+")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)) {
+                String user = command.split(" ")[1];
+                String score = command.split(" ")[2];
+                scores.setScore(user, Integer.parseInt(score));
+                event.respond(user+"'s current score is: "+scores.getScore(user));
             }
         }
     }
