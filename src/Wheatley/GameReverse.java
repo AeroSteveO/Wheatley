@@ -23,7 +23,6 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  */
 public class GameReverse extends ListenerAdapter {
-//    static GameArray activeGame = new GameArray();
     int time = 20;  // Seconds
     String blockedChan = "#dtella";
     int basePrize = 10; // $
@@ -37,12 +36,15 @@ public class GameReverse extends ListenerAdapter {
             // get the list of words only if theres nothing in the list alread
             
             if (!Global.activeGame.isGameActive(gameChan, "reverse", "reverse", time)){
-                //get and shuffle the word
+                
+                // Get the game object index and grab the necessary variables from it
                 int currentIndex = Global.activeGame.getGameIdx(gameChan,"reverse");
                 String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
                 String reversed = Global.activeGame.get(currentIndex).getSolution();
+                
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +reversed.toUpperCase() + Colors.NORMAL);
-                //setup amount of given time
+                
+                // Setup the Wait For Queue
                 int key=(int) (Math.random()*100000+1);
                 TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
                 boolean running = true;
@@ -57,10 +59,11 @@ public class GameReverse extends ListenerAdapter {
                         }
                         else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
+                                
                                 int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+reversed.length(), timeSpent, time);
-                                
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
+                                
 //                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                                 timedQueue.end();
                                 running = false;
