@@ -5,6 +5,7 @@
   */
 package Wheatley;
 
+import Objects.Runner;
 import Objects.ChannelStore;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
