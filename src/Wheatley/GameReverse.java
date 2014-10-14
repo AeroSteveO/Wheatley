@@ -26,6 +26,8 @@ public class GameReverse extends ListenerAdapter {
 //    static GameArray activeGame = new GameArray();
     int time = 20;  // Seconds
     String blockedChan = "#dtella";
+    int basePrize = 10; // $
+    
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException{
         String message = Colors.removeFormattingAndColors(event.getMessage());
@@ -55,7 +57,11 @@ public class GameReverse extends ListenerAdapter {
                         }
                         else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
-                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
+                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+reversed.length(), timeSpent, time);
+                                
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
+//                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                                 timedQueue.end();
                                 running = false;
                             }

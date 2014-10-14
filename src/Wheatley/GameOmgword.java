@@ -25,6 +25,7 @@ public class GameOmgword extends ListenerAdapter {
     // Initialize needed variables
     String blockedChan = "#dtella";
     int time = 30;  // Seconds
+    int basePrize = 20; // $
 //    static GameArray activeGame = new GameArray();
     
     @Override
@@ -54,7 +55,10 @@ public class GameOmgword extends ListenerAdapter {
                         }
                         else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
-                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
+                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length(), timeSpent, time);
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
+//                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
                                 running = false;
                                 timedQueue.end();
                             }

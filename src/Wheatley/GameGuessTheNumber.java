@@ -30,8 +30,10 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class GameGuessTheNumber extends ListenerAdapter {
     String blockedChan = "#dtella";
+    int basePrize = 15; // $
     //static Game.GameArray activeGame = new Game.GameArray();
     
+    @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String gameChan = event.getChannel().getName();
@@ -82,7 +84,11 @@ public class GameGuessTheNumber extends ListenerAdapter {
                                 timedQueue.end();
                             }
                             else if (guess.equalsIgnoreCase(solution)){
-                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the number: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
+                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+Integer.toString(length).length()+lives, timeSpent, time);
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the number in "+timeSpent+" seconds and wins $"+prize+". Number: " + Colors.BOLD+Colors.RED+solution);
+
+//                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the number: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
                                 running = false;
                                 timedQueue.end();
                             }

@@ -9,6 +9,8 @@ package Wheatley;
 import Objects.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -30,6 +32,8 @@ public class GameAltReverse extends ListenerAdapter {
     boolean isactive = false;
     String blockedChan = "#dtella";
     int time = 20;  // Seconds
+    int basePrize = 10; // $
+    
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException{
         String message = Colors.removeFormattingAndColors(event.getMessage());
@@ -46,6 +50,7 @@ public class GameAltReverse extends ListenerAdapter {
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +chosenword.toUpperCase() + Colors.NORMAL);
                 //setup amount of given time
                 int key=(int) (Math.random()*100000+1);
+//                DateTime startTime = new DateTime();
                 TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
                 while (running){
                     try {
@@ -58,7 +63,12 @@ public class GameAltReverse extends ListenerAdapter {
                         }
                         else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
                             if (CurrentEvent.getMessage().equalsIgnoreCase(reversed)&&currentChan.equalsIgnoreCase(gameChan)){
-                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+reversed.toUpperCase());
+//                                DateTime endTime = new DateTime();
+//                                Period timeElapsed = new Period(startTime, new DateTime());
+                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+reversed.length(), timeSpent, time);
+                                
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+reversed.toUpperCase());
                                 running = false;
                                 timedQueue.end();
                             }

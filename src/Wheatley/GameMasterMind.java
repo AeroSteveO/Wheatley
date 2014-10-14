@@ -34,6 +34,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class GameMasterMind extends ListenerAdapter {
     
     String blockedChan = "#dtella";
+    int basePrize = 40; // $
 //    static Game.GameArray activeGame = new Game.GameArray();
     
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
@@ -133,7 +134,11 @@ public class GameMasterMind extends ListenerAdapter {
                                 timedQueue.end();
                             }
                             else if (scorePositionValue == length){
-                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the code: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
+                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+length+charSize+lives, timeSpent, time);
+                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the code in "+timeSpent+" seconds and wins $"+prize+". Code: " + Colors.BOLD+Colors.RED+solution.toUpperCase());
+
+//                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the code: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
                                 running = false;
                                 timedQueue.end();
                             }
