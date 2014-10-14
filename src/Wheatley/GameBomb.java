@@ -12,10 +12,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import org.joda.time.DateTime;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.WaitForQueue;
 import org.pircbotx.hooks.events.MessageEvent;
 
 /**
@@ -26,6 +24,8 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * Activate Command with:
  *      !bomb
+ *          Gives the user a bomb, the user has to pick the correctly colored
+ *          wire to cut before the time limit or the user loses
  *
  */
 public class GameBomb extends ListenerAdapter {

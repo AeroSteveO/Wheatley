@@ -14,7 +14,10 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Stephen
- * 
+ * Activate Command with:
+ *      !slot
+ *      !slots
+ *          Plays a game of slots
  * 
  */
 public class GameSlots extends ListenerAdapter {

@@ -62,6 +62,7 @@ public class Game {
         this.solution=modify(mod,this.chosenWord);
         this.startTime = new DateTime();
     }
+    
     public Game(String channel, String game, String mod, int time) throws FileNotFoundException{
         this.channelName=channel;
         this.gameType = game;
@@ -71,32 +72,40 @@ public class Game {
         this.solution=modify(mod,this.chosenWord);
         this.startTime = new DateTime();
     }
+    
     public Game(String channel, String game, String mod, int length, int charSize, int time) throws FileNotFoundException{
         this.channelName=channel;
         this.gameType = game;
         this.modifier = mod;
         this.timeLimit = time;
         this.startTime = new DateTime();
+        
         if (mod.equalsIgnoreCase("int array")){
             this.chosenNumArray = createIntArray(length,charSize);
             //this.chosenNum = convertIntegers();
         }
+        
         else if (mod.equalsIgnoreCase("int")){
             this.chosenNum = createInt(charSize,length); //when creating a general integer, charSize and length are used as lower and upper bounds
         }
     }
+    
     public int getInt(){
         return this.chosenNum;
     }
+    
     public void setTime(int t){
         this.timeLimit = t;
     }
+    
     public ArrayList<Integer> getIntArray(){
         return this.chosenNumArray;
     }
+    
     public String describeGame(){
         return (Colors.BOLD+"Game: "+Colors.NORMAL+this.gameType+Colors.BOLD+" Channel: "+Colors.NORMAL+this.channelName);//Colors.BOLD+" Modifier: "+Colors.NORMAL+this.modifier+
     }
+    
     private static ArrayList<Integer> createIntArray(int length, int charSize){
         ArrayList<Integer> numbers = new ArrayList<>();
         
@@ -177,7 +186,7 @@ public class Game {
         return(modifiedWord);
     }
     private static String shuffle(String input){
-        List<Character> characters = new ArrayList<Character>();
+        List<Character> characters = new ArrayList<>();
         for(char c:input.toCharArray()){
             characters.add(c);
         }
@@ -198,7 +207,7 @@ public class Game {
     }
     
     private static String reverse(String input){
-        List<Character> characters = new ArrayList<Character>();
+        List<Character> characters = new ArrayList<>();
         for(char c:input.toCharArray()){
             characters.add(c);
         }
@@ -223,12 +232,14 @@ public class Game {
             return null;
         }
     }
+    
     public boolean isChanEqual(String inputChannel) {
         boolean isChan = false;
         if (inputChannel.equalsIgnoreCase(this.channelName))
             isChan = true;
         return(isChan);
     }
+    
     public boolean isGameRunning(String inputChannel, String gameName) {
         boolean isChan = false;
         if (inputChannel.equalsIgnoreCase(this.channelName))
@@ -236,6 +247,8 @@ public class Game {
                 isChan = true;
         return(isChan);
     }
+    
+    
     public static class GameArray extends Vector<Game>{
         public int getGameIdx(String channel,String game){
             int idx = -1;
@@ -247,6 +260,7 @@ public class Game {
             }
             return (idx);
         }
+        
         public boolean isGameActive(String inputChannel, String GameType) {
             boolean isChan = false;
             if (!this.isEmpty()){
@@ -258,9 +272,11 @@ public class Game {
             }
             return(isChan);
         }
+        
         public Game getGame(String channel,String game){
             return (this.get(this.getGameIdx(channel, game)));
         }
+        
         public ArrayList<String> getCurrentGameDescriptions(){
             ArrayList<String> gameDescriptions = new ArrayList<>();
             
@@ -274,6 +290,7 @@ public class Game {
             }
             return gameDescriptions;
         }
+        
         public boolean isGameActive(String currentChan,String GameType, String modification, int time) throws FileNotFoundException{
             boolean isActive=false;
             if (this.isEmpty()){
@@ -291,6 +308,7 @@ public class Game {
             }
             return(isActive);
         }
+        
         public void closeAllGames(){
             for (int i=0;i>this.size()-1;i++){
                 

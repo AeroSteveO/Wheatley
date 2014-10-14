@@ -25,13 +25,10 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class GameHangman extends ListenerAdapter {
     // Woohooo basic variables for junk
     int baselives = 10;
-//    int changed = 0;
-//    int lives = baselives;
     int time = 60;  // Seconds
-//    static GameArray activeGame = new GameArray();
     String blockedChan = "#dtella";
     int basePrize = 30; // $
-//    int correct = 0;
+    
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
@@ -58,7 +55,6 @@ public class GameHangman extends ListenerAdapter {
                 
                 while (running){
                     MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
-//                    String currentChan = CurrentEvent.getChannel().getName();
                     changed = 0;
                     if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
                         event.getBot().sendIRC().message(gameChan,"Game over! You've run out of time. "+Colors.BOLD+Colors.RED + chosenword.toUpperCase() + Colors.NORMAL + " would have been the solution.");

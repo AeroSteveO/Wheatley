@@ -9,8 +9,6 @@ package Wheatley;
 import Objects.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -42,15 +40,17 @@ public class GameAltReverse extends ListenerAdapter {
         if ((message.equalsIgnoreCase("!altreverse")||message.equalsIgnoreCase("esrever!"))&&!Global.channels.areGamesBlocked(gameChan)) {
             
             if (!Global.activeGame.isGameActive(gameChan, "altreverse", "reverse", time)){
+                
                 //get and shuffle the word
                 int currentIndex = Global.activeGame.getGameIdx(gameChan,"altreverse");
                 String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
                 String reversed = Global.activeGame.get(currentIndex).getSolution();
                 boolean running = true;
+                
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +chosenword.toUpperCase() + Colors.NORMAL);
-                //setup amount of given time
+                
+                // Setup the wait for queue
                 int key=(int) (Math.random()*100000+1);
-//                DateTime startTime = new DateTime();
                 TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
                 while (running){
                     try {
@@ -63,8 +63,7 @@ public class GameAltReverse extends ListenerAdapter {
                         }
                         else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
                             if (CurrentEvent.getMessage().equalsIgnoreCase(reversed)&&currentChan.equalsIgnoreCase(gameChan)){
-//                                DateTime endTime = new DateTime();
-//                                Period timeElapsed = new Period(startTime, new DateTime());
+                                
                                 int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+reversed.length(), timeSpent, time);
                                 

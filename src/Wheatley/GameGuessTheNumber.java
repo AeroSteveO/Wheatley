@@ -84,6 +84,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                                 timedQueue.end();
                             }
                             else if (guess.equalsIgnoreCase(solution)){
+                                
                                 int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+Integer.toString(length).length()+lives, timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the number in "+timeSpent+" seconds and wins $"+prize+". Number: " + Colors.BOLD+Colors.RED+solution);

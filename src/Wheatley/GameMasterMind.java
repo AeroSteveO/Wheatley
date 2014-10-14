@@ -35,7 +35,6 @@ public class GameMasterMind extends ListenerAdapter {
     
     String blockedChan = "#dtella";
     int basePrize = 40; // $
-//    static Game.GameArray activeGame = new Game.GameArray();
     
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         
@@ -91,7 +90,6 @@ public class GameMasterMind extends ListenerAdapter {
                 int key=(int) (Math.random()*100000+1);
                 TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
                 event.respond("Try to correctly guess a "+length+" digit code (0-"+Integer.toString(charSize-1)+")");
-                //event.respond(""+Integer.toString(solutionArray.size()) + "  "+ solution);
                 
                 while (running){
                     MessageEvent CurrentEvent = timedQueue.waitFor(MessageEvent.class);
@@ -134,6 +132,7 @@ public class GameMasterMind extends ListenerAdapter {
                                 timedQueue.end();
                             }
                             else if (scorePositionValue == length){
+                                
                                 int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+length+charSize+lives, timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the code in "+timeSpent+" seconds and wins $"+prize+". Code: " + Colors.BOLD+Colors.RED+solution.toUpperCase());

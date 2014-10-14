@@ -37,12 +37,15 @@ public class GameOmgword extends ListenerAdapter {
         if (message.equalsIgnoreCase("!omgword")&&!Global.channels.areGamesBlocked(gameChan)) {
             
             if (!Global.activeGame.isGameActive(gameChan, "omgword", "shuffle", time)){
+                
                 //get and shuffle the word
                 boolean running = true;
                 currentIndex = Global.activeGame.getGameIdx(gameChan,"omgword");
                 String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
                 String scrambled = Global.activeGame.get(currentIndex).getSolution();
+                
                 event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
+                
                 int key=(int) (Math.random()*100000+1);
                 TimedWaitForQueue timedQueue = new TimedWaitForQueue(event,time,key);
                 while (running){
@@ -54,14 +57,18 @@ public class GameOmgword extends ListenerAdapter {
                             timedQueue.end();
                         }
                         else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
+                            
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
+                                
                                 int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
+
 //                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
                                 running = false;
                                 timedQueue.end();
                             }
+                            
                             else if ((CurrentEvent.getMessage().equalsIgnoreCase("!fuckthis")||(CurrentEvent.getMessage().equalsIgnoreCase("I give up")))&&CurrentEvent.getChannel().getName().equals(event.getChannel().getName())){
                                 event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have given up! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                                 running = false;

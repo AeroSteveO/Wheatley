@@ -145,7 +145,7 @@ public class Score implements Comparable<Score> {
         
         public int addScore(String nick, int v, int x1, int x2){
             
-            v +=  v - (v * x1 / x2) ;// (int) (Math.random()*6)
+            v += v - (v * x1 / x2) ;
             getScoreObj(nick).add(v);
             this.saveToJSON();
             

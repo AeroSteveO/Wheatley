@@ -6,8 +6,6 @@
 
 package Wheatley;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
