@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package Wheatley;
+package Objects;
 
+import Wheatley.Global;
 import org.pircbotx.PircBotX;
 
 /**
@@ -17,7 +18,7 @@ public class Runner implements Runnable {
     PircBotX bot;
     Thread t;
 
-    Runner(PircBotX bot) {
+    public Runner(PircBotX bot) {
         this.bot = bot;
     }
 
