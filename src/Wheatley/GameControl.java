@@ -21,6 +21,26 @@ import org.pircbotx.hooks.events.UserListEvent;
 /**
  *
  * @author Stephen
+ * ADMIN COMMANDS
+ * Activate Command with:
+ *      !set [user] [value]
+ *          sets the input users money to the input money value
+ *      !save
+ *          Saves everyones score to JSON and removes duplicate entries if any were made
+ *      !list games
+ *          Lists out the currently active games to the sender
+ * 
+ * USER COMMANDS
+ * Activate Command with:
+ *      !score
+ *          Responds with your score, if a game is currently running, it gives both
+ *          your current score and your overall trivia score, otherwise it just gives
+ *          your overall score
+ *      !score [user]
+ *          Responds with the users score, if a game is currently running, it gives both
+ *          their current score and their overall trivia score, otherwise it just gives
+ *          their overall score
+ *
  */
 public class GameControl extends ListenerAdapter {
     public static ScoreArray scores = new ScoreArray();
@@ -38,7 +58,12 @@ public class GameControl extends ListenerAdapter {
                 
             }
             
-            else if (command.equalsIgnoreCase("score")){ // Get your current score
+            else if (command.equalsIgnoreCase("save")&&Global.botAdmin.contains(event.getUser().getNick())){
+                scores.removeDupes();
+                scores.saveToJSON();
+            }
+            
+            else if (command.equalsIgnoreCase("money")){ // Get your current score
                 int userScore = scores.getScore(event.getUser().getNick());
                 if (userScore < 0){
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
@@ -47,7 +72,7 @@ public class GameControl extends ListenerAdapter {
                     event.respond("Your current score is: "+userScore);
             }
             
-            else if (command.matches("score\\s[a-z\\|]+")){ // Get someone elses current score
+            else if (command.matches("money\\s[a-z\\|]+")){ // Get someone elses current score
                 String user = command.split(" ")[1];
                 int userScore = scores.getScore(user);
                 if (userScore < 0){
@@ -92,7 +117,7 @@ public class GameControl extends ListenerAdapter {
     public void onJoin(JoinEvent event){
         if (!Global.channels.areGamesBlocked(event.getChannel().getName())){
             if (!scores.containsUser(event.getUser().getNick())){
-                scores.add(new Score(event.getUser().getNick()));
+                scores.addUser(event.getUser().getNick());
                 scores.saveToJSON();
             }
         }
@@ -108,7 +133,7 @@ public class GameControl extends ListenerAdapter {
             User element = iterator.next();
             if (!scores.containsUser(element.getNick())){
                 //temp = (User)users.floor(temp);
-                scores.add(new Score(element.getNick()));
+                scores.addUser(element.getNick());
                 System.out.println(element.getNick());
                 modified = true;
             }
