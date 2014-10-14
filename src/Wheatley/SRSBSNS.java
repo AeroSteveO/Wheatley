@@ -12,9 +12,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -62,14 +65,20 @@ public class SRSBSNS extends ListenerAdapter {
             } catch (MalformedURLException e) { // If exception happens, then its not a URL
             }
             if (message.equalsIgnoreCase("!lasturl")){
-                if (!Global.channels.getChan(currentChan).getLastUrl().equals(""))
-                    event.getBot().sendIRC().action(currentChan,"Last URL: "+Global.channels.getChan(currentChan).getLastUrl());
+                if (!Global.channels.getChan(currentChan).getLastUrl().equals("")){
+                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(Global.channels.getChan(currentChan).getLastUrl()).get();
+                    String title = finaldoc.title();
+                    event.getBot().sendIRC().action(currentChan,Colors.BOLD+"Last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
+                }
                 else
                     event.getBot().sendIRC().action(currentChan,"No previous URL found");
             }
             if (message.equalsIgnoreCase("!secondlasturl")){
-                if (!Global.channels.getChan(currentChan).getSecondLastUrl().equals(""))
-                    event.getBot().sendIRC().action(currentChan,"Second to last URL: "+Global.channels.getChan(currentChan).getSecondLastUrl());
+                if (!Global.channels.getChan(currentChan).getSecondLastUrl().equals("")){
+                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(Global.channels.getChan(currentChan).getSecondLastUrl()).get();
+                    String title = finaldoc.title();
+                    event.getBot().sendIRC().action(currentChan,Colors.BOLD+"Second to last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getSecondLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
+                }
                 else
                     event.getBot().sendIRC().action(currentChan,"Currently less than 2 URLs found");
             }
