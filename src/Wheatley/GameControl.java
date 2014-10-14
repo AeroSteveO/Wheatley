@@ -51,7 +51,7 @@ public class GameControl extends ListenerAdapter {
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
             String command = message.split(Global.commandPrefix)[1];
             
             if (command.equalsIgnoreCase("flush")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
@@ -89,11 +89,11 @@ public class GameControl extends ListenerAdapter {
                 }
             }
             
-            else if (command.toLowerCase().matches("set\\s[a-z\\|\\-\\`]\\s[0-9]+")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)) {
+            else if (command.toLowerCase().matches("set\\s[a-z\\|\\-\\`]+\\s[0-9]+")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)) {
                 String user = command.split(" ")[1];
                 String score = command.split(" ")[2];
                 scores.setScore(user, Integer.parseInt(score));
-                event.respond(user+"'s current score is: "+scores.getScore(user));
+                event.getBot().sendIRC().message(event.getChannel().getName(),user+" currently has $"+scores.getScore(user));
             }
         }
     }
