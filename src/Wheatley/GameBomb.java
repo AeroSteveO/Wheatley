@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Objects.TimedWaitForQueue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class GameBomb extends ListenerAdapter {
     int time = 10;  // Seconds
     String blockedChan = "#dtella";
     ArrayList<String> colorls = null;
+    int prize = 70; // $
     
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
@@ -54,28 +56,34 @@ public class GameBomb extends ListenerAdapter {
             }
             colorlist = colorlist + colours.get(colours.size()-1);
 //            }
-            DateTime dt = new DateTime();
-            DateTime end = dt.plusSeconds(time);
+            int key = (int) (Math.random()*100000+1);
+//            DateTime dt = new DateTime();
+//            DateTime end = dt.plusSeconds(time);
             String solution = colours.get((int) (Math.random()*colours.size()-1));
             event.respond("You recieved the bomb. You have " + time + " seconds to defuse it by cutting the right cable." + Colors.BOLD + " Choose your destiny:" + Colors.NORMAL);
             event.getBot().sendIRC().message(event.getChannel().getName(),"Wire colors include: " + colorlist);
-            WaitForQueue queue = new WaitForQueue(event.getBot());
+            TimedWaitForQueue queue = new TimedWaitForQueue(event, time, key);
             while (true){
                 MessageEvent CurrentEvent = queue.waitFor(MessageEvent.class);
-                dt = new DateTime();
-                if (dt.isAfter(end)){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),"the bomb explodes in front of " + player + ". Seems like you did not even notice the big beeping suitcase.");
+//                dt = new DateTime();
+                if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
+                    int moneyLoss = 50;
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"the bomb explodes in front of " + player + ". Seems like you did not even notice the big beeping suitcase. You lose $"+moneyLoss);
                     colours.clear();
+                    GameControl.scores.subtractScore(player, moneyLoss);
                     queue.close();
                 }
-                else if (CurrentEvent.getMessage().equalsIgnoreCase(solution)&&CurrentEvent.getUser().getNick().equalsIgnoreCase(player)){
-                    event.getBot().sendIRC().message(event.getChannel().getName(), player + " defused the bomb. Seems like he was wise enough to buy a defuse kit." );
+                else if (CurrentEvent.getMessage().equalsIgnoreCase(solution)&&CurrentEvent.getUser().getNick().equalsIgnoreCase(player)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
+                    event.getBot().sendIRC().message(event.getChannel().getName(), player + " defused the bomb. Seems like he was wise enough to buy a defuse kit. You win $"+prize );
                     colours.clear();
+                    GameControl.scores.addScore(player,prize);
                     queue.close();
                 }
-                else if (!CurrentEvent.getMessage().equalsIgnoreCase(solution)&&CurrentEvent.getUser().getNick().equalsIgnoreCase(player)) {
-                    event.getBot().sendIRC().message(event.getChannel().getName(),"The bomb explodes in " + player + "'s hands. You lost your life.");
+                else if (!CurrentEvent.getMessage().equalsIgnoreCase(solution)&&CurrentEvent.getUser().getNick().equalsIgnoreCase(player)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
+                    int moneyLoss = 20;
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"The bomb explodes in " + player + "'s hands. You lost your life and - even worse - $"+moneyLoss+". The right color would have been "+Colors.BOLD+Colors.RED+solution);
                     colours.clear();
+                    GameControl.scores.subtractScore(player, moneyLoss);
                     queue.close();
                 }
             }
