@@ -69,20 +69,20 @@ public class GameControl extends ListenerAdapter {
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
                 }
                 else
-                    event.respond("Your current score is: "+userScore);
+                    event.respond("You currently have $"+userScore);
             }
             
-            else if (command.matches("money\\s[a-z\\|]+")){ // Get someone elses current score
+            else if (command.toLowerCase().matches("money\\s[a-z\\|]+")){ // Get someone elses current score
                 String user = command.split(" ")[1];
                 int userScore = scores.getScore(user);
                 if (userScore < 0){
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
                 }
                 else
-                    event.respond(user+"'s current score is: "+userScore);
+                    event.respond(user+" currently has $"+userScore);
             }
             
-            else if(command.equalsIgnoreCase("list games")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+            else if(command.toLowerCase().equalsIgnoreCase("list games")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
                 ArrayList<String> descriptions = Global.activeGame.getCurrentGameDescriptions();
                 for (int i=0;i<descriptions.size();i++){
                     event.getBot().sendIRC().message(event.getChannel().getName(),descriptions.get(i));
