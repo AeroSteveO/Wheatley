@@ -40,7 +40,7 @@ public class Global {
     public static String commandPrefix = "!";              // Not implemented yet in other functions
     public static GameArray activeGame = new GameArray();  // To be implemented in games
     public static String phrasePrefix = new String();      //mainNick+", ";
-    public static ArrayList<String> botAdmin = new ArrayList<>();
+    public static ArrayList<String> botAdmin = getBotAdmins();
     
     public static String getTimestamp(Event event){
         TimeZone tz = TimeZone.getDefault();
@@ -57,5 +57,12 @@ public class Global {
         String tzShortString = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
         String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
         return outputTime;
+    }
+        private static ArrayList<String> getBotAdmins() {
+        ArrayList<String> admins = new ArrayList<>();
+        admins.add(botOwner);
+        admins.add("theDoctor");
+        admins.add("burg");
+        return(admins);
     }
 }
