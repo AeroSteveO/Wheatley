@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.pircbotx.Colors;
 
 /**
@@ -49,6 +51,7 @@ public class Game {
     private String key;
     private ArrayList<Integer> chosenNumArray;
     private TimedWaitForQueue gameQueue;
+    DateTime startTime;// = new DateTime();
     
     public Game(String channel, String mod, String type) throws FileNotFoundException{
         this.channelName = channel;
@@ -57,6 +60,7 @@ public class Game {
         this.gameType = type;
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
+        this.startTime = new DateTime();
     }
     public Game(String channel, String game, String mod, int time) throws FileNotFoundException{
         this.channelName=channel;
@@ -65,12 +69,14 @@ public class Game {
         this.timeLimit = time;
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
+        this.startTime = new DateTime();
     }
     public Game(String channel, String game, String mod, int length, int charSize, int time) throws FileNotFoundException{
         this.channelName=channel;
         this.gameType = game;
         this.modifier = mod;
         this.timeLimit = time;
+        this.startTime = new DateTime();
         if (mod.equalsIgnoreCase("int array")){
             this.chosenNumArray = createIntArray(length,charSize);
             //this.chosenNum = convertIntegers();
@@ -103,6 +109,7 @@ public class Game {
     private static int createInt(int charSize){
         return (int) (Math.random()*charSize);
     }
+    
     private static int createInt(int lowerBound,int upperBound){
         return (int) (Math.random()*upperBound)+lowerBound;
     }
@@ -115,6 +122,7 @@ public class Game {
         int finalInt = Integer.parseInt(converted);
         return finalInt;
     }
+    
     public String convertIntToString(){
         String converted = "";
         for (int i=0;i<this.chosenNumArray.size();i++){
@@ -122,6 +130,12 @@ public class Game {
         }
         return converted;
     }
+    
+    public int getTimeSpent(){
+        Period timeElapsed = new Period(this.startTime, new DateTime());
+        return timeElapsed.getSeconds();
+    }
+    
     public String getGameType(){
         return(this.gameType);
     }
