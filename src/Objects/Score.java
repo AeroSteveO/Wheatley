@@ -143,6 +143,12 @@ public class Score implements Comparable<Score> {
             this.saveToJSON();
         }
         
+        public void addScore(String nick, int v, int x1, int x2){
+            v += v - (v * x1 / x2) ;
+            getScoreObj(nick).add(v);
+            this.saveToJSON();
+        }
+        
         public void subtractScore(String nick, int toSubtract){
             getScoreObj(nick).subtract(toSubtract);
             this.saveToJSON();
@@ -174,6 +180,12 @@ public class Score implements Comparable<Score> {
                 }
             }
             return false;
+        }
+        
+        public void addUser(String nick){
+            if (!containsUser(nick)){
+                this.add(new Score(nick,baseScore));
+            }
         }
         
         public Score getScoreObj(String nick){
