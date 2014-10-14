@@ -34,7 +34,7 @@ public class GameSlots extends ListenerAdapter {
                 String slotString = "";
                 
                 for (int i=0;i<3;i++){
-                    slots.add(slotWords.get((int) (Math.random()*slotWords.size()-1)));
+                    slots.add(slotWords.get((int) (Math.random()*slotWords.size())));
                     slotString = slotString +"("+slots.get(i)+") ";
                 }
                 
@@ -55,7 +55,7 @@ public class GameSlots extends ListenerAdapter {
                     GameControl.scores.addScore(event.getUser().getNick(), prizes.get(0));
                 }
                 
-                else{
+                else if (slots.get(0).equalsIgnoreCase(slots.get(1))||slots.get(1).equalsIgnoreCase(slots.get(2))){
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "Congratulations "+event.getUser().getNick()+" you won $"+prizes.get(1));
                     GameControl.scores.addScore(event.getUser().getNick(), prizes.get(1));
                 }
@@ -79,6 +79,9 @@ public class GameSlots extends ListenerAdapter {
         slotWords.add("Citron");
         slotWords.add("Orange");
         slotWords.add("Banana");
+        slotWords.add("Grape");
+        slotWords.add("Lemon");
+        slotWords.add("Sun");
         slotWords.add("1337");
         return slotWords;
     }
