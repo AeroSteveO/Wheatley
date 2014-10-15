@@ -561,7 +561,6 @@ companion
 company
 compare
 comparison
-compe
 competition
 complement
 complete
@@ -1822,7 +1821,6 @@ mouse
 mouth
 move
 movement
-mrs.
 much
 mud
 murder
