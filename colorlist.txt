@@ -57,7 +57,6 @@ Diamond
 Dirt
 Ebony
 Emerald
-Eminence
 Eucalyptus
 Fallow
 Fuchsia
@@ -167,5 +166,4 @@ Wenge
 Wheat
 White
 Wisteria
-Xanadu
 Yellow
