@@ -23,20 +23,20 @@ import org.pircbotx.hooks.events.UserListEvent;
  * @author Stephen
  * ADMIN COMMANDS
  * Activate Command with:
- *      !set [user] [value]
+ *      !money [user] [value]
  *          sets the input users money to the input money value
  *      !save
  *          Saves everyones score to JSON and removes duplicate entries if any were made
  *      !list games
  *          Lists out the currently active games to the sender
- * 
+ *
  * USER COMMANDS
  * Activate Command with:
- *      !score
+ *      !money
  *          Responds with your score, if a game is currently running, it gives both
  *          your current score and your overall trivia score, otherwise it just gives
  *          your overall score
- *      !score [user]
+ *      !money [user]
  *          Responds with the users score, if a game is currently running, it gives both
  *          their current score and their overall trivia score, otherwise it just gives
  *          their overall score
@@ -72,7 +72,7 @@ public class GameControl extends ListenerAdapter {
                     event.respond("You currently have $"+userScore);
             }
             
-            else if (command.toLowerCase().matches("money\\s[a-z\\|]+")){ // Get someone elses current score
+            else if (command.toLowerCase().startsWith("money")&&command.split(" ").length>1){ // Get someone elses current score
                 String user = command.split(" ")[1];
                 int userScore = scores.getScore(user);
                 if (userScore < 0){
@@ -89,7 +89,7 @@ public class GameControl extends ListenerAdapter {
                 }
             }
             
-            else if (command.toLowerCase().matches("set\\s[a-z\\|\\-\\`]+\\s[0-9]+")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)) {
+            else if (command.toLowerCase().startsWith("money")&&command.split(" ").length>2&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)) {
                 String user = command.split(" ")[1];
                 String score = command.split(" ")[2];
                 scores.setScore(user, Integer.parseInt(score));
