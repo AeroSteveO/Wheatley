@@ -143,9 +143,9 @@ public class Score implements Comparable<Score> {
             this.saveToJSON();
         }
         
-        public int addScore(String nick, int v, int x1, int x2){
+        public int addScore(String nick, int v, int len, int x1, int x2){
             
-            v += v - (v * x1 / x2) ;
+            v += len - (v * x1 / x2) ;
             getScoreObj(nick).add(v);
             this.saveToJSON();
             
