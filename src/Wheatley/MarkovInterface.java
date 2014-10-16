@@ -111,7 +111,7 @@ public class MarkovInterface extends ListenerAdapter{
         }
         
         //Command Wheatley to save his lines
-        if ((message.equalsIgnoreCase("!save lines")||message.equalsIgnoreCase("!save all"))&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        if (message.equalsIgnoreCase("!save")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
             newLines = 0;
             borg.saveWords(markovFile);
         }
