@@ -60,7 +60,7 @@ public class GameControl extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (message.startsWith(Global.commandPrefix)&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
             String command = message.split(Global.commandPrefix)[1];
-            
+            String[] cmdSplit = command.split(" ");
             if (command.equalsIgnoreCase("flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
                 
             }
@@ -81,7 +81,7 @@ public class GameControl extends ListenerAdapter {
                     event.respond("You currently have $"+userScore);
             }
             
-            else if (command.toLowerCase().startsWith("money")&&command.split(" ").length==2){ // Get someone elses current score
+            else if (cmdSplit[0].equalsIgnoreCase("money")&&command.split(" ").length==2){ // Get someone elses current score
                 String user = command.split(" ")[1];
                 int userScore = scores.getScore(user);
                 if (userScore < 0){
@@ -100,7 +100,7 @@ public class GameControl extends ListenerAdapter {
                 }
             }
             
-            else if (command.toLowerCase().startsWith("money")&&command.split(" ").length==3
+            else if (cmdSplit[0].equalsIgnoreCase("money")&&command.split(" ").length==3
                     &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()) {
                 
                 String user = command.split(" ")[1];
@@ -125,7 +125,7 @@ public class GameControl extends ListenerAdapter {
                 }
             }
             
-            else if (command.toLowerCase().startsWith("give")&&command.split(" ").length==3) {
+            else if (cmdSplit[0].equalsIgnoreCase("give")&&command.split(" ").length==3) {
                 String sender = event.getUser().getNick();
                 String reciever = command.split(" ")[1];
                 String toGive = command.split(" ")[2];
@@ -160,7 +160,7 @@ public class GameControl extends ListenerAdapter {
                 }
             }
             
-            else if (command.toLowerCase().startsWith("merge")&&command.split(" ").length==3
+            else if (cmdSplit[0].equalsIgnoreCase("merge")&&command.split(" ").length==3
                     &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()) {
                 
                 String mergeThis = command.split(" ")[1];
