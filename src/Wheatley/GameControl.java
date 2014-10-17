@@ -61,11 +61,13 @@ public class GameControl extends ListenerAdapter {
         if (message.startsWith(Global.commandPrefix)&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
             String command = message.split(Global.commandPrefix)[1];
             
-            if (command.equalsIgnoreCase("flush")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+            if (command.equalsIgnoreCase("flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
                 
             }
             
-            else if (command.equalsIgnoreCase("save")&&Global.botAdmin.contains(event.getUser().getNick())){
+            else if (command.equalsIgnoreCase("save")
+                    &&(Global.botAdmin.contains(event.getUser().getNick())&&event.getUser().isVerified())){
+                
                 scores.removeDupes();
                 scores.saveToJSON();
             }
@@ -89,14 +91,18 @@ public class GameControl extends ListenerAdapter {
                     event.respond(user+" currently has $"+userScore);
             }
             
-            else if(command.toLowerCase().equalsIgnoreCase("list games")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+            else if(command.toLowerCase().equalsIgnoreCase("list games")
+                    &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
+                
                 ArrayList<String> descriptions = Global.activeGame.getCurrentGameDescriptions();
                 for (int i=0;i<descriptions.size();i++){
                     event.getBot().sendIRC().message(event.getChannel().getName(),descriptions.get(i));
                 }
             }
             
-            else if (command.toLowerCase().startsWith("money")&&command.split(" ").length==3&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)) {
+            else if (command.toLowerCase().startsWith("money")&&command.split(" ").length==3
+                    &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()) {
+                
                 String user = command.split(" ")[1];
                 String score = command.split(" ")[2];
                 int userCurrentScore = scores.getScore(user);
@@ -154,7 +160,9 @@ public class GameControl extends ListenerAdapter {
                 }
             }
             
-            else if (command.toLowerCase().startsWith("merge")&&command.split(" ").length==3&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)) {
+            else if (command.toLowerCase().startsWith("merge")&&command.split(" ").length==3
+                    &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()) {
+                
                 String mergeThis = command.split(" ")[1];
                 String mergeIntoThis = command.split(" ")[2];
                                 

@@ -29,7 +29,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
         if (message.toLowerCase().startsWith("!hack")){
-            if(event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser())){
+            if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
                 String[] kill = message.split(" ");
                 event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Wheatley has killed you in his attempt to plug your brain into a computer");
             }
@@ -38,7 +38,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
             }
         }
         if (message.toLowerCase().startsWith("!smash")){
-            if(event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser())){//||event.getUser().getNick().equals("fluke42")
+            if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){//||event.getUser().getNick().equals("fluke42")
                 String[] kill = message.split(" ");
                 event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Aristotle vs MASHY-SPIKE-PLATE");
             }
@@ -52,9 +52,6 @@ public class WheatleyChatStuff extends ListenerAdapter {
         if (message.equalsIgnoreCase("!Wheatley"))
             event.getBot().sendIRC().message(event.getChannel().getName(),"My command list --> http://bit.ly/QWAKdE");
         
-//        if (message.equalsIgnoreCase("!Wheatley?"))
-//            event.getBot().sendIRC().message(event.getChannel().getName(),"Okay. What you're doing there is jumping. You just... you just jumped. But nevermind.");
-        
         if (message.equalsIgnoreCase("Oh. Hi."))//||message.equalsIgnoreCase("potato?")
             event.getBot().sendIRC().message(event.getChannel().getName(),"Oh. Hi. So. How are you holding up? BECAUSE I'M A POTATO.");
         
@@ -63,13 +60,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
         
         if (Pattern.matches(Global.mainNick+",?\\s+(youre|you're|you\\s+are)\\s+a?\\s*moron.*",message))
             event.getBot().sendIRC().message(event.getChannel().getName(),"I AM NOT A MORON");
-        
-//        if (message.equalsIgnoreCase("Wheatley?"))
-//            event.respond("He's not just a regular moron. He's the product of the greatest minds of a generation working together with the express purpose of building the dumbest moron who ever lived. | My command list --> http://bit.ly/QWAKdE");
-        
-        //if (message.equalsIgnoreCase("GLaDOS?"))
-        //    event.respond("What a nasty piece of work she was, honestly. Like a proper maniac. You know who ended up, do you know who ended up taking her down in the end? You're not going to believe this. A human. I know! I know, I wouldn't have believe it either.");
-        
+                
         if ((message.equalsIgnoreCase("!space"))||(message.equalsIgnoreCase("SPACE"))) {
             switch((int) (Math.random()*3+1)) {
                 case 1:

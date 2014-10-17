@@ -45,7 +45,9 @@ public class Logger extends ListenerAdapter{
         if (!event.getUser().getNick().equalsIgnoreCase(event.getBot().getUserBot().getNick()))
             log.add("<"+event.getUser().getNick()+"> "+message);
         
-        if(log.size()>100||(message.equalsIgnoreCase("!save")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner))){
+        if(log.size()>100||(message.equalsIgnoreCase("!save")
+                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()))){
+            
             success = saveToFile(log);
             if(!success)
                 event.getBot().sendIRC().notice(Global.botOwner,"Log file failed to save");

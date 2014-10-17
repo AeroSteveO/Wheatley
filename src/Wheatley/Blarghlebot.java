@@ -98,7 +98,7 @@ public class Blarghlebot extends ListenerAdapter {
                 event.getChannel().send().kick(event.getUser(), "you += dead");
             
             if (message.toLowerCase().startsWith("!troll")){
-                if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser())||event.getUser().getNick().equalsIgnoreCase("Blarghedy")){
+                if((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
                     String[] kill = message.split(" ");
                     event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"YOO GAWT TROLLED " + kill[1]);
                 }
@@ -158,8 +158,6 @@ public class Blarghlebot extends ListenerAdapter {
             // REGEX for creating IRC quote links
             if (Pattern.matches("![0-9]+", message))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
-            
-            
             
             //OTHER Functions
             if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")&&message.endsWith("?"))){

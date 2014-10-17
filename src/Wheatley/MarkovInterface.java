@@ -70,7 +70,9 @@ public class MarkovInterface extends ListenerAdapter{
         }
         
         //||event.getChannel().isOwner(event.getUser())
-        if (message.toLowerCase().startsWith("!set chance ")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))){
+        if (message.toLowerCase().startsWith("!set chance ")
+                &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified())){
+            
             String[] chanceSplit = message.split(" ");
             int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
             if (inputChance>0)
@@ -111,7 +113,9 @@ public class MarkovInterface extends ListenerAdapter{
         }
         
         //Command Wheatley to save his lines
-        if (message.equalsIgnoreCase("!save")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        if (message.equalsIgnoreCase("!save")
+                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
+            
             newLines = 0;
             borg.saveWords(markovFile);
         }

@@ -48,6 +48,7 @@ public class Definitions extends ListenerAdapter {
     String definitionsFileName = "definitions.txt";
     String definitionLogName   = "definitionLog.txt";
     
+    @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
@@ -90,7 +91,10 @@ public class Definitions extends ListenerAdapter {
         }
         
         // ADDING DEFINITIONS
-        if((message.startsWith("!adddef")||message.startsWith("!addef"))&&message.split("@").length==2&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&!containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+        if((message.startsWith("!adddef")||message.startsWith("!addef"))&&message.split("@").length==2
+                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())
+                &&!containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+            
             String addition = message.split(" ",2)[1];
             
             try{
@@ -112,10 +116,16 @@ public class Definitions extends ListenerAdapter {
             definitions = getDefinitions();
             words = getWordsFromDefs(definitions);
         }
-        else if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&(message.startsWith("!adddef")||message.startsWith("!addef"))&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+        else if ((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())
+                &&(message.startsWith("!adddef")||message.startsWith("!addef"))
+                &&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+            
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition already exists");
         }
-        else if((message.startsWith("!adddef")||message.startsWith("!addef"))&&!(message.split("@").length==2)&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        else if((message.startsWith("!adddef")||message.startsWith("!addef"))
+                &&!(message.split("@").length==2)
+                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
+            
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: !adddef word or phrase @ definition phrase");
         }
         else if (message.startsWith("!adddef")||message.startsWith("!addef")){
@@ -123,7 +133,10 @@ public class Definitions extends ListenerAdapter {
         }
         
         // REMOVING DEFINITIONS
-        if((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&containsIgnoreCase(words,message.split(" ",2)[1])&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        if((message.startsWith("!deldef")||message.startsWith("!deletedef"))
+                &&containsIgnoreCase(words,message.split(" ",2)[1])
+                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
+            
             int index = indexOfIgnoreCase(words, message.split(" ",2)[1]);
             try{
                 File log = new File(definitionLogName);
@@ -155,7 +168,9 @@ public class Definitions extends ListenerAdapter {
             }
             
         }
-        else if ((message.startsWith("!deldef")||message.startsWith("!deletedef"))&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        else if ((message.startsWith("!deldef")||message.startsWith("!deletedef"))
+                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
+            
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition not found");
         }
         else if (message.startsWith("!deldef")||message.startsWith("!deletedef")){
@@ -163,7 +178,10 @@ public class Definitions extends ListenerAdapter {
         }
         
         // Updating definitions already in the db
-        if((message.startsWith("!updatedef")||message.startsWith("!updef"))&&message.split("@").length==2&&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        if((message.startsWith("!updatedef")||message.startsWith("!updef"))&&message.split("@").length==2
+                &&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())
+                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
+            
             int index = indexOfIgnoreCase(words, message.split(" ",2)[1].split("@")[0].trim());
             try{
                 File log = new File(definitionLogName);
@@ -195,7 +213,9 @@ public class Definitions extends ListenerAdapter {
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
             }
         }
-        else if ((message.startsWith("!updatedef")||message.startsWith("!updef"))&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        else if ((message.startsWith("!updatedef")||message.startsWith("!updef"))
+                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
+            
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed update command: !updef word phrase @ definition phrase");
         }
         else if (message.startsWith("!updatedef")||message.startsWith("!updef")){
@@ -217,7 +237,7 @@ public class Definitions extends ListenerAdapter {
         }
     }
     private ArrayList<String> getWordsFromDefs(ArrayList<String> definitions){
-        ArrayList<String> words = new ArrayList<String>();
+        ArrayList<String> words = new ArrayList<>();
         for (int i=0;i<definitions.size();i++){
             words.add(definitions.get(i).split("@")[0].trim());
         }
