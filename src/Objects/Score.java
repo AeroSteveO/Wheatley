@@ -174,6 +174,13 @@ public class Score implements Comparable<Score> {
             for (int i=0;i<toBeMerged.size();i++){
                 this.addScore(toBeMerged.get(i).user, toBeMerged.get(i).getScore());
             }
+            this.saveToJSON();
+        }
+        
+        public void merge(String mergeThis, String mergeIntoThis){
+            this.addScore(mergeIntoThis, this.getScore(mergeThis)-baseScore);
+            this.getScoreObj(mergeThis).setScore(baseScore);
+            this.saveToJSON();
         }
         
         public boolean containsUser(String nick){
@@ -199,6 +206,16 @@ public class Score implements Comparable<Score> {
             }
             this.add(new Score(nick,baseScore));
             return (this.getScoreObj(nick));
+        }
+        
+        public int getScoreIdx(String nick){
+            for(int i = 0; i < this.size(); i++) {
+                if (this.get(i).user.equalsIgnoreCase(nick)) {
+                    return (i);
+                }
+            }
+            this.add(new Score(nick,baseScore));
+            return (this.getScoreIdx(nick));
         }
         
         public int getScore(String nick){
