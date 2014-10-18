@@ -137,9 +137,50 @@ public class MatrapterChat extends ListenerAdapter {
                 butt.add("   \\      |      /");
                 butt.add("    Y     |     Y");
                 butt.add("    |     I     |");
-                for (int i=0;i<butt.size()-1;i++)
+                for (int i=0;i<butt.size();i++)
                     event.getBot().sendIRC().message(event.getUser().getNick(),butt.get(i));
             }
+            
+            if (message.equalsIgnoreCase("!flag")||message.equalsIgnoreCase("!america")
+                    ||message.equalsIgnoreCase("!merica")||message.equalsIgnoreCase("!merika")){
+                ArrayList<String> a = getFlag();
+                for (int i=0;i<a.size();i++)
+                    event.getBot().sendIRC().message(event.getUser().getNick(),a.get(i));
+            }
+            
+            if (message.toLowerCase().startsWith("give ")&&(message.toLowerCase().split(" ",3)[2].toLowerCase().equalsIgnoreCase("some freedom"))){
+                
+                String user = message.split(" ")[1];
+                if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(user))) {
+
+                    ArrayList<String> a = getFlag();
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),user+" has been PMed the American flag");
+                    
+                    for (int i=0;i<a.size();i++)
+                        event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(user).getNick(),a.get(i));
+                }
+                else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"user not in channel");
+                }
+            }
         }
+    }
+    
+    public ArrayList<String> getFlag() {
+        ArrayList<String> a = new ArrayList();
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+"* * * * * * * * * * "+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+" * * * * * * * * *  "+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+"* * * * * * * * * * "+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+" * * * * * * * * *  "+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+"* * * * * * * * * * "+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+" * * * * * * * * *  "+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+"::::::::::::::::::::;::::"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+"* * * * * * * * * * "+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        return a;
     }
 }
