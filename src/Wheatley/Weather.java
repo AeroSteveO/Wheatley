@@ -93,7 +93,7 @@ public class Weather extends ListenerAdapter{
         location = null;
         String message = Colors.removeFormattingAndColors(event.getMessage().toLowerCase());
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("LilWayne")).contains(event.getChannel())) {
-            if (message.equalsIgnoreCase("!nuke local cache")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+            if (message.equalsIgnoreCase("!nuke local cache")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 localCache.clear();
                 event.respond("Local Cache Nuked");
             }
