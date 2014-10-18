@@ -18,7 +18,6 @@ import org.pircbotx.hooks.events.ModeEvent;
 import org.pircbotx.hooks.events.RemoveChannelBanEvent;
 import org.pircbotx.hooks.events.ServerResponseEvent;
 import org.pircbotx.hooks.events.SetChannelBanEvent;
-import org.pircbotx.hooks.events.UserModeEvent;
 
 /**
  *
@@ -55,14 +54,16 @@ class KickBanWatcher extends ListenerAdapter {
             event.respond(Colors2.getRandomColorAndBackground()+"COOL STUFF"+Colors.NORMAL+Colors2.getRandomColor()+" IS COOL");
         }
     }
-//    @Override
-//    public void onJoin(JoinEvent event){
-//        event.getBot().sendRaw().rawLine("mode "+event.getChannel().getName()+" +b");
-//        int start = ReplyConstants.RPL_BANLIST;
-//        System.out.println(start);
-//        int end = ReplyConstants.RPL_ENDOFBANLIST;
-//        System.out.println(end);
-//    }
+    
+    @Override
+    public void onJoin(JoinEvent event){
+        event.getBot().sendRaw().rawLine("mode "+event.getChannel().getName()+" +b");
+        int start = ReplyConstants.RPL_BANLIST;
+        System.out.println(start);
+        int end = ReplyConstants.RPL_ENDOFBANLIST;
+        System.out.println(end);
+    }
+    
     @Override
     public void onKick(KickEvent event) {
         String hostmask = event.getUser().getHostmask();
@@ -73,7 +74,8 @@ class KickBanWatcher extends ListenerAdapter {
         event.getBot().sendIRC().message(event.getChannel().getName(), time);//time.toString());
     }
     
-    public void onBanAdd(SetChannelBanEvent event) {
+    @Override
+    public void onSetChannelBan(SetChannelBanEvent event) {
         String hostmask = event.getUser().getHostmask();
         String banner = event.getUser().getNick();
         String channel = event.getChannel().getName();
@@ -82,7 +84,9 @@ class KickBanWatcher extends ListenerAdapter {
         event.getBot().sendIRC().message(channel,"Ban added: "+userBans.getBan(hostmask, channel).getSimpleInfo());
         System.out.println("BAN SET");
     }
-    public void onBanRemove(RemoveChannelBanEvent event) {
+    
+    @Override
+    public void onRemoveChannelBan(RemoveChannelBanEvent event) {
         String hostmask = event.getUser().getHostmask();
         String banner = event.getUser().getNick();
         String channel = event.getChannel().getName();
@@ -91,9 +95,12 @@ class KickBanWatcher extends ListenerAdapter {
         userBans.safeRemove(hostmask, channel);
         System.out.println("BAN REMOVED");
     }
-    public void onModeChange(ModeEvent event){
-        System.out.println("BAN REMOVED");
+    
+    @Override
+    public void onMode(ModeEvent event){
+        System.out.println("MODE CHANGED");
     }
+    
     @Override
     public void onServerResponse(ServerResponseEvent event) {
         try{
