@@ -142,14 +142,14 @@ public class Score implements Comparable<Score> {
             getScoreObj(nick).add(toAdd);
             this.saveToJSON();
         }
-        
-        public int addScore(String nick, int v, int len, int x1, int x2){
+                
+        public int addScore(String nick, int basePrize, int wordLength, int x1, int x2){
             
-            v += len - (v * x1 / x2) ;
-            getScoreObj(nick).add(v);
+            basePrize += wordLength - (wordLength * x1 / x2) ;
+            getScoreObj(nick).add(basePrize);
             this.saveToJSON();
             
-            return v;
+            return basePrize;
         }
         
         public void subtractScore(String nick, int toSubtract){
