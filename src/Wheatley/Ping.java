@@ -33,6 +33,7 @@ import org.w3c.dom.Element;
  *      !ping check LAN
  */
 public class Ping extends ListenerAdapter {
+    
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());

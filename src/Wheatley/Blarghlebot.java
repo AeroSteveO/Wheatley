@@ -40,6 +40,7 @@ import org.pircbotx.hooks.events.*;
 public class Blarghlebot extends ListenerAdapter {
     int shoot = 0;
     static String poop = "null";
+    
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());

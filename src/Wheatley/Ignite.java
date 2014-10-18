@@ -26,6 +26,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  */
 public class Ignite extends ListenerAdapter {
+    
     @Override
     public void onMessage(MessageEvent event) {
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("matrapter")).contains(event.getChannel())) {

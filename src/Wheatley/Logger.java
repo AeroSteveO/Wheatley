@@ -39,6 +39,7 @@ public class Logger extends ListenerAdapter{
     ArrayList<String> log = new ArrayList<>();
     Boolean success = false;
     
+    @Override
     public void onMessage(MessageEvent event) throws IOException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
@@ -56,10 +57,13 @@ public class Logger extends ListenerAdapter{
             log.clear();
         }
     }
+    
+    @Override
     public void onAction(ActionEvent event) {
         String action = Colors.removeFormattingAndColors(event.getMessage());
         log.add("* "+event.getUser().getNick()+" "+action);
     }
+    
     private Boolean saveToFile(ArrayList<String> log) throws IOException {
         Boolean isSaved = false;
         File file =new File("WheatleyLogs.plog");

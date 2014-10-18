@@ -13,7 +13,6 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.SimpleEmail;
 import org.pircbotx.Colors;
-import static org.pircbotx.Colors.removeFormattingAndColors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.w3c.dom.Document;
@@ -29,6 +28,7 @@ import org.w3c.dom.NodeList;
  * 
  */
 public class AutodlText extends ListenerAdapter {
+    
         @Override
         public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());        

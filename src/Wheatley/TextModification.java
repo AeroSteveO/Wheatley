@@ -18,6 +18,8 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class TextModification extends ListenerAdapter{
     List<String> ColorList = getColorList();
+    
+    @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (!event.getBot().getUserChannelDao().userExists("BlarghleBot")&&!event.getChannel().getName().equals("#dtella")) {

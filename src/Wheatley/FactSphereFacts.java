@@ -24,6 +24,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class FactSphereFacts extends ListenerAdapter {
     ArrayList<String> quotels = getQuoteList();
+    
     @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());

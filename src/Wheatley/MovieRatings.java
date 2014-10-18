@@ -46,6 +46,7 @@ public class MovieRatings extends ListenerAdapter {
     boolean wideSearch = false;
     private String key = "***REMOVED***";
     
+    @Override
     public void onMessage(MessageEvent event) throws Exception {
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SRSBSNS")).contains(event.getChannel())) {
             String message = Colors.removeFormattingAndColors(event.getMessage().trim());

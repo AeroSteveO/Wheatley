@@ -8,16 +8,12 @@ package Wheatley;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-import org.w3c.dom.Document;
 
 /**
  *

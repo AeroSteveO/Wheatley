@@ -32,9 +32,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          random insult generated from one of the built in methods
  */
 public class Insult extends ListenerAdapter {
-//    ArrayList<String> first = shakespeareFront();
-//    ArrayList<String> mid = shakespeareMid();
-//    ArrayList<String> ending = shakespeareEnd();
+
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());

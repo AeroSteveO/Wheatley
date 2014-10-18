@@ -31,6 +31,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class BadWords extends ListenerAdapter{
     static ArrayList<String> badwords = null;
+    
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
