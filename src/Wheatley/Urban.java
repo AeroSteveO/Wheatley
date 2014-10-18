@@ -82,12 +82,12 @@ public class Urban extends ListenerAdapter {
                         }
                     }
                 }
-                if (message.toLowerCase().matches("!set ucall [0-9]*")){
+                if (message.toLowerCase().matches("!set ucall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
                     maxLog = Integer.parseInt(message.split(" ")[2]);
                     long sec = maxTime/1000;
                     event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
                 }
-                if (message.toLowerCase().matches("!set utime [0-9]*")){
+                if (message.toLowerCase().matches("!set utime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
                     maxTime = Integer.parseInt(message.split(" ")[2])*1000;
                     long sec = maxTime/1000;
                     event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
