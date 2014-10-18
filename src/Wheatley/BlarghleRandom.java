@@ -24,6 +24,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Responds with a random action to the user who gave the command
  */
 public class BlarghleRandom extends ListenerAdapter {
+    
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
