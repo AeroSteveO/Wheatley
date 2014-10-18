@@ -53,6 +53,7 @@ public class Definitions extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
         if (message.equalsIgnoreCase("!randef")||message.equalsIgnoreCase("!randdef")){
+            
             int randNum = (int) (Math.random()*definitions.size()-1);
             event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+definitions.get(randNum).split("@")[0].trim()+": "+Colors.NORMAL+definitions.get(randNum).split("@")[1].trim());
         }
@@ -74,6 +75,7 @@ public class Definitions extends ListenerAdapter {
         if (message.toLowerCase().startsWith("tell ")&&message.toLowerCase().split(" ")[2].toLowerCase().startsWith("about")){
             String user = message.split(" ")[1];
             if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(user))) {
+                
                 //If the user is in the same channel as the summon
                 String defWord = message.split("about")[1].trim();//.split(" ",2)[2];
                 if (containsIgnoreCase(words,defWord)){
@@ -116,18 +118,21 @@ public class Definitions extends ListenerAdapter {
             definitions = getDefinitions();
             words = getWordsFromDefs(definitions);
         }
+        
         else if ((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())
                 &&(message.startsWith("!adddef")||message.startsWith("!addef"))
                 &&containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
             
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition already exists");
         }
+        
         else if((message.startsWith("!adddef")||message.startsWith("!addef"))
                 &&!(message.split("@").length==2)
                 &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
             
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: !adddef word or phrase @ definition phrase");
         }
+        
         else if (message.startsWith("!adddef")||message.startsWith("!addef")){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
         }
@@ -168,11 +173,13 @@ public class Definitions extends ListenerAdapter {
             }
             
         }
+        
         else if ((message.startsWith("!deldef")||message.startsWith("!deletedef"))
                 &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
             
             event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition not found");
         }
+        
         else if (message.startsWith("!deldef")||message.startsWith("!deletedef")){
             event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
         }
