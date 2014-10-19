@@ -61,8 +61,10 @@ public class GameControl extends ListenerAdapter {
         if (message.startsWith(Global.commandPrefix)&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
-            if (command.equalsIgnoreCase("flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
-                
+            if (command.equalsIgnoreCase("flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner))){
+                if (event.getUser().isVerified()){
+                    
+                }
             }
             
             else if (command.equalsIgnoreCase("save")
@@ -91,37 +93,39 @@ public class GameControl extends ListenerAdapter {
                     event.respond(user+" currently has $"+userScore);
             }
             
-            else if(command.toLowerCase().equalsIgnoreCase("list games")
-                    &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
-                
-                ArrayList<String> descriptions = Global.activeGame.getCurrentGameDescriptions();
-                for (int i=0;i<descriptions.size();i++){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),descriptions.get(i));
+            else if(command.toLowerCase().equalsIgnoreCase("list games")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                if (event.getUser().isVerified()){
+                    
+                    ArrayList<String> descriptions = Global.activeGame.getCurrentGameDescriptions();
+                    for (int i=0;i<descriptions.size();i++){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),descriptions.get(i));
+                    }
                 }
             }
             
-            else if (cmdSplit[0].equalsIgnoreCase("money")&&command.split(" ").length==3
-                    &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()) {
-                
-                String user = command.split(" ")[1];
-                String score = command.split(" ")[2];
-                int userCurrentScore = scores.getScore(user);
-                
-                if (userCurrentScore < 0){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
-                }
-                
-                else if (!score.matches("[0-9]+")){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Input number must be an integer");
-                }
-                
-                else if(score.matches("\\-[0-9]+")){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(),"You cannot give a user a negative score");
-                }
-                
-                else{
-                    scores.setScore(user, Integer.parseInt(score));
-                    event.getBot().sendIRC().message(event.getChannel().getName(),user+" currently has $"+scores.getScore(user));
+            else if (cmdSplit[0].equalsIgnoreCase("money")&&command.split(" ").length==3&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                if(event.getUser().isVerified()) {
+                    
+                    String user = command.split(" ")[1];
+                    String score = command.split(" ")[2];
+                    int userCurrentScore = scores.getScore(user);
+                    
+                    if (userCurrentScore < 0){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
+                    }
+                    
+                    else if (!score.matches("[0-9]+")){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Input number must be an integer");
+                    }
+                    
+                    else if(score.matches("\\-[0-9]+")){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"You cannot give a user a negative score");
+                    }
+                    
+                    else{
+                        scores.setScore(user, Integer.parseInt(score));
+                        event.getBot().sendIRC().message(event.getChannel().getName(),user+" currently has $"+scores.getScore(user));
+                    }
                 }
             }
             
@@ -160,22 +164,23 @@ public class GameControl extends ListenerAdapter {
                 }
             }
             
-            else if (cmdSplit[0].equalsIgnoreCase("merge")&&command.split(" ").length==3
-                    &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()) {
-                
-                String mergeThis = command.split(" ")[1];
-                String mergeIntoThis = command.split(" ")[2];
-                                
-                if (scores.getScore(mergeThis)<1){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), mergeThis+": USER NOT FOUND");
-                }
-                else if (scores.getScore(mergeIntoThis)<1){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), mergeIntoThis+": USER NOT FOUND");
-                }
-                
-                else{
-                    scores.merge(mergeThis,mergeIntoThis);
-                    event.getBot().sendIRC().message(event.getChannel().getName(),mergeIntoThis+" currently has $"+scores.getScore(mergeIntoThis));
+            else if (cmdSplit[0].equalsIgnoreCase("merge")&&command.split(" ").length==3&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                if (event.getUser().isVerified()) {
+                    
+                    String mergeThis = command.split(" ")[1];
+                    String mergeIntoThis = command.split(" ")[2];
+                    
+                    if (scores.getScore(mergeThis)<1){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), mergeThis+": USER NOT FOUND");
+                    }
+                    else if (scores.getScore(mergeIntoThis)<1){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), mergeIntoThis+": USER NOT FOUND");
+                    }
+                    
+                    else{
+                        scores.merge(mergeThis,mergeIntoThis);
+                        event.getBot().sendIRC().message(event.getChannel().getName(),mergeIntoThis+" currently has $"+scores.getScore(mergeIntoThis));
+                    }
                 }
             }
         }
