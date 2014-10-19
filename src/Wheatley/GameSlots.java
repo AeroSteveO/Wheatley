@@ -17,19 +17,48 @@ import org.pircbotx.hooks.events.MessageEvent;
  * Activate Command with:
  *      !slot
  *      !slots
- *          Plays a game of slots
- * 
+ *          Plays a game of slots with the base bet as the amount bet ($10)
+ *      !slot [bet value]
+ *      !slots [bet value]
+ *          Plays a game of slots using the input value as the mount bet
+ *
  */
 public class GameSlots extends ListenerAdapter {
-    ArrayList<Integer> prizes = getPrizeArray();
     ArrayList<String> slotWords = getSlotArray();
+    int baseBet = 10;
     
     @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (message.startsWith(Global.commandPrefix)){
             String command = message.split(Global.commandPrefix)[1].toLowerCase();
-            if (command.equalsIgnoreCase("slot")||command.equalsIgnoreCase("slots")){
+            String[] cmdSplit = command.split(" ");
+            if (cmdSplit[0].equalsIgnoreCase("slot")||cmdSplit[0].equalsIgnoreCase("slots")){
+                
+                int bet = baseBet;
+                
+                if (cmdSplit.length==2){
+                    
+                    if (cmdSplit[1].matches("[0-9]+")){
+                        bet = Integer.parseInt(cmdSplit[1]);
+                        
+                        if (bet>GameControl.scores.getScore(event.getUser().getNick())){
+                            event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to bet that much");
+                            return;
+                        }
+                    }
+                    
+                    else if(cmdSplit[1].matches("\\-[0-9]+")){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"You cannot bet on your own failure");
+                    }
+                    
+                    else{
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Input number must be an integer");
+                        return;
+                    }
+                }
+                ArrayList<Integer> prizes = getPrizeArray(bet);
+                
                 ArrayList<String> slots = new ArrayList<>();
                 String slotString = "";
                 
@@ -63,12 +92,18 @@ public class GameSlots extends ListenerAdapter {
         }
     }
     
-    private ArrayList<Integer> getPrizeArray() {
+    private ArrayList<Integer> getPrizeArray(int bet) {
+        
         ArrayList<Integer> prizes = new ArrayList<>();
-        prizes.add(-10);
-        prizes.add(30);
-        prizes.add(300);
+        prizes.add(-bet);
+        prizes.add(bet*3);
+        prizes.add(bet*30);
         prizes.add(1337);
+        
+        while(prizes.get(2)>prizes.get(3)){
+            prizes.set(3, (prizes.get(3)-4)*10+7);
+        }
+        
         return prizes;
     }
     private ArrayList<String> getSlotArray() {
