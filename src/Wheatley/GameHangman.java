@@ -75,6 +75,12 @@ public class GameHangman extends ListenerAdapter {
                             else{
                                 lives--;
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is incorrect. Lives left: " + lives );
+                                
+                                if(lives <= 0){
+                                    event.getBot().sendIRC().message(gameChan, "You've run out of lives! The word we looked for was " + Colors.BOLD + Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
+                                    running = false;
+                                    timedQueue.end();
+                                }
                             }
                         }
                         else if (Pattern.matches("[a-zA-Z]{1}", CurrentEvent.getMessage())){
@@ -90,7 +96,8 @@ public class GameHangman extends ListenerAdapter {
                             if (changed ==0){
                                 lives--;
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getMessage() + " is wrong or was already guessed. Lives left: " + lives );
-                                if(lives == 0){
+                                
+                                if(lives <= 0){
                                     event.getBot().sendIRC().message(gameChan, "You've run out of lives! The word we looked for was " + Colors.BOLD + Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
                                     running = false;
                                     timedQueue.end();
