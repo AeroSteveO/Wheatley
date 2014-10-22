@@ -73,10 +73,10 @@ public class MatrapterChat extends ListenerAdapter {
                 if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod"))
                     event.getBot().sendIRC().message(currentChan, "http://meatspin.cc");
                 if (message.equalsIgnoreCase("fuck")){
-                    int i = (int) (Math.random()*1000+1);
-                    if (i == 500)
+                    int i = (int) (Math.random()*500+1);
+                    if (i == 250)
                         event.getBot().sendIRC().message(currentChan, "a duck");
-                    if (i == 1000)
+                    if (i == 500)
                         event.getBot().sendIRC().message(currentChan, "a dog in the ass");
                     else
                         event.getBot().sendIRC().message(currentChan, "you");
