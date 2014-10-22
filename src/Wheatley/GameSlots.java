@@ -41,8 +41,6 @@ public class GameSlots extends ListenerAdapter {
                     
                     if (cmdSplit[1].matches("[0-9]+")){
                         bet = Integer.parseInt(cmdSplit[1]);
-                        
-                        
                     }
                     
                     else if(cmdSplit[1].matches("\\-[0-9]+")){
@@ -55,10 +53,12 @@ public class GameSlots extends ListenerAdapter {
                         return;
                     }
                 }
+                
                 if (bet>GameControl.scores.getScore(event.getUser().getNick())){
                     event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to bet that much");
                     return;
                 }
+                
                 ArrayList<Integer> prizes = getPrizeArray(bet);
                 System.out.println("SLOTS");
                 ArrayList<String> slots = new ArrayList<>();
@@ -113,6 +113,7 @@ public class GameSlots extends ListenerAdapter {
         
         return prizes;
     }
+    
     private ArrayList<String> getSlotArray() {
         ArrayList<String> slotWords = new ArrayList<>();
         slotWords.add("Apple");
