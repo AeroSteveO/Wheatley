@@ -45,12 +45,53 @@ public class BotControl extends ListenerAdapter{
     @Override
     public void onMessage(MessageEvent event) throws InterruptedException, Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        
+        String[] msgSplit = message.split(" ");
         if (message.equalsIgnoreCase("!flush")&&(event.getUser().getNick().equals(Global.botOwner)&&event.getUser().isVerified())){
             
             Global.channels.removeDupes();
             Blarghlebot.poop = "null";
             BadWords.badwords = null;
+        }
+        
+        if (msgSplit[0].equalsIgnoreCase("!say")){
+            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                if (msgSplit.length>2&&msgSplit[1].contains("#")){
+                    String chan = msgSplit[1];
+                    if (chan.contains("#")){
+                        System.out.println(chan);
+                        Channel c = event.getBot().getUserChannelDao().getChannel(chan);
+                        if(event.getBot().getUserBot().getChannels().contains(c)){
+                            
+                            String msg = message.split(" ",3)[2];
+                            event.getBot().sendIRC().message(chan, msg);
+                        }
+                        else{
+                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Bot not in this channel");
+                        }
+                    }
+                    else{
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Improperly formed channel string");
+                    }
+                }
+                else{
+                    String msg = message.split(" ",2)[1];
+                    event.getBot().sendIRC().message(event.getChannel().getName(), msg);
+                }
+            }
+            else{
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
+            }
+        }
+        
+        if (message.equalsIgnoreCase("!ram")){
+            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
+                int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
+                event.getBot().sendIRC().message(event.getChannel().getName(), "I am currently using "+usedRam+"MB ram, with "+freeRam+"MB ram free");
+            }
+            else{
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
+            }
         }
         
         if (message.equalsIgnoreCase(Global.mainNick+", fix yourself")
