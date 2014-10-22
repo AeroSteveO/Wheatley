@@ -36,7 +36,10 @@ public class GameSlots extends ListenerAdapter {
             if (cmdSplit[0].equalsIgnoreCase("slot")||cmdSplit[0].equalsIgnoreCase("slots")){
                 
                 int bet = baseBet;
-                
+                if (cmdSplit.length>2){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 1 integer input maximum");
+                    return;
+                }
                 if (cmdSplit.length==2){
                     
                     if (cmdSplit[1].matches("[0-9]+")){

@@ -50,7 +50,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                     return;
                 }
                 if (options.length>2){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 1 integer inputs maximum");
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 1 integer input maximum");
                     return;
                 }
                 
