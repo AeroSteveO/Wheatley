@@ -34,6 +34,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class EnglishSayings extends ListenerAdapter {
     ArrayList<String> sayings = getSayings();
     
+    @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         

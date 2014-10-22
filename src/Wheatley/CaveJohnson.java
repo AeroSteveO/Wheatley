@@ -27,6 +27,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class CaveJohnson extends ListenerAdapter {
     List<String> a = getQuoteList();
     
+    @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
