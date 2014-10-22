@@ -45,6 +45,15 @@ public class GameGuessTheNumber extends ListenerAdapter {
                 String[] options = message.split(" ");
                 int length = 100;
                 
+                if (!options[1].matches("[0-9]+")){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"You must input an integer");
+                    return;
+                }
+                if (options.length>2){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 1 integer inputs maximum");
+                    return;
+                }
+                
                 if (options.length==2){
                     length = Integer.parseInt(options[1]);
                     if (length>1000)
@@ -88,7 +97,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                                 int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+Integer.toString(length).length()+lives,Integer.toString(length).length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the number in "+timeSpent+" seconds and wins $"+prize+". Number: " + Colors.BOLD+Colors.RED+solution);
-
+                                
 //                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the number: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
                                 running = false;
                                 timedQueue.end();

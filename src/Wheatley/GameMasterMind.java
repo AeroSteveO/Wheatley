@@ -48,7 +48,20 @@ public class GameMasterMind extends ListenerAdapter {
                 int length = 5;
                 int charSize = 2;
                 int lives = length * charSize;
-                
+                {
+                    int i=1;
+                    while (i<options.length){
+                        if (!options[i].matches("[0-9]+")){
+                            event.getBot().sendIRC().notice(event.getUser().getNick(),"You must input an integer");
+                            return;
+                        }
+                        i++;
+                    }
+                    if (options.length>4){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 3 integer inputs maximum");
+                        return;
+                    }
+                }
                 if (options.length==2){
                     length = Integer.parseInt(options[1]);
                     if (length>10)
@@ -56,6 +69,7 @@ public class GameMasterMind extends ListenerAdapter {
                     lives = length * charSize;
                 }
                 else if (options.length == 3){
+                    
                     length = Integer.parseInt(options[1]);
                     if (length>10){
                         length=10;
