@@ -42,14 +42,12 @@ public class GameSlots extends ListenerAdapter {
                     if (cmdSplit[1].matches("[0-9]+")){
                         bet = Integer.parseInt(cmdSplit[1]);
                         
-                        if (bet>GameControl.scores.getScore(event.getUser().getNick())){
-                            event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to bet that much");
-                            return;
-                        }
+                        
                     }
                     
                     else if(cmdSplit[1].matches("\\-[0-9]+")){
                         event.getBot().sendIRC().notice(event.getUser().getNick(),"You cannot bet on your own failure");
+                        return;
                     }
                     
                     else{
@@ -57,8 +55,12 @@ public class GameSlots extends ListenerAdapter {
                         return;
                     }
                 }
+                if (bet>GameControl.scores.getScore(event.getUser().getNick())){
+                    event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to bet that much");
+                    return;
+                }
                 ArrayList<Integer> prizes = getPrizeArray(bet);
-                
+                System.out.println("SLOTS");
                 ArrayList<String> slots = new ArrayList<>();
                 String slotString = "";
                 
@@ -70,23 +72,28 @@ public class GameSlots extends ListenerAdapter {
 //                event.getBot().sendIRC().message(event.getChannel().getName(),slotString);
                 
                 if (slots.get(0).equalsIgnoreCase(slotWords.get(6))&&slots.get(1).equalsIgnoreCase(slotWords.get(6))&&slots.get(2).equalsIgnoreCase(slotWords.get(6))){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString+ "C0nGr47ul47!0nz "+event.getUser().getNick()+" u won $"+prizes.get(3)+" - go pwn som n00bs :>");
+                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString+ "| C0nGr47ul47!0nz "+event.getUser().getNick()+", u won $"+prizes.get(3)+" - go pwn som n00bs :>");
                     GameControl.scores.addScore(event.getUser().getNick(), prizes.get(3));
                 }
                 
                 else if (slots.get(0).equalsIgnoreCase(slots.get(1))&&slots.get(1).equalsIgnoreCase(slots.get(2))){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "Congratulations "+event.getUser().getNick()+" you won $"+prizes.get(2));
+                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Congratulations "+event.getUser().getNick()+", you won $"+prizes.get(2));
                     GameControl.scores.addScore(event.getUser().getNick(), prizes.get(2));
                 }
                 
-                else if (!slots.get(0).equalsIgnoreCase(slots.get(1))&&!slots.get(1).equalsIgnoreCase(slots.get(2))&&!slots.get(0).equalsIgnoreCase(slots.get(2))){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "Sorry "+event.getUser().getNick()+" but you lost $"+-prizes.get(0));
-                    GameControl.scores.addScore(event.getUser().getNick(), prizes.get(0));
+                else if (slots.get(0).equalsIgnoreCase(slots.get(1))||slots.get(1).equalsIgnoreCase(slots.get(2))){
+                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Congratulations "+event.getUser().getNick()+", you won $"+prizes.get(1));
+                    GameControl.scores.addScore(event.getUser().getNick(), prizes.get(1));
                 }
                 
-                else if (slots.get(0).equalsIgnoreCase(slots.get(1))||slots.get(1).equalsIgnoreCase(slots.get(2))){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "Congratulations "+event.getUser().getNick()+" you won $"+prizes.get(1));
-                    GameControl.scores.addScore(event.getUser().getNick(), prizes.get(1));
+                else if (!slots.get(0).equalsIgnoreCase(slots.get(1))&&!slots.get(1).equalsIgnoreCase(slots.get(2))){//&&!slots.get(0).equalsIgnoreCase(slots.get(2))
+                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Sorry "+event.getUser().getNick()+", but you lost $"+-prizes.get(0));
+                    GameControl.scores.addScore(event.getUser().getNick(), prizes.get(0));
+                }
+
+                else{
+                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Sorry "+event.getUser().getNick()+", but  something broke, the botowner has been notified");
+                    event.getBot().sendIRC().notice(Global.botOwner,slotString + "| Something broke, no score found");
                 }
             }
         }
