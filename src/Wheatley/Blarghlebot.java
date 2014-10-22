@@ -104,7 +104,7 @@ public class Blarghlebot extends ListenerAdapter {
                     event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"YOO GAWT TROLLED " + kill[1]);
                 }
                 else{
-                    event.getChannel().send().kick(event.getUser(),"YOO GAWT TROLLED " + event.getUser());
+                    event.getChannel().send().kick(event.getUser(),"YOO GAWT TROLLED " + event.getUser().getNick());
                 }
             }
             
