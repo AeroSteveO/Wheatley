@@ -38,6 +38,12 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *          Gives the current external IP address of the bot
  *      Wheatley, shutdown
  *          Shuts down the bot
+ *      !ram
+ *          Responds with Wheatley's current ram usage
+ *      !say [sentence]
+ *          Forces Wheatley to say the input sentence
+ *      !say [channel] [sentence]
+ *          Forces Wheatley to say the sentence in the input channel
  *
  */
 public class BotControl extends ListenerAdapter{
