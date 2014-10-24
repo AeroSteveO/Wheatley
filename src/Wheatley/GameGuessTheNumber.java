@@ -42,25 +42,31 @@ public class GameGuessTheNumber extends ListenerAdapter {
         if ((message.split(" ")[0].equalsIgnoreCase("!GuessTheNumber")||message.split(" ")[0].equalsIgnoreCase("!guessnumber"))&&!Global.channels.areGamesBlocked(gameChan)) {
             
             if (!Global.activeGame.isGameActive(gameChan, "guessthenumber")){
-                String[] options = message.split(" ");
+                
                 int length = 100;
                 
-                if (!options[1].matches("[0-9]+")){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(),"You must input an integer");
-                    return;
-                }
-                if (options.length>2){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 1 integer input maximum");
-                    return;
+                if (message.split(" ").length>=2){
+                    
+                    String[] options = message.split(" ");
+                    
+                    if (!options[1].matches("[0-9]+")){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"You must input an integer");
+                        return;
+                    }
+                    
+                    else if (options.length>2){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 1 integer input maximum");
+                        return;
+                    }
+                    
+                    else if (options.length==2){
+                        length = Integer.parseInt(options[1]);
+                        if (length>1000)
+                            length=1000;
+                    }
                 }
                 
-                if (options.length==2){
-                    length = Integer.parseInt(options[1]);
-                    if (length>1000)
-                        length=1000;
-                }
-                
-                int lives = length / 10;
+                int lives =(int) 10+length/100;
                 int time = 30+(length)/5;
                 
                 Global.activeGame.add(new Game( gameChan, "guessthenumber", "int", length, 1, time));
@@ -103,12 +109,12 @@ public class GameGuessTheNumber extends ListenerAdapter {
                                 timedQueue.end();
                             }
                             else if (Integer.parseInt(guess)<Integer.parseInt(solution)){
-                                CurrentEvent.respond("Your guess is too low, lives left: "+lives);
                                 lives--;
+                                CurrentEvent.respond("Your guess is too low, lives left: "+lives);
                             }
                             else if (Integer.parseInt(guess)>Integer.parseInt(solution)){
-                                CurrentEvent.respond("Your guess is too high, lives left: "+lives);
                                 lives--;
+                                CurrentEvent.respond("Your guess is too high, lives left: "+lives);
                             }
                         }
                     }
