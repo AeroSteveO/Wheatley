@@ -33,7 +33,7 @@ public class GameSlots extends ListenerAdapter {
         if (message.startsWith(Global.commandPrefix)){
             String command = message.split(Global.commandPrefix)[1].toLowerCase();
             String[] cmdSplit = command.split(" ");
-            if (cmdSplit[0].equalsIgnoreCase("slot")||cmdSplit[0].equalsIgnoreCase("slots")){
+            if ((cmdSplit[0].equalsIgnoreCase("slot")||cmdSplit[0].equalsIgnoreCase("slots"))&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
                 
                 int bet = baseBet;
                 if (cmdSplit.length>2){
