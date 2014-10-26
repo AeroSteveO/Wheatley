@@ -48,7 +48,42 @@ public class SRSBSNS extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
+//        String[] messageArray = message.split(" ");
         String currentChan = event.getChannel().getName();
+        
+//        if (messageArray[0].equalsIgnoreCase("!bankick")) {
+////            String[] kill = messageArray;
+//            if (messageArray.length < 3) {
+//                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " 1m " + event.getBot().getUserChannelDao().getUser(messageArray[1]).getNick() + "!*@*");
+////                output.kick(event.getBot().getUserChannelDao().getUser(kill[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
+//                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(messageArray[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
+//            } 
+//            else if (messageArray.length>4){
+//                String time;
+//                String[] kill;
+//                String reason;
+//                if (messageArray[2].matches("[0-9]+[s|d|m|h]")){
+//                    kill = Colors.removeFormattingAndColors(event.getMessage()).split(" ",4);
+//                    time = messageArray[2];
+//                    reason = kill[3];
+//                }
+//                else {
+//                    kill = Colors.removeFormattingAndColors(event.getMessage()).split(" ",3);
+//                    time = "1m";
+//                    reason = kill[2];
+//                }
+//                
+//                String user = event.getBot().getUserChannelDao().getUser(kill[1]).getNick();
+//                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " " + time + " " + event.getBot().getUserChannelDao().getUser(user).getNick() + "!*@*");
+//                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(user), "<"+event.getUser().getNick()+"> "+reason);
+//            }
+//            else {
+//                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " " + messageArray[2] + " " + event.getBot().getUserChannelDao().getUser(messageArray[1]).getNick() + "!*@*");
+////                output.kick(event.getBot().getUserChannelDao().getUser(kill[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
+//                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(messageArray[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
+//            }
+//        }
+        
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
             // separete input by spaces ( URLs don't have spaces )
             String [] parts = message.split("\\s");
