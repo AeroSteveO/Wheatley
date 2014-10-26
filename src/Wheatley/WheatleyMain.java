@@ -127,7 +127,8 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new EnglishSayings())
                     .addListener(new Definitions())
                     .addListener(new AutodlText())
-                    .addListener(new KickBanWatcher())
+//                    .addListener(new Fuckingweather())
+//                    .addListener(new KickBanWatcher())
                     .addListener(new Ignite())
                     .addListener(new Laser())
                     .addListener(new FactSphereFacts())
@@ -141,7 +142,6 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new MovieRatings())
                     .addListener(new BadWords())
                     .addListener(new MarkovInterface())
-                    .addListener(new TextModification())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
                     .addListener(new RandChan())             // generates random 4chan image links
