@@ -7,7 +7,7 @@
 package Wheatley;
 
 import Objects.ChannelStore.ChannelArray;
-import Objects.Game.GameArray;
+import Objects.GameList;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +31,7 @@ import org.pircbotx.hooks.Event;
  *
  */
 public class Global {
+    
     public static String botOwner = new String(); //Updated in the Main .java file from Setings.XML
     public static String mainNick = new String(); //Updated in the Main .java file from Setings.XML
     public static String nickPass = new String(); //Updated in the Main .java file from Setings.XML
@@ -38,7 +39,7 @@ public class Global {
     public static PircBotX bot;
     public static ChannelArray channels = new ChannelArray();
     public static String commandPrefix = "!";              // Not implemented yet in other functions
-    public static GameArray activeGame = new GameArray();  // To be implemented in games
+    public static GameList activeGame = new GameList();    // To be implemented in games
     public static String phrasePrefix = new String();      //mainNick+", ";
     public static ArrayList<String> botAdmin = getBotAdmins();
     
@@ -50,6 +51,7 @@ public class Global {
         String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
         return outputTime;
     }
+    
     public static String getTimestamp(String date) {
         TimeZone tz = TimeZone.getDefault();
         Date timestamp = new Date(Long.parseLong(date));
@@ -58,6 +60,7 @@ public class Global {
         String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
         return outputTime;
     }
+    
         private static ArrayList<String> getBotAdmins() {
         ArrayList<String> admins = new ArrayList<>();
         admins.add(botOwner);
