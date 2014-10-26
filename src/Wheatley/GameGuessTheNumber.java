@@ -69,9 +69,9 @@ public class GameGuessTheNumber extends ListenerAdapter {
                 int lives =(int) 10+length/100;
                 int time = 30+(length)/5;
                 
-                Global.activeGame.add(new Game( gameChan, "guessthenumber", "int", length, 1, time));
-                currentIndex = Global.activeGame.getGameIdx(gameChan,"guessthenumber");
-                String solution = Integer.toString(Global.activeGame.get(currentIndex).getInt());
+                Game currentGame = new Game("int", length, 1);
+//                currentIndex = Global.activeGame.getGameIdx(gameChan,"guessthenumber");
+                String solution = Integer.toString(currentGame.getInt());
                 
                 boolean running=true;
                 int key=(int) (Math.random()*100000+1);
@@ -100,7 +100,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                             }
                             else if (guess.equalsIgnoreCase(solution)){
                                 
-                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int timeSpent = currentGame.getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+Integer.toString(length).length()+lives,Integer.toString(length).length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the number in "+timeSpent+" seconds and wins $"+prize+". Number: " + Colors.BOLD+Colors.RED+solution);
                                 
@@ -119,7 +119,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                         }
                     }
                 }
-                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"guessthenumber")); //updated current index of the game
+                Global.activeGame.remove(gameChan,"guessthenumber"); //updated current index of the game
             }
         }
     }

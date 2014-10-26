@@ -97,9 +97,15 @@ public class GameControl extends ListenerAdapter {
                 if (event.getUser().isVerified()){
                     
                     ArrayList<String> descriptions = Global.activeGame.getCurrentGameDescriptions();
+                    if (descriptions.isEmpty()){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),"No currently active games");
+                    }
                     for (int i=0;i<descriptions.size();i++){
                         event.getBot().sendIRC().message(event.getChannel().getName(),descriptions.get(i));
                     }
+                }
+                else{
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
                 }
             }
             

@@ -44,6 +44,7 @@ public class GameMasterMind extends ListenerAdapter {
         if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!Global.channels.areGamesBlocked(gameChan)) {
             
             if (!Global.activeGame.isGameActive(gameChan, "mastermind")){
+                
                 String[] options = message.split(" ");
                 int length = 5;
                 int charSize = 2;
@@ -94,11 +95,11 @@ public class GameMasterMind extends ListenerAdapter {
                 int time = 30+(charSize+length)*10;
                 int scorePositionValue = 0;
                 int scoreValue = 0;
-                Global.activeGame.add(new Game( gameChan, "mastermind", "int array", length, charSize, time));
-                currentIndex = Global.activeGame.getGameIdx(gameChan,"mastermind");
+                Game currentGame = new Game("int array", length, charSize);
+//                currentIndex = Global.activeGame.getGameIdx(gameChan,"mastermind");
                 
-                ArrayList<Integer> solutionArray = Global.activeGame.get(currentIndex).getIntArray();
-                String solution = Global.activeGame.get(currentIndex).convertIntToString();
+                ArrayList<Integer> solutionArray = currentGame.getIntArray();
+                String solution = currentGame.convertIntToString();
                 
                 boolean running=true;
                 int key=(int) (Math.random()*100000+1);
@@ -147,7 +148,7 @@ public class GameMasterMind extends ListenerAdapter {
                             }
                             else if (scorePositionValue == length){
                                 
-                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int timeSpent = currentGame.getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+length+charSize+lives,length, timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the code in "+timeSpent+" seconds and wins $"+prize+". Code: " + Colors.BOLD+Colors.RED+solution.toUpperCase());
 
@@ -164,7 +165,7 @@ public class GameMasterMind extends ListenerAdapter {
                         }
                     }
                 }
-                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"mastermind")); //updated current index of the game
+                Global.activeGame.remove(gameChan,"mastermind"); //updated current index of the game
             }
         }
     }

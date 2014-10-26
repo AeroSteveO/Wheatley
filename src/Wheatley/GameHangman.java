@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Objects.Game;
 import Objects.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
@@ -33,20 +34,20 @@ public class GameHangman extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String gameChan = event.getChannel().getName();
-        int currentIndex=0;
         
         if (message.equalsIgnoreCase("!hangman")&&!Global.channels.areGamesBlocked(gameChan)) {
             
-            if (!Global.activeGame.isGameActive(gameChan, "hangman", "blank", time)){
+            if (!Global.activeGame.isGameActive(gameChan, "hangman")){
+                
+                Game currentGame = new Game("blank");
                 
                 // Setup variables that will be needed through hangman
                 int changed = 0;
                 int correct = 0;
                 int lives = baselives;
                 
-                currentIndex = Global.activeGame.getGameIdx(gameChan,"hangman");
-                String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
-                String guess = Global.activeGame.get(currentIndex).getSolution();
+                String chosenword = currentGame.getChosenWord();
+                String guess = currentGame.getSolution();
                 char[] characters = chosenword.toCharArray();
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to find the following word: " + Colors.BOLD + guess + Colors.NORMAL);
                 boolean running=true;
@@ -64,7 +65,7 @@ public class GameHangman extends ListenerAdapter {
                     else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
                         if (Pattern.matches("[a-zA-Z]{2,}",CurrentEvent.getMessage())){
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
-                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int timeSpent = currentGame.getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length()+lives+(chosenword.length()-changed),chosenword.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
 
@@ -104,7 +105,7 @@ public class GameHangman extends ListenerAdapter {
                                 }
                             }
                             else if (correct == chosenword.length()){
-                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int timeSpent = currentGame.getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length()+lives, chosenword.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
 //                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD +Colors.RED+ chosenword.toUpperCase() + Colors.NORMAL);
@@ -122,7 +123,7 @@ public class GameHangman extends ListenerAdapter {
 //                    correct = 0;
 //                    changed = 0;
 //                    lives = baselives;
-                Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"hangman")); //updated current index of the game
+                Global.activeGame.remove(gameChan,"hangman"); //updated current index of the game
             }
         }
     }

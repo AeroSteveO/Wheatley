@@ -5,6 +5,7 @@
 */
 
 package Wheatley;
+import Objects.Game;
 import Objects.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import org.pircbotx.Colors;
@@ -36,13 +37,14 @@ public class GameOmgword extends ListenerAdapter {
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
         if (message.equalsIgnoreCase("!omgword")&&!Global.channels.areGamesBlocked(gameChan)) {
             
-            if (!Global.activeGame.isGameActive(gameChan, "omgword", "shuffle", time)){
+            if (!Global.activeGame.isGameActive(gameChan, "omgword")){
                 
+                Game currentGame = new Game("shuffle");
                 //get and shuffle the word
                 boolean running = true;
-                currentIndex = Global.activeGame.getGameIdx(gameChan,"omgword");
-                String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
-                String scrambled = Global.activeGame.get(currentIndex).getSolution();
+//                currentIndex = Global.activeGame.getGameIdx(gameChan,"omgword");
+                String chosenword = currentGame.getChosenWord();
+                String scrambled = currentGame.getSolution();
                 
                 event.getBot().sendIRC().message(event.getChannel().getName(), "You have "+time+" seconds to solve this: " + Colors.BOLD+Colors.RED +scrambled.toUpperCase() + Colors.NORMAL);
                 
@@ -60,10 +62,10 @@ public class GameOmgword extends ListenerAdapter {
                             
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
                                 
-                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int timeSpent = currentGame.getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length(), chosenword.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
-
+                                
 //                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
                                 running = false;
                                 timedQueue.end();
@@ -80,7 +82,7 @@ public class GameOmgword extends ListenerAdapter {
                     }
                 }
             }
-            Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"omgword"));
+            Global.activeGame.remove(gameChan,"omgword");
         }
     }
 }

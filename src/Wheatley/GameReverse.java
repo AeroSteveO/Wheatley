@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Objects.Game;
 import Objects.TimedWaitForQueue;
 import java.io.FileNotFoundException;
 import org.pircbotx.Colors;
@@ -35,12 +36,14 @@ public class GameReverse extends ListenerAdapter {
         if (message.equalsIgnoreCase("!reverse")&&!Global.channels.areGamesBlocked(gameChan)) {
             // get the list of words only if theres nothing in the list alread
             
-            if (!Global.activeGame.isGameActive(gameChan, "reverse", "reverse", time)){
+            if (!Global.activeGame.isGameActive(gameChan, "reverse")){
+                
+                Game currentGame = new Game("reverse");
                 
                 // Get the game object index and grab the necessary variables from it
-                int currentIndex = Global.activeGame.getGameIdx(gameChan,"reverse");
-                String chosenword = Global.activeGame.get(currentIndex).getChosenWord();
-                String reversed = Global.activeGame.get(currentIndex).getSolution();
+//                int currentIndex = Global.activeGame.getGameIdx(gameChan,"reverse");
+                String chosenword = currentGame.getChosenWord();
+                String reversed = currentGame.getSolution();
                 
                 event.getBot().sendIRC().message(gameChan, "You have "+time+" seconds to reverse this: " + Colors.BOLD+Colors.RED +reversed.toUpperCase() + Colors.NORMAL);
                 
@@ -60,7 +63,7 @@ public class GameReverse extends ListenerAdapter {
                         else if (CurrentEvent.getChannel().getName().equalsIgnoreCase(gameChan)&&!CurrentEvent.getUser().getNick().equalsIgnoreCase(event.getBot().getNick())){
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
                                 
-                                int timeSpent = Global.activeGame.get(currentIndex).getTimeSpent();
+                                int timeSpent = currentGame.getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+reversed.length(), reversed.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                                 
@@ -79,7 +82,7 @@ public class GameReverse extends ListenerAdapter {
                     }
                 }
             }
-            Global.activeGame.remove(Global.activeGame.getGameIdx(gameChan,"reverse"));
+            Global.activeGame.remove(gameChan,"reverse");
         }
     }
 }
