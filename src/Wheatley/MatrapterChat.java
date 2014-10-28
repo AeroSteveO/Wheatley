@@ -159,7 +159,7 @@ public class MatrapterChat extends ListenerAdapter {
                     for (int i=0;i<a.size();i++)
                         event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(user).getNick(),a.get(i));
                 }
-                else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
+                else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
                     event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"user not in channel");
                 }
             }

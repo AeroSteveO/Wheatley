@@ -84,21 +84,21 @@ public class Definitions extends ListenerAdapter {
                     event.getBot().sendIRC().notice(event.getUser().getNick(),user+" has been PMed");
                     event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(user).getNick(),event.getUser().getNick()+" wants me to tell you about: "+Colors.BOLD+defWord+Colors.NORMAL+ ": "+Colors.NORMAL+def);
                 }
-                else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
+                else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
                     event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"definition not found");
                 }
             }
-            else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
+            else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"user not in channel");
             }
         }
         
         // ADDING DEFINITIONS
-        if ((msgSplit[0].equalsIgnoreCase("!adddef")||msgSplit[0].equalsIgnoreCase("!addef"))&&!event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        if ((msgSplit[0].equalsIgnoreCase("!def"))&&!event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){//||msgSplit[0].equalsIgnoreCase("!addef")
             event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
         }
         
-        else if(msgSplit[0].equalsIgnoreCase("!adddef")||msgSplit[0].equalsIgnoreCase("!addef")){
+        else if(msgSplit[0].equalsIgnoreCase("!def")){//||msgSplit[0].equalsIgnoreCase("!addef")
             
             if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 
@@ -183,11 +183,11 @@ public class Definitions extends ListenerAdapter {
         }
         
         // Updating definitions already in the db
-        if ((msgSplit[0].equalsIgnoreCase("!updatedef")||msgSplit[0].equalsIgnoreCase("!updef"))&&!event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+        if ((msgSplit[0].equalsIgnoreCase("!overdef"))&&!event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){//||msgSplit[0].equalsIgnoreCase("!updef")
             event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
         }
         
-        else if(msgSplit[0].equalsIgnoreCase("!updatedef")||msgSplit[0].equalsIgnoreCase("!updef")) {
+        else if(msgSplit[0].equalsIgnoreCase("!overdef")) {//||msgSplit[0].equalsIgnoreCase("!updef")
             
             if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 

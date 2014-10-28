@@ -84,7 +84,7 @@ public class SRSBSNS extends ListenerAdapter {
 //            }
 //        }
         
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("srsbsns")).contains(event.getChannel())) {
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
             // separete input by spaces ( URLs don't have spaces )
             String [] parts = message.split("\\s");
             // Attempt to convert each item into an URL.
@@ -97,21 +97,28 @@ public class SRSBSNS extends ListenerAdapter {
             }
             if (message.equalsIgnoreCase("!lasturl")){
                 if (!Global.channels.getChan(currentChan).getLastUrl().equals("")){
+                    String title;
+                    
+                    try{
                     org.jsoup.nodes.Document finaldoc = Jsoup.connect(Global.channels.getChan(currentChan).getLastUrl()).get();
-                    String title = finaldoc.title();
-                    event.getBot().sendIRC().action(currentChan,Colors.BOLD+"Last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
+                    title = finaldoc.title();
+                    }
+                    catch (Exception ex){
+                        title = "No Title Found";
+                    }
+                    event.getBot().sendIRC().message(currentChan,Colors.BOLD+"Last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
                 }
                 else
-                    event.getBot().sendIRC().action(currentChan,"No previous URL found");
+                    event.getBot().sendIRC().message(currentChan,"No previous URL found");
             }
             if (message.equalsIgnoreCase("!secondlasturl")){
                 if (!Global.channels.getChan(currentChan).getSecondLastUrl().equals("")){
                     org.jsoup.nodes.Document finaldoc = Jsoup.connect(Global.channels.getChan(currentChan).getSecondLastUrl()).get();
                     String title = finaldoc.title();
-                    event.getBot().sendIRC().action(currentChan,Colors.BOLD+"Second to last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getSecondLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
+                    event.getBot().sendIRC().message(currentChan,Colors.BOLD+"Second to last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getSecondLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
                 }
                 else
-                    event.getBot().sendIRC().action(currentChan,"Currently less than 2 URLs found");
+                    event.getBot().sendIRC().message(currentChan,"Currently less than 2 URLs found");
             }
             if (message.equalsIgnoreCase("!srsbsns"))
                 event.getBot().sendIRC().action(currentChan,"wat");

@@ -48,7 +48,7 @@ public class MovieRatings extends ListenerAdapter {
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SRSBSNS")).contains(event.getChannel())) {
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
             String message = Colors.removeFormattingAndColors(event.getMessage().trim());
             if (message.toLowerCase().matches("!imdb\\s[a-z\\s]+\\s[0-9]{4}")){
                 String[] msgSplit = message.split(" ");

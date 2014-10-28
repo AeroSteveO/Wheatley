@@ -51,14 +51,14 @@ public class Urban extends ListenerAdapter {
     private LinkedList<Long> timeLog = new LinkedList<Long>();
     private int maxLog = 2;
     private long maxTime = 30*1000;
-    private int defNum = 0;
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SRSBSNS")).contains(event.getChannel())) {
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
             try{
                 String message = Colors.removeFormattingAndColors(event.getMessage().trim());
-                if(message.toLowerCase().matches("!udict[\\sA-Za-z0-9]*")) {
+                if(message.toLowerCase().matches("!udict[\\sA-Za-z0-9\\'\\-\\_\\.]*")) {
+                    int defNum = 0;
                     Date d = new Date();
                     long currentTime = d.getTime();
                     if(timeLog.size() > maxLog) {
@@ -74,13 +74,17 @@ public class Urban extends ListenerAdapter {
                         String[] splitString = message.split("\\s+",2);
                         if(splitString.length>1) {
                             timeLog.addFirst(d.getTime());
-                            event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1]));
+                            event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1],defNum));
                         }
                         else {
-                            timeLog.addFirst(d.getTime());
-                            event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(""));
+                            event.getBot().sendIRC().notice(event.getUser().getNick(),"Please input a word to get the definition of");
+//                            timeLog.addFirst(d.getTime());
+//                            event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition("",defNum));
                         }
                     }
+                }
+                else if(message.toLowerCase().split(" ",2)[0].equalsIgnoreCase("!udict")) {
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"Udict only accepts a-z, 0-9, and ['-_.]");
                 }
                 if (message.toLowerCase().matches("!set ucall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
                     maxLog = Integer.parseInt(message.split(" ")[2]);
@@ -123,7 +127,7 @@ public class Urban extends ListenerAdapter {
                 reader.close();
         }
     }
-    private String getDefinition(String term){
+    private String getDefinition(String term, int defNum){
         JSONParser parser = new JSONParser();
         try{
             String jsonObject = (readUrl("http://api.urbandictionary.com/v0/define?term="+term.trim().replaceAll(" ", "%20")));
@@ -136,10 +140,6 @@ public class Urban extends ListenerAdapter {
             List<String> results = JSONKeyFinder(jsonObject,"result_type");
             String slimmedDef;
             String slimmedExample;
-            
-            System.out.println(definition.get(defNum));
-            System.out.println(example.get(defNum));
-            
             if(results.get(defNum).equalsIgnoreCase("no_results"))
                 return("Error: Definition Not Found");
             
@@ -152,8 +152,6 @@ public class Urban extends ListenerAdapter {
                 slimmedExample = example.get(defNum).replaceAll("[\t\r\n]", "").substring(0,Math.min(example.get(defNum).length(),150))+"... ";
             else
                 slimmedExample = example.get(defNum).replaceAll("[\t\r\n]", "")+" ";
-            
-            System.out.println(slimmedExample);
             
             return(Colors.BOLD+word.get(defNum)+Colors.NORMAL+" : "+slimmedDef+" "+Colors.BOLD+"Example : "+Colors.NORMAL+slimmedExample + directLink.get(defNum));
         }catch (Exception e){
