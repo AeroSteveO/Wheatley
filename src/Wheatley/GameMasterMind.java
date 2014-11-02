@@ -56,7 +56,12 @@ public class GameMasterMind extends ListenerAdapter {
                             event.getBot().sendIRC().notice(event.getUser().getNick(),"You must input an integer");
                             return;
                         }
+                        else if (options[i].matches("[0]+")){
+                            event.getBot().sendIRC().notice(event.getUser().getNick(),"You must input a non-zero integer");
+                            return;
+                        }
                         i++;
+                        
                     }
                     if (options.length>4){
                         event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 3 integer inputs maximum");
@@ -140,7 +145,6 @@ public class GameMasterMind extends ListenerAdapter {
                                         scoreValue = scoreValue + solCount;
                                 }
                             }
-                            lives--;
                             if (lives <= 0){
                                 CurrentEvent.respond("You've run out of lives, the solution was "+solution);
                                 running = false;
@@ -151,15 +155,15 @@ public class GameMasterMind extends ListenerAdapter {
                                 int timeSpent = currentGame.getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+length+charSize+lives,length, timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the code in "+timeSpent+" seconds and wins $"+prize+". Code: " + Colors.BOLD+Colors.RED+solution.toUpperCase());
-
+                                
 //                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the code: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
                                 running = false;
                                 timedQueue.end();
                             }
                             else{
+                                lives--;
                                 CurrentEvent.respond("Code has "+scorePositionValue+" digits correct in position and value | "+scoreValue+" digits correct in value | Lives left: "+lives);
                             }
-                            
                             scoreValue = 0;
                             scorePositionValue = 0;
                         }
