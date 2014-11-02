@@ -13,6 +13,7 @@
 
 package Objects;
 
+import org.pircbotx.Colors;
 
 public class PlayingCard implements Comparable {
     
@@ -235,8 +236,49 @@ public class PlayingCard implements Comparable {
                 break;
         }
         return card;
+    }//<Asamarui> ♤, ♥, ♢, ♧
+    //<Asamarui> i.e these ♠♥♦♣
+        public String toColoredString() {
+        String card = "";
+        switch (this.value) {
+            case JOKER:
+                card += Colors.BOLD+"Jok";
+                break;
+            case ACE:
+                card += Colors.BOLD+"A";
+                break;
+            case JACK:
+                card += Colors.BOLD+"J";
+                break;
+            case QUEEN:
+                card += Colors.BOLD+"Q";
+                break;
+            case KING:
+                card += Colors.BOLD+"K";
+                break;
+            default:
+                card += Colors.BOLD+this.value;  //all digits
+                break;
+        }
+        switch (this.suit) {
+            case HEARTS:
+                card += " "+Colors.RED+"<3"+Colors.NORMAL;
+                break;
+            case CLUBS:
+                card += " -%"+Colors.NORMAL;
+                break;
+            case SPADES:
+                card += " <3="+Colors.NORMAL;
+                break;
+            case DIAMONDS:
+                card += " "+Colors.RED+"<>"+Colors.NORMAL;
+                break;
+            default:
+                //add nothing (such as to "Jok")
+                break;
+        }
+        return card;
     }
-    
     
     
 // INNER CLASSES ------------
