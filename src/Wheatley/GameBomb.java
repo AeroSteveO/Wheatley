@@ -71,6 +71,7 @@ public class GameBomb extends ListenerAdapter {
                     event.getBot().sendIRC().message(event.getChannel().getName(),"the bomb explodes in front of " + player + ". Seems like you did not even notice the big beeping suitcase. You lose $"+moneyLoss);
                     colours.clear();
                     GameControl.scores.subtractScore(player, moneyLoss);
+                    GameControl.scores.addScore(event.getBot().getNick(), moneyLoss);
                     queue.close();
                 }
                 else if (CurrentEvent.getMessage().equalsIgnoreCase(solution)&&CurrentEvent.getUser().getNick().equalsIgnoreCase(player)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
@@ -84,6 +85,7 @@ public class GameBomb extends ListenerAdapter {
                     event.getBot().sendIRC().message(event.getChannel().getName(),"The bomb explodes in " + player + "'s hands. You lost your life and - even worse - $"+moneyLoss+". The right color would have been "+Colors.BOLD+Colors.RED+solution);
                     colours.clear();
                     GameControl.scores.subtractScore(player, moneyLoss);
+                    GameControl.scores.addScore(event.getBot().getNick(), moneyLoss);
                     queue.close();
                 }
             }

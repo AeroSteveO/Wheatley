@@ -70,7 +70,7 @@ public class GameSlots extends ListenerAdapter {
                     slots.add(slotWords.get((int) (Math.random()*slotWords.size())));
                     slotString = slotString +"("+slots.get(i)+") ";
                 }
-                                
+                
                 if (slots.get(0).equalsIgnoreCase(slotWords.get(6))&&slots.get(1).equalsIgnoreCase(slotWords.get(6))&&slots.get(2).equalsIgnoreCase(slotWords.get(6))){
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString+ "| C0nGr47ul47!0nz "+event.getUser().getNick()+", u won $"+prizes.get(3)+" - go pwn som n00bs :>");
                     GameControl.scores.addScore(event.getUser().getNick(), prizes.get(3));
@@ -89,8 +89,9 @@ public class GameSlots extends ListenerAdapter {
                 else if (!slots.get(0).equalsIgnoreCase(slots.get(1))&&!slots.get(1).equalsIgnoreCase(slots.get(2))){//&&!slots.get(0).equalsIgnoreCase(slots.get(2))
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Sorry "+event.getUser().getNick()+", but you lost $"+-prizes.get(0));
                     GameControl.scores.addScore(event.getUser().getNick(), prizes.get(0));
+                    GameControl.scores.addScore(event.getBot().getNick(), prizes.get(0)*-1); //Give wheatley the money
                 }
-
+                
                 else{
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Sorry "+event.getUser().getNick()+", but  something broke, the botowner has been notified");
                     event.getBot().sendIRC().notice(Global.botOwner,slotString + "| Something broke, no score found");
