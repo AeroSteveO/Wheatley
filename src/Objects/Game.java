@@ -46,9 +46,9 @@ public class Game {
     private String modifier;
     private String solution;
     private int chosenNum;
-    private String key;
+//    private String key;
     private ArrayList<Integer> chosenNumArray;
-    private TimedWaitForQueue gameQueue;
+//    private TimedWaitForQueue gameQueue;
     DateTime startTime;// = new DateTime();
     
 //    public Game(String mod, String type) throws FileNotFoundException{
