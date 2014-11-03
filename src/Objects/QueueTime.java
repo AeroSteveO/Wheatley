@@ -23,7 +23,8 @@ public  class QueueTime implements Runnable {
     int key;
     PircBotX bot;
     Thread t;
-    QueueTime(PircBotX bot, int time, Channel chan, User user, int key) {
+    
+    public QueueTime(PircBotX bot, int time, Channel chan, User user, int key) {
         this.time = time;
         this.chan=chan;
         this.user=user;
@@ -31,15 +32,18 @@ public  class QueueTime implements Runnable {
         this.bot=bot;
     }
     
+    public QueueTime(MessageEvent event, int time, int key) {
+        this.time = time;
+        this.chan = event.getChannel();
+        this.user = event.getBot().getUserBot();
+        this.key = key;
+        this.bot = Global.bot;
+    }
+    
     public void giveT(Thread t) {
         this.t = t;
     }
-//        public void onMessage(final MessageEvent event) throws Exception {
-//            // in case something should be done here
-//            String message = Colors.removeFormattingAndColors(event.getMessage());
-//            if (message.equalsIgnoreCase("!flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)))
-//                bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
-//        }
+    
     @Override
     public void run() {
         try { // No need to loop for this thread
