@@ -9,11 +9,19 @@ package Objects;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import Objects.Throttle.ThrottleArray;
 
 /**
  *
  * @author Steve-O
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
  * ChannelStore Object and Corresponding ChannelArray Object
  * ->stores channel specific settings and logs
  * ->primarily oriented towards markov interface
@@ -115,15 +123,15 @@ public class ChannelStore {
             return(false);
         }
     }
-    public void addThrottleSetting(String type){
-        this.throttle.add(new Throttle(type));
-    }
+//    public void addThrottleSetting(String type){
+//        this.throttle.add(new Throttle(type));
+//    }
     public static class ChannelArray extends Vector<ChannelStore>{
-        public void addThrottleToAll(String throttleType){
-            for(int i = 0; i < this.size(); i++) {
-                this.get(i).addThrottleSetting(throttleType);
-            }
-        }
+//        public void addThrottleToAll(String throttleType){
+//            for(int i = 0; i < this.size(); i++) {
+//                this.get(i).addThrottleSetting(throttleType);
+//            }
+//        }
         public int getChanIdx(String toCheck){
             int idx = -1;
             for(int i = 0; i < this.size(); i++) {

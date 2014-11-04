@@ -17,6 +17,14 @@ import org.pircbotx.Colors;
  * @author Stephen
  * Replaces the GameArray vector
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
  * Object:
  *      GameList
  * - Object that contains game data and prevents multiple instances of single
