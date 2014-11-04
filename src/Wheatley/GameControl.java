@@ -63,7 +63,7 @@ public class GameControl extends ListenerAdapter {
             String[] cmdSplit = command.split(" ");
             if (command.equalsIgnoreCase("flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner))){
                 if (event.getUser().isVerified()){
-                    
+                    Global.activeGame.clear();
                 }
             }
             
