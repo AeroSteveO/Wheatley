@@ -173,11 +173,11 @@ public class GameHighLow extends ListenerAdapter {
                             else if (currentEvent.getMessage().equals("!fuckthis")||currentEvent.getMessage().equalsIgnoreCase("I give up")){
                                 if (correctGuesses>0){
                                     GameControl.scores.addScore(prevPlayer, basePrize+correctGuesses*correctGuesses);
-                                    event.getBot().sendIRC().message(gameChan,"Game over! You've given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
+                                    event.respond("Game over! You've given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
                                     
                                 }
                                 else
-                                    event.getBot().sendIRC().message(gameChan,"Game over! You've given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions. Sorry, but you haven't won anything.");
+                                    event.respond("Game over! You've given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions. Sorry, but you haven't won anything.");
                                 
                                 queue.close();
                                 break;
