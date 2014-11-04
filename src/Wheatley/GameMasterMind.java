@@ -20,6 +20,17 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  *
  * Requested by: PiTheMathGod
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    TimedWaitForQueue
+ *    Game
+ * - Linked Classes
+ *    Global
+ *    GameControl
+ * 
  * Activate Command with:
  *      !Mastermind [length] [chars] [lives]
  *
@@ -43,7 +54,7 @@ public class GameMasterMind extends ListenerAdapter {
         
         if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!Global.channels.areGamesBlocked(gameChan)) {
             
-            if (!Global.activeGame.contains(gameChan, "mastermind")){
+            if (!GameControl.activeGame.contains(gameChan, "mastermind")){
                 
                 String[] options = message.split(" ");
                 int length = 5;
@@ -98,7 +109,7 @@ public class GameMasterMind extends ListenerAdapter {
                     lives = Integer.parseInt(options[3]);
                 }
                 
-                Global.activeGame.add(gameChan, "mastermind", "long");//Lets add the game to the array well after the input checks
+                GameControl.activeGame.add(gameChan, "mastermind", "long");//Lets add the game to the array well after the input checks
                 int time = 30+(charSize+length)*10;
                 int scorePositionValue = 0;
                 int scoreValue = 0;
@@ -171,7 +182,7 @@ public class GameMasterMind extends ListenerAdapter {
                         }
                     }
                 }
-                Global.activeGame.remove(gameChan,"mastermind"); //updated current index of the game
+                GameControl.activeGame.remove(gameChan,"mastermind"); //updated current index of the game
             }
             else
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

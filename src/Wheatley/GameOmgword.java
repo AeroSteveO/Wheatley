@@ -18,13 +18,23 @@ import org.pircbotx.hooks.events.*;
  * Based on the C# IRC bot, CasinoBot
  * which is really unstable and breaks all the time
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    ScoreArray
+ *    GameList
+ * - Linked Classes
+ *    Global
+ *    GameControl
+ * 
  * Activate command with:
  *      !omgword
  *
  */
 public class GameOmgword extends ListenerAdapter {
     // Initialize needed variables
-    String blockedChan = "#dtella";
+//    String blockedChan = "#dtella";
     int time = 30;  // Seconds
     int basePrize = 20; // $
 //    static GameArray activeGame = new GameArray();
@@ -37,7 +47,7 @@ public class GameOmgword extends ListenerAdapter {
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
         if (message.equalsIgnoreCase("!omgword")&&!Global.channels.areGamesBlocked(gameChan)) {
             
-            if (!Global.activeGame.isGameActive(gameChan, "omgword")){
+            if (!GameControl.activeGame.isGameActive(gameChan, "omgword")){
                 
                 Game currentGame = new Game("shuffle");
                 //get and shuffle the word
@@ -82,7 +92,7 @@ public class GameOmgword extends ListenerAdapter {
                     }
                 }
             }
-            Global.activeGame.remove(gameChan,"omgword");
+            GameControl.activeGame.remove(gameChan,"omgword");
         }
     }
 }

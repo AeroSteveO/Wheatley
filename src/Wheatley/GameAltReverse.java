@@ -18,8 +18,18 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  *  Original Bot: WHEATLEY
- *      a variant of the reverse function from CasinoBot, idea from Steve-O
+ *      a variant of the reverse function from CasinoBot. Original idea from Steve-O
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Game
+ *    TimedWaitForQueue
+ * - Linked Classes
+ *    Global
+ *    GameControl
+ * 
  *  Activate Command with:
  *      !altreverse
  *      esrever!
@@ -40,7 +50,7 @@ public class GameAltReverse extends ListenerAdapter {
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
         if ((message.equalsIgnoreCase("!altreverse")||message.equalsIgnoreCase("esrever!"))&&!Global.channels.areGamesBlocked(gameChan)) {
             
-            if (!Global.activeGame.isGameActive(gameChan, "altreverse")){
+            if (!GameControl.activeGame.isGameActive(gameChan, "altreverse")){
                 
                 Game currentGame = new Game("reverse");
                 //get and shuffle the word
@@ -84,7 +94,7 @@ public class GameAltReverse extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
-                Global.activeGame.remove(gameChan,"altreverse");
+                GameControl.activeGame.remove(gameChan,"altreverse");
             }
             else
                 isactive=false;

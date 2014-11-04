@@ -20,6 +20,15 @@ import org.pircbotx.hooks.events.MessageEvent;
  * Based on the C# IRC bot, CasinoBot
  * which is generally unstable and requires windows to run
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Game
+ * - Linked Classes
+ *    Global
+ *    GameControl
+ * 
  * Activate Command with:
  *      !hangman
  */
@@ -37,7 +46,7 @@ public class GameHangman extends ListenerAdapter {
         
         if (message.equalsIgnoreCase("!hangman")&&!Global.channels.areGamesBlocked(gameChan)) {
             
-            if (!Global.activeGame.isGameActive(gameChan, "hangman")){
+            if (!GameControl.activeGame.isGameActive(gameChan, "hangman")){
                 
                 Game currentGame = new Game("blank");
                 
@@ -123,7 +132,7 @@ public class GameHangman extends ListenerAdapter {
 //                    correct = 0;
 //                    changed = 0;
 //                    lives = baselives;
-                Global.activeGame.remove(gameChan,"hangman"); //updated current index of the game
+                GameControl.activeGame.remove(gameChan,"hangman"); //updated current index of the game
             }
         }
     }

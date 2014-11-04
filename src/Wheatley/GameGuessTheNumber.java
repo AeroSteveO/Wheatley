@@ -18,6 +18,16 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Game
+ *    TimedWaitForQueue
+ * - Linked Classes
+ *    Global
+ *    GameControl
+ * 
  * Activate Command with:
  *      !GuessTheNumber [upperBound]
  *      !GuessNumber [upperBound]
@@ -71,7 +81,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
             }
             
             
-            if (!Global.activeGame.isGameActive(gameChan, "guessthenumber")){
+            if (!GameControl.activeGame.isGameActive(gameChan, "guessthenumber")){
                 
                 
                 int lives =(int) 10+length/100;
@@ -127,7 +137,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                         }
                     }
                 }
-                Global.activeGame.remove(gameChan,"guessthenumber"); //updated current index of the game
+                GameControl.activeGame.remove(gameChan,"guessthenumber"); //updated current index of the game
             }
             else
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

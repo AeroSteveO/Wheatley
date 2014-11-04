@@ -22,6 +22,15 @@ import org.pircbotx.hooks.events.MessageEvent;
  * Based on the C# IRC bot, CasinoBot
  * which is generally unstable and requires windows to run
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    TimedWaitForQueue
+ * - Linked Classes
+ *    Global
+ *    GameControl
+ * 
  * Activate Command with:
  *      !bomb
  *          Gives the user a bomb, the user has to pick the correctly colored

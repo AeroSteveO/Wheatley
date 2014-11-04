@@ -1,6 +1,6 @@
 package Wheatley;
 
-import Objects.Score;
+import Objects.GameList;
 import Objects.Score.ScoreArray;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.ArrayList;
@@ -21,6 +21,16 @@ import org.pircbotx.hooks.events.UserListEvent;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    ScoreArray
+ *    GameList
+ * - Linked Classes
+ *    Global
+ * 
  * ADMIN COMMANDS
  * Activate Command with:
  *      !money [user] [value]
@@ -50,6 +60,8 @@ import org.pircbotx.hooks.events.UserListEvent;
  *
  */
 public class GameControl extends ListenerAdapter {
+    
+    public static GameList activeGame = new GameList();    // To be implemented in games
     public static ScoreArray scores = new ScoreArray();
     String filename = "gameScores.json";
     boolean loaded = startScores();
@@ -63,7 +75,7 @@ public class GameControl extends ListenerAdapter {
             String[] cmdSplit = command.split(" ");
             if (command.equalsIgnoreCase("flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner))){
                 if (event.getUser().isVerified()){
-                    Global.activeGame.clear();
+                    activeGame.clear();
                 }
             }
             
@@ -96,7 +108,7 @@ public class GameControl extends ListenerAdapter {
             else if(command.toLowerCase().equalsIgnoreCase("list games")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
                 if (event.getUser().isVerified()){
                     
-                    ArrayList<String> descriptions = Global.activeGame.getCurrentGameDescriptions();
+                    ArrayList<String> descriptions = activeGame.getCurrentGameDescriptions();
                     if (descriptions.isEmpty()){
                         event.getBot().sendIRC().message(event.getChannel().getName(),"No currently active games");
                     }

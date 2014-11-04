@@ -18,8 +18,21 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Stephen
  * Inspired By: http://math.hws.edu/javanotes/c5/s4.html
- *
- *
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    DeckOfCards
+ *    PlayingCard
+ *    QueueTime
+ * - Linked Classes
+ *    Global
+ *    GameControl
+ * 
+ * Activate Command with:
+ *      !highlow
+ *          
  *
  */
 public class GameHighLow extends ListenerAdapter {
@@ -40,7 +53,7 @@ public class GameHighLow extends ListenerAdapter {
             
             if (cmdSplit[0].equalsIgnoreCase("highlow")&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
                 
-                if (!Global.activeGame.isGameActive(event.getChannel().getName(), "highlow")){
+                if (!GameControl.activeGame.isGameActive(event.getChannel().getName(), "highlow")){
                     
                     int key=(int) (Math.random()*100000+1);
 //                int updateKey = (int) (Math.random()*100000+1);
@@ -171,7 +184,7 @@ public class GameHighLow extends ListenerAdapter {
                             }
                         }
                     }
-                    Global.activeGame.remove(gameChan,"highlow"); //updated current index of the game
+                    GameControl.activeGame.remove(gameChan,"highlow"); //updated current index of the game
                 }
                 else
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

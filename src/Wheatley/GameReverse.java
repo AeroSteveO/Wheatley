@@ -19,6 +19,16 @@ import org.pircbotx.hooks.events.MessageEvent;
  * Based on the C# IRC bot, CasinoBot
  * which is really unstable and breaks all the time
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Game
+ *    TimedWaitForQueue
+ * - Linked Classes
+ *    Global
+ *    GameControl
+ * 
  * Activate Command with:
  *      !reverse
  *
@@ -36,7 +46,7 @@ public class GameReverse extends ListenerAdapter {
         if (message.equalsIgnoreCase("!reverse")&&!Global.channels.areGamesBlocked(gameChan)) {
             // get the list of words only if theres nothing in the list alread
             
-            if (!Global.activeGame.isGameActive(gameChan, "reverse")){
+            if (!GameControl.activeGame.isGameActive(gameChan, "reverse")){
                 
                 Game currentGame = new Game("reverse");
                 
@@ -82,7 +92,7 @@ public class GameReverse extends ListenerAdapter {
                     }
                 }
             }
-            Global.activeGame.remove(gameChan,"reverse");
+            GameControl.activeGame.remove(gameChan,"reverse");
         }
     }
 }

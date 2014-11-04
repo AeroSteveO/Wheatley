@@ -39,7 +39,7 @@ public class Global {
     public static PircBotX bot;
     public static ChannelArray channels = new ChannelArray();
     public static String commandPrefix = "!";              // Not implemented yet in other functions
-    public static GameList activeGame = new GameList();    // To be implemented in games
+//    public static GameList activeGame = new GameList();    // To be implemented in games
     public static String phrasePrefix = new String();      //mainNick+", ";
     public static ArrayList<String> botAdmin = getBotAdmins();
     

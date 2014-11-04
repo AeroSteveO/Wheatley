@@ -14,6 +14,16 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ *    GameControl
+ * 
  * Activate Command with:
  *      !slot
  *      !slots
@@ -88,8 +98,8 @@ public class GameSlots extends ListenerAdapter {
                 
                 else if (!slots.get(0).equalsIgnoreCase(slots.get(1))&&!slots.get(1).equalsIgnoreCase(slots.get(2))){//&&!slots.get(0).equalsIgnoreCase(slots.get(2))
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Sorry "+event.getUser().getNick()+", but you lost $"+-prizes.get(0));
-                    GameControl.scores.addScore(event.getUser().getNick(), prizes.get(0));
-                    GameControl.scores.addScore(event.getBot().getNick(), prizes.get(0)*-1); //Give wheatley the money
+                    GameControl.scores.subtractScore(event.getUser().getNick(), prizes.get(0));
+                    GameControl.scores.addScore(event.getBot().getNick(), prizes.get(0)); //Give wheatley the money
                 }
                 
                 else{
@@ -103,7 +113,7 @@ public class GameSlots extends ListenerAdapter {
     private ArrayList<Integer> getPrizeArray(int bet) {
         
         ArrayList<Integer> prizes = new ArrayList<>();
-        prizes.add(-bet);
+        prizes.add(bet);
         prizes.add(bet*3);
         prizes.add(bet*30);
         prizes.add(1337);
