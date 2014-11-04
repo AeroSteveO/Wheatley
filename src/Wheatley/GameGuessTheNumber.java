@@ -41,30 +41,38 @@ public class GameGuessTheNumber extends ListenerAdapter {
         
         if ((message.split(" ")[0].equalsIgnoreCase("!GuessTheNumber")||message.split(" ")[0].equalsIgnoreCase("!guessnumber"))&&!Global.channels.areGamesBlocked(gameChan)) {
             
+            int length = 100;
+            
+            if (message.split(" ").length>=2){
+                
+                String[] options = message.split(" ");
+                
+                if (!options[1].matches("[0-9]+")){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"You must input an integer");
+                    return;
+                }
+                
+                else if (options.length>2){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 1 integer input maximum");
+                    return;
+                }
+                
+                else if (options.length==2){
+                    
+                    length = Integer.parseInt(options[1]);
+                    
+                    if (length>1000)
+                        length=1000;
+                    
+                    else if (length<10)
+                        length = 10;
+                    
+                }
+            }
+            
+            
             if (!Global.activeGame.isGameActive(gameChan, "guessthenumber")){
                 
-                int length = 100;
-                
-                if (message.split(" ").length>=2){
-                    
-                    String[] options = message.split(" ");
-                    
-                    if (!options[1].matches("[0-9]+")){
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"You must input an integer");
-                        return;
-                    }
-                    
-                    else if (options.length>2){
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"This command takes 1 integer input maximum");
-                        return;
-                    }
-                    
-                    else if (options.length==2){
-                        length = Integer.parseInt(options[1]);
-                        if (length>1000)
-                            length=1000;
-                    }
-                }
                 
                 int lives =(int) 10+length/100;
                 int time = 30+(length)/5;
@@ -121,6 +129,8 @@ public class GameGuessTheNumber extends ListenerAdapter {
                 }
                 Global.activeGame.remove(gameChan,"guessthenumber"); //updated current index of the game
             }
+            else
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");
         }
     }
 }

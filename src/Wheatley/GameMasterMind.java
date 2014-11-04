@@ -40,15 +40,16 @@ public class GameMasterMind extends ListenerAdapter {
         
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String gameChan = event.getChannel().getName();
-        int currentIndex=0;
+        
         if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!Global.channels.areGamesBlocked(gameChan)) {
             
-            if (!Global.activeGame.isGameActive(gameChan, "mastermind")){
+            if (!Global.activeGame.contains(gameChan, "mastermind")){
                 
                 String[] options = message.split(" ");
                 int length = 5;
                 int charSize = 2;
                 int lives = length * charSize;
+                
                 {
                     int i=1;
                     while (i<options.length){
@@ -68,6 +69,7 @@ public class GameMasterMind extends ListenerAdapter {
                         return;
                     }
                 }
+                
                 if (options.length==2){
                     length = Integer.parseInt(options[1]);
                     if (length>10)
@@ -96,7 +98,7 @@ public class GameMasterMind extends ListenerAdapter {
                     lives = Integer.parseInt(options[3]);
                 }
                 
-                
+                Global.activeGame.add(gameChan, "mastermind", "long");//Lets add the game to the array well after the input checks
                 int time = 30+(charSize+length)*10;
                 int scorePositionValue = 0;
                 int scoreValue = 0;
@@ -171,6 +173,8 @@ public class GameMasterMind extends ListenerAdapter {
                 }
                 Global.activeGame.remove(gameChan,"mastermind"); //updated current index of the game
             }
+            else
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");
         }
     }
     public int characterCounter(ArrayList<Integer> s, int charToFind){

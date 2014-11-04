@@ -32,14 +32,15 @@ public class GameHighLow extends ListenerAdapter {
         
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (!Global.activeGame.isGameActive(event.getChannel().getName(), "highlow")){
+        
+        if (message.startsWith(Global.commandPrefix)){
             
-            if (message.startsWith(Global.commandPrefix)){
+            String command = message.split(Global.commandPrefix)[1];
+            String[] cmdSplit = command.split(" ");
+            
+            if (cmdSplit[0].equalsIgnoreCase("highlow")&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
                 
-                String command = message.split(Global.commandPrefix)[1];
-                String[] cmdSplit = command.split(" ");
-                
-                if (cmdSplit[0].equalsIgnoreCase("highlow")&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
+                if (!Global.activeGame.isGameActive(event.getChannel().getName(), "highlow")){
                     
                     int key=(int) (Math.random()*100000+1);
 //                int updateKey = (int) (Math.random()*100000+1);
@@ -166,11 +167,14 @@ public class GameHighLow extends ListenerAdapter {
                                     event.getBot().sendIRC().message(gameChan,"Game over! You've given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions. Sorry, but you haven't won anything.");
                                 
                                 queue.close();
-                                break;                        
+                                break;
                             }
                         }
                     }
+                    Global.activeGame.remove(gameChan,"highlow"); //updated current index of the game
                 }
+                else
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");
             }
         }
     }
