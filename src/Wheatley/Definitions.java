@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -22,6 +23,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  * Original Bot = SRSBSNS
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  * Activate Commands With
  *      [definition]?
  *          respond with the definition of that word/phrase (if there is a definition in the db)
@@ -66,6 +75,7 @@ public class Definitions extends ListenerAdapter {
         }
         
         if (message.equalsIgnoreCase("!list defs")){
+            Collections.sort(words);
             String wordList = "";
             for (int i=0;i<words.size();i++){
                 wordList = wordList + words.get(i)+", ";
