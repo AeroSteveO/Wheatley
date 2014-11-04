@@ -48,6 +48,10 @@ public class MatrapterChat extends ListenerAdapter {
             
             if (message.equalsIgnoreCase("!penis"))
                 event.getBot().sendIRC().message(currentChan, "8==D");
+            
+            if (message.equalsIgnoreCase("!vagina"))
+                event.getBot().sendIRC().message(currentChan, "({'})");
+            
             if (message.equalsIgnoreCase("!boobs")||message.equalsIgnoreCase("!botd")||message.equalsIgnoreCase("!melons")){
                 List<String> a = new ArrayList<>();
                 a.add("( . ) ( . )");
