@@ -138,9 +138,9 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new Ping())
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
-                    .addListener(new Weather())
-                    .addListener(new Urban())
-                    .addListener(new MovieRatings())
+//                    .addListener(new Weather())
+//                    .addListener(new Urban())
+//                    .addListener(new MovieRatings())
                     .addListener(new BadWords())
                     .addListener(new MarkovInterface())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
