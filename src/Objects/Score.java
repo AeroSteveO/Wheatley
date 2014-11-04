@@ -23,6 +23,13 @@ import org.json.simple.parser.JSONParser;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    JSON-Simple-1.1.1
+ * - Custom Objects
+ *    N/A
+ * 
  * Object:
  *      Score
  * - Object that contains an int score for the input user, and keeps track of it
@@ -224,22 +231,19 @@ public class Score implements Comparable<Score> {
                     return (this.get(i).score);
                 }
             }
-//            if (idx==-1){
-//                this.add(new Score(nick,baseScore));
-//                idx = this.size();
-//            }
+//            throw new NullPointerException("User not contained in Score array");
             return (-1);
         }
         
         public void removeDupes(){
-            ArrayList<String> typesContained = new ArrayList<>();
+            ArrayList<String> usersContained = new ArrayList<>();
             for(int i = 0; i < this.size(); i++) {
                 
-                if (!typesContained.contains(this.get(i).user)) {
-                    typesContained.add(this.get(i).user);
+                if (!usersContained.contains(this.get(i).user)) {
+                    usersContained.add(this.get(i).user);
                 }
                 
-                else if (typesContained.contains(this.get(i).user)){
+                else if (usersContained.contains(this.get(i).user)){
                     this.remove(i);
                     i--;
                 }
