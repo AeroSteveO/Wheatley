@@ -20,7 +20,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  *
  * Requested by: PiTheMathGod
- * 
+ *
  * Requirements:
  * - APIs
  *    N/A
@@ -30,7 +30,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - Linked Classes
  *    Global
  *    GameControl
- * 
+ *
  * Activate Command with:
  *      !Mastermind [length] [chars] [lives]
  *
@@ -158,12 +158,8 @@ public class GameMasterMind extends ListenerAdapter {
                                         scoreValue = scoreValue + solCount;
                                 }
                             }
-                            if (lives <= 0){
-                                CurrentEvent.respond("You've run out of lives, the solution was "+solution);
-                                running = false;
-                                timedQueue.end();
-                            }
-                            else if (scorePositionValue == length){
+                            
+                            if (scorePositionValue == length){
                                 
                                 int timeSpent = currentGame.getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+length+charSize+lives,length, timeSpent, time);
@@ -173,10 +169,18 @@ public class GameMasterMind extends ListenerAdapter {
                                 running = false;
                                 timedQueue.end();
                             }
+                            
                             else{
                                 lives--;
-                                CurrentEvent.respond("Code has "+scorePositionValue+" digits correct in position and value | "+scoreValue+" digits correct in value | Lives left: "+lives);
+                                CurrentEvent.getBot().sendIRC().message(gameChan,"Code has "+scorePositionValue+" digits correct in position and value | "+scoreValue+" digits correct in value | Lives left: "+lives);
                             }
+                            
+                            if (lives <= 0){
+                                CurrentEvent.getBot().sendIRC().message(gameChan,"You've run out of lives, the solution was "+solution);
+                                running = false;
+                                timedQueue.end();
+                            }
+                            
                             scoreValue = 0;
                             scorePositionValue = 0;
                         }
