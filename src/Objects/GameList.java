@@ -16,26 +16,26 @@ import org.pircbotx.Colors;
  *
  * @author Stephen
  * Replaces the GameArray vector
- * 
+ *
  * Object:
  *      GameList
- * - Object that contains game data and prevents multiple instances of single 
+ * - Object that contains game data and prevents multiple instances of single
  *   games to occur in one channel
  *
  * Methods:
- *     *contains                   - Returns true if the current input game/channel 
+ *     *contains                   - Returns true if the current input game/channel
  *                                   combination is already in the array
  *     *add                        - Adds the input game/channel combo to the array
  *     *remove                     - Removes the input game/channel combo from the array
  *     *getCurrentGameDescriptions - Gives a nice text output of the game/channel
  *                                   combinations in the array
- *      getGameIDX                 - Returns the game/chanel combinations index 
+ *      getGameIDX                 - Returns the game/chanel combinations index
  *                                   value of its position in the array
- *     *isGameActive               - Returns true if the game is currently active, 
- *                                   returns false if the game is currently inactive, 
- *                                   if the game is inactive it adds it to the array 
+ *     *isGameActive               - Returns true if the game is currently active,
+ *                                   returns false if the game is currently inactive,
+ *                                   if the game is inactive it adds it to the array
  *                                   so subsequent searches show it as active
- * 
+ *
  * Note: Only commands marked with a * are available for use outside the object
  */
 
@@ -44,6 +44,10 @@ public class GameList {
     ArrayList<String[]> games = new ArrayList<>();
     
     public boolean contains(String channel, String game){
+        
+        if (games.isEmpty()){
+            return false;
+        }
         
         List gameSyn = Collections.synchronizedList(games);
         
@@ -56,12 +60,56 @@ public class GameList {
                 }
             }
         }
-        
         return false;
     }
     
     public void add(String channel, String game){
-        games.add(new String[] {channel,game});
+        games.add(new String[] {channel, game});
+    }
+    
+    public void add(String channel, String game, String length){
+        games.add(new String[] {channel, game, length});
+    }
+    
+    /**
+     *
+     * @param options is a string list containing [channel, game, length]
+     * Length parameter is either SHORT or LONG
+     * Game is the name and can be any string
+     * Channel must be a string starting with #, ex: #trivia
+     * 
+     */
+    public void add(String[] options){
+        String channel = null;
+        String game = null;
+        String length = null;
+        
+        for (int i=0;i<options.length;i++){
+            if (options[i].startsWith("#")){
+                channel = options[i];
+            }
+            else if (options[i].equalsIgnoreCase("short")||options[i].equalsIgnoreCase("long")){
+                length = options[i];
+            }
+            else{
+                game = options[i];
+            }
+        }
+        if (channel == null){
+            throw new NullPointerException("Channel cannot be null, channel must be of form #channel");
+        }
+        if (game == null){
+            throw new NullPointerException("Game cannot be null, game name must have a value");
+        }
+        if (length==null){
+            length = "";
+        }
+        
+        add(channel, game, length);
+    }
+    
+    public void clear(){
+        games.clear();
     }
     
     public ArrayList<String> getCurrentGameDescriptions(){
