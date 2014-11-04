@@ -29,8 +29,14 @@ import org.pircbotx.Colors;
  * Previous Bot: Poopsock by khwain
  * --created the russian roulette/throttling in the original randchan function
  *
- * Besides the one specialty library, this is plug and play
- *
+ * Requirements:
+ * - APIs
+ *    JSON-Simple-1.1.1
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  * Activate Commands with:
  *      !randchan [board]
  *          responds with a link to a random 4chan image in the given board,
@@ -84,11 +90,11 @@ public class RandChan extends ListenerAdapter {
                 }
 //                else{
                     //Russian roulette up in here
-                    if(((int)(Math.random()*6))==0) {
-//                        event.getChannel().send().kick(event.getUser(), "No soup for you");
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Randchan call blocked for no apparent reason");
-                        return;
-                    }
+//                    if(((int)(Math.random()*6))==0) {
+////                        event.getChannel().send().kick(event.getUser(), "No soup for you");
+//                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Randchan call blocked for no apparent reason");
+//                        return;
+//                    }
                     String[] splitString = event.getMessage().split("\\s+");
                     if(splitString.length>1) {
                         if(boardList.contains(splitString[1])) {
