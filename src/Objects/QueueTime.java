@@ -15,6 +15,15 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  */
 public  class QueueTime implements Runnable {
     int time;
