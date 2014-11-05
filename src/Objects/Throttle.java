@@ -6,32 +6,58 @@
 
 package Objects;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Vector;
 
 /**
  *
  * @author Steve-O
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
  */
 public class Throttle {
     private LinkedList<Long> timeLog = new LinkedList<Long>();
     private int maxLog = 5;
     private long maxTime = 100*1000;
-    String type;
+    private String channel;
+    private String type;
+    
     public Throttle (String name){
         this.type = name;
     }
+    
+    public Throttle (String name, String channel){
+        this.type = name;
+        this.channel = channel;
+    }
+    
     public Throttle (){
         this.type = "general";
     }
+    
     public void setMaxLog(int maxCalls){
         this.maxLog=maxCalls;
     }
+    
     public void setMaxTime(int timeLimit){
         this.maxTime=timeLimit;
     }
+    
+    public String getChannel(){
+        return(this.channel);
+    }
+    
+    public String getType(){
+        return (this.type);
+    }
+    
     public boolean isThrottleActive(){
         Date d = new Date();
         long currentTime = d.getTime();
@@ -44,63 +70,5 @@ public class Throttle {
             }
         }
         return(false);
-    }
-    public static class ThrottleArray extends Vector<Throttle>{
-        public Throttle getThrottleByType(String get){
-            int idx = -1;
-            for(int i = 0; i < this.size(); i++) {
-                if (this.get(i).type.equalsIgnoreCase(get)) {
-                    idx = i;
-                    break;
-                }
-            }
-            if (idx==-1){
-                this.add(new Throttle(get));
-                idx = this.size();
-            }
-            return (this.get(idx));
-        }
-        public boolean containsType(String type){
-            for(int i = 0; i < this.size(); i++) {
-                if (this.get(i).type.equalsIgnoreCase(type)) {
-                    return(true);
-                }
-            }
-            return(false);
-        }
-        public ArrayList<String> getAllThrottleTypes(){
-            ArrayList<String> typesContained = new ArrayList<>();
-            for(int i = 0; i < this.size(); i++) {
-                if (!typesContained.contains(this.get(i).type)) {
-                    typesContained.add(this.get(i).type);
-                }
-            }
-            return(typesContained);
-        }
-        public void safeAdd(String type){
-            if (!containsType(type)){
-                this.add(new Throttle(type));
-            }
-        }
-        public void safeRemove(String type){
-            for(int i = 0; i < this.size(); i++) {
-                if (this.get(i).type.equalsIgnoreCase(type)) {
-                    this.remove(i);
-                    i--;
-                }
-            }
-        }
-        public void removeDupes(){
-            ArrayList<String> typesContained = new ArrayList<>();
-            for(int i = 0; i < this.size(); i++) {
-                if (!typesContained.contains(this.get(i).type)) {
-                    typesContained.add(this.get(i).type);
-                }
-                else if (typesContained.contains(this.get(i).type)){
-                    this.remove(i);
-                    i--;
-                }
-            }
-        }
     }
 }
