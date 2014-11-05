@@ -67,7 +67,7 @@ public class GameSlots extends ListenerAdapter {
                     }
                 }
                 
-                if (bet>GameControl.scores.getScore(event.getUser().getNick())){
+                if (bet>GameControl.scores.getScoreObj(event.getUser().getNick()).getScore()){
                     event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to bet that much");
                     return;
                 }
