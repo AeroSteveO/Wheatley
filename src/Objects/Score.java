@@ -55,7 +55,6 @@ import org.json.simple.parser.JSONParser;
  *     *addScore      - Adds the input integer onto the current score of the input user
  *     *subtractScore - Subtracts the current integer from the current score of the input user
  *     *setScore      - Sets the current score of the input nick to the input int
- *     *removeDupes   - Removes duplicate entries from the score object
  *     *getScore      - Gets the current score of the input user
  *                    - Returns -1 if no user/score is found
  *     *getScoreObj   - Gets the current score object of the input user
@@ -70,6 +69,10 @@ import org.json.simple.parser.JSONParser;
  *                      to the current scores of the second, if there is no current
  *                      score in the second for a user, it adds that user and their score
  *     *compareTo     - Used to enable sorting using collections.sort
+ *      removeDupes       - Removes duplicate entries from the score object
+ *      removeDtellaUsers - Removes users whos nick starts with '|'
+ *      removeIdlePlayers - Removes users whos score is the same as the base score
+ *     *clean             - Removes duplicates, idle players, and dtella users
  *
  * Note: Only commands marked with a * are available for use outside the object
  */
