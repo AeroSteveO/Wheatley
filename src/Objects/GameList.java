@@ -165,10 +165,13 @@ public class GameList {
     }
     
     public boolean isGameActive(String currentChan, String GameType) {
+        
         boolean isActive=false;
+        
         if (games.isEmpty()){
             add(currentChan, GameType);
         }
+        
         else{
             isActive = contains(currentChan,GameType);
             if (!isActive){

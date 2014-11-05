@@ -8,6 +8,9 @@
   * @author Dickinson College
   * @version 3/29/2000
   * 
+  * @author Stephen
+  * @version 11/4/2014
+  * 
   * Some functions are derivatives from:
   * http://math.hws.edu/javanotes/c5/s4.html
   * 
@@ -17,8 +20,18 @@ package Objects;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-
+/**
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    PlayingCard
+ * - Linked Classes
+ *    N/A
+ *    
+ * 
+ */
 public class DeckOfCards {
     
     // A name for an array of references to Playing Card objects.

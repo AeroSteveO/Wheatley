@@ -21,6 +21,14 @@ import org.joda.time.Period;
  * ->stores game specific settings and ensures only one instance of a game can be in each channel
  * ->reduces redundant code and allows for re-use of code across games
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
  * ->Current Modifiers
  * ---->Shuffle
  *          Shuffles the characters in the chosen word
@@ -172,7 +180,9 @@ public class Game {
     }
     
     private static String modify(String mod, String word){
+        
         String modifiedWord ="";
+        
         if(mod.equalsIgnoreCase("blank"))   //Change the chosenword to all underscores
             modifiedWord=makeBlank(word);
         else if(mod.equalsIgnoreCase("shuffle")) //Shuffle the characters in the chosen word
@@ -181,8 +191,12 @@ public class Game {
             modifiedWord=reverse(word);
         else if(mod.equalsIgnoreCase("none"))    //User doesn't want the string modified
             modifiedWord=word;
+        else
+            throw new UnsupportedOperationException("Modifier not supported, use 'none' to leave the word unmodified");
+        
         return(modifiedWord);
     }
+    
     private static String shuffle(String input){
         List<Character> characters = new ArrayList<>();
         for(char c:input.toCharArray()){
