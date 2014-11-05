@@ -16,6 +16,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
  * Activate Commands With
  *      !Bane
  *      !Bane [word 1] [word 2]
@@ -30,6 +38,8 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Responds with random ascii boobs
  *      !Butt
  *          Responds with a PM with ascii art of a butt
+ *      !anus
+ *          Responds with an ascii butt (single line)
  *      !Meatlab
  *          Responds with saying
  *      !Matlab
@@ -49,8 +59,14 @@ public class MatrapterChat extends ListenerAdapter {
             if (message.equalsIgnoreCase("!penis"))
                 event.getBot().sendIRC().message(currentChan, "8==D");
             
+            if (message.equalsIgnoreCase("!bbc"))
+                event.getBot().sendIRC().message(currentChan, Colors.BOLD+"8===D");
+            
             if (message.equalsIgnoreCase("!vagina"))
                 event.getBot().sendIRC().message(currentChan, "({'})");
+            
+            if (message.equalsIgnoreCase("!anus"))
+                event.getBot().sendIRC().message(currentChan, "()o()");
             
             if (message.equalsIgnoreCase("!boobs")||message.equalsIgnoreCase("!botd")||message.equalsIgnoreCase("!melons")){
                 List<String> a = new ArrayList<>();
