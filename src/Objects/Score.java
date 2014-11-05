@@ -235,7 +235,36 @@ public class Score implements Comparable<Score> {
             return (-1);
         }
         
-        public void removeDupes(){
+        public void clean(){
+            this.removeDupes();
+            this.removeDtellaUsers();
+            this.removeIdlePlayers();
+            this.saveToJSON();
+        }
+        
+        private void removeIdlePlayers(){
+            for(int i = 0; i < this.size(); i++) {
+                
+                if (this.get(i).getScore()==baseScore) {
+                    System.out.println("removed user "+this.get(i).user);
+                    this.remove(i);
+                    i--;
+                }
+            }
+        }
+        
+        private void removeDtellaUsers(){
+            for(int i = 0; i < this.size(); i++) {
+                
+                if (this.get(i).user.startsWith("|")) {
+                    System.out.println("removed user "+this.get(i).user);
+                    this.remove(i);
+                    i--;
+                }
+            }
+        }
+        
+        private void removeDupes(){
             ArrayList<String> usersContained = new ArrayList<>();
             for(int i = 0; i < this.size(); i++) {
                 

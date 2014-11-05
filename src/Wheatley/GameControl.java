@@ -71,19 +71,35 @@ public class GameControl extends ListenerAdapter {
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (message.startsWith(Global.commandPrefix)&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
+            
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
-            if (command.equalsIgnoreCase("flush")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner))){
+            
+            if (command.equalsIgnoreCase("flush")
+                    &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                
                 if (event.getUser().isVerified()){
                     activeGame.clear();
+                    scores.clean();
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Cleaned out game files");
+                }
+                else{
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
                 }
             }
             
             else if (command.equalsIgnoreCase("save")
-                    &&(Global.botAdmin.contains(event.getUser().getNick())&&event.getUser().isVerified())){
+                    &&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
                 
-                scores.removeDupes();
-                scores.saveToJSON();
+                if(event.getUser().isVerified()){
+                    
+                    scores.clean();
+                    scores.saveToJSON();
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Saved game score json");
+                }
+                else{
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
+                }
             }
             
             else if (command.equalsIgnoreCase("money")){ // Get your current score
@@ -231,20 +247,24 @@ public class GameControl extends ListenerAdapter {
     
     @Override
     public void onUserList(UserListEvent event){
-        ImmutableSortedSet users = event.getUsers();
         
-        Iterator<User> iterator = users.iterator();
-        boolean modified = false;
-        while(iterator.hasNext()) {
-            User element = iterator.next();
-            if (!scores.containsUser(element.getNick())){
-                //temp = (User)users.floor(temp);
-                scores.addUser(element.getNick());
-                System.out.println(element.getNick());
-                modified = true;
+        if (!Global.channels.areGamesBlocked(event.getChannel().getName())){
+            
+            ImmutableSortedSet users = event.getUsers();
+            
+            Iterator<User> iterator = users.iterator();
+            boolean modified = false;
+            while(iterator.hasNext()) {
+                User element = iterator.next();
+                if (!scores.containsUser(element.getNick())){
+                    //temp = (User)users.floor(temp);
+                    scores.addUser(element.getNick());
+                    System.out.println(element.getNick());
+                    modified = true;
+                }
             }
+            if (modified)
+                scores.saveToJSON();
         }
-        if (modified)
-            scores.saveToJSON();
     }
 }
