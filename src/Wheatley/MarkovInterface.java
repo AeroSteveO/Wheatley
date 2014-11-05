@@ -21,9 +21,17 @@ import org.pircbotx.Colors;
 /**
  *
  * @author Steve-O
- *Jborg markov chain integration, based off seeborg which is based on pyborg
+ * Jborg markov chain integration, based off seeborg which is based on pyborg
  *
- *Activate Commands With
+ * Requirements:
+ * - APIs
+ *    Jborg (https://code.google.com/p/jborg/)
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
+ * Activate Commands With
  *     !mute
  *     !speak
  *         To turn on and off the random response markov generator
@@ -62,29 +70,50 @@ public class MarkovInterface extends ListenerAdapter{
         //Toggle off Markov Chain Talking
         if (Pattern.matches(Global.mainNick + ", (shutup|shut\\s+up)",message)||message.equalsIgnoreCase("!mute")||Pattern.matches("(shutup|shut\\s+up)\\s+"+Global.mainNick,message)){
             Global.channels.get(channelIndex).setSpeakValue(false);
+            event.getBot().sendIRC().notice(event.getUser().getNick(), "Markov chain system muted");
         }
         
         //Toggle on Markov Chain Talking
         if (message.equalsIgnoreCase(Global.mainNick + ", speak up")||message.equalsIgnoreCase("!speak")){
             Global.channels.get(channelIndex).setSpeakValue(true);
+            event.getBot().sendIRC().notice(event.getUser().getNick(), "Markov chain system un-muted");
         }
         
         //||event.getChannel().isOwner(event.getUser())
         if (message.toLowerCase().startsWith("!set chance ")
-                &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified())){
+                &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))
+                &&event.getUser().isVerified())){
             
             String[] chanceSplit = message.split(" ");
-            int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
-            if (inputChance>0)
-                Global.channels.get(channelIndex).setChanceValue(inputChance);
+            String chance = chanceSplit[chanceSplit.length-1];
+            
+            if(chance.matches("[0-9]+")){
+                int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
+                
+                if (inputChance>0){
+                    Global.channels.get(channelIndex).setChanceValue(inputChance);
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance set to: 1/"+inputChance);
+                }
+                
+                else
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance must be an integer value greater than 0");
+            }
             else
-                event.getBot().sendIRC().message(currentChan, "Chance must be an integer value greater than 0");
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance must be an integer value greater than 0");
         }
+        
         if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")){
+            
             String[] keyWord = message.replace("?","").split(" ");
-            String response = borg.generateReply(keyWord[keyWord.length-1]);
-            event.getBot().sendIRC().message(currentChan, response);
-            Global.channels.get(channelIndex).setPreviousMessage(response);
+            
+            try{
+                String response = borg.generateReply(keyWord[keyWord.length-1]);
+                event.getBot().sendIRC().message(currentChan, response);
+                Global.channels.get(channelIndex).setPreviousMessage(response);
+            }
+            catch(Exception ex){
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "Word "+Colors.BOLD+keyWord[keyWord.length-1]+Colors.NORMAL+" not found in the Markov system");
+            }
         }
         
         if (!message.startsWith("!")&&!message.startsWith(".")&&
@@ -106,8 +135,14 @@ public class MarkovInterface extends ListenerAdapter{
             
             //Automatically speak with a 1/chance probability
             if (Global.channels.get(channelIndex).getChance()==((int) (Math.random()*Global.channels.get(channelIndex).getChance())+1)&&Global.channels.get(channelIndex).canSpeak()){
-                String reply = borg.generateReply(message);
-                event.getBot().sendIRC().message(currentChan, reply);
+                String reply;
+                try{
+                    reply = borg.generateReply(message);
+                    event.getBot().sendIRC().message(currentChan, reply);
+                }
+                catch (Exception ex){
+                    
+                }
             }
             Global.channels.get(channelIndex).setPreviousMessage(message);
         }
