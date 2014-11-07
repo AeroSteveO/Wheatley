@@ -97,7 +97,7 @@ public class GameSlots extends ListenerAdapter {
                 }
                 
                 else if (!slots.get(0).equalsIgnoreCase(slots.get(1))&&!slots.get(1).equalsIgnoreCase(slots.get(2))){//&&!slots.get(0).equalsIgnoreCase(slots.get(2))
-                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Sorry "+event.getUser().getNick()+", but you lost $"+-prizes.get(0));
+                    event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Sorry "+event.getUser().getNick()+", but you lost $"+prizes.get(0));
                     GameControl.scores.subtractScore(event.getUser().getNick(), prizes.get(0));
                     GameControl.scores.addScore(event.getBot().getNick(), prizes.get(0)); //Give wheatley the money
                 }
