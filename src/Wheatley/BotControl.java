@@ -48,6 +48,8 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *          Shuts down the bot
  *      !ram
  *          Responds with Wheatley's current ram usage
+ *      !threads
+ *          Responds with the number of threads Wheatley is using
  *      !say [sentence]
  *          Forces Wheatley to say the input sentence
  *      !say [channel] [sentence]
