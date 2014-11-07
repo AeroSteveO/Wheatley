@@ -68,7 +68,18 @@ public class DeckOfCards {
         }
         cardsUsed = 0;
     }
-    
+    // creates a nicely organized deck for testing purposes
+    public DeckOfCards(int asdf) {
+        theDeck = new ArrayList<>();
+        
+        // Create the cards:
+        for (int j=1;j<5;j++){
+            for (int i=0; i < 13; i++) {
+                theDeck.add(new PlayingCard(i+1, j));
+            }
+        }
+        cardsUsed = 0;
+    }
     /**
      * Shuffle the deck of cards.
      */
