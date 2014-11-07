@@ -25,6 +25,14 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  * Part code from RoyalBot -- http://www.royalcraft.org/royaldev/royalbot
  * Rest of the code is Wheatley Original
  *
+ * Requirements:
+ * - APIs
+ *    JSON-Simple-1.1.1
+ * - Custom Objects
+ *    ChannelStore
+ * - Linked Classes
+ *    Global
+ * 
  * Activate Commands with:
  *      Wheatley, join #[channel]
  *          Makes the bot join the given channel
@@ -99,6 +107,16 @@ public class BotControl extends ListenerAdapter{
                 event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
             }
         }
+        
+        if (message.equalsIgnoreCase("!threads")){
+            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                event.getBot().sendIRC().message(event.getChannel().getName(), "I am currently using "+Thread.activeCount()+" threads");
+            }
+            else{
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
+            }
+        }
+        
         
         if (message.equalsIgnoreCase(Global.mainNick+", fix yourself")
                 &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)
@@ -228,15 +246,3 @@ public class BotControl extends ListenerAdapter{
         }
     }
 }
-//    public void onEvent(Event event) throws Exception {
-//        MessageEvent newEvent = null;
-//        if (event instanceof MessageEvent) {
-//            if (!Permissions.getAccess((MessageEvent) event)) {
-//                return;
-//            }
-//        } else if (event instanceof PrivateMessageEvent) {
-//            newEvent = new MessageEvent(event.getBot(), (Channel) event.getBot().getUserBot().getChannels().toArray()[0], ((PrivateMessageEvent) event).getUser(), ((PrivateMessageEvent) event).getMessage());
-//            if (!Permissions.getAccess((MessageEvent) newEvent)) {
-//                return;
-//            }
-//        }
