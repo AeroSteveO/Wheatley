@@ -187,7 +187,9 @@ public class PlayingCard implements Comparable {
         return (this.value == card.value);
     }
     
-    
+    public String toMaskedString(){
+        return "**";
+    }
     /**
      * Return a string representation of this PlayingCard.
      * Each card is in the format of [value][suit].
