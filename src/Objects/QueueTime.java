@@ -49,6 +49,10 @@ public  class QueueTime implements Runnable {
         this.bot = Global.bot;
     }
     
+    public void interrupt(){
+        this.t.interrupt();
+    }
+    
     public void giveT(Thread t) {
         this.t = t;
     }
@@ -59,7 +63,7 @@ public  class QueueTime implements Runnable {
             Thread.sleep(time*1000);
             bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            
         }
     }
 }
