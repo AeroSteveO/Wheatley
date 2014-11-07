@@ -12,25 +12,47 @@ import java.util.ArrayList;
  *
  * @author Stephen
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    PlayingCard
+ * - Linked Classes
+ *    N/A
+ * 
  * An object of type Hand represents a hand of cards.  The
  * cards belong to the class Card.  A hand is empty when it
  * is created, and any number of cards can be added to it.
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  * Utilized multiple sources
  * http://math.hws.edu/javanotes/c5/s4.html
  */
 
 public class CardHand {
     private ArrayList<PlayingCard> hand;
+    private String player = new String();
     
     public CardHand(){
         hand = new ArrayList<>();
         
     }
+    public CardHand(String player){
+        hand = new ArrayList<>();
+        this.player = player;
+    }
     
+    public String toColoredString(){
+        String handString = "";
+        for (int i=0;i<hand.size();i++){
+            handString += hand.get(i).toColoredString() + " | ";
+        }
+        return handString;
+    }
+    
+    @Override
     public String toString(){
         String handString = "";
         for (int i=0;i<hand.size();i++){
@@ -38,6 +60,57 @@ public class CardHand {
         }
         return handString;
     }
+    
+    public String toMaskedString(){
+        String handString = "";
+        for (int i=0;i<hand.size();i++){
+            handString += hand.get(i).toMaskedString() + " | ";
+        }
+        return handString;
+    }
+    
+    public String getPlayer(){
+        return this.player;
+    }
+    
+    public int getHandValue(){
+        int value = 0;
+        for (int i=0;i<hand.size();i++){
+            value+=hand.get(i).getValue();
+        }
+        return value;
+    }
+    
+    public int getBlackjackHandValue(){
+        
+        int value = 0;
+        int aces = 0;
+        for (int i=0;i<hand.size();i++){
+            
+            if (hand.get(i).getValue()>10){
+                value+=10;
+            }
+            else if (hand.get(i).getValue()==1){
+                value+=11;
+                aces++;
+            }
+            else{
+                value+=hand.get(i).getValue();
+            }
+            
+        }
+        
+        if (value>21){
+            int i=0;
+            while (i<aces&&value>21){
+                value-=11;
+                value+=1;
+                i++;
+            }
+        }
+        return value;
+    }
+    
     /**
      * Remove all cards from the hand, leaving it empty.
      */
@@ -82,6 +155,7 @@ public class CardHand {
     
     /**
      * Returns the number of cards in the hand.
+     * @return the number of cards in the hand.
      */
     public int getCardCount() {
         return hand.size();
