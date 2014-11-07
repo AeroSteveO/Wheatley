@@ -101,7 +101,7 @@ public class GameHighLow extends ListenerAdapter {
                             break;
                             
                         }
-                        if (currentChan.equalsIgnoreCase(gameChan)){
+                        else if (currentChan.equalsIgnoreCase(gameChan)){
                             if(currentMessage.equalsIgnoreCase("h")||currentMessage.equalsIgnoreCase("l")){
                                 prevPlayer = currentEvent.getUser().getNick();
                                 String guess = currentMessage;
@@ -160,7 +160,15 @@ public class GameHighLow extends ListenerAdapter {
                                     }
                                 }
                                 
+                                if(deck.cardsLeft()==0){
+                                    GameControl.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
+                                    event.getBot().sendIRC().message(gameChan,"Game over! You've completed the deck! "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
+                                    queue.close();
+                                    break;
+                                }
+                                
                                 key = (int) (Math.random()*100000+1);
+                                gameUpdater.interrupt();
                                 gameUpdater = new QueueTime(event,time,key);
                                 t = new Thread(gameUpdater);
                                 gameUpdater.giveT(t);
@@ -173,11 +181,11 @@ public class GameHighLow extends ListenerAdapter {
                             else if (currentEvent.getMessage().equals("!fuckthis")||currentEvent.getMessage().equalsIgnoreCase("I give up")){
                                 if (correctGuesses>0){
                                     GameControl.scores.addScore(prevPlayer, basePrize+correctGuesses*correctGuesses);
-                                    event.respond("Game over! You've given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
+                                    event.respond("You have given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
                                     
                                 }
                                 else
-                                    event.respond("Game over! You've given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions. Sorry, but you haven't won anything.");
+                                    event.respond("You have given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions. Sorry, but you haven't won anything.");
                                 
                                 queue.close();
                                 break;
