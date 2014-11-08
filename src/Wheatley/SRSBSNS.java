@@ -20,6 +20,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  *      Original Bot: SRSBSNS by: Saigon
  *
+ * Requirements:
+ * - APIs
+ *    Jsoup
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  * Activate Command with:
  *      !lasturl
  *          Pulls up the last url seen in the current channel
@@ -37,13 +45,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class SRSBSNS extends ListenerAdapter {
     
-//    !whodef (who defined), !whatis (definition), !explain (definition),
-//    !imdb (imdb movie search), !metacritic (metacritic.com rating),
-    
-    
-//    !lasturl (analyzes the last url posted), !summon (person), !christmas (countdown to Christmas)
-//    !udict (urban dictionary), !randomdef (random definition), !srsbsns (responds: wat), 
-//    !rt (rotten tomatoes movie rating),
+//    !metacritic (metacritic.com rating),
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -148,15 +150,17 @@ public class SRSBSNS extends ListenerAdapter {
                 event.respond(String.format("There are %d days, %d hours, %d minutes, and %d seconds until Christmas", days, hours, minutes, seconds));
             }
             //String message = event.getMessage().trim();
-            if(message.matches("!summon\\s+[^\\s]+")) {
-                String target = message.split("\\s+")[1];
-                if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(target))) {
-                    //If the user is in the same channel as the summon
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+target+" has been PMed");
-                    event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(target).getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"you have been summoned by "+event.getUser().getNick()+" from "+event.getChannel().getName());
-                }
-                else {
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"user not in channel");
+            if(!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())){
+                if(message.matches("!summon\\s+[^\\s]+")) {
+                    String target = message.split("\\s+")[1];
+                    if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(target))) {
+                        //If the user is in the same channel as the summon
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+target+" has been PMed");
+                        event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(target).getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"you have been summoned by "+event.getUser().getNick()+" from "+event.getChannel().getName());
+                    }
+                    else {
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"user not in channel");
+                    }
                 }
             }
         }
