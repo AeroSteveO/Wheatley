@@ -81,6 +81,17 @@ public class CardHand {
         return value;
     }
     
+    public boolean isBlackjackHandSoft(){
+        int value=0;
+        for (int i=0;i<hand.size();i++){
+            
+            if (hand.get(i).getValue()>10){
+                value+=10;
+            }
+        }
+        return (value!=getBlackjackHandValue());
+    }
+    
     public int getBlackjackHandValue(){
         
         int value = 0;
