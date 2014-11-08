@@ -56,7 +56,6 @@ public class GameHighLow extends ListenerAdapter {
                 if (!GameControl.activeGame.isGameActive(event.getChannel().getName(), "highlow")){
                     
                     int key=(int) (Math.random()*100000+1);
-//                int updateKey = (int) (Math.random()*100000+1);
                     boolean running = true;
                     
                     DeckOfCards deck = new DeckOfCards();
@@ -80,13 +79,11 @@ public class GameHighLow extends ListenerAdapter {
                     WaitForQueue queue = new WaitForQueue(event.getBot());
                     
                     while (running){
+                        
                         MessageEvent currentEvent = queue.waitFor(MessageEvent.class);
                         String currentMessage = Colors.removeFormattingAndColors(currentEvent.getMessage());
                         String currentChan = currentEvent.getChannel().getName();
-//                    if (currentMessage.equalsIgnoreCase(Integer.toString(updateKey))){
-//
-//                        counter++;
-//                    }
+                        
                         if (currentMessage.equalsIgnoreCase(Integer.toString(key))){
                             
                             if (correctGuesses>0){
@@ -103,11 +100,10 @@ public class GameHighLow extends ListenerAdapter {
                         }
                         else if (currentChan.equalsIgnoreCase(gameChan)){
                             if(currentMessage.equalsIgnoreCase("h")||currentMessage.equalsIgnoreCase("l")){
+                                
                                 prevPlayer = currentEvent.getUser().getNick();
-                                String guess = currentMessage;
-//                            event.getBot().sendIRC().message(gameChan,"The next card is the "+nextCard.toColoredString());
+                                
                                 if (nextCard.getValue()==currentCard.getValue()){
-//                                event.getBot().sendIRC().message(gameChan,"The value is the same as the previous card. You lose on ties. Sorry!");
                                     if (correctGuesses>0){
                                         GameControl.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
                                         event.getBot().sendIRC().message(gameChan,"Game over! The value is the same as the previous card. You lose on ties. Sorry! "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
@@ -118,15 +114,14 @@ public class GameHighLow extends ListenerAdapter {
                                     
                                     queue.close();
                                     break;
-                                    // END GAM HERA
+                                    // END GAME HERE
                                 }
                                 else if( nextCard.getValue()>currentCard.getValue()){
-                                    if(guess.equalsIgnoreCase("h")){
+                                    if(currentMessage.equalsIgnoreCase("h")){
                                         event.getBot().sendIRC().message(gameChan,"The next card is the "+nextCard.toColoredString()+" Your prediction was correct. What will be your next guess?");
                                         correctGuesses++;
                                     }
                                     else{
-//                                    event.getBot().sendIRC().message(gameChan,"The next card is the "+nextCard.toColoredString()+" Your prediction was incorrect.");
                                         if (correctGuesses>0){
                                             GameControl.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
                                             event.getBot().sendIRC().message(gameChan,"Game over! Your prediction was incorrect. The card was "+nextCard.toColoredString()+". "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
@@ -136,16 +131,15 @@ public class GameHighLow extends ListenerAdapter {
                                         }
                                         queue.close();
                                         break;
-                                        // END GAM HEAR
+                                        // END GAME HERE
                                     }
                                 }
                                 else{
-                                    if(guess.equalsIgnoreCase("l")){
+                                    if(currentMessage.equalsIgnoreCase("l")){
                                         event.getBot().sendIRC().message(gameChan,"The next card is the "+nextCard.toColoredString()+" Your prediction was correct. What will be your next guess?");
                                         correctGuesses++;
                                     }
                                     else{
-//                                    event.getBot().sendIRC().message(gameChan,"Your prediction was incorrect.");
                                         if (correctGuesses>0){
                                             GameControl.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
                                             event.getBot().sendIRC().message(gameChan,"Game over! Your prediction was incorrect. The card was "+nextCard.toColoredString()+". "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
@@ -156,7 +150,7 @@ public class GameHighLow extends ListenerAdapter {
                                         
                                         queue.close();
                                         break;
-                                        // END GAM HEAR
+                                        // END GAME HERE
                                     }
                                 }
                                 
