@@ -45,7 +45,7 @@ public  class TimedWaitForQueue extends WaitForQueue{
         runnable.giveT(t);
         t.start();
     }
-    
+
     public void end() throws InterruptedException{
         this.t.interrupt();
         this.close(); //Close this EventQueue
