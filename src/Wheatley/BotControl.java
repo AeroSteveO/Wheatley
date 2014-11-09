@@ -119,6 +119,16 @@ public class BotControl extends ListenerAdapter{
             }
         }
         
+        if (message.equalsIgnoreCase("!sysinfo")){
+            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
+                int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
+                event.getBot().sendIRC().message(event.getChannel().getName(), Colors.BOLD+"Ram used: "+Colors.NORMAL+usedRam+"MB"+Colors.BOLD+" Ram free: "+Colors.NORMAL+freeRam+"MB"+Colors.BOLD+" Threads: "+Colors.NORMAL+Thread.activeCount());
+            }
+            else{
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
+            }
+        }
         
         if (message.equalsIgnoreCase(Global.mainNick+", fix yourself")
                 &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)
