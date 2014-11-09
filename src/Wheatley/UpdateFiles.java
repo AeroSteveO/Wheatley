@@ -9,7 +9,6 @@ package Wheatley;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -19,6 +18,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  * Used to update .txt files
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  * Activate commands with
  *      !update [filename] [singleWordItem]
  *          !update badwords defenetely
