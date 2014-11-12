@@ -6,6 +6,7 @@
 
 package Objects;
 
+import Objects.Score.ScoreArray;
 import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
@@ -20,6 +21,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    N/A
  * - Custom Objects
  *    TimedWaitForQueue
+ *    ScoreArray
  * - Linked Classes
  *    Global
  *
@@ -37,7 +39,9 @@ import org.pircbotx.hooks.events.MessageEvent;
  *                    coming from the channel that the source event came from
  *     *setMaxSize  - Sets the maximum number of players allowed in the list, if
  *                    this isn't set by the user, there is no limit
- *
+ *     *setScoringRequirements - Gives the function a score array to use in
+ *                               verifying that each user who joins the game
+ *                               has enough money to afford the minimum bet
  *
  * Note: Only commands marked with a * are available for use outside the object
  */
@@ -49,7 +53,8 @@ public class MultiplayerArrayGetQueue {
     private final String commandString;
     private TimedWaitForQueue queue;
     private int maxSize = -1;
-    
+    private ScoreArray scores = null;
+    private int minBet=-1;
     
     public MultiplayerArrayGetQueue(MessageEvent event,String commandString){
         this.event=event;
@@ -78,6 +83,11 @@ public class MultiplayerArrayGetQueue {
         this.maxSize = maxSize;
     }
     
+    public void setScoringRequirements(ScoreArray scores, int bet){
+        this.minBet=bet;
+        this.scores=scores;
+    }
+    
     public void end() throws InterruptedException{
         this.queue.end();
     }
@@ -95,19 +105,31 @@ public class MultiplayerArrayGetQueue {
             String currentChan = currentEvent.getChannel().getName();
             
             if (currentMessage.equalsIgnoreCase(Integer.toString(key))){
-                this.queue.close();
+                this.queue.end();
                 running = false;
             }
+            
             else if (currentChan.equalsIgnoreCase(this.event.getChannel().getName())){
+                
                 if (currentMessage.equalsIgnoreCase(Global.commandPrefix+this.commandString)){
-                    this.players.add(currentEvent.getUser().getNick());
-                    currentEvent.respond("You have been added to the playerlist");
+                    if (scores==null||minBet==-1){
+                        this.players.add(currentEvent.getUser().getNick());
+                        currentEvent.respond("You have been added to the playerlist");
+                    }
+                    else{
+                        if(scores.getScoreObj(currentEvent.getUser().getNick()).getScore()>=minBet){
+                            this.players.add(currentEvent.getUser().getNick());
+                            currentEvent.respond("You have been added to the playerlist");
+                        }
+                        else
+                            currentEvent.respond("You don't have enough money to join this game");
+                    }
                 }
-                if (maxSize!=-1){
-                    if(this.players.size()>this.maxSize){
+                
+                if (maxSize>0){
+                    if(this.players.size()>=this.maxSize){
                         this.event.getBot().sendIRC().message(this.event.getChannel().getName(),"Playerlist Full");
                         this.queue.end();
-//                        this.queue.close();
                         running = false;
                     }
                 }
