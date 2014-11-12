@@ -12,10 +12,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.Vector;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
@@ -23,13 +24,13 @@ import org.json.simple.parser.JSONParser;
 /**
  *
  * @author Stephen
- * 
+ *
  * Requirements:
  * - APIs
  *    JSON-Simple-1.1.1
  * - Custom Objects
  *    N/A
- * 
+ *
  * Object:
  *      Score
  * - Object that contains an int score for the input user, and keeps track of it
@@ -136,9 +137,22 @@ public class Score implements Comparable<Score> {
         
     }
     
-    public static class ScoreArray extends Vector<Score>{
+    public static class ScoreArray {
+        private final List<Score> scores = Collections.synchronizedList( new  ArrayList<Score>());
         private String filename="doNotSave";
         private int baseScore=0;
+        public void add(Score score){
+            this.scores.add(score);
+        }
+        public void clear(){
+            this.scores.clear();
+        }
+        public int size(){
+            return (this.scores.size());
+        }
+        public Score get(int i){
+            return (this.scores.get(i));
+        }
         
         public void setBaseScore(int score){
             baseScore = score;
@@ -152,7 +166,7 @@ public class Score implements Comparable<Score> {
             getScoreObj(nick).add(toAdd);
             this.saveToJSON();
         }
-                
+        
         public int addScore(String nick, int basePrize, int wordLength, int x1, int x2){
             
             basePrize += wordLength - (wordLength * x1 / x2) ;
@@ -173,11 +187,13 @@ public class Score implements Comparable<Score> {
         }
         
         public ScoreArray copyOutZeros(){
-            ScoreArray zeros = new ScoreArray();
-            for (int i=0;i<this.size();i++){
-                zeros.add(new Score(this.get(i).user));
+            synchronized(scores){
+                ScoreArray zeros = new ScoreArray();
+                for (int i=0;i<scores.size();i++){
+                    zeros.add(new Score(scores.get(i).user));
+                }
+                return zeros;
             }
-            return zeros;
         }
         
         public void merge(ScoreArray toBeMerged){
@@ -194,48 +210,57 @@ public class Score implements Comparable<Score> {
         }
         
         public boolean containsUser(String nick){
-            for(int i = 0; i < this.size(); i++) {
-                if (this.get(i).user.equalsIgnoreCase(nick)) {
-                    return true;
+            
+            synchronized(scores){
+                for(int i = 0; i < scores.size(); i++) {
+                    if (scores.get(i).user.equalsIgnoreCase(nick)) {
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
         }
         
         public void addUser(String nick){
             if (!containsUser(nick)){
-                this.add(new Score(nick,baseScore));
+                scores.add(new Score(nick,baseScore));
             }
         }
         
         public Score getScoreObj(String nick){
-            for(int i = 0; i < this.size(); i++) {
-                if (this.get(i).user.equalsIgnoreCase(nick)) {
-                    return (this.get(i));
+            synchronized(scores){
+                for(int i = 0; i < scores.size(); i++) {
+                    if (scores.get(i).user.equalsIgnoreCase(nick)) {
+                        return (scores.get(i));
+                    }
                 }
+                scores.add(new Score(nick,baseScore));
+                return (this.getScoreObj(nick));
             }
-            this.add(new Score(nick,baseScore));
-            return (this.getScoreObj(nick));
         }
         
         public int getScoreIdx(String nick){
-            for(int i = 0; i < this.size(); i++) {
-                if (this.get(i).user.equalsIgnoreCase(nick)) {
-                    return (i);
+            synchronized(scores){
+                for(int i = 0; i < this.size(); i++) {
+                    if (scores.get(i).user.equalsIgnoreCase(nick)) {
+                        return (i);
+                    }
                 }
+                scores.add(new Score(nick,baseScore));
+                return (this.getScoreIdx(nick));
             }
-            this.add(new Score(nick,baseScore));
-            return (this.getScoreIdx(nick));
         }
         
         public int getScore(String nick){
-            for(int i = 0; i < this.size(); i++) {
-                if (this.get(i).user.equalsIgnoreCase(nick)) {
-                    return (this.get(i).score);
+            synchronized(scores){
+                for(int i = 0; i < scores.size(); i++) {
+                    if (scores.get(i).user.equalsIgnoreCase(nick)) {
+                        return (scores.get(i).score);
+                    }
                 }
-            }
 //            throw new NullPointerException("User not contained in Score array");
-            return (-1);
+                return (-1);
+            }
         }
         
         public void clean(){
@@ -246,38 +271,44 @@ public class Score implements Comparable<Score> {
         }
         
         private void removeIdlePlayers(){
-            for(int i = 0; i < this.size(); i++) {
-                
-                if (this.get(i).getScore()==baseScore) {
-                    System.out.println("removed user "+this.get(i).user);
-                    this.remove(i);
-                    i--;
+            synchronized(scores){
+                for(int i = 0; i < this.size(); i++) {
+                    
+                    if (scores.get(i).getScore()==baseScore) {
+                        System.out.println("removed user "+scores.get(i).user);
+                        scores.remove(i);
+                        i--;
+                    }
                 }
             }
         }
         
         private void removeDtellaUsers(){
-            for(int i = 0; i < this.size(); i++) {
-                
-                if (this.get(i).user.startsWith("|")) {
-                    System.out.println("removed user "+this.get(i).user);
-                    this.remove(i);
-                    i--;
+            synchronized(scores){
+                for(int i = 0; i < this.size(); i++) {
+                    
+                    if (scores.get(i).user.startsWith("|")) {
+                        System.out.println("removed user "+scores.get(i).user);
+                        scores.remove(i);
+                        i--;
+                    }
                 }
             }
         }
         
         private void removeDupes(){
-            ArrayList<String> usersContained = new ArrayList<>();
-            for(int i = 0; i < this.size(); i++) {
-                
-                if (!usersContained.contains(this.get(i).user)) {
-                    usersContained.add(this.get(i).user);
-                }
-                
-                else if (usersContained.contains(this.get(i).user)){
-                    this.remove(i);
-                    i--;
+            synchronized(scores){
+                ArrayList<String> usersContained = new ArrayList<>();
+                for(int i = 0; i < scores.size(); i++) {
+                    
+                    if (!usersContained.contains(scores.get(i).user)) {
+                        usersContained.add(scores.get(i).user);
+                    }
+                    
+                    else if (usersContained.contains(scores.get(i).user)){
+                        scores.remove(i);
+                        i--;
+                    }
                 }
             }
         }
@@ -286,8 +317,10 @@ public class Score implements Comparable<Score> {
             if (!this.filename.equalsIgnoreCase("doNotSave")){
                 JSONObject scoreList = new JSONObject();
 //            JSONArray score = new JSONArray();
-                for (int i=0;i<this.size();i++){
-                    scoreList.put(this.get(i).user,this.get(i).score);
+                synchronized(scores){
+                    for (int i=0;i<scores.size();i++){
+                        scoreList.put(scores.get(i).user,scores.get(i).score);
+                    }
                 }
                 String addition = JSONValue.toJSONString(scoreList);
                 try{

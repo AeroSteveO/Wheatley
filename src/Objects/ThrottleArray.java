@@ -27,24 +27,24 @@ import java.util.List;
  */
 public class ThrottleArray {
     
-    ArrayList<Throttle> throttling = new ArrayList<>();
+    private final List<Throttle> throttling = Collections.synchronizedList( new ArrayList<Throttle>());
     
     public Throttle getThrottleByType(String get){
         
-        List throttleSyn = Collections.synchronizedList(throttling);
+//        List throttleSyn = Collections.synchronizedList(throttling);
         int idx = -1;
         
-        synchronized(throttleSyn){
+        synchronized(throttling){
             
-            for(int i = 0; i < throttleSyn.size(); i++) {
-                if (((Throttle) throttleSyn.get(i)).getType().equalsIgnoreCase(get)) {
+            for(int i = 0; i < throttling.size(); i++) {
+                if (((Throttle) throttling.get(i)).getType().equalsIgnoreCase(get)) {
                     idx = i;
                     break;
                 }
             }
             if (idx==-1){
-                throttleSyn.add(new Throttle(get));
-                idx = throttleSyn.size();
+                throttling.add(new Throttle(get));
+                idx = throttling.size();
             }
         }
         return ((Throttle) throttling.get(idx));
@@ -52,12 +52,12 @@ public class ThrottleArray {
     
     public boolean containsType(String type){
         
-        List throttleSyn = Collections.synchronizedList(throttling);
+//        List throttleSyn = Collections.synchronizedList(throttling);
         
-        synchronized(throttleSyn){
+        synchronized(throttling){
             
-            for(int i = 0; i < throttleSyn.size(); i++) {
-                if (((Throttle)throttleSyn.get(i)).getType().equalsIgnoreCase(type)) {
+            for(int i = 0; i < throttling.size(); i++) {
+                if (((Throttle)throttling.get(i)).getType().equalsIgnoreCase(type)) {
                     return(true);
                 }
             }
@@ -68,13 +68,13 @@ public class ThrottleArray {
     public ArrayList<String> getAllThrottleTypes(){
         
         ArrayList<String> typesContained = new ArrayList<>();
-        List throttleSyn = Collections.synchronizedList(throttling);
+//        List throttleSyn = Collections.synchronizedList(throttling);
         
-        synchronized(throttleSyn){
+        synchronized(throttling){
             
             for(int i = 0; i < throttling.size(); i++) {
-                if (!typesContained.contains(((Throttle)throttleSyn.get(i)).getType())) {
-                    typesContained.add(((Throttle)throttleSyn.get(i)).getType());
+                if (!typesContained.contains(((Throttle)throttling.get(i)).getType())) {
+                    typesContained.add(((Throttle)throttling.get(i)).getType());
                 }
             }
         }
@@ -89,13 +89,13 @@ public class ThrottleArray {
     
     public void remove(String type){
         
-        List throttleSyn = Collections.synchronizedList(throttling);
+//        List throttleSyn = Collections.synchronizedList(throttling);
         
-        synchronized(throttleSyn){
+        synchronized(throttling){
             
-            for(int i = 0; i < throttleSyn.size(); i++) {
+            for(int i = 0; i < throttling.size(); i++) {
                 
-                if (((Throttle) throttleSyn.get(i)).getType().equalsIgnoreCase(type)) {
+                if (((Throttle) throttling.get(i)).getType().equalsIgnoreCase(type)) {
                     
                     throttling.remove(i);
                     i--;
@@ -108,14 +108,14 @@ public class ThrottleArray {
         
         ArrayList<String> typesContained = new ArrayList<>();
         
-        List throttleSyn = Collections.synchronizedList(throttling);
-        synchronized(throttleSyn){
+//        List throttleSyn = Collections.synchronizedList(throttling);
+        synchronized(throttling){
             
-            for(int i = 0; i < throttleSyn.size(); i++) {
-                if (!typesContained.contains(((Throttle)throttleSyn.get(i)).getType())) {
-                    typesContained.add(((Throttle)throttleSyn.get(i)).getType());
+            for(int i = 0; i < throttling.size(); i++) {
+                if (!typesContained.contains(((Throttle)throttling.get(i)).getType())) {
+                    typesContained.add(((Throttle)throttling.get(i)).getType());
                 }
-                else if (typesContained.contains(((Throttle)throttleSyn.get(i)).getType())){
+                else if (typesContained.contains(((Throttle)throttling.get(i)).getType())){
                     throttling.remove(i);
                     i--;
                 }
