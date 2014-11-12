@@ -20,6 +20,14 @@ import org.pircbotx.hooks.events.*;
  * original bot functions by Blarghedy
  * Who's lazy and doesn't run his bot much
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  * Activate Commands with:
  *      s/replaceThis/replaceWithThis
  *          Replaces the text replaceThis with the text replaceWithThis, using the log of previous messages in Global.channels
@@ -48,10 +56,9 @@ public class Blarghlebot extends ListenerAdapter {
         Global.channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message.toLowerCase());
         
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
+            
             String[] messageArray = message.split(" ");
-            //<Evidlo> re.split('(?<!\\\\)/','hello\/world/hello')
-            //<Evidlo> Whenever python sees \/, it changes it to \\/
-            //<Evidlo> So thats why theres \\\\
+            
             if (message.toLowerCase().startsWith("s/")||message.toLowerCase().startsWith("sed/")){
                 String[] findNreplace = Colors.removeFormattingAndColors(message.toLowerCase()).split("/");
                 Pattern findThis = Pattern.compile(findNreplace[1]);
@@ -264,11 +271,13 @@ public class Blarghlebot extends ListenerAdapter {
         Boolean found = false;
         
         while (i>=0&&!found){
-            if (findThis.matcher(Global.channels.get(idx).getMessage(i).split(" ",2)[1]).find()){
-//                String[] temp = reply.split(" ",2);
-                reply = Global.channels.get(idx).getMessage(i).split(" ",2)[0]+" "+Global.channels.get(idx).getMessage(i).split(" ",2)[1].replaceAll(findNreplace[1],findNreplace[2]);
-                backReply = reply.split(" ");
-                if (backReply.length>1){
+            try{
+                if (findThis.matcher(Global.channels.get(idx).getMessage(i).split(" ",2)[1]).find()){
+                    
+                    reply = Global.channels.get(idx).getMessage(i).split(" ",2)[0]+" "+Global.channels.get(idx).getMessage(i).split(" ",2)[1].replaceAll(findNreplace[1],findNreplace[2]);
+                    backReply = reply.split(" ");
+                    
+//                if (backReply.length>1){
                     if(backReply[1].startsWith("s/")||backReply[1].startsWith("sed/")){
                         i--;
                         reply=backReply[1];
@@ -279,10 +288,13 @@ public class Blarghlebot extends ListenerAdapter {
                         findThis = Pattern.compile(findNreplace[1]);
                         reply = findReplace(i, findNreplace, findThis, idx);
                     }
+//                }
+                    found = true;
                 }
-                found = true;
+                i--;
+            }catch (Exception ex){
+                
             }
-            i--;
         }
         return(reply);
     }
