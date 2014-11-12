@@ -20,6 +20,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  * Simple logging listener, updates the log file every 100 lines of chat, so to not spam the file
  * To use: 
  * --Before the configuration lines
@@ -52,7 +60,7 @@ public class Logger extends ListenerAdapter{
             success = saveToFile(log);
             if(!success)
                 event.getBot().sendIRC().notice(Global.botOwner,"Log file failed to save");
-            else if (message.equalsIgnoreCase("!save all")||message.equalsIgnoreCase("!save logs"))
+            else if (message.equalsIgnoreCase("!save"))
                 event.getBot().sendIRC().notice(Global.botOwner,"Log file saved");
             log.clear();
         }

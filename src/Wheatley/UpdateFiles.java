@@ -26,7 +26,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - Linked Classes
  *    Global
  * 
- * Activate commands with
+ * Activate commands with:
  *      !update [filename] [singleWordItem]
  *          !update badwords defenetely
  */

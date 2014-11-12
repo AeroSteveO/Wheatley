@@ -26,6 +26,7 @@ import org.pircbotx.Colors;
  * Requirements:
  * - APIs
  *    Jborg (https://code.google.com/p/jborg/)
+ *    Jaxen-1.1.6
  * - Custom Objects
  *    N/A
  * - Linked Classes
