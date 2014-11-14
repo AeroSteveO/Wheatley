@@ -4,11 +4,7 @@ This README would normally document whatever steps are necessary to get your app
 
 ### What is this repository for? ###
 
-<<<<<<< HEAD
-* This is a PIRCBOTX IRC bot that i made, cause i was bored
-=======
 * This is a PIRCBOTX IRC bot that I made, because I was bored
->>>>>>> command_interface_work
 * PIRCBOTX 2.0.1
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
@@ -22,11 +18,7 @@ This README would normally document whatever steps are necessary to get your app
 3.  commons-lang3-3.2.1.jar
 4.  guava-16.0.jar
 5.  jaxen-1.1.6.jar
-<<<<<<< HEAD
-6.  joda-time-2.3.jar
-=======
 6.  json-simple-1.1.1.jar
->>>>>>> command_interface_work
 7.  mail-1.4.1.jar
 8.  pircbotx-2.0.1.jar
 9.  slf4j-api-1.7.5.jar

@@ -29,7 +29,7 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  *    Runner
  *    ChannelStore
  * - Linked Classes
- *    Global
+ *    Global  
  * 
  * Wheatley, the derp bot
  *  With Functions from
@@ -42,6 +42,7 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  *      LilWayne    -- by 
  *      Hermes      -- by aaahhh
  *      Poopsock    -- by khwain
+ * 
  *
  * @author Stephen
  * often by siphoning code from other bots by tangd, and Vanilla, and theDoctor
