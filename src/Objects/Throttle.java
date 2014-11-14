@@ -46,7 +46,7 @@ public class Throttle {
         this.maxLog=maxCalls;
     }
     
-    public void setMaxTime(int timeLimit){
+    public void setMaxTime(long timeLimit){
         this.maxTime=timeLimit;
     }
     
@@ -69,6 +69,7 @@ public class Throttle {
                 return(true);
             }
         }
+        timeLog.addFirst(d.getTime());
         return(false);
     }
 }
