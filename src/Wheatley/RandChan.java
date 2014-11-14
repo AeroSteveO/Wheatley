@@ -7,10 +7,10 @@
 package Wheatley;
 
 import Objects.KeyFinder;
+import Objects.Throttle;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Date;
 import java.util.LinkedList;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -33,7 +33,8 @@ import org.pircbotx.Colors;
  * - APIs
  *    JSON-Simple-1.1.1
  * - Custom Objects
- *    N/A
+ *    KeyFinder
+ *    Throttle
  * - Linked Classes
  *    Global
  * 
@@ -50,18 +51,16 @@ import org.pircbotx.Colors;
  *          is stopped when # of calls > rcall over the course of rtime, if 
  *          no value is input, gives the current settings
  * 
- * Requires:
- *      json-simple-1.1.1
- *      KeyFinder.java
- *
  */
 public class RandChan extends ListenerAdapter {
     
     private LinkedList<Long> timeLog = new LinkedList<Long>();
     private int maxLog = 2;
     private long maxTime = 100*1000;
-    List<String> boardList = getBoardList();
-    List<String> boardTitles = getBoardTitles();
+    private List<String> boardList = getBoardList();
+    private List<String> boardTitles = getBoardTitles();
+    private Throttle rThrottle = new Throttle("randchan");
+    boolean setup = setupThrottle(maxLog,maxTime);
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -75,53 +74,35 @@ public class RandChan extends ListenerAdapter {
                 event.getBot().sendIRC().message(event.getUser().getNick(),boards);
             }
             else if(message.toLowerCase().matches("!randchan(\\s+\\p{Alnum}+)?")) {
-                //Little bit of throttling up in here
-                Date d = new Date();
-                long currentTime = d.getTime();
-                if(timeLog.size() > maxLog) {
-                    while(timeLog.size()>0 && currentTime - timeLog.getLast() > maxTime) {
-                        timeLog.pollLast();
-                    }
-                    if(timeLog.size()>maxLog) {
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
-                        return;
-                    }
-//                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
-                }
-//                else{
-                    //Russian roulette up in here
-//                    if(((int)(Math.random()*6))==0) {
-////                        event.getChannel().send().kick(event.getUser(), "No soup for you");
-//                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Randchan call blocked for no apparent reason");
-//                        return;
-//                    }
+                if(!rThrottle.isThrottleActive()){
                     String[] splitString = event.getMessage().split("\\s+");
                     if(splitString.length>1) {
                         if(boardList.contains(splitString[1])) {
-                            timeLog.addFirst(d.getTime());
                             event.respond(get4ChanImage(splitString[1]));
                         }
                         else {
-                            timeLog.addFirst(d.getTime());
                             event.getBot().sendIRC().notice(event.getUser().getNick(), "Board is not allowed/Does not exist");
                         }
                     }
                     else {
-                        timeLog.addFirst(d.getTime());
                         event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
                     }
-//                }
+                }else{
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
+                }
             }
             
             if (message.toLowerCase().matches("!set rcall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
                 maxLog = Integer.parseInt(message.split(" ")[2])-1;
                 long sec = maxTime/1000;
+                rThrottle.setMaxLog(maxLog);
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
             }
             
             if (message.toLowerCase().matches("!set rtime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
                 maxTime = Integer.parseInt(message.split(" ")[2])*1000;
                 long sec = maxTime/1000;
+                rThrottle.setMaxTime(maxTime);
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
             }
             
@@ -235,5 +216,10 @@ public class RandChan extends ListenerAdapter {
             }
         }
         return(matchedJson);
+    }
+    private boolean setupThrottle(int maxLog, long maxTime) {
+        rThrottle.setMaxLog(maxLog);
+        rThrottle.setMaxTime(maxTime);
+        return(true);
     }
 }

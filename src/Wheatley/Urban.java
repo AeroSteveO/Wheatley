@@ -7,10 +7,10 @@
 package Wheatley;
 
 import Objects.KeyFinder;
+import Objects.Throttle;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Date;
 import java.util.LinkedList;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -26,9 +26,16 @@ import org.pircbotx.Colors;
  * --created the json grabbing and parsing parts
  * Previous Bot: SRSBSNS
  * --utilizes the randchan function from poopsock/khwain as a base
- *
- * Besides the one specialty library, this is plug and play
- *
+ * 
+ * Requirements:
+ * - APIs
+ *    JSON-Simple-1.1.1
+ * - Custom Objects
+ *    KeyFinder
+ *    Throttle
+ * - Linked Classes
+ *    Global
+ * 
  * Activate Commands with:
  *      !udict [word]
  *          responds with the urban dictionary reference to the given word
@@ -41,9 +48,6 @@ import org.pircbotx.Colors;
  *          is stopped when # of calls > ucall over the course of utime, if
  *          no value is input, gives the current settings
  *
- * Requires:
- *      json-simple-1.1.1
- *      KeyFinder.java
  *
  */
 public class Urban extends ListenerAdapter {
@@ -51,6 +55,8 @@ public class Urban extends ListenerAdapter {
     private LinkedList<Long> timeLog = new LinkedList<Long>();
     private int maxLog = 2;
     private long maxTime = 30*1000;
+    private Throttle uThrottle = new Throttle("udict");
+    boolean setup = setupThrottle(maxLog,maxTime);
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -59,28 +65,17 @@ public class Urban extends ListenerAdapter {
                 String message = Colors.removeFormattingAndColors(event.getMessage().trim());
                 if(message.toLowerCase().matches("!udict[\\sA-Za-z0-9\\'\\-\\_\\.]*")) {
                     int defNum = 0;
-                    Date d = new Date();
-                    long currentTime = d.getTime();
-                    if(timeLog.size() > maxLog) {
-                        while(timeLog.size()>0 && currentTime - timeLog.getLast() > maxTime) {
-                            timeLog.pollLast();
-                        }
-                        if(timeLog.size()>maxLog) {
-                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Please Wait Before Sending Another Call for Udict");
-                            return;
-                        }
-                    }
-                    else{
+                    if(!uThrottle.isThrottleActive()){
                         String[] splitString = message.split("\\s+",2);
                         if(splitString.length>1) {
-                            timeLog.addFirst(d.getTime());
                             event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1],defNum));
                         }
                         else {
                             event.getBot().sendIRC().notice(event.getUser().getNick(),"Please input a word to get the definition of");
-//                            timeLog.addFirst(d.getTime());
-//                            event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition("",defNum));
                         }
+                        
+                    }else{
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Please Wait Before Sending Another Call for Udict");
                     }
                 }
                 else if(message.toLowerCase().split(" ",2)[0].equalsIgnoreCase("!udict")) {
@@ -89,22 +84,23 @@ public class Urban extends ListenerAdapter {
                 if (message.toLowerCase().matches("!set ucall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
                     maxLog = Integer.parseInt(message.split(" ")[2]);
                     long sec = maxTime/1000;
+                    uThrottle.setMaxLog(maxLog);
                     event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
                 }
                 if (message.toLowerCase().matches("!set utime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
                     maxTime = Integer.parseInt(message.split(" ")[2])*1000;
+                    uThrottle.setMaxTime(maxTime);
                     long sec = maxTime/1000;
                     event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
                 }
                 if (message.equalsIgnoreCase("!set ucall")||message.equalsIgnoreCase("!set utime")){
                     long sec = maxTime/1000;
+                    
                     event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
                 }
                 
             }
             catch(Exception ex){
-                ex.printStackTrace();
-                System.out.println(ex.getMessage());
                 event.respond("Error: Definition Not Found"); // Throws hanson if theres an error
             }
         }
@@ -175,5 +171,11 @@ public class Urban extends ListenerAdapter {
             }
         }
         return(matchedJson);
+    }
+
+    private boolean setupThrottle(int maxLog, long maxTime) {
+        uThrottle.setMaxLog(maxLog);
+        uThrottle.setMaxTime(maxTime);
+        return(true);
     }
 }
