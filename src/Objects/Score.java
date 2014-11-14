@@ -138,18 +138,41 @@ public class Score implements Comparable<Score> {
     }
     
     public static class ScoreArray {
+        
         private final List<Score> scores = Collections.synchronizedList( new  ArrayList<Score>());
         private String filename="doNotSave";
         private int baseScore=0;
+        
+        public void sort(){
+            Collections.sort(scores);
+        }
+        
+        public ArrayList<Score> toArrayList(){
+            ArrayList<Score> scoreArray = new ArrayList<>();
+            synchronized(scores){
+                for (int i=0;i<scores.size();i++){
+                    scoreArray.add(scores.get(i));
+                }
+            }
+            return(scoreArray);
+        }
+        
+        public List<Score> getList(){
+            return scores;
+        }
+        
         public void add(Score score){
             this.scores.add(score);
         }
+        
         public void clear(){
             this.scores.clear();
         }
+        
         public int size(){
             return (this.scores.size());
         }
+        
         public Score get(int i){
             return (this.scores.get(i));
         }
@@ -239,17 +262,17 @@ public class Score implements Comparable<Score> {
             }
         }
         
-        public int getScoreIdx(String nick){
-            synchronized(scores){
-                for(int i = 0; i < this.size(); i++) {
-                    if (scores.get(i).user.equalsIgnoreCase(nick)) {
-                        return (i);
-                    }
-                }
-                scores.add(new Score(nick,baseScore));
-                return (this.getScoreIdx(nick));
-            }
-        }
+//        public int getScoreIdx(String nick){
+//            synchronized(scores){
+//                for(int i = 0; i < this.size(); i++) {
+//                    if (scores.get(i).user.equalsIgnoreCase(nick)) {
+//                        return (i);
+//                    }
+//                }
+//                scores.add(new Score(nick,baseScore));
+//                return (this.getScoreIdx(nick));
+//            }
+//        }
         
         public int getScore(String nick){
             synchronized(scores){
