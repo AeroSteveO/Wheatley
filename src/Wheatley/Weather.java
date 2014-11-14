@@ -87,7 +87,7 @@ public class Weather extends ListenerAdapter{
     String alertChannel = "#dtella";              // Channel to send weather alert updates to
     int alertUpdateTime = 15*60;                  // 15 min converted to seconds
     boolean updateAlerts = true;                  // True if the bot should send weather alert updates
-    AlertTime alertUpdater = new AlertTime(alertChannel,updateAlerts,alertUpdateTime);     // Initiate auto-alert object
+    AlertTime alertUpdater = new AlertTime(alertChannel,updateAlerts,alertUpdateTime,stockZip);     // Initiate auto-alert object
     Thread t = new Thread(alertUpdater);          // Give it a thread to run in
     boolean started = startAlertTime(t);          // Start the auto-alert thread
     
@@ -279,11 +279,18 @@ public class Weather extends ListenerAdapter{
         boolean updateAlerts;         // Boolean to start or stop alert updates
         String channel;               // Channel to announce updates to
         int time;                     // Time inbetween each update
-        AlertTime(String chan, boolean update, int interval) {
+        String zip;
+//        AlertTime(String chan, boolean update, int interval) {
+//            this.time = interval;
+//            this.updateAlerts = update;
+//            this.channel=chan;
+//        }
+        AlertTime(String chan, boolean update, int interval, String zip) {
             this.time = interval;
             this.updateAlerts = update;
             this.channel=chan;
-        }
+            this.zip = zip;
+        }        
         public void end() throws InterruptedException{
             this.updateAlerts = false;
             this.t.interrupt();
