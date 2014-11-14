@@ -16,19 +16,23 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  * Quotes from Portal 2's Cave Johnson
- * http://theportalwiki.com/wiki/Cave_Johnson_voice_lines
- * http://www.cavejohnsonhere.com/
+ * Source: http://theportalwiki.com/wiki/Cave_Johnson_voice_lines
+ *         http://www.cavejohnsonhere.com/
+ * 
+ * Activate Commands With
+ *      !cave
+ *          responds with a quote by Cave Johnson
+ * 
  */
 public class CaveJohnson extends ListenerAdapter {
-    List<String> a = null;
+    List<String> a = getQuoteList();
     
+    @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
+        
         String[] messageArray = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
         if ((message.equalsIgnoreCase("Cave Johnson"))||(message.equalsIgnoreCase("!cave"))||message.equalsIgnoreCase("cave johnson here")) {
-            if (a == null) {
-                a = getQuoteList();
-            }
             String quote = a.get((int) (Math.random()*a.size()-1));
             event.getBot().sendIRC().message(event.getChannel().getName(),quote);
         }

@@ -28,7 +28,10 @@ Cardinal
 Carmine
 Carnelian
 Catawba
+<<<<<<< HEAD
 Ceil
+=======
+>>>>>>> command_interface_work
 Celadon
 Celeste
 Cerise
@@ -57,6 +60,7 @@ Denim
 Diamond
 Dirt
 Ebony
+<<<<<<< HEAD
 Ecru
 Eggplant
 Eggshell
@@ -72,11 +76,19 @@ Gainsboro
 Gamboge
 Ginger
 Glaucous
+=======
+Emerald
+Eucalyptus
+Fallow
+Fuchsia
+Ginger
+>>>>>>> command_interface_work
 Gold
 Goldenrod
 Grape
 Gray
 Green
+<<<<<<< HEAD
 Grullo
 Harlequin
 Heliotrope
@@ -85,6 +97,13 @@ Icterine
 Indigo
 Iris
 Irresistible
+=======
+Harlequin
+Heliotrope
+Honeydew
+Indigo
+Iris
+>>>>>>> command_interface_work
 Ivory
 Jade
 Jasmine
@@ -100,7 +119,10 @@ Mahogany
 Malachite
 Maroon
 Mauve
+<<<<<<< HEAD
 Mauvelous
+=======
+>>>>>>> command_interface_work
 Melon
 Mindaro
 Mint
@@ -130,18 +152,27 @@ Prune
 Puce
 Pumpkin
 Purple
+<<<<<<< HEAD
 Purpureus
 Quartz
 Rackley
 Rajah
 Raspberry
 Razzmatazz
+=======
+Quartz
+Rajah
+Raspberry
+>>>>>>> command_interface_work
 Red
 Redwood
 Regalia
 Rose
 Rosewood
+<<<<<<< HEAD
 Ruber
+=======
+>>>>>>> command_interface_work
 Ruby
 Ruddy
 Rufous
@@ -157,8 +188,11 @@ Seashell
 Sepia
 Sienna
 Silver
+<<<<<<< HEAD
 Sinopia
 Skobeloff
+=======
+>>>>>>> command_interface_work
 Slate
 Smalt
 Smitten
@@ -171,7 +205,10 @@ Tangelo
 Tangerine
 Taupe
 Teal
+<<<<<<< HEAD
 Telemagenta
+=======
+>>>>>>> command_interface_work
 Tenne
 Topaz
 Turquoise
@@ -188,5 +225,8 @@ Wenge
 Wheat
 White
 Wisteria
+<<<<<<< HEAD
 Xanadu
+=======
+>>>>>>> command_interface_work
 Yellow

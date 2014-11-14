@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 build/classes/Wheatley/AutodlText.class
 build/classes/Wheatley/BadWords.class
 build/classes/Wheatley/Bane.class
@@ -27,3 +28,28 @@ SettingMarkov.xml
 SettingPing.xml
 build/classes/PlayingCard$Comparator.class
 nbproject/private/profiler/configurations.xml
+=======
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+/nbproject/private/
+/build/
+/dist/
+definitionLog.txt
+definitions.txt
+SettingPing.xml
+Settings.xml
+ImportedMarkov
+SettingMarkov.xml
+WheatleyLogs.plog
+badwords.txt
+gameScores.json
+>>>>>>> command_interface_work

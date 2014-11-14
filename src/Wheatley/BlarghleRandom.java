@@ -18,31 +18,36 @@ import org.pircbotx.hooks.events.MessageEvent;
  * original bot functions by Blarghedy
  * Who's lazy and doesn't run his bot much
  * Original Bot output can be seen below
+ * 
+ * Activate Command with:
+ *      !Blarghlebot
+ *          Responds with a random action to the user who gave the command
  */
 public class BlarghleRandom extends ListenerAdapter {
+    
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.equalsIgnoreCase("!blarghlebot")){
-            String a = new String();
-          //  a=" " + adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();
-            switch((int) (Math.random()*3+1)) {
-                case 1:
-                    a= adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();
-                    break;
-                case 2:
-                    a= adverb() + " " + "rips off" + " " + event.getUser().getNick()+"'s " + bodypart()+ " and "+adverb()+ " beats them with it";
-                    break;
-                case 3:
-                    a= adverb() + " " + "shoves" + " " + event.getUser().getNick()+"'s " + bodypart() + " through their "+adjective()+ " " + bodypart();
-                    break;
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
+            if (message.equalsIgnoreCase("!blarghlebot")){
+                String a = new String();
+                //  a=" " + adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();
+                switch((int) (Math.random()*3+1)) {
+                    case 1:
+                        a= adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();
+                        break;
+                    case 2:
+                        a= adverb() + " " + "rips off" + " " + event.getUser().getNick()+"'s " + bodypart()+ " and "+adverb()+ " beats them with it";
+                        break;
+                    case 3:
+                        a= adverb() + " " + "shoves" + " " + event.getUser().getNick()+"'s " + bodypart() + " through their "+adjective()+ " " + bodypart();
+                        break;
+                }
+                event.getBot().sendIRC().action(event.getChannel().getName(), a);
             }
-            event.getBot().sendIRC().action(event.getChannel().getName(), a);
-            
         }
-        //Not Added Yet
     }
-    public static String adjective() {
+    private static String adjective() {
         List<String> a = new ArrayList<>();
         a.add("delectable");
         a.add("scrumptious");
@@ -57,7 +62,7 @@ public class BlarghleRandom extends ListenerAdapter {
         a.add("delicious");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String bodypart() {
+    private static String bodypart() {
         List<String> a = new ArrayList<>();
         a.add("arm");
         a.add("manhorn");
@@ -70,8 +75,7 @@ public class BlarghleRandom extends ListenerAdapter {
         a.add("elbow");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    
-    public static String adverb() {
+    private static String adverb() {
         List<String> a = new ArrayList<>();
         a.add("lovingly");
         a.add("carefully");
@@ -87,20 +91,19 @@ public class BlarghleRandom extends ListenerAdapter {
         a.add("intricately");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String verb() {
+    private static String verb() {
         List<String> a = new ArrayList<>();
         a.add("flatulates on");
         a.add("noms on");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-        public static String verbset2() {
+    private static String verbset2() {
         List<String> a = new ArrayList<>();
         a.add("shoves");
         a.add("rips off");
-  //      a.add("beats");
+        //      a.add("beats");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    
 }
 
 //       COMMAND SENTENCE SET 1

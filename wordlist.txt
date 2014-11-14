@@ -561,7 +561,6 @@ companion
 company
 compare
 comparison
-compe
 competition
 complement
 complete
@@ -1664,7 +1663,6 @@ love
 lovely
 low
 lower
-lrsfrt
 lucky
 lunch
 lying
@@ -1823,7 +1821,6 @@ mouse
 mouth
 move
 movement
-mrs.
 much
 mud
 murder
@@ -1935,7 +1932,6 @@ occurred
 occurrence
 ocean
 october
-octover
 odd
 off
 offence

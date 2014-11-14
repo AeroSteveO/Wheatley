@@ -14,19 +14,21 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
- * !fact returns a random fact originally said by the fact sphere
  * Quotes from Portal 2's personality sphere; Fact Sphere (or Fact Core)
- * Via: http://theportalwiki.com/wiki/List_of_Fact_Sphere_facts
+ * Source: http://theportalwiki.com/wiki/List_of_Fact_Sphere_facts
+ * 
+ * Activate Commands With
+ *      !fact
+ *          returns a random fact originally said by the fact sphere
+ * 
  */
 public class FactSphereFacts extends ListenerAdapter {
-    static ArrayList<String> quotels = null;
+    ArrayList<String> quotels = getQuoteList();
+    
     @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (message.equalsIgnoreCase("!fact")){
-            if (quotels == null) {
-                quotels = getQuoteList();
-            }
             String fact = quotels.get((int) (Math.random()*quotels.size()-1));
             event.getBot().sendIRC().message(event.getChannel().getName(),"Fact: " + fact);
         }

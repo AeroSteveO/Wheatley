@@ -19,25 +19,33 @@ import org.pircbotx.hooks.events.MessageEvent;
  * original bot = Matrapter
  * matlab based IRC bot written by Steve-O
  *
+ * Activate Commands With
+ *      !ignite [it]
+ *          lights input object on fire in a randomly generated way, if nothing is input,
+ *          the object becomes "it"
+ *
  */
 public class Ignite extends ListenerAdapter {
+    
     @Override
     public void onMessage(MessageEvent event) {
-        String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.startsWith("!ignite")){
-            String it;
-            String[] check = message.split(" ");
-            if (check.length!=2){
-                it = "it";
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("matrapter")).contains(event.getChannel())) {
+            String message = Colors.removeFormattingAndColors(event.getMessage());
+            if (message.toLowerCase().startsWith("!ignite")){
+                String it;
+                String[] check = message.split(" ",2);
+                if (check.length!=2){
+                    it = "it";
+                }
+                else {
+                    it = check[1];
+                }
+                String chat = simpleFront()+ " " + it + " " + simpleEnd();
+                event.getBot().sendIRC().message(event.getChannel().getName(), chat.toUpperCase());
             }
-            else {
-                it = check[1];
-            }
-            String chat = simple_front()+ " " + it + " " + simple_end();
-            event.getBot().sendIRC().message(event.getChannel().getName(), chat.toUpperCase());
         }
     }
-    public static String simple_front() {
+    public static String simpleFront() {
         List<String> a = new ArrayList<>();
         a.add("burn");
         a.add("bake");
@@ -58,7 +66,7 @@ public class Ignite extends ListenerAdapter {
         a.add("bombard");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    public static String simple_end() {
+    public static String simpleEnd() {
         List<String> a = new ArrayList<>();
         a.add("with nukes");
         a.add("with gasoline");
