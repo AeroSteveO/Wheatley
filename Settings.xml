@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : ServerSettings.xml
+    Created on : February 15, 2014, 3:33 PM
+    Author     : Steve-O
+    Description:  <useserver>1</useserver>
+        Purpose of the document follows.
+-->
+
+<settings>
+    
+    <basicsettings id ="IRC Settings">
+        <test>1</test>
+        <nick>Wheatley</nick>
+        <login>Wheatley</login>
+        <nickservpass>***REMOVED***</nickservpass>
+        <botowner>Steve-O</botowner>
+    </basicsettings>
+    
+    <server id="dtella">
+        <address>irc.dhirc.com</address>
+        <channel>#rapterverse</channel>
+        <channel>#AlternateUniverse</channel>
+        <channel>#fluke42land</channel>
+        <channel>#SirMatthias</channel>
+        <channel>#Frictionverse</channel>
+    </server>
+   
+    <server id="test">
+        <address>irc.Stevensnet.info</address>
+        <channel>#rapterverse</channel> 
+		<channel>#dtella</channel>
+    </server>
+    
+    <email>
+        <gmail id="autodl status">
+            <hostname>***REMOVED***</hostname>
+            <username>***REMOVED***</username>
+            <password>***REMOVED***</password>
+            <from>***REMOVED***</from>
+            <subject>Download Started</subject>
+            <to>***REMOVED***</to>
+        </gmail>
+    </email>
+    <ping id="ALL">
+        <server>
+            <name>***REMOVED***</name>
+            <category>LAN</category>
+            <service>Minecraft</service>
+            <port>25565</port>
+            <serviceaddr>***REMOVED***</serviceaddr>
+            <address>***REMOVED***</address>
+        </server>
+        
+        <server>
+            <name>***REMOVED***</name>
+            <category>LAN</category>
+            <service>File Server</service>
+            <port>445</port>
+            <serviceaddr></serviceaddr>
+            <address>***REMOVED***</address>
+        </server>
+        
+        <server>
+            <name>Serenity</name>
+            <category>LAN</category>
+            <service>u***REMOVED***</service>
+            <port>9045</port>
+            <serviceaddr></serviceaddr>
+            <address>***REMOVED***</address>
+        </server>
+        
+        <server>
+            <name>Raspberry Pi</name>
+            <category>LAN</category>
+            <service>ZNC</service>
+            <port>2564</port>
+            <serviceaddr>***REMOVED***</serviceaddr>
+            <address>***REMOVED***</address>
+        </server>
+        
+        <server>
+            <name>***REMOVED***</name>
+            <category>***REMOVED***</category>
+            <service>***REMOVED***</service>
+            <serviceaddr>tracker.***REMOVED***</serviceaddr>
+            <port>8080</port>
+            <address>***REMOVED***</address>
+        </server>
+		
+        <server>
+            <name>***REMOVED***</name>
+            <category>***REMOVED***</category>
+            <service>***REMOVED***</service>
+            <serviceaddr>tracker.***REMOVED***</serviceaddr>
+            <port>80</port>
+            <address>***REMOVED***</address>
+        </server>
+		
+        <server>
+            <name>***REMOVED***</name>
+            <category>***REMOVED***</category>
+            <service>***REMOVED***</service>
+            <serviceaddr>tracker.***REMOVED***</serviceaddr>
+            <port>80</port>
+            <address>***REMOVED***</address>
+        </server>
+		
+        <server>
+            <name>***REMOVED***</name>
+            <category>***REMOVED***</category>
+            <service>***REMOVED***</service>
+            <serviceaddr>***REMOVED***</serviceaddr>
+            <port>80</port>
+            <address>***REMOVED***</address>
+        </server>
+		
+        <server>
+            <name>***REMOVED***</name>
+            <category>***REMOVED***</category>
+            <service>***REMOVED***</service>
+            <serviceaddr>***REMOVED***</serviceaddr>
+            <port>80</port>
+            <address>ip***REMOVED***s.com</address>
+        </server>
+		
+        <server>
+            <name>***REMOVED***</name>
+            <category>***REMOVED***</category>
+            <service>***REMOVED***</service>
+            <serviceaddr>***REMOVED***</serviceaddr>
+            <port>80</port>
+            <address>***REMOVED***</address>
+        </server>
+		
+    </ping>
+</settings>
