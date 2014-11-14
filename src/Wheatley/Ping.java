@@ -19,10 +19,18 @@ import org.w3c.dom.Element;
 
 /**
  *
- * @author Steve-O
- * original Ping function by theDoctor
- * idea for ping function by jnick
+ * @author Stphen    -- Added XML scraping to check groups of IP's by the owner
+ * @author theDoctor -- Made the original ping function using Socket
+ * @author jnick     -- Came up with the idea for the ping function
  *
+ * Requirements:
+ * - APIs
+ *    Jaxen-1.1.6
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  * Modified to allow me to remotely check to see if my servers are up
  * 
  * Activate Command with:
@@ -119,15 +127,15 @@ public class Ping extends ListenerAdapter {
                 try {
                     socket = new Socket(address[0], checkport);
                     response[0] = "true";
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                } catch (IOException ex) {
+//                    ex.printStackTrace();
                     response[0] = "false";
                 } finally {
                     if (socket != null) {
                         try {
                             socket.close();
                         } catch (IOException ex) {
-                            ex.printStackTrace();
+//                            ex.printStackTrace();
                         }
                     }
                 }
@@ -135,7 +143,7 @@ public class Ping extends ListenerAdapter {
             catch (Exception ex) {
                 response[1] = "Hostname not found";
                 response[0]="false";
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }
         return(response);
