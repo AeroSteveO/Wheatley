@@ -48,8 +48,7 @@ import org.pircbotx.Colors;
  */
 
 public class GameList {
-    String[] info;
-    ArrayList<String[]> games = new ArrayList<>();
+    private final List<String[]> games = Collections.synchronizedList( new  ArrayList<String[]>());
     
     public boolean contains(String channel, String game){
         
@@ -57,10 +56,8 @@ public class GameList {
             return false;
         }
         
-        List gameSyn = Collections.synchronizedList(games);
-        
-        synchronized(gameSyn){
-            Iterator<String[]> i = gameSyn.iterator();
+        synchronized(games){
+            Iterator<String[]> i = games.iterator();
             while (i.hasNext()){
                 String[] tmp = i.next();
                 if (tmp[0].equalsIgnoreCase(channel)&&tmp[1].equalsIgnoreCase(game)){
@@ -121,10 +118,10 @@ public class GameList {
     }
     
     public ArrayList<String> getCurrentGameDescriptions(){
-        List gameSyn = Collections.synchronizedList(games);
+        
         ArrayList<String> descriptions = new ArrayList<>();
-        synchronized(gameSyn){
-            Iterator<String[]> i = gameSyn.iterator();
+        synchronized(games){
+            Iterator<String[]> i = games.iterator();
             while (i.hasNext()){
                 String[] tmp = i.next();
                 descriptions.add(Colors.BOLD+"Game: "+Colors.NORMAL+tmp[1]+Colors.BOLD+" Channel: "+Colors.NORMAL+tmp[0]);
@@ -137,11 +134,10 @@ public class GameList {
     private int getGameIDX(String channel, String game){
         
         int idx = 0;
-        List gameSyn = Collections.synchronizedList(games);
         
-        synchronized(gameSyn){
+        synchronized(games){
             
-            Iterator<String[]> i = gameSyn.iterator();
+            Iterator<String[]> i = games.iterator();
             
             while (i.hasNext()){
                 
