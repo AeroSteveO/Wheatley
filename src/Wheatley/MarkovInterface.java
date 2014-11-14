@@ -113,7 +113,7 @@ public class MarkovInterface extends ListenerAdapter{
                 Global.channels.get(channelIndex).setPreviousMessage(response);
             }
             catch(Exception ex){
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "Word "+Colors.BOLD+keyWord[keyWord.length-1]+Colors.NORMAL+" not found in the Markov system");
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "Word "+Colors.BOLD+keyWord[keyWord.length-1].trim()+Colors.NORMAL+" not found in the Markov system");
             }
         }
         
