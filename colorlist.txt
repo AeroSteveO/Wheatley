@@ -1,7 +1,4 @@
-Aero
-Almond
 Amaranth
-Amazon
 Amber
 Amethyst
 Apricot
@@ -9,37 +6,22 @@ Aqua
 Aquamarine
 Auburn
 Aureolin
-AuroMetalSaurus
-Avocado
 Azure
 Beige
 Black
 Blue
 Blueberry
-Bluebonnet
 Brass
 Bronze
 Brown
-Burgundy
-Byzantine
-Byzantium
-Capri
 Cardinal
-Carmine
-Carnelian
-Catawba
-<<<<<<< HEAD
 Ceil
-=======
->>>>>>> command_interface_work
 Celadon
 Celeste
 Cerise
 Cerulean
 Chamoisee
 Champagne
-Charcoal
-Chartreuse
 Cherry
 Chocolate
 Cinereous
@@ -50,9 +32,6 @@ Citron
 Claret
 Cobalt
 Copper
-Coquelicot
-Coral
-Cordovan
 Cream
 Crimson
 Cyan
@@ -60,50 +39,19 @@ Denim
 Diamond
 Dirt
 Ebony
-<<<<<<< HEAD
-Ecru
-Eggplant
-Eggshell
 Emerald
 Eminence
 Eucalyptus
-Fallow
-Fandago
-Flavescent
 Fuchsia
-Fulvous
-Gainsboro
-Gamboge
-Ginger
-Glaucous
-=======
-Emerald
-Eucalyptus
-Fallow
-Fuchsia
-Ginger
->>>>>>> command_interface_work
 Gold
 Goldenrod
 Grape
 Gray
 Green
-<<<<<<< HEAD
-Grullo
-Harlequin
-Heliotrope
 Honeydew
 Icterine
 Indigo
 Iris
-Irresistible
-=======
-Harlequin
-Heliotrope
-Honeydew
-Indigo
-Iris
->>>>>>> command_interface_work
 Ivory
 Jade
 Jasmine
@@ -112,21 +60,12 @@ Jonquil
 Keppel
 Lavender
 Lime
-Limerick
 Magenta
 Magnolia
 Mahogany
 Malachite
 Maroon
-Mauve
-<<<<<<< HEAD
-Mauvelous
-=======
->>>>>>> command_interface_work
-Melon
-Mindaro
 Mint
-Mulberry
 Mustard
 Nyanza
 Ochre
@@ -138,41 +77,14 @@ Orchid
 Peach
 Pear
 Pearl
-Peridot
-Periwinkle
-Persimmon
 Peru
-Phlox
-Pineapple
 Pink
-Pistachio
-Platinum
-Plum
-Prune
-Puce
-Pumpkin
 Purple
-<<<<<<< HEAD
-Purpureus
 Quartz
-Rackley
-Rajah
 Raspberry
-Razzmatazz
-=======
-Quartz
-Rajah
-Raspberry
->>>>>>> command_interface_work
 Red
-Redwood
-Regalia
 Rose
-Rosewood
-<<<<<<< HEAD
 Ruber
-=======
->>>>>>> command_interface_work
 Ruby
 Ruddy
 Rufous
@@ -188,45 +100,22 @@ Seashell
 Sepia
 Sienna
 Silver
-<<<<<<< HEAD
 Sinopia
 Skobeloff
-=======
->>>>>>> command_interface_work
 Slate
-Smalt
-Smitten
 Smoke
-Stizza
-Straw
-Strawberry
 Tan
-Tangelo
-Tangerine
 Taupe
 Teal
-<<<<<<< HEAD
-Telemagenta
-=======
->>>>>>> command_interface_work
 Tenne
 Topaz
 Turquoise
 Tuscan
 Tuscany
-Ultramarine
-Umber
 Vanilla
-Verdigris
 Vermilion
 Violet
 Viridian
-Wenge
 Wheat
 White
-Wisteria
-<<<<<<< HEAD
-Xanadu
-=======
->>>>>>> command_interface_work
 Yellow
