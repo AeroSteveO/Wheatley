@@ -47,6 +47,7 @@ public class GameMasterMind extends ListenerAdapter {
     String blockedChan = "#dtella";
     int basePrize = 40; // $
     
+    @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         
         String message = Colors.removeFormattingAndColors(event.getMessage());
