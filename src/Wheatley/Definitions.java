@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -33,14 +34,11 @@ import org.pircbotx.hooks.events.MessageEvent;
  * Activate Commands With
  *      [definition]?
  *          respond with the definition of that word/phrase (if there is a definition in the db)
- *      !addDef [word/phrase/ @ [word/phrase]
- *      !adDef [word/phrase] @ [word/phrase]
+ *      !mkdef [word/phrase] @ [word/phrase]
  *          adds the corresponding definition to the db, the word being the first part, the definition of said word being the second
- *      !delDef [word/phrase]
- *      !deleteDef [word/phrase]
+ *      !rmdef [word/phrase]
  *          Removes the corresponding def from the database
- *      !updef [word/phrase/ @ [word/phrase]
- *      !updatedef [word/phrase/ @ [word/phrase]
+ *      !overdef [word/phrase] @ [word/phrase]
  *          Updates the input def to the input phrase
  *      !listDefs
  *          Sends a PM with all the defs available
@@ -75,7 +73,7 @@ public class Definitions extends ListenerAdapter {
         
         if (message.equalsIgnoreCase("!list defs")){
             
-//            Collections.sort(words);
+            Collections.sort(words);
             
             String wordList = "";
             for (int i=0;i<words.size();i++){
@@ -105,11 +103,7 @@ public class Definitions extends ListenerAdapter {
         }
         
         // ADDING DEFINITIONS
-        if ((msgSplit[0].equalsIgnoreCase("!def"))&&!event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){//||msgSplit[0].equalsIgnoreCase("!addef")
-            event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
-        }
-        
-        else if(msgSplit[0].equalsIgnoreCase("!def")){//||msgSplit[0].equalsIgnoreCase("!addef")
+        if(msgSplit[0].equalsIgnoreCase("!mkdef")){//||msgSplit[0].equalsIgnoreCase("!addef")
             
             if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 
@@ -145,14 +139,12 @@ public class Definitions extends ListenerAdapter {
                     words = getWordsFromDefs(definitions);
                 }
             }
+            else
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
         }
         
         // REMOVING DEFINITIONS
-        if ((msgSplit[0].equalsIgnoreCase("!deldef")||msgSplit[0].equalsIgnoreCase("!deletedef"))&&!event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-            event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
-        }
-        
-        if(msgSplit[0].equalsIgnoreCase("!deldef")||msgSplit[0].equalsIgnoreCase("!deletedef")){
+        if(msgSplit[0].equalsIgnoreCase("!rmdef")){//||msgSplit[0].equalsIgnoreCase("!deletedef")
             
             if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 
@@ -191,15 +183,14 @@ public class Definitions extends ListenerAdapter {
                     }
                 }
             }
+            else
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
         }
         
         // Updating definitions already in the db
-        if ((msgSplit[0].equalsIgnoreCase("!overdef"))&&!event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){//||msgSplit[0].equalsIgnoreCase("!updef")
-            event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
-        }
         
-        else if(msgSplit[0].equalsIgnoreCase("!overdef")) {//||msgSplit[0].equalsIgnoreCase("!updef")
-            
+        if(msgSplit[0].equalsIgnoreCase("!overdef")) {//||msgSplit[0].equalsIgnoreCase("!updef")
+                        
             if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 
                 if(!(message.split("@").length==2)){
@@ -244,6 +235,8 @@ public class Definitions extends ListenerAdapter {
                     }
                 }
             }
+            else
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
         }
     }
     
