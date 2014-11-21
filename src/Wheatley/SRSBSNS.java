@@ -97,6 +97,7 @@ public class SRSBSNS extends ListenerAdapter {
                 Global.channels.getChan(currentChan).setLastUrl(item);
             } catch (MalformedURLException e) { // If exception happens, then its not a URL
             }
+            
             if (message.equalsIgnoreCase("!lasturl")){
                 if (!Global.channels.getChan(currentChan).getLastUrl().equals("")){
                     String title;
@@ -113,6 +114,7 @@ public class SRSBSNS extends ListenerAdapter {
                 else
                     event.getBot().sendIRC().message(currentChan,"No previous URL found");
             }
+            
             if (message.equalsIgnoreCase("!secondlasturl")){
                 if (!Global.channels.getChan(currentChan).getSecondLastUrl().equals("")){
                     org.jsoup.nodes.Document finaldoc = Jsoup.connect(Global.channels.getChan(currentChan).getSecondLastUrl()).get();
@@ -122,6 +124,7 @@ public class SRSBSNS extends ListenerAdapter {
                 else
                     event.getBot().sendIRC().message(currentChan,"Currently less than 2 URLs found");
             }
+            
             if (message.equalsIgnoreCase("!srsbsns"))
                 event.getBot().sendIRC().action(currentChan,"wat");
             
