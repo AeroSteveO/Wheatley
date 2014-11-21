@@ -31,9 +31,12 @@ nbproject/private/profiler/configurations.xml
 *.war
 *.ear
 hs_err_pid*
-/nbproject/private/
-/build/
-/dist/
+nbproject/private/
+nbproject/private/*
+build/
+build/*
+dist/
+dist/*
 definitionLog.txt
 definitions.txt
 SettingPing.xml
