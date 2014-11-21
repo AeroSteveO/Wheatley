@@ -104,7 +104,7 @@ public class GameControl extends ListenerAdapter {
             
             else if (command.equalsIgnoreCase("money")){ // Get your current score
                 int userScore = scores.getScore(event.getUser().getNick());
-                if (userScore < 0){
+                if (userScore == Integer.MIN_VALUE){
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
                 }
                 else
@@ -114,7 +114,7 @@ public class GameControl extends ListenerAdapter {
             else if (cmdSplit[0].equalsIgnoreCase("money")&&command.split(" ").length==2){ // Get someone elses current score
                 String user = command.split(" ")[1];
                 int userScore = scores.getScore(user);
-                if (userScore < 0){
+                if (userScore ==Integer.MIN_VALUE){
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
                 }
                 else
@@ -144,7 +144,7 @@ public class GameControl extends ListenerAdapter {
                     String score = command.split(" ")[2];
                     int userCurrentScore = scores.getScore(user);
                     
-                    if (userCurrentScore < 0){
+                    if (userCurrentScore < Integer.MIN_VALUE){
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
                     }
                     
@@ -170,7 +170,7 @@ public class GameControl extends ListenerAdapter {
                 
                 if (toGive.matches("[0-9]+")){
                     
-                    if (scores.getScore(reciever)<1){
+                    if (scores.getScore(reciever)==Integer.MIN_VALUE){
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "USER NOT FOUND");
                     }
                     
@@ -204,10 +204,10 @@ public class GameControl extends ListenerAdapter {
                     String mergeThis = command.split(" ")[1];
                     String mergeIntoThis = command.split(" ")[2];
                     
-                    if (scores.getScore(mergeThis)<1){
+                    if (scores.getScore(mergeThis)==Integer.MIN_VALUE){
                         event.getBot().sendIRC().notice(event.getUser().getNick(), mergeThis+": USER NOT FOUND");
                     }
-                    else if (scores.getScore(mergeIntoThis)<1){
+                    else if (scores.getScore(mergeIntoThis)==Integer.MIN_VALUE){
                         event.getBot().sendIRC().notice(event.getUser().getNick(), mergeIntoThis+": USER NOT FOUND");
                     }
                     

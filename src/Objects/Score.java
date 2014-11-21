@@ -282,7 +282,7 @@ public class Score implements Comparable<Score> {
                     }
                 }
 //            throw new NullPointerException("User not contained in Score array");
-                return (-1);
+                return (Integer.MIN_VALUE);
             }
         }
         
