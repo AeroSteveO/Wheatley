@@ -47,20 +47,20 @@ public class Runner implements Runnable {
         while (Global.reconnect) {
             try {
                 Thread.sleep(1500);
-            } catch (InterruptedException ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
             if (!bot.isConnected()) {
                 try {
                     System.out.println("Trying to restart...");
                     bot.startBot();
-                } catch (IOException | IrcException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             } else {
                 try {
                     Thread.sleep(15000);
-                } catch (InterruptedException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
