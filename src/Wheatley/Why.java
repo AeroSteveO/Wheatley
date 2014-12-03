@@ -15,10 +15,24 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Steve-O
+ * 
  * based on an easter egg in MATLAB
  * well, ported from that easter egg
  * pretty much the exact same code, minus some additions to make it more extensible
  * and some changes to make it run better in IRC
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ *
+ * Activate Command with:
+ *      !Why
+ *      Wheatley, Why [any question]
+ * 
  *
  */
 public class Why extends ListenerAdapter {
@@ -79,7 +93,7 @@ public class Why extends ListenerAdapter {
         a.add("the customer is always right.");
         a.add("in the beginning, God created the heavens and the earth...");
         a.add("don't you have something better to do?");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     
     private static String phrase() {
@@ -234,7 +248,7 @@ public class Why extends ListenerAdapter {
         List<String> a = new ArrayList<>();
         a.add("of");
         a.add("from");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String noun() {
         List<String> a = new ArrayList<>();
@@ -244,13 +258,13 @@ public class Why extends ListenerAdapter {
         a.add("engineer");
         a.add("hamster");
         a.add("kid");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String nouned_verb() {
         List<String> a = new ArrayList<>();
         a.add("love");
         a.add("approval");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size()))); 
     }
     private static String proper_noun() {
         List<String> a = new ArrayList<>();
@@ -266,7 +280,7 @@ public class Why extends ListenerAdapter {
         a.add("Mary Ann");
         a.add("Penny");
         a.add("Mara");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String nominative_pronoun() {
         List<String> a = new ArrayList<>();
@@ -275,7 +289,7 @@ public class Why extends ListenerAdapter {
         a.add("he");
         a.add("she");
         a.add("they");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String accusative_pronoun() {
         List<String> a = new ArrayList<>();
@@ -283,7 +297,7 @@ public class Why extends ListenerAdapter {
         a.add("all");
         a.add("her");
         a.add("him");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String adverb() {
         List<String> a = new ArrayList<>();
@@ -291,7 +305,7 @@ public class Why extends ListenerAdapter {
         a.add("not very");
         a.add("excessively");
         a.add("not excessively");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String adjective() {
         List<String> a = new ArrayList<>();
@@ -301,14 +315,14 @@ public class Why extends ListenerAdapter {
         a.add("smart");
         a.add("terrified");
         a.add("good");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String article() {
         List<String> a = new ArrayList<>();
         a.add("the");
         a.add("some");
         a.add("a");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String present_verb() {
         List<String> a = new ArrayList<>();
@@ -316,7 +330,7 @@ public class Why extends ListenerAdapter {
         a.add("please");
         a.add("satisfy");
         a.add("honor");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String intrasitive_verb() {
         List<String> a = new ArrayList<>();
@@ -326,7 +340,7 @@ public class Why extends ListenerAdapter {
         a.add("wanted it");
         a.add("knew it was a good idea");
         a.add("wanted it that way");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
     private static String transitive_verb() {
         List<String> a = new ArrayList<>();
@@ -340,6 +354,6 @@ public class Why extends ListenerAdapter {
         a.add("obeyed");
         a.add("obeyed");
         a.add("obeyed");
-        return (a.get((int) (Math.random()*a.size()-1)));
+        return (a.get((int) (Math.random()*a.size())));
     }
 }
