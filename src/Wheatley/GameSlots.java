@@ -34,8 +34,9 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  */
 public class GameSlots extends ListenerAdapter {
-    ArrayList<String> slotWords = getSlotArray();
     int baseBet = 10;
+    String leet ="1337";
+    ArrayList<String> slotWords = getSlotArray();
     
     @Override
     public void onMessage(MessageEvent event) {
@@ -81,7 +82,7 @@ public class GameSlots extends ListenerAdapter {
                     slotString = slotString +"("+slots.get(i)+") ";
                 }
                 
-                if (slots.get(0).equalsIgnoreCase(slotWords.get(6))&&slots.get(1).equalsIgnoreCase(slotWords.get(6))&&slots.get(2).equalsIgnoreCase(slotWords.get(6))){
+                if (slots.get(0).equalsIgnoreCase(leet)&&slots.get(1).equalsIgnoreCase(leet)&&slots.get(2).equalsIgnoreCase(leet)){
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString+ "| C0nGr47ul47!0nz "+event.getUser().getNick()+", u won $"+prizes.get(3)+" - go pwn som n00bs :>");
                     GameControl.scores.addScore(event.getUser().getNick(), prizes.get(3));
                 }
@@ -136,7 +137,7 @@ public class GameSlots extends ListenerAdapter {
         slotWords.add("Grape");
         slotWords.add("Lemon");
         slotWords.add("Sun");
-        slotWords.add("1337");
+        slotWords.add(leet);
         return slotWords;
     }
 }
