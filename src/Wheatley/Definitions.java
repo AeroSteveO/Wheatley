@@ -67,17 +67,20 @@ public class Definitions extends ListenerAdapter {
         
         if (message.endsWith("?")&&message.split("\\?",2)[0].length()>0){
             if (containsIgnoreCase(words,message.split("\\?")[0])){
-                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+message.split("\\?")[0].toLowerCase()+Colors.NORMAL+": "+definitions.get(indexOfIgnoreCase(words,message.split("\\?")[0])).split("@")[1].trim());
+                int index = indexOfIgnoreCase(words,message.split("\\?")[0]);
+                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+words.get(index)+Colors.NORMAL+": "+definitions.get(index).split("@")[1].trim());
             }
         }
         
         if (message.equalsIgnoreCase("!list defs")){
             
-            Collections.sort(words);
+            ArrayList<String> sortedWords = new ArrayList<>();
+            sortedWords.addAll(words);
+            Collections.sort(sortedWords);
             
             String wordList = "";
-            for (int i=0;i<words.size();i++){
-                wordList = wordList + words.get(i)+", ";
+            for (int i=0;i<sortedWords.size();i++){
+                wordList = wordList + sortedWords.get(i)+", ";
             }
             event.getBot().sendIRC().message(event.getUser().getNick(),wordList);
         }
