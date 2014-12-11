@@ -37,20 +37,20 @@ import org.pircbotx.Colors;
  *    Throttle
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate Commands with:
  *      !randchan [board]
  *          responds with a link to a random 4chan image in the given board,
  *          if no board is given, then it responds with a random image from a
  *          random board
  *      !set rcall
- *          Changes the number of randchan calls that can be made per specified 
+ *          Changes the number of randchan calls that can be made per specified
  *          amount of time, if no value is input, gives the current settings
  *      !set rtime
- *          Changes the amount of time between randchan call flushes, randchan 
- *          is stopped when # of calls > rcall over the course of rtime, if 
+ *          Changes the amount of time between randchan call flushes, randchan
+ *          is stopped when # of calls > rcall over the course of rtime, if
  *          no value is input, gives the current settings
- * 
+ *
  */
 public class RandChan extends ListenerAdapter {
     
@@ -65,56 +65,79 @@ public class RandChan extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage().trim());
-        try{
-            if (message.equalsIgnoreCase("!randchan dict")||message.equalsIgnoreCase("!list boards")||message.equalsIgnoreCase("!randchan list")){
-                String boards = Colors.RED+boardList.get(0)+": "+Colors.NORMAL+boardTitles.get(0)+", ";
-                for(int i=1;i<boardList.size()-1;i++){
-                    boards = boards+Colors.RED+boardList.get(i)+": "+Colors.NORMAL+boardTitles.get(i)+", ";
+        
+        if (message.startsWith(Global.commandPrefix)){
+            
+            String command = message.split(Global.commandPrefix)[1];
+            String[] cmdSplit = command.split(" ");
+            
+            try{
+                if (message.equalsIgnoreCase("!randchan dict")||message.equalsIgnoreCase("!list boards")||message.equalsIgnoreCase("!randchan list")){
+                    String boards = Colors.RED+boardList.get(0)+": "+Colors.NORMAL+boardTitles.get(0)+", ";
+                    for(int i=1;i<boardList.size()-1;i++){
+                        boards = boards+Colors.RED+boardList.get(i)+": "+Colors.NORMAL+boardTitles.get(i)+", ";
+                    }
+                    event.getBot().sendIRC().message(event.getUser().getNick(),boards);
                 }
-                event.getBot().sendIRC().message(event.getUser().getNick(),boards);
-            }
-            else if(message.toLowerCase().matches("!randchan(\\s+\\p{Alnum}+)?")) {
-                if(!rThrottle.isThrottleActive()){
-                    String[] splitString = event.getMessage().split("\\s+");
-                    if(splitString.length>1) {
-                        if(boardList.contains(splitString[1])) {
-                            event.respond(get4ChanImage(splitString[1]));
+                else if (cmdSplit[1].equalsIgnoreCase("board")){
+                    if(cmdSplit.length==2){
+                        
+                        if(cmdSplit[2].equalsIgnoreCase("list")){
+                            String boards = Colors.RED+boardList.get(0)+": "+Colors.NORMAL+boardTitles.get(0)+", ";
+                            for(int i=1;i<boardList.size()-1;i++){
+                                boards = boards+Colors.RED+boardList.get(i)+": "+Colors.NORMAL+boardTitles.get(i)+", ";
+                            }
+                            event.getBot().sendIRC().message(event.getUser().getNick(),boards);
+                        }
+                        
+                        else{
+                            
+                        }
+                    }
+                }
+                else if(message.toLowerCase().matches("!randchan(\\s+\\p{Alnum}+)?")) {
+                    if(!rThrottle.isThrottleActive()){
+                        String[] splitString = event.getMessage().split("\\s+");
+                        if(splitString.length>1) {
+                            if(boardList.contains(splitString[1])) {
+                                event.respond(get4ChanImage(splitString[1]));
+                            }
+                            else {
+                                event.getBot().sendIRC().notice(event.getUser().getNick(), "Board is not allowed/Does not exist");
+                            }
                         }
                         else {
-                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Board is not allowed/Does not exist");
+                            event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
                         }
+                    }else{
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
                     }
-                    else {
-                        event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
-                    }
-                }else{
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
+                }
+                
+                if (message.toLowerCase().matches("!set rcall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
+                    maxLog = Integer.parseInt(message.split(" ")[2])-1;
+                    long sec = maxTime/1000;
+                    rThrottle.setMaxLog(maxLog);
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
+                }
+                
+                if (message.toLowerCase().matches("!set rtime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
+                    maxTime = Integer.parseInt(message.split(" ")[2])*1000;
+                    long sec = maxTime/1000;
+                    rThrottle.setMaxTime(maxTime);
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
+                }
+                
+                if (message.equalsIgnoreCase("!set rcall")||message.equalsIgnoreCase("!set rtime")){
+                    long sec = maxTime/1000;
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
                 }
             }
-            
-            if (message.toLowerCase().matches("!set rcall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
-                maxLog = Integer.parseInt(message.split(" ")[2])-1;
-                long sec = maxTime/1000;
-                rThrottle.setMaxLog(maxLog);
-                event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
+            catch(Exception ex){
+                ex.printStackTrace();
+                System.out.println(ex.getMessage());
+                event.respond("http://i.imgur.com/JaKGGo7.jpg"); // Throws hanson if theres an error
             }
-            
-            if (message.toLowerCase().matches("!set rtime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
-                maxTime = Integer.parseInt(message.split(" ")[2])*1000;
-                long sec = maxTime/1000;
-                rThrottle.setMaxTime(maxTime);
-                event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
-            }
-            
-            if (message.equalsIgnoreCase("!set rcall")||message.equalsIgnoreCase("!set rtime")){
-                long sec = maxTime/1000;
-                event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
-            }
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-            System.out.println(ex.getMessage());
-            event.respond("http://i.imgur.com/JaKGGo7.jpg"); // Throws hanson if theres an error
         }
     }
     
