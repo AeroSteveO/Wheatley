@@ -69,7 +69,7 @@ public class DeckOfCards {
         cardsUsed = 0;
     }
     // creates a nicely organized deck for testing purposes
-    public DeckOfCards(int asdf) {
+    public DeckOfCards(int ThisIsForTestingONLY) {
         theDeck = new ArrayList<>();
         
         // Create the cards:

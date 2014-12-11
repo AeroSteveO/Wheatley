@@ -81,6 +81,22 @@ public class CardHand {
         return value;
     }
     
+    public boolean isHandBlackjack(){
+        if(getBlackjackHandValue()!=21)
+            return(false);
+        
+        boolean containsTen = false;
+        boolean containsAce = false;
+        for(int i=0;i<hand.size();i++){
+            if (hand.get(i).getValue()>=10)
+                containsTen=true;
+            else if(hand.get(i).getValue()==1)
+                containsAce=true;
+        }
+        return(containsTen&&containsAce);
+    }
+    
+    
     public boolean isBlackjackHandSoft(){
         int value=0;
         for (int i=0;i<hand.size();i++){
@@ -88,6 +104,8 @@ public class CardHand {
             if (hand.get(i).getValue()>10){
                 value+=10;
             }
+            else
+                value+=hand.get(i).getValue();
         }
         return (value!=getBlackjackHandValue());
     }
