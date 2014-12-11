@@ -130,6 +130,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameMasterMind())     //mastermind game listener
                     .addListener(new GameGuessTheNumber()) //guess the number game listener
                     .addListener(new GameControl())
+//                    .addListener(new GameLuckyLotto())
                     .addListener(new GameHighLow())
                     .addListener(new GameBlackjack())
                     .addListener(new GameSlots())
@@ -140,7 +141,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new EnglishSayings())
                     .addListener(new Definitions())
                     .addListener(new AutodlText())
-                    .addListener(new Fuckingweather())
+//                    .addListener(new Fuckingweather())
 //                    .addListener(new KickBanWatcher())
                     .addListener(new Ignite())
                     .addListener(new Laser())
@@ -151,11 +152,11 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
 //                    .addListener(new Weather())
-                    .addListener(new Urban())
-                    .addListener(new CommandListener())
+//                    .addListener(new Urban())
+//                    .addListener(new CommandListener())
 //                    .addListener(new MovieRatings())
                     .addListener(new BadWords())
-//                    .addListener(new MarkovInterface())
+                    .addListener(new MarkovInterface())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
                     .addListener(new RandChan())             // generates random 4chan image links
