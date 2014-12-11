@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.Event;
-//import org.reflections.Reflections;
+import org.reflections.Reflections;
 
 /**
  *
@@ -44,7 +44,7 @@ public class Global {
     public static String commandPrefix = "!";              // Not implemented in all functions
     public static String phrasePrefix = new String();      //mainNick+", ";
     public static ArrayList<String> botAdmin = getBotAdmins();
-//    public static final Reflections wheatleyReflection = new Reflections();
+//    public static final Reflections wheatleyReflection = new Reflections("org.pircbotx");
     public static List<Command> commandList = new ArrayList<>();
     
     public static String getTimestamp(Event event){

@@ -9,10 +9,8 @@ package Commands;
 import Annot.CMD;
 import Annot.GenCMD;
 import Objects.Command;
-import Wheatley.Global;
 import java.util.ArrayList;
 import java.util.List;
-import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -30,8 +28,13 @@ public class Why implements Command{
     }
     
     @Override
+    public boolean isCommand(String toCheck){
+        return(toCheck.equalsIgnoreCase("why"));
+    }
+    
+    @Override
     public boolean announce() {
-        Global.commandList.add(this);
+//        Global.commandList.add(this);
         return(true);
     }
     
