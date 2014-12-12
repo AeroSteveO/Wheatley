@@ -53,7 +53,7 @@ public class GameHighLow extends ListenerAdapter {
             
             if (cmdSplit[0].equalsIgnoreCase("highlow")&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
                 
-                if (!GameControl.activeGame.isGameActive(event.getChannel().getName(), "highlow")){
+                if (!GameControl.activeGame.isGameActive(event.getChannel().getName(), "highlow", "long")){
                     
                     int key=(int) (Math.random()*100000+1);
                     boolean running = true;

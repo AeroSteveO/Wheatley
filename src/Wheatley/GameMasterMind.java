@@ -55,7 +55,7 @@ public class GameMasterMind extends ListenerAdapter {
         
         if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!Global.channels.areGamesBlocked(gameChan)) {
             
-            if (!GameControl.activeGame.contains(gameChan, "mastermind")){
+            if (!GameControl.activeGame.contains(new String[] {gameChan, "mastermind", "long"})){
                 
                 String[] options = message.split(" ");
                 int length = 5;
