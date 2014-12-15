@@ -54,7 +54,7 @@ import org.pircbotx.Colors;
  */
 public class RandChan extends ListenerAdapter {
     
-    private LinkedList<Long> timeLog = new LinkedList<Long>();
+    private LinkedList<Long> timeLog = new LinkedList<>();
     private int maxLog = 2;
     private long maxTime = 100*1000;
     private List<String> boardList = getBoardList();
