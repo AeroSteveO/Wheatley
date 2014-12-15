@@ -81,7 +81,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
             }
             
             
-            if (!GameControl.activeGame.isGameActive(gameChan, "guessthenumber")){
+            if (!GameControl.activeGame.isGameActive(gameChan, "guessthenumber", "long")){
                 
                 
                 int lives =(int) 10+length/100;

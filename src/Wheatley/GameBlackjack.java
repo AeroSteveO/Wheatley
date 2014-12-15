@@ -69,7 +69,7 @@ public class GameBlackjack extends ListenerAdapter {
                 
                 String gameChan = event.getChannel().getName();
                 
-                if (!GameControl.activeGame.contains(gameChan, "blackjack")){
+                if (!GameControl.activeGame.contains(new String[] {gameChan, "blackjack", "long"})){
                     
                     int minBet = 10;
                     String options = null;

@@ -43,6 +43,10 @@ import org.pircbotx.Colors;
  *          responds with a link to a random 4chan image in the given board,
  *          if no board is given, then it responds with a random image from a
  *          random board
+ *      !board [board name]
+ *          responds with the title for the board
+ *      !board list
+ *          responds with a PM containing all the board names and titles
  *      !set rcall
  *          Changes the number of randchan calls that can be made per specified
  *          amount of time, if no value is input, gives the current settings
@@ -57,8 +61,9 @@ public class RandChan extends ListenerAdapter {
     private LinkedList<Long> timeLog = new LinkedList<>();
     private int maxLog = 2;
     private long maxTime = 100*1000;
-    private List<String> boardList = getBoardList();
-    private List<String> boardTitles = getBoardTitles();
+//    private List<String> boardList = getBoardList();
+//    private List<String> boardTitles = getBoardTitles();
+    private List<List<String>> boardInfo = getBoardInfo();
     private Throttle rThrottle = new Throttle("randchan");
     boolean setup = setupThrottle(maxLog,maxTime);
     
@@ -72,26 +77,31 @@ public class RandChan extends ListenerAdapter {
             String[] cmdSplit = command.split(" ");
             
             try{
-                if (message.equalsIgnoreCase("!randchan dict")||message.equalsIgnoreCase("!list boards")||message.equalsIgnoreCase("!randchan list")){
-                    String boards = Colors.RED+boardList.get(0)+": "+Colors.NORMAL+boardTitles.get(0)+", ";
-                    for(int i=1;i<boardList.size()-1;i++){
-                        boards = boards+Colors.RED+boardList.get(i)+": "+Colors.NORMAL+boardTitles.get(i)+", ";
-                    }
-                    event.getBot().sendIRC().message(event.getUser().getNick(),boards);
-                }
-                else if (cmdSplit[1].equalsIgnoreCase("board")){
+                if (cmdSplit[0].equalsIgnoreCase("board")){
                     if(cmdSplit.length==2){
                         
-                        if(cmdSplit[2].equalsIgnoreCase("list")){
-                            String boards = Colors.RED+boardList.get(0)+": "+Colors.NORMAL+boardTitles.get(0)+", ";
-                            for(int i=1;i<boardList.size()-1;i++){
-                                boards = boards+Colors.RED+boardList.get(i)+": "+Colors.NORMAL+boardTitles.get(i)+", ";
+                        if(cmdSplit[1].equalsIgnoreCase("list")){
+                            String boards = "";
+                            for(int i=0;i<boardInfo.size()-1;i++){
+                                boards = boards+Colors.RED+boardInfo.get(i).get(0)+": "+Colors.NORMAL+boardInfo.get(i).get(1)+", ";
                             }
                             event.getBot().sendIRC().message(event.getUser().getNick(),boards);
                         }
                         
                         else{
-                            
+                            boolean found = false;
+                            int i=0;
+                            while (!found && i<boardInfo.size()-1){
+                                
+                                if(boardInfo.get(i).get(0).equalsIgnoreCase(cmdSplit[1])){
+                                    found = true;
+                                    event.getBot().sendIRC().message(event.getChannel().getName(),Colors.RED+boardInfo.get(i).get(0)+": "+Colors.NORMAL+boardInfo.get(i).get(1));
+                                }
+                                i++;
+                            }
+                            if (!found){
+                                    event.getBot().sendIRC().message(event.getChannel().getName(), "Board is not allowed/Does not exist");
+                            }
                         }
                     }
                 }
@@ -99,7 +109,7 @@ public class RandChan extends ListenerAdapter {
                     if(!rThrottle.isThrottleActive()){
                         String[] splitString = event.getMessage().split("\\s+");
                         if(splitString.length>1) {
-                            if(boardList.contains(splitString[1])) {
+                            if(isBoardAllowed(splitString[1])) {
                                 event.respond(get4ChanImage(splitString[1]));
                             }
                             else {
@@ -107,7 +117,7 @@ public class RandChan extends ListenerAdapter {
                             }
                         }
                         else {
-                            event.respond(get4ChanImage(boardList.get((int) (Math.random()*boardList.size()-1)).toString()));
+                            event.respond(get4ChanImage(boardInfo.get((int) (Math.random()*boardInfo.size()-1)).get(0).toString()));
                         }
                     }else{
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
@@ -140,6 +150,14 @@ public class RandChan extends ListenerAdapter {
             }
         }
     }
+    private boolean isBoardAllowed(String board){
+        for (int i=0;i<boardInfo.size();i++){
+            if (boardInfo.get(i).get(0).equalsIgnoreCase(board)){
+                return(true);
+            }
+        }
+        return(false);
+    }
     
     //converts URL to string, primarily used to string-ify json text
     private static String readUrl(String urlString) throws Exception {
@@ -159,44 +177,44 @@ public class RandChan extends ListenerAdapter {
         }
     }
     
-    //Gets a full list of 4Chan boards using the 4chan json
-    private List<String> getBoardList(){
-        JSONParser parser = new JSONParser();
-        List<String> boards = new ArrayList<>();
-        try{
-            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
-            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
-            for (int i=0; i<boardsTemp.size(); i++) {
-                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
-                boards.add((String) jsonObject.get("board"));
-            }
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-            System.out.println(ex.getMessage());
-        }
-        return(boards);
-    }
+//    //Gets a full list of 4Chan boards using the 4chan json
+//    private List<String> getBoardList(){
+//        JSONParser parser = new JSONParser();
+//        List<String> boards = new ArrayList<>();
+//        try{
+//            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
+//            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
+//            for (int i=0; i<boardsTemp.size(); i++) {
+//                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
+//                boards.add((String) jsonObject.get("board"));
+//            }
+//        }
+//        catch(Exception ex){
+//            ex.printStackTrace();
+//            System.out.println(ex.getMessage());
+//        }
+//        return(boards);
+//    }
     
     
-    //Gets a full list of 4Chan board titles using the 4chan json
-    private List<String> getBoardTitles(){
-        JSONParser parser = new JSONParser();
-        List<String> titles = new ArrayList<>();
-        try{
-            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
-            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
-            for (int i=0; i<boardsTemp.size(); i++) {
-                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
-                titles.add((String) jsonObject.get("title"));
-            }
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-            System.out.println(ex.getMessage());
-        }
-        return(titles);
-    }
+//    //Gets a full list of 4Chan board titles using the 4chan json
+//    private List<String> getBoardTitles(){
+//        JSONParser parser = new JSONParser();
+//        List<String> titles = new ArrayList<>();
+//        try{
+//            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
+//            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
+//            for (int i=0; i<boardsTemp.size(); i++) {
+//                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
+//                titles.add((String) jsonObject.get("title"));
+//            }
+//        }
+//        catch(Exception ex){
+//            ex.printStackTrace();
+//            System.out.println(ex.getMessage());
+//        }
+//        return(titles);
+//    }
     
     
     private String get4ChanImage(String board) throws Exception {
@@ -244,5 +262,26 @@ public class RandChan extends ListenerAdapter {
         rThrottle.setMaxLog(maxLog);
         rThrottle.setMaxTime(maxTime);
         return(true);
+    }
+
+    private List<List<String>> getBoardInfo() {
+        List<List<String>> info = new ArrayList<>();
+        JSONParser parser = new JSONParser();
+        try{
+            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
+            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
+            for (int i=0; i<boardsTemp.size(); i++) {
+                List<String> singleBoardInfo = new ArrayList<>();
+                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
+                singleBoardInfo.add((String) jsonObject.get("board"));
+                singleBoardInfo.add((String) jsonObject.get("title"));
+                info.add(singleBoardInfo);
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        return(info);
     }
 }

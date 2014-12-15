@@ -24,7 +24,7 @@ import org.pircbotx.Colors;
  *    N/A
  * - Linked Classes
  *    N/A
- * 
+ *
  * Object:
  *      GameList
  * - Object that contains game data and prevents multiple instances of single
@@ -62,6 +62,52 @@ public class GameList {
                 String[] tmp = i.next();
                 if (tmp[0].equalsIgnoreCase(channel)&&tmp[1].equalsIgnoreCase(game)){
                     return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public boolean contains(String[] options){
+        String channel = null;
+        String game = null;
+        String length = null;
+        
+        for (int i=0;i<options.length;i++){
+            if (options[i].startsWith("#")){
+                channel = options[i];
+            }
+            else if (options[i].equalsIgnoreCase("short")||options[i].equalsIgnoreCase("long")){
+                length = options[i];
+            }
+            else{
+                game = options[i];
+            }
+        }
+        if (channel == null){
+            throw new NullPointerException("Channel cannot be null, channel must be of form #channel");
+        }
+        if (game == null){
+            throw new NullPointerException("Game cannot be null, game name must have a value");
+        }
+        if (length==null){
+            length = "";
+        }
+        if (games.isEmpty()){
+            return false;
+        }
+        
+        synchronized(games){
+            Iterator<String[]> i = games.iterator();
+            while (i.hasNext()){
+                String[] tmp = i.next();
+                if (tmp[0].equalsIgnoreCase(channel)&&tmp[1].equalsIgnoreCase(game)){
+                    return true;
+                }
+                else if (tmp.length>2){
+                    if(tmp[0].equalsIgnoreCase(channel)&&tmp[2].equalsIgnoreCase("long")&&length.equalsIgnoreCase("long")){
+                        return true;
+                    }
                 }
             }
         }
@@ -172,6 +218,22 @@ public class GameList {
             isActive = contains(currentChan,GameType);
             if (!isActive){
                 add(currentChan,GameType);
+            }
+        }
+        return(isActive);
+    }
+    public boolean isGameActive(String currentChan, String GameType, String length) {
+        
+        boolean isActive=false;
+        
+        if (games.isEmpty()){
+            add(new String[] {currentChan, GameType, length});
+        }
+        
+        else{
+            isActive = contains(new String[] {currentChan,GameType, length});
+            if (!isActive){
+                add(new String[] {currentChan, GameType, length});
             }
         }
         return(isActive);

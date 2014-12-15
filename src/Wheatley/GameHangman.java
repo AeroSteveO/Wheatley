@@ -46,7 +46,7 @@ public class GameHangman extends ListenerAdapter {
         
         if (message.equalsIgnoreCase("!hangman")&&!Global.channels.areGamesBlocked(gameChan)) {
             
-            if (!GameControl.activeGame.isGameActive(gameChan, "hangman")){
+            if (!GameControl.activeGame.isGameActive(gameChan, "hangman", "long")){
                 
                 Game currentGame = new Game("blank");
                 
@@ -134,6 +134,8 @@ public class GameHangman extends ListenerAdapter {
 //                    lives = baselives;
                 GameControl.activeGame.remove(gameChan,"hangman"); //updated current index of the game
             }
+            else
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");
         }
     }
 }
