@@ -217,6 +217,34 @@ public class GameControl extends ListenerAdapter {
                     }
                 }
             }
+            else if (cmdSplit[0].equalsIgnoreCase("makeitrain")){
+                if(cmdSplit.length>1){
+                    if (cmdSplit.length>2){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "!MakeItRain only accepts up to 2 inputs");
+                    }
+                    else if(cmdSplit[1].matches("[0-9]+")){
+                        int rain = Integer.parseInt(cmdSplit[1]);
+                        if(scores.getScoreObj(event.getUser().getNick()).getScore()<rain){
+                            event.getBot().sendIRC().notice(event.getUser().getNick(), "You don't have enough to make it rain that much");
+                        }
+                        else{
+                            
+                        }
+                        
+                    }
+                    else{
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "!MakeItRain only accepts non-negative integer as an input");
+                    }
+                }
+                else{
+                    int rain = 0;
+                    if(scores.getScoreObj(event.getUser().getNick()).getScore()<rain){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "You don't have enough to make it rain that much");
+                    }else{
+                        
+                    }
+                }
+            }
         }
     }
     
