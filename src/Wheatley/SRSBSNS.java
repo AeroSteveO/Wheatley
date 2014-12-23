@@ -44,7 +44,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  */
 public class SRSBSNS extends ListenerAdapter {
-    
+    boolean rossa = true;
 //    !metacritic (metacritic.com rating),
     
     @Override
@@ -52,6 +52,17 @@ public class SRSBSNS extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
 //        String[] messageArray = message.split(" ");
         String currentChan = event.getChannel().getName();
+        
+//        if (message.equalsIgnoreCase("tell |Rossa about slots")){
+//            if(rossa)
+//            event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+"++");
+//        }
+//        else if (message.equalsIgnoreCase("!rossa off")&&(event.getUser().getNick().equalsIgnoreCase("Steve-O")||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
+//            rossa=false;
+//        }
+//        else if (message.equalsIgnoreCase("!rossa on")&&(event.getUser().getNick().equalsIgnoreCase("Steve-O")||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
+//            rossa=true;
+//        }
         
 //        if (messageArray[0].equalsIgnoreCase("!bankick")) {
 ////            String[] kill = messageArray;
