@@ -108,7 +108,12 @@ public class MarkovInterface extends ListenerAdapter{
             String[] keyWord = message.replace("?","").split(" ");
             
             try{
-                String response = borg.generateReply(keyWord[keyWord.length-1]);
+                String response = "";
+                int count = 0;
+                while(response.split(" ").length<2){
+                    response = borg.generateReply(keyWord[keyWord.length-1]);
+                    count++;
+                }
                 event.getBot().sendIRC().message(currentChan, response);
                 Global.channels.get(channelIndex).setPreviousMessage(response);
             }
