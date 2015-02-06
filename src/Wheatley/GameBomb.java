@@ -81,7 +81,14 @@ public class GameBomb extends ListenerAdapter {
                             colorls = getColorList();
                         }
                         for (int i=0;i<5;i++){
-                            colours.add(colorls.get((int) (Math.random()*colorls.size()-1)).toLowerCase());
+                            int rndNum = (int) (Math.random()*colorls.size()-1);
+                            if(!colours.contains(colorls.get(rndNum).toLowerCase())){
+                                colours.add(colorls.get(rndNum).toLowerCase());
+                                
+                            }
+                            else
+                                i--;
+                            
                         }
                     }
                     
