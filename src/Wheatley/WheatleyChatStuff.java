@@ -28,29 +28,38 @@ public class WheatleyChatStuff extends ListenerAdapter {
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.toLowerCase().startsWith("!hack")){
-            if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
-                String[] kill = message.split(" ");
-                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Wheatley has killed you in his attempt to plug your brain into a computer");
-            }
-            else{
-                event.getChannel().send().kick(event.getUser(),"Wheatley has killed you in an attempt to counter hack your brain");
-            }
-        }
-        if (message.toLowerCase().startsWith("!smash")){
-            if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){//||event.getUser().getNick().equals("fluke42")
-                String[] kill = message.split(" ");
-                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"Aristotle vs MASHY-SPIKE-PLATE");
-            }
-            else{
-                event.getChannel().send().kick(event.getUser(),"MASHY-SPIKE-PLATE smashed you into goop");
-            }
-        }
-        if (message.toLowerCase().startsWith("!old "))
-            event.getBot().sendIRC().notice(event.getUser().getNick(),"you so funny, me ruv u rong time");
         
-        if (message.equalsIgnoreCase("!Wheatley"))
-            event.getBot().sendIRC().message(event.getChannel().getName(),"My command list --> http://bit.ly/QWAKdE");
+        if (message.startsWith(Global.commandPrefix)){
+            
+            String command = message.split(Global.commandPrefix)[1];
+            String[] cmdSplit = command.split(" ");
+            
+            
+            if (cmdSplit[0].equalsIgnoreCase("hack")){
+                if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
+                    event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(cmdSplit[1]),"Wheatley has killed you in his attempt to plug your brain into a computer");
+                }
+                else{
+                    event.getChannel().send().kick(event.getUser(),"Wheatley has killed you in an attempt to counter hack your brain");
+                }
+            }
+            
+            if (cmdSplit[0].equalsIgnoreCase("smash")){
+                if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){//||event.getUser().getNick().equals("fluke42")
+                    event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(cmdSplit[1]),"Aristotle vs MASHY-SPIKE-PLATE");
+                }
+                else{
+                    event.getChannel().send().kick(event.getUser(),"MASHY-SPIKE-PLATE smashed you into goop");
+                }
+            }
+            
+            if (cmdSplit[0].equalsIgnoreCase("old"))
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"you so funny, me ruv u rong time");
+            
+            if (cmdSplit[0].equalsIgnoreCase("Wheatley"))
+                event.getBot().sendIRC().message(event.getChannel().getName(),"My command list --> http://bit.ly/QWAKdE");
+            
+        }
         
         if (message.equalsIgnoreCase("Oh. Hi."))//||message.equalsIgnoreCase("potato?")
             event.getBot().sendIRC().message(event.getChannel().getName(),"Oh. Hi. So. How are you holding up? BECAUSE I'M A POTATO.");
