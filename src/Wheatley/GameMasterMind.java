@@ -86,27 +86,36 @@ public class GameMasterMind extends ListenerAdapter {
                     length = Integer.parseInt(options[1]);
                     if (length>10)
                         length=10;
+                    if (length<5)
+                        length=5;
                     lives = length * charSize;
                 }
                 else if (options.length == 3){
                     
                     length = Integer.parseInt(options[1]);
-                    if (length>10){
+                    if (length>10)
                         length=10;
-                    }
+                    if (length<5)
+                        length=5;
+                    
                     charSize = Integer.parseInt(options[2]);
-                    if (charSize>10){
+                    if (charSize>10)
                         charSize=10;
-                    }
+                    if (charSize<2)
+                        charSize=2;
                     lives = length * charSize;
                 }
                 else if (options.length == 4){
                     length = Integer.parseInt(options[1]);
                     if (length>10)
                         length=10;
+                    if (length<5)
+                        length=5;
                     charSize = Integer.parseInt(options[2]);
                     if (charSize>10)
                         charSize=10;
+                    if (charSize<2)
+                        charSize=2;
                     lives = Integer.parseInt(options[3]);
                 }
                 
