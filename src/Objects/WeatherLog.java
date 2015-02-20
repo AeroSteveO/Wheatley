@@ -5,6 +5,7 @@
 package Objects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.pircbotx.Colors;
@@ -52,9 +53,9 @@ public class WeatherLog {
     private ArrayList<String> lowF;    // FORECAST
     private ArrayList<String> lowC;    // FORECAST
     private ArrayList<String> forecastConditions; // FORECAST
-    private ArrayList<String> alertType;     // ALERT
-    private ArrayList<String> alertExpires;  // ALERT
-    private ArrayList<String> alertText;     // ALERT
+    private String alertType;     // ALERT
+    private String alertExpires;  // ALERT
+    private String alertText;     // ALERT
     
     // WEATHER TYPE LOG ENTRY
     public WeatherLog(String inputLocation,String inputZip, String inputWeather, String hum, String tmp, String windImperial, String windMetric, String windDirection, String obsTime) {
@@ -85,7 +86,7 @@ public class WeatherLog {
         this.expiration = new DateTime().plusMinutes(60);
     }
     // ALERT TYPE LOG ENTRY
-    public WeatherLog(String inputLocation, String inputZip, ArrayList<String> alertDescription, ArrayList<String> alertExpiration, ArrayList<String> alertText){
+    public WeatherLog(String inputLocation, String inputZip, String alertDescription, String alertExpiration, String alertText){
         this.cityState = inputLocation;
         this.zip = inputZip;
         this.alertType = alertDescription;
@@ -94,47 +95,62 @@ public class WeatherLog {
         this.expiration = new DateTime().plusMinutes(30);
         this.alertText = alertText;
     }
-    public void addAlert(String alert, String expiration, String fullText){
-        this.alertType.add(alert);
-        this.alertExpires.add(expiration);
-        this.expiration = new DateTime().plusMinutes(30);
-        this.alertText.add(fullText);
+    
+    public ArrayList<String> getLocationData(){
+        ArrayList<String> locationData = new ArrayList<>();
+        
+        locationData.add(cityState.split(",")[0].trim());
+        locationData.add(cityState.split(",")[1].trim());
+        locationData.add(zip);
+        
+        return locationData;
     }
+    
     public void updateExpiration(int index, String expiration){
-        this.alertExpires.add(index, expiration);
+        this.alertExpires = expiration;
+        this.expiration = new DateTime().plusMinutes(30);
     }
-    public ArrayList<String> getAlertType(){
+    
+    public String getAlertType(){
         return this.alertType;
     }
-    public String getLongResponse(){
-        String response = "";
+    
+    public ArrayList<String> getLongResponse(){
+        
+        ArrayList<String> respond = new ArrayList<>();
+        
         if (this.cacheType.equalsIgnoreCase("alert")){
-            if (!this.alertType.get(0).equalsIgnoreCase("Error Parsing Alerts")||this.alertType.get(0).equalsIgnoreCase("No Current Weather Alerts")){
-                for (int i=0;i<alertText.size();i++){
-                    response = response + "Alert Full Text: "+Colors.NORMAL+response+alertText.get(i)+ " !";
+            if (!this.alertType.equalsIgnoreCase("Error Parsing Alerts")||this.alertType.equalsIgnoreCase("No Current Weather Alerts")){
+                String[] alertLines = alertText.split("\\u000A");
+                
+                respond.add(Colors.BOLD+Colors.RED+"Alert Full Text: ");
+                
+                for (int i=0;i<alertLines.length;i++){
+                    if (alertLines[i].trim().length()>0)
+                        respond.add(alertLines[i].trim());
                 }
             }
-            else
-                response = alertType.get(0);
+            else{
+                respond.add(alertType);
+            }
         }
-        else
-            response = "Formatted Response Unavailable for this type of Weather Log";
-        return (response);
+        else{
+            respond.add("Formatted Response Unavailable for this type of Weather Log");
+        }
+        return (respond);
     }
     //GETS FORMATTED STRING FOR IRC
     public String getFormattedResponse(){
         String response = "";
         // ALERT CACHE FORMATTED RESPONSE
         if (this.cacheType.equalsIgnoreCase("alert")){
-            if (!this.alertType.get(0).equalsIgnoreCase("Error Parsing Alerts")||this.alertType.get(0).equalsIgnoreCase("No Current Weather Alerts")){
-                for (int i=0;i<this.alertType.size();i++){
-                    response +=Colors.BOLD+ Colors.RED+Colors.BOLD+"WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+this.cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+this.alertType.get(i)+Colors.BOLD+" Ending: "+Colors.NORMAL+this.alertExpires.get(i) + " !";
-                }
+            if (!this.alertType.equalsIgnoreCase("Error Parsing Alerts")||this.alertType.equalsIgnoreCase("No Current Weather Alerts")){
+                response = Colors.RED + Colors.BOLD + "WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+this.cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+this.alertType+Colors.BOLD+" Ending: "+Colors.NORMAL+this.alertExpires;
             }
             else
-                response = alertType.get(0);
+                response = alertType;
             
-        // FORECAST CACHE FORMATTED RESPONSE
+            // FORECAST CACHE FORMATTED RESPONSE
         }else if (this.cacheType.equalsIgnoreCase("forecast")){
             response =(Colors.BOLD+this.cityState+" Forecast "+Colors.NORMAL+"(High/Low); "+Colors.BOLD+"Updated: "+Colors.NORMAL+this.observationTime.split("on")[0].trim()+"; ");
             //weekDay.size()
@@ -142,7 +158,7 @@ public class WeatherLog {
                 response = response+(Colors.BOLD+this.weekDay.get(i)+": "+Colors.NORMAL+this.forecastConditions.get(i)+", "+this.highF.get(i)+"/"+this.lowF.get(i)+"°F ("+this.highC.get(i)+"/"+this.lowC.get(i)+"°C); ");
             }
             
-        // WEATHER CACHE FORMATTED RESPONSE
+            // WEATHER CACHE FORMATTED RESPONSE
         }else if (this.cacheType.equalsIgnoreCase("weather")){
             response = (Colors.BOLD+this.cityState+"; Updated: "+Colors.NORMAL+this.observationTime+"; "+Colors.BOLD+"Conditions: "+Colors.NORMAL+this.conditions+"; "+
                     Colors.BOLD+"Temperature: "+Colors.NORMAL+this.temp+"; "+Colors.BOLD+"Humidity: "+Colors.NORMAL+this.humidity+"; "+Colors.BOLD+"Wind: "+Colors.NORMAL+this.windMPH+" ("+this.windKPH+") "+this.windDir);
@@ -159,7 +175,7 @@ public class WeatherLog {
         return(false);
     }
     public static class WeatherCache {
-        private final List<WeatherLog> cache = Collections.synchronizedList( new  ArrayList<WeatherLog>());
+        private final List<WeatherLog> cache = Collections.synchronizedList( new ArrayList<WeatherLog>());
         
         public void add(WeatherLog log){
             this.cache.add(log);
@@ -184,17 +200,73 @@ public class WeatherLog {
                 return(cache.get(idx));
             }
         }
+        
+        public ArrayList<String>getAllAlertTypes(String locationString, String type){
+            ArrayList<String> alertTypes = new ArrayList<>();
+            List<WeatherLog> alerts = getCacheArray(locationString, type);
+            
+            for (int i=0;i<alerts.size();i++){
+                alertTypes.add(alerts.get(i).getAlertType());
+            }
+            
+            return(alertTypes);
+        }
+        
+        public ArrayList<String> getFormattedAlertArray(String locationString, String type){
+            ArrayList<String> formattedAlerts = new ArrayList<>();
+            List<WeatherLog> alerts = getCacheArray(locationString, "alert");
+            if (alerts.size()>0){
+                for (int i=0;i<alerts.size()-1;i++){
+                    formattedAlerts.add(alerts.get(i).getFormattedResponse());
+                }
+//                System.out.println(alerts.size());
+                formattedAlerts.add(alerts.get(alerts.size()-1).getFormattedResponse()+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alerts full [zip]' for the full alert text");
+            }
+            else
+                return(new ArrayList<>(Arrays.asList("Error")));
+            
+            return(formattedAlerts);
+        }
+        
+        public ArrayList<String> getAllAlertsLongResponse(String locationString, String type){
+            ArrayList<String> formattedAlerts = new ArrayList<>();
+            List<WeatherLog> alerts = getCacheArray(locationString, type);
+            
+            for (int i=0;i<alerts.size();i++){
+                formattedAlerts.addAll(alerts.get(i).getLongResponse());
+                
+            }
+            return(formattedAlerts);
+        }
+        
+        public List<WeatherLog> getCacheArray(String locationString, String type){
+            purge();
+            int idx = -1;
+            List<WeatherLog> cacheReturn = new ArrayList<>();
+            
+            synchronized(cache){
+                for(int i = 0; i < cache.size(); i++) {
+                    if ((cache.get(i).zip.equalsIgnoreCase(locationString)||cache.get(i).cityState.equalsIgnoreCase(locationString))&&cache.get(i).cacheType.equalsIgnoreCase(type)) {
+                        idx = i;
+                        cacheReturn.add(cache.get(idx));
+                    }
+                }
+                return(cacheReturn);
+            }
+        }
+        
         public boolean containsEntry(String locationString,String type){
             purge();
 //            System.out.println(locationString);
             
             synchronized(cache){
                 for(int i = 0; i < cache.size(); i++) {
-//                System.out.println(this.get(i).cityState);
-//                System.out.println(this.get(i).zip);
-//                System.out.println(this.get(i).cacheType);
+//                    System.out.println("Search String: "+locationString);
+//                    System.out.println(cache.get(i).cityState);
+//                    System.out.println(cache.get(i).zip);
+//                    System.out.println(cache.get(i).cacheType);
                     if ((cache.get(i).zip.equalsIgnoreCase(locationString)||cache.get(i).cityState.equalsIgnoreCase(locationString))&&cache.get(i).cacheType.equalsIgnoreCase(type)) {
-                    System.out.println("Found Cached Entry " + cache.get(i).cacheType);
+//                        System.out.println("Found Cached Entry " + cache.get(i).cacheType);
                         return(true);
                     }
                 }
