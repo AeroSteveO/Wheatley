@@ -135,6 +135,12 @@ public class Weather extends ListenerAdapter{
                         msgSplit[1]=msgSplit[1].replace("full","");
                     }
                     locationData = getLocationData(msgSplit[1].trim().replaceAll(" ", "_"));
+                    if (locationData.get(0).equalsIgnoreCase("Error")){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),"Error Retrieving Location Data");
+                        return;
+                    }
+                    
+                    
                     location = locationData.get(1).trim()+"/"+locationData.get(0).trim().replaceAll(" ", "_");
                     locationDataRetrieved = true;
                 }
@@ -461,16 +467,16 @@ public class Weather extends ListenerAdapter{
         try{
             JSONObject jsonObject = (JSONObject) parser.parse(jsonData);
             
-            System.out.println(jsonObject.toString());
+//            System.out.println(jsonObject.toString());
             if (jsonObject.toString().toLowerCase().matches(".*\"results\".*")){
-                System.out.println("IDIOT REGEX CONTAIN WIN");
+//                System.out.println("IDIOT REGEX CONTAIN WIN");
                 ArrayList<String> cities = new ArrayList<>();
                 ArrayList<String> states = new ArrayList<>();
                 String city;
                 String state;
                 jsonObject = (JSONObject) jsonObject.get("response");
                 
-                System.out.println(jsonObject.toString());
+//                System.out.println(jsonObject.toString());
                 
                 JSONArray locationJSON = (JSONArray) jsonObject.get("results");
                 
@@ -482,7 +488,7 @@ public class Weather extends ListenerAdapter{
                 int randLocation = (int) (Math.random()*locationJSON.size());
                 city = (cities.get(randLocation));
                 state = (states.get(randLocation));
-                System.out.println(city+", "+state);
+//                System.out.println(city+", "+state);
                 locationData = getLocationData((city+", "+state).trim().replaceAll(" ", "_"));
                 
                 
@@ -490,7 +496,7 @@ public class Weather extends ListenerAdapter{
                 
                 JSONObject locationJSON = (JSONObject) jsonObject.get("location");
                 
-                System.out.println(locationJSON.toString());
+//                System.out.println(locationJSON.toString());
                 
                 locationData.add((String) locationJSON.get("city"));
                 locationData.add((String) locationJSON.get("state"));
@@ -562,7 +568,7 @@ public class Weather extends ListenerAdapter{
     
     //converts URL to string, primarily used to string-ify json text
     private static String readUrl(String urlString) throws Exception {
-        System.out.println(urlString);
+//        System.out.println(urlString);
         BufferedReader reader = null;
         try {
             URL url = new URL(urlString);
