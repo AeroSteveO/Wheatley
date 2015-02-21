@@ -89,19 +89,19 @@ public class MatrapterChat extends ListenerAdapter {
             }
             
             //Meatpod Functions
-            if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("meatpod")).contains(event.getChannel())) {
-                if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod"))
-                    event.getBot().sendIRC().message(currentChan, "http://meatspin.cc");
-                if (message.equalsIgnoreCase("fuck")){
-                    int i = (int) (Math.random()*250+1);
-                    if (i == 100)
-                        event.getBot().sendIRC().message(currentChan, "a duck");
-                    else if (i == 150)
-                        event.getBot().sendIRC().message(currentChan, "a dog in the ass");
-                    else
-                        event.getBot().sendIRC().message(currentChan, "you");
-                }
-            }
+//            if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("meatpod")).contains(event.getChannel())) {
+//                if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod"))
+//                    event.getBot().sendIRC().message(currentChan, "http://meatspin.cc");
+//                if (message.equalsIgnoreCase("fuck")){
+//                    int i = (int) (Math.random()*250+1);
+//                    if (i == 100)
+//                        event.getBot().sendIRC().message(currentChan, "a duck");
+//                    else if (i == 150)
+//                        event.getBot().sendIRC().message(currentChan, "a dog in the ass");
+//                    else
+//                        event.getBot().sendIRC().message(currentChan, "you");
+//                }
+//            }
             
             //Bane
             //Idea for a random command similar to !Xzibit

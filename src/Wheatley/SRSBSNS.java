@@ -202,8 +202,8 @@ public class SRSBSNS extends ListenerAdapter {
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"user not in channel");
             }
         }
-        if (message.equalsIgnoreCase("!pickaport")){
-            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*65534-1025+1)));
-        }
+//        if (message.equalsIgnoreCase("!pickaport")){
+//            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*65534-1025+1)));
+//        }
     }
 }

@@ -53,8 +53,8 @@ public class WheatleyChatStuff extends ListenerAdapter {
                 }
             }
             
-            if (cmdSplit[0].equalsIgnoreCase("old"))
-                event.getBot().sendIRC().notice(event.getUser().getNick(),"you so funny, me ruv u rong time");
+//            if (cmdSplit[0].equalsIgnoreCase("old"))
+//                event.getBot().sendIRC().notice(event.getUser().getNick(),"you so funny, me ruv u rong time");
             
             if (cmdSplit[0].equalsIgnoreCase("Wheatley"))
                 event.getBot().sendIRC().message(event.getChannel().getName(),"My command list --> http://bit.ly/QWAKdE");
