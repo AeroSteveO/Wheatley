@@ -93,7 +93,7 @@ public class CardHand {
             else if(hand.get(i).getValue()==1)
                 containsAce=true;
         }
-        return(containsTen&&containsAce);
+        return(containsTen&&containsAce&&hand.size()==2);
     }
     
     
