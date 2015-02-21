@@ -18,7 +18,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Stephen
  * Inspired By: http://math.hws.edu/javanotes/c5/s4.html
- * 
+ *
  * Requirements:
  * - APIs
  *    N/A
@@ -29,10 +29,10 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - Linked Classes
  *    Global
  *    GameControl
- * 
+ *
  * Activate Command with:
  *      !highlow
- *          
+ *
  *
  */
 public class GameHighLow extends ListenerAdapter {

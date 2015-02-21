@@ -28,7 +28,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - Linked Classes
  *    Global
  *    GameControl
- * 
+ *
  * Activate Command with:
  *      !reverse
  *
@@ -91,8 +91,10 @@ public class GameReverse extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
+                GameControl.activeGame.remove(gameChan,"reverse");
             }
-            GameControl.activeGame.remove(gameChan,"reverse");
+            else
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");
         }
     }
 }

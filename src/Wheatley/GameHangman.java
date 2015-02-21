@@ -28,7 +28,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - Linked Classes
  *    Global
  *    GameControl
- * 
+ *
  * Activate Command with:
  *      !hangman
  */
@@ -77,7 +77,7 @@ public class GameHangman extends ListenerAdapter {
                                 int timeSpent = currentGame.getTimeSpent();
                                 int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length()+lives+(chosenword.length()-changed),chosenword.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
-
+                                
 //                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD+Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
                                 running=false;
                                 timedQueue.end();
@@ -129,9 +129,6 @@ public class GameHangman extends ListenerAdapter {
                         }
                     }
                 }
-//                    correct = 0;
-//                    changed = 0;
-//                    lives = baselives;
                 GameControl.activeGame.remove(gameChan,"hangman"); //updated current index of the game
             }
             else

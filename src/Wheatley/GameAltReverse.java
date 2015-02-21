@@ -29,7 +29,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - Linked Classes
  *    Global
  *    GameControl
- * 
+ *
  *  Activate Command with:
  *      !altreverse
  *      esrever!
@@ -38,7 +38,6 @@ public class GameAltReverse extends ListenerAdapter {
     static ArrayList<String> activechan = new ArrayList<String>();
 //    static GameArray activeGame = new GameArray();
     
-    boolean isactive = false;
     String blockedChan = "#dtella";
     int time = 20;  // Seconds
     int basePrize = 10; // $
@@ -97,7 +96,7 @@ public class GameAltReverse extends ListenerAdapter {
                 GameControl.activeGame.remove(gameChan,"altreverse");
             }
             else
-                isactive=false;
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");
         }
     }
 }

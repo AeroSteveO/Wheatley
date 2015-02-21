@@ -27,7 +27,7 @@ import org.pircbotx.hooks.events.*;
  * - Linked Classes
  *    Global
  *    GameControl
- * 
+ *
  * Activate command with:
  *      !omgword
  *
@@ -48,11 +48,10 @@ public class GameOmgword extends ListenerAdapter {
         if (message.equalsIgnoreCase("!omgword")&&!Global.channels.areGamesBlocked(gameChan)) {
             
             if (!GameControl.activeGame.isGameActive(gameChan, "omgword")){
-                
+//                GameControl.activeGame.add(gameChan, "omgword", "short");
                 Game currentGame = new Game("shuffle");
                 //get and shuffle the word
                 boolean running = true;
-//                currentIndex = Global.activeGame.getGameIdx(gameChan,"omgword");
                 String chosenword = currentGame.getChosenWord();
                 String scrambled = currentGame.getSolution();
                 
@@ -91,8 +90,10 @@ public class GameOmgword extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
+                GameControl.activeGame.remove(gameChan,"omgword");
             }
-            GameControl.activeGame.remove(gameChan,"omgword");
+            else 
+                event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");
         }
     }
 }
