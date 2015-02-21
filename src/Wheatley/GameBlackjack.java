@@ -314,65 +314,74 @@ public class GameBlackjack extends ListenerAdapter {
                             if (counter == 0){
                                 
                                 ArrayList<Integer> winner = new ArrayList<>();
-                                if (hands.get(0).getBlackjackHandValue()<=21)
-                                    winner.add(0);
-                                
-                                int winningHand = 0; // make into an arraylist of winners
+                                {
+                                    int i=0;
+                                    while (winner.size()<1&&i<hands.size()){
+                                        if (hands.get(i).getBlackjackHandValue()<=21)
+                                            winner.add(i);
+                                        i++;
+                                    }
+                                }
                                 
                                 for (int i=0;i<hands.size();i++){ // START SCORING
                                     
                                     if (hands.get(i).getBlackjackHandValue()<=21){
                                         
-                                        if (hands.get(i).getBlackjackHandValue()>hands.get(winningHand).getBlackjackHandValue()|| hands.get(winningHand).getBlackjackHandValue()>21){
+                                        if (hands.get(i).getBlackjackHandValue()>hands.get(winner.get(0)).getBlackjackHandValue()){//|| hands.get(winningHand).getBlackjackHandValue()>21){
                                             winner.clear();
-                                            winningHand=i;
                                             winner.add(i);
                                         }
                                         
-                                        else if (hands.get(i).getBlackjackHandValue()==hands.get(winningHand).getBlackjackHandValue()){
+                                        else if (hands.get(i).getBlackjackHandValue()==hands.get(winner.get(0)).getBlackjackHandValue()){
 //if hands are equal to 21, player with blackjack wins
 // if both have blackjack, dealer wins, if neither are the dealer, winnings are split
-                                            if(hands.get(i).getBlackjackHandValue()==21){
-                                                
-                                                if (hands.get(i).isHandBlackjack()&&!hands.get(winningHand).isHandBlackjack()){
+                                            
+                                            if (hands.get(i).isHandBlackjack()&&!hands.get(winner.get(0)).isHandBlackjack()){
+                                                winner.clear();
+                                                winner.add(i);
+                                            }
+                                            else if (hands.get(i).isHandBlackjack()&&hands.get(winner.get(0)).isHandBlackjack()){
+                                                if(hands.get(i).getPlayer().equalsIgnoreCase(event.getBot().getNick())||hands.get(winner.get(0)).getPlayer().equalsIgnoreCase(event.getBot().getNick())){
                                                     winner.clear();
+                                                    winner.add(0);
+                                                }
+                                                else{
                                                     winner.add(i);
-                                                    winningHand = i;
                                                 }
-                                                else if (hands.get(i).isHandBlackjack()&&hands.get(winningHand).isHandBlackjack()){
-                                                    if(hands.get(i).getPlayer().equalsIgnoreCase(event.getBot().getNick())||hands.get(winningHand).getPlayer().equalsIgnoreCase(event.getBot().getNick())){
-                                                        winner.clear();
-                                                        winner.add(0);
-                                                        winningHand=0;
-                                                    }
-                                                    else{
-                                                        winner.add(i);
-                                                    }
-                                                    
-                                                }
-                                                    
                                             }
-                                            if (!hands.get(i).getPlayer().equalsIgnoreCase(event.getBot().getNick())&&!hands.get(winningHand).getPlayer().equalsIgnoreCase(event.getBot().getNick())){
-                                                winningHand=getHandByPlayer(hands, event.getBot().getNick());
+                                            else if (hands.get(i).getPlayer().equalsIgnoreCase(event.getBot().getNick())||hands.get(winner.get(0)).getPlayer().equalsIgnoreCase(event.getBot().getNick())){
+                                                winner.clear();
+                                                winner.add(0);
                                             }
-                                            else if (hands.get(i).getPlayer().equalsIgnoreCase(event.getBot().getNick())){
-                                                winningHand=i;
+                                            else{
+                                                winner.add(i);
                                             }
                                         }
                                     }
                                 }// END SCORING
                                 
-                                event.getBot().sendIRC().message(gameChan,hands.get(winningHand).getPlayer()+" has won! The winning hand was "+ hands.get(winningHand).toColoredString()+"totaling "+hands.get(winningHand).getBlackjackHandValue()+" and earning $"+minBet*(hands.size()-1)+", everyone else has lost $"+minBet);
-                                GameControl.scores.addScore(hands.get(winningHand).getPlayer(),minBet*(hands.size()-1));
+                                double multiplier=1;
+                                if (hands.get(winner.get(0)).isHandBlackjack()&&!hands.get(winner.get(0)).getPlayer().equalsIgnoreCase(event.getBot().getNick()))
+                                    multiplier=1.5;
+                                
+                                int earnings = (int) ((minBet*(hands.size()-1) * multiplier) / winner.size());
+                                
+                                for (int i=0;i<winner.size();i++){
+                                    event.getBot().sendIRC().message(gameChan,hands.get(winner.get(i)).getPlayer()+" has won! The winning hand was "+ hands.get(winner.get(i)).toColoredString()+"totaling "+hands.get(winner.get(i)).getBlackjackHandValue()+" and earning $"+minBet*(hands.size()-1)+", everyone else has lost $"+minBet);
+                                    GameControl.scores.addScore(hands.get(winner.get(i)).getPlayer(),minBet*(hands.size()-1));
+                                }
                                 
 //subtract bet from all players scores, winners included
 //add all losses/bets into winning pool, split by number of winners evenly
 
                                 // SUBTRACT BET FROM ALL USERS BUT THE WINNER
                                 for (int i=0;i<hands.size();i++){
-                                    if(i!=winningHand){
-//                                    if (!hands.get(i).getPlayer().equalsIgnoreCase(winner)){
-                                        GameControl.scores.subtractScore(hands.get(i).getPlayer(),minBet);
+                                    if(!winner.contains(i)){
+                                        
+                                        if (i==0)
+                                            GameControl.scores.subtractScore(hands.get(i).getPlayer(),(int) (minBet*(1.5*winner.size())));
+                                        else
+                                            GameControl.scores.subtractScore(hands.get(i).getPlayer(),minBet);
                                     }
                                 }// END UPDATE ALL USERS SCORES BUT THE WINNER
                                 
