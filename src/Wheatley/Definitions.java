@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import org.apache.commons.lang3.StringUtils;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -65,7 +66,7 @@ public class Definitions extends ListenerAdapter {
             event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+definitions.get(randNum).split("@")[0].trim()+": "+Colors.NORMAL+definitions.get(randNum).split("@")[1].trim());
         }
         
-        if (message.endsWith("?")&&message.split("\\?",2)[0].length()>0){
+        if (message.endsWith("?")&&message.split("\\?",2)[0].length()>0&&message.split("\\?").length==1&&StringUtils.countMatches(message, "?")==1){
             if (containsIgnoreCase(words,message.split("\\?")[0])){
                 int index = indexOfIgnoreCase(words,message.split("\\?")[0]);
                 event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+words.get(index)+Colors.NORMAL+": "+definitions.get(index).split("@")[1].trim());
@@ -76,7 +77,7 @@ public class Definitions extends ListenerAdapter {
             
             ArrayList<String> sortedWords = new ArrayList<>();
             sortedWords.addAll(words);
-            Collections.sort(sortedWords);
+            Collections.sort(sortedWords, String.CASE_INSENSITIVE_ORDER);
             
             String wordList = "";
             for (int i=0;i<sortedWords.size();i++){
@@ -112,6 +113,10 @@ public class Definitions extends ListenerAdapter {
                 
                 if(message.split("@").length!=2){
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: !adddef word or phrase @ definition phrase");
+                }
+                
+                else if (StringUtils.countMatches(message.split("@")[0], "?")>0){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: Definition terms may not contain a \"?\"");
                 }
                 
                 else if (containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
