@@ -60,7 +60,7 @@ public class Urban extends ListenerAdapter {
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
+//        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
             try{
                 String message = Colors.removeFormattingAndColors(event.getMessage().trim());
                 if(message.toLowerCase().matches("!udict[\\sA-Za-z0-9\\'\\-\\_\\.]*")) {
@@ -103,7 +103,7 @@ public class Urban extends ListenerAdapter {
             catch(Exception ex){
                 event.respond("Error: Definition Not Found"); // Throws hanson if theres an error
             }
-        }
+//        }
     }
     
     //converts URL to string, primarily used to string-ify json text
@@ -127,8 +127,6 @@ public class Urban extends ListenerAdapter {
         JSONParser parser = new JSONParser();
         try{
             String jsonObject = (readUrl("http://api.urbandictionary.com/v0/define?term="+term.trim().replaceAll(" ", "%20")));
-            //jsonObject = jsonObject.replaceAll("(\\r|\\n)", "");
-            //JSONString directLink = (JSONString) jsonObject.get("permalink");
             List<String> directLink = JSONKeyFinder(jsonObject,"permalink");
             List<String> word = JSONKeyFinder(jsonObject,"word");
             List<String> definition = JSONKeyFinder(jsonObject,"definition");
@@ -139,14 +137,16 @@ public class Urban extends ListenerAdapter {
             if(results.get(defNum).equalsIgnoreCase("no_results"))
                 return("Error: Definition Not Found");
             
-            if (definition.get(defNum).length()>150)
-                slimmedDef = definition.get(defNum).replaceAll("[\t\r\n]", "").substring(0,Math.min(definition.get(defNum).length(),150))+"...";
-            else
+            if (definition.get(defNum).length()>150){
+                definition.add(defNum,definition.get(defNum).replaceAll("[\t\r\n]", ""));
+                slimmedDef = definition.get(defNum).substring(0,Math.min(definition.get(defNum).length(),150))+"...";
+            }else
                 slimmedDef = definition.get(defNum).replaceAll("[\t\r\n]", "");
             
-            if (example.get(defNum).length()>150)
-                slimmedExample = example.get(defNum).replaceAll("[\t\r\n]", "").substring(0,Math.min(example.get(defNum).length(),150))+"... ";
-            else
+            if (example.get(defNum).length()>150){
+                example.add(defNum,example.get(defNum).replaceAll("[\t\r\n]", ""));
+                slimmedExample = example.get(defNum).substring(0,Math.min(example.get(defNum).length(),150))+"... ";
+            }else
                 slimmedExample = example.get(defNum).replaceAll("[\t\r\n]", "")+" ";
             
             return(Colors.BOLD+word.get(defNum)+Colors.NORMAL+" : "+slimmedDef+" "+Colors.BOLD+"Example : "+Colors.NORMAL+slimmedExample + directLink.get(defNum));
