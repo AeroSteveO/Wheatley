@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.ActionEvent;
+//import org.pircbotx.hooks.events.MessageEvent;
 
 /**
  *
@@ -26,10 +27,10 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class BlarghleRandom extends ListenerAdapter {
     
     @Override
-    public void onMessage(MessageEvent event) throws Exception {
+    public void onAction(ActionEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
-            if (message.equalsIgnoreCase("!blarghlebot")){
+//        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
+            if (message.trim().equalsIgnoreCase("licks "+event.getBot().getNick())){
                 String a = new String();
                 //  a=" " + adverb() +" "+ verb() +" "+ event.getUser().getNick() + "'s " + adjective() + " " + bodypart();
                 switch((int) (Math.random()*3+1)) {
@@ -45,7 +46,7 @@ public class BlarghleRandom extends ListenerAdapter {
                 }
                 event.getBot().sendIRC().action(event.getChannel().getName(), a);
             }
-        }
+//        }
     }
     private static String adjective() {
         List<String> a = new ArrayList<>();
