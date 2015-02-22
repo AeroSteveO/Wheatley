@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 
 package Objects;
 
@@ -14,7 +14,7 @@ import org.pircbotx.exception.IrcException;
 /**
  *
  * @author carson
- * 
+ *
  * Requirements:
  * - APIs
  *    N/A
@@ -22,26 +22,26 @@ import org.pircbotx.exception.IrcException;
  *    N/A
  * - Linked Classes
  *    N/A
- * 
+ *
  */
 public class Runner implements Runnable {
-
+    
     PircBotX bot;
     Thread t;
-
+    
     public Runner(PircBotX bot) {
         this.bot = bot;
     }
-
+    
     public void giveT(Thread t) {
         this.t = t;
     }
-
+    
     @Override
     public void run() {
         try {
             bot.startBot();
-        } catch (IOException | IrcException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         while (Global.reconnect) {
