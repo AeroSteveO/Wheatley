@@ -6,11 +6,16 @@
 
 package Wheatley;
 
+import static Wheatley.GameControl.scores;
+import com.google.common.collect.ImmutableSortedSet;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.*;
+import org.pircbotx.Channel;
 import org.pircbotx.Colors;
+import org.pircbotx.User;
 import org.pircbotx.hooks.*;
 import org.pircbotx.hooks.events.*;
 
@@ -69,6 +74,50 @@ public class Blarghlebot extends ListenerAdapter {
                     event.getBot().sendIRC().message(event.getChannel().getName(),reply.substring(0,Math.min(reply.length(),400)));
                     Global.channels.get(idx).addMessageToLog(reply);
                 }
+            }
+            
+//            if (message.equalsIgnoreCase("!dtellausers")){
+//                int counter = 0;
+//                ImmutableSortedSet users = event.getBot().getUserChannelDao().getAllUsers();
+//                
+//                Iterator<User> iterator = users.iterator();
+//                while(iterator.hasNext()) {
+//                    User element = iterator.next();
+//                        if (element.getNick().startsWith("|")){
+//                            counter++;
+//                        }
+//                }
+//                event.getBot().sendIRC().message(event.getChannel().getName(),"There are "+(counter-1)+" users on Dtella");
+//            }
+            if (message.equalsIgnoreCase("!users")||message.equalsIgnoreCase("!dtellausers")){
+                int totalUsers = 0;
+                int dtellaChanUsers = 0;
+                int dtellaUsers = 0;
+                ImmutableSortedSet users = event.getBot().getUserChannelDao().getAllUsers();
+                
+                Iterator<User> iterator = users.iterator();
+                while(iterator.hasNext()) {
+                    User element = iterator.next();
+//                    if (element.getNick().startsWith("|")){
+//                        dtellaUsers++;
+//                    }
+                    if (element.getServer().toLowerCase().matches(".*bridge.*")){
+                        dtellaUsers++;
+                    }
+                    Iterator<Channel> chanIterator = element.getChannels().iterator();
+                    while (chanIterator.hasNext()){
+                        Channel chanElement = chanIterator.next();
+                        if(chanElement.getName().equalsIgnoreCase("#dtella")){
+                            dtellaChanUsers++;
+                            break;
+                        }
+                    }
+                    if (element.getChannels().size()>0)
+                        totalUsers++;
+                }
+                if (dtellaUsers == 0)
+                    dtellaUsers++; //Adding one so that its not negative
+                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Dtella Shares: "+Colors.NORMAL+(dtellaUsers-1)+Colors.BOLD+" #Dtella Users: "+Colors.NORMAL+dtellaChanUsers+Colors.BOLD+" Total Visible Users "+Colors.NORMAL+totalUsers);
             }
             
             //KICKS ON KICKS ON KICKS
