@@ -1,0 +1,36 @@
+{
+  "generalSettings": {
+    "port": "6667",
+    "botowner": "Steve-O",
+    "nick": "Wheatley",
+    "server": "irc.dhirc.com",
+    "randchantime": "all"
+  },
+  "channelSettings": {
+    "#rapterverse": {
+      "log": "false",
+      "markov": "true",
+      "newLine": "cool",
+      "randchanlog": "5",
+      "randchantime": "100",
+      "rejoin": "true"
+    },
+    "#dtella": {
+      "log": "false",
+      "markov": "true",
+      "newLine": "cool",
+      "randchanlog": "5",
+      "randchantime": "100",
+      "rejoin": "true"
+    },
+    "#casino": {
+      "randchanlog": "5",
+      "markovChance": "100",
+      "markov": "penisjokes",
+      "log": "true",
+      "newLine": "coolStuff",
+      "randchantime": "100",
+      "rejoin": "false"
+    }
+  }
+}
