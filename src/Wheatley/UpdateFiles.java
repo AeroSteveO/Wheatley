@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Objects.Settings;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -32,7 +33,10 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class UpdateFiles extends ListenerAdapter{
     
-    
+//        String filename = "settings.json";
+//    public static Settings settings = new Settings();
+//    boolean start = startSettings();
+
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         
@@ -43,7 +47,49 @@ public class UpdateFiles extends ListenerAdapter{
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             
-            if (cmdSplit[0].equalsIgnoreCase("update")){
+            if (cmdSplit[0].equalsIgnoreCase("save")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                Global.settings.save();
+                event.getBot().sendIRC().notice(event.getUser().getNick(), "Settings file saved");
+            }
+            else if (cmdSplit[0].equalsIgnoreCase("set")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                if (cmdSplit.length==3){
+                    
+                    boolean success = Global.settings.set(cmdSplit[1], cmdSplit[2], event.getChannel().getName());
+                    if (!success){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Setting failed to update: Setting does not exist");
+                    }
+                }
+                else if(cmdSplit.length==4){
+                    boolean success = Global.settings.set(cmdSplit[1], cmdSplit[2], cmdSplit[3]);
+                    if (!success){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Setting failed to update: Setting does not exist");
+                    }
+                    
+                }
+            }
+            else if (cmdSplit[0].equalsIgnoreCase("create")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                if (cmdSplit.length==3){
+                    Global.settings.create(cmdSplit[1],cmdSplit[2]);
+                    
+                }
+                else if (cmdSplit.length==4){
+                    Global.settings.create(cmdSplit[1],cmdSplit[2],cmdSplit[3]);
+                }
+            }
+            
+            else if (cmdSplit[0].equalsIgnoreCase("get")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                
+                if (cmdSplit.length==2){
+                    event.respond(Global.settings.get(cmdSplit[1]));
+                    
+                }
+                else if (cmdSplit.length==3){
+                    event.respond(Global.settings.get(cmdSplit[1],cmdSplit[2]));
+                }
+            }
+
+            
+            else if (cmdSplit[0].equalsIgnoreCase("update")){
                 if(event.getUser().getNick().equals(Global.botOwner)&&event.getUser().isVerified()){
                     
 //                    String[] properties = message.split(" ");
@@ -59,6 +105,8 @@ public class UpdateFiles extends ListenerAdapter{
                                 file =new File(filename+".txt");
                                 filename = filename+".txt";
                             }
+                            
+                            
                             
                             else{
                                 file =new File(filename);
@@ -92,4 +140,18 @@ public class UpdateFiles extends ListenerAdapter{
             }
         }
     }
+    
+//        private boolean startSettings() {
+//        try{
+//            settings.setFileName(filename);
+//            settings.loadFile();
+//        }
+//        catch (Exception ex){
+//            System.out.println("SETTINGS FAILED TO LOAD");
+//            ex.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
+
 }

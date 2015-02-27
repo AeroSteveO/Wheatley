@@ -8,17 +8,15 @@ package Wheatley;
 
 import Objects.ChannelStore.ChannelArray;
 import Objects.Command;
-import java.lang.annotation.Annotation;
+import Objects.Settings;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.TimeZone;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.Event;
-import org.reflections.Reflections;
 
 /**
  *
@@ -45,7 +43,25 @@ public class Global {
     public static String phrasePrefix = new String();      //mainNick+", ";
     public static ArrayList<String> botAdmin = getBotAdmins();
 //    public static final Reflections wheatleyReflection = new Reflections("org.pircbotx");
-    public static List<Command> commandList = new ArrayList<>();
+    //public static List<Command> commandList = new ArrayList<>();
+    
+    private static String filename = "settings.json";
+    public static Settings settings = startSettings();
+//    boolean start = startSettings();
+    
+    
+    private static Settings startSettings() {
+        Settings setting = new Settings();
+        try{
+            setting.setFileName(filename);
+            setting.loadFile();
+        }
+        catch (Exception ex){
+            System.out.println("SETTINGS FAILED TO LOAD");
+            ex.printStackTrace();
+        }
+        return setting;
+    }
     
     public static String getTimestamp(Event event){
         TimeZone tz = TimeZone.getDefault();
