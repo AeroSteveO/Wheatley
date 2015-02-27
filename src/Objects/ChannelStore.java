@@ -36,7 +36,7 @@ public class ChannelStore {
     private List<String> msgLog = new ArrayList<>();                       // for use in s/find/replace commands
     private ArrayList<String> gameChanBlocks = getBlockedGameChannels();   // List of channels that games are blocked from
     private boolean gamesBlocked;                                          // Are games currently blocked in this channel
-    private ThrottleArray throttle = new ThrottleArray();
+//    private ThrottleArray throttle = new ThrottleArray();
     
     public ChannelStore(String aName) {
         this.name = aName;
