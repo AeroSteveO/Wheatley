@@ -264,14 +264,15 @@ public class GameControl extends ListenerAdapter {
                             event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Input must be an integer value between 0 and 100");
                         }
                         else if (guess==lottoNumber){
-//                            int WheatleyGain = (int) (lottoWinnings * .1);
-//                            lottoWinnings = (int) (lottoWinnings *.9);
+                            int WheatleyGain = (int) (lottoWinnings * .4);
+                            lottoWinnings = (int) (lottoWinnings *.6);
                             event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Congratulations "+Colors.NORMAL+event.getUser().getNick()+", you won $"+lottoWinnings);
                             GameControl.scores.addScore(event.getUser().getNick(), lottoWinnings);
-//                            GameControl.scores.addScore(event.getBot().getNick(), WheatleyGain);
-//                            GameControl.scores.subtractScore(event.getBot().getNick(), lottoBaseWin);
+                            GameControl.scores.addScore(event.getBot().getNick(), WheatleyGain);
+                            GameControl.scores.subtractScore(event.getBot().getNick(), lottoBaseWin);
                             lottoNumber = (int) (0+(Math.random()*100-0+1));
                             lottoWinnings = lottoBaseWin;
+                            guessList.clear();
                         }
                         else{
                             event.getBot().sendIRC().message(event.getChannel().getName(),"Sorry "+event.getUser().getNick()+", but you lost $"+lottoCost);
