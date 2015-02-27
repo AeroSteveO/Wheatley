@@ -79,6 +79,16 @@ public class MarkovInterface extends ListenerAdapter{
             Global.channels.get(channelIndex).setSpeakValue(true);
             event.getBot().sendIRC().notice(event.getUser().getNick(), "Markov chain system un-muted");
         }
+        if (message.startsWith(Global.commandPrefix)){
+            
+            String command = message.split(Global.commandPrefix)[1];
+            String[] cmdSplit = command.split(" ");
+            
+            if (cmdSplit[0].equalsIgnoreCase("words")){
+                event.getBot().sendIRC().message(currentChan, "I know "+borg.words.size()+" ("+borg.numContexts+" contexts, "+String.valueOf(borg.numContexts/borg.words.size())+" per word), "+borg.lines.size()+" lines.");
+            }
+        }
+        
         
         //||event.getChannel().isOwner(event.getUser())
         if (message.toLowerCase().startsWith("!set chance ")
