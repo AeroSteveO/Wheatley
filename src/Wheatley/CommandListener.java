@@ -6,6 +6,11 @@
 
 package Wheatley;
 
+import Commands.PickAPort;
+import Commands.Why;
+import Objects.Command;
+import java.util.ArrayList;
+import java.util.List;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -13,16 +18,33 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Stephen
+ * create commandlist in this class and do a hard coded array for testing
  */
 public class CommandListener extends ListenerAdapter{
+    List<Command> commandList = getCommandList();
+    
+    
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        System.out.println("Command list size " + Global.commandList.size());
-        for (int i=0;i<Global.commandList.size();i++){
-            if (Global.commandList.get(i).commandTerms().contains(message)){
-                Global.commandList.get(i).processCommand(event);
+        
+        if (message.startsWith(Global.commandPrefix)){
+            String command = message.split(Global.commandPrefix)[1];
+            String[] cmdSplit = command.split(" ");
+            
+            for (int i=0;i<commandList.size();i++){
+                if (commandList.get(i).commandTerms().contains(cmdSplit[0])){
+                    commandList.get(i).processCommand(event);
+                }
             }
         }
+    }
+
+    private List<Command> getCommandList() {
+        List<Command> listOfCommands = new ArrayList<>();
+        listOfCommands.add(new PickAPort());
+        listOfCommands.add(new Why());
+        
+        return(listOfCommands);
     }
 }

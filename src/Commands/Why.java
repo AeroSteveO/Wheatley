@@ -12,6 +12,7 @@ import Objects.Command;
 import java.util.ArrayList;
 import java.util.List;
 import org.pircbotx.hooks.Event;
+import org.pircbotx.hooks.events.MessageEvent;
 
 /**
  *
@@ -20,7 +21,6 @@ import org.pircbotx.hooks.Event;
 @CMD
 @GenCMD
 public class Why implements Command{
-    Boolean announce = announce();
     
     @Override
     public String toString(){
@@ -32,11 +32,11 @@ public class Why implements Command{
         return(toCheck.equalsIgnoreCase("why"));
     }
     
-    @Override
-    public boolean announce() {
-//        Global.commandList.add(this);
-        return(true);
-    }
+//    @Override
+//    public boolean announce() {
+////        Global.commandList.add(this);
+//        return(true);
+//    }
     
     @Override
     public ArrayList<String> commandTerms(){
@@ -82,10 +82,12 @@ public class Why implements Command{
                         a=sentence();
                         break;
                 }
-                System.out.println(a);
-//                event.getBot().sendIRC().message(event.getChannel().getName(), a);
-//            }
-        }
+//                System.out.println(a);
+                if (event instanceof MessageEvent){
+                    MessageEvent mEvent = (MessageEvent) event;
+                    mEvent.getBot().sendIRC().message(mEvent.getChannel().getName(), a);
+                }
+    }
     
     private static String special_case() {
         List<String> a = new ArrayList<>();

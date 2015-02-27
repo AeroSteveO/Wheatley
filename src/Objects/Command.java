@@ -16,7 +16,7 @@ import org.pircbotx.hooks.Event;
 public interface Command {
     
     public void processCommand(Event event);
-    public boolean announce();
+//    public boolean announce();
     public ArrayList<String> commandTerms();
     public boolean isCommand(String toCheck);
     
