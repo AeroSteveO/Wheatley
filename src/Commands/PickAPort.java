@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 /**
  *
@@ -32,11 +33,6 @@ public class PickAPort implements Command{
         return(toCheck.equalsIgnoreCase("pickaport"));
     }
     
-//    @Override
-//    public boolean announce() {
-////        Global.commandList.add(this);
-//        return(true);
-//    }
     @Override
     public ArrayList<String> commandTerms(){
         ArrayList<String> a = new ArrayList<>();
@@ -49,6 +45,10 @@ public class PickAPort implements Command{
         if (event instanceof MessageEvent){
             MessageEvent mEvent = (MessageEvent) event;
             mEvent.getBot().sendIRC().message(mEvent.getChannel().getName(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*65534-1025+1)));
+        }
+        else   if (event instanceof PrivateMessageEvent){
+            PrivateMessageEvent mEvent = (PrivateMessageEvent) event;
+            mEvent.getBot().sendIRC().message(mEvent.getUser().getNick(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*65534-1025+1)));
         }
 //        System.out.println("Port Number: "+(int) (1025+(Math.random()*65534-1025+1)));
     }

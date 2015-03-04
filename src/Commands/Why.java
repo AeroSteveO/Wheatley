@@ -1,18 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 
 package Commands;
 
 import Annot.CMD;
 import Annot.GenCMD;
 import Objects.Command;
+import Wheatley.Global;
 import java.util.ArrayList;
 import java.util.List;
 import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 /**
  *
@@ -29,15 +31,10 @@ public class Why implements Command{
     
     @Override
     public boolean isCommand(String toCheck){
-        return(toCheck.equalsIgnoreCase("why"));
+        
+        return((toCheck.equalsIgnoreCase("why")||(toCheck.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why"))));
     }
-    
-//    @Override
-//    public boolean announce() {
-////        Global.commandList.add(this);
-//        return(true);
-//    }
-    
+        
     @Override
     public ArrayList<String> commandTerms(){
         ArrayList<String> a = new ArrayList<>();
@@ -47,46 +44,50 @@ public class Why implements Command{
     
     @Override
     public void processCommand(Event event){
-            String a = new String();
+        String a = new String();
 //            String message = Colors.removeFormattingAndColors(event.getMessage());
 //            if (message.equalsIgnoreCase("!Why")||(message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why"))){//||message.equalsIgnoreCase("why?")||(message.toLowerCase().startsWith("why")&&message.endsWith("?"))&&message.endsWith("?")
-                switch((int) (Math.random()*10+1)) {
-                    case 1:
-                        a=special_case();
-                        break;
-                    case 2:
-                        a=phrase();
-                        break;
-                    case 3:
-                        a=phrase();
-                        break;
-                    case 4:
-                        a=phrase();
-                        break;
-                    case 5:
-                        a=sentence();
-                        break;
-                    case 6:
-                        a=sentence();
-                        break;
-                    case 7:
-                        a=sentence();
-                        break;
-                    case 8:
-                        a=sentence();
-                        break;
-                    case 9:
-                        a=sentence();
-                        break;
-                    case 10:
-                        a=sentence();
-                        break;
-                }
+        switch((int) (Math.random()*10+1)) {
+            case 1:
+                a=special_case();
+                break;
+            case 2:
+                a=phrase();
+                break;
+            case 3:
+                a=phrase();
+                break;
+            case 4:
+                a=phrase();
+                break;
+            case 5:
+                a=sentence();
+                break;
+            case 6:
+                a=sentence();
+                break;
+            case 7:
+                a=sentence();
+                break;
+            case 8:
+                a=sentence();
+                break;
+            case 9:
+                a=sentence();
+                break;
+            case 10:
+                a=sentence();
+                break;
+        }
 //                System.out.println(a);
-                if (event instanceof MessageEvent){
-                    MessageEvent mEvent = (MessageEvent) event;
-                    mEvent.getBot().sendIRC().message(mEvent.getChannel().getName(), a);
-                }
+        if (event instanceof MessageEvent){
+            MessageEvent mEvent = (MessageEvent) event;
+            mEvent.getBot().sendIRC().message(mEvent.getChannel().getName(), a);
+        }
+        else if(event instanceof PrivateMessageEvent){
+            PrivateMessageEvent mEvent = (PrivateMessageEvent) event;
+            mEvent.getBot().sendIRC().message(mEvent.getUser().getNick(), a);
+        }
     }
     
     private static String special_case() {
@@ -365,5 +366,5 @@ public class Why implements Command{
         a.add("obeyed");
         a.add("obeyed");
         return (a.get((int) (Math.random()*a.size()-1)));
-    }    
+    }
 }
