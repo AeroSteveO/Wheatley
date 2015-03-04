@@ -7,13 +7,12 @@
 package Wheatley;
 
 import Objects.ChannelStore.ChannelArray;
-import Objects.Command;
 import Objects.Settings;
+import Objects.Throttle;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.Event;
@@ -48,6 +47,8 @@ public class Global {
     private static String filename = "settings.json";
     public static Settings settings = startSettings();
 //    boolean start = startSettings();
+    private static String throttleName = "throttle.json";
+    public static Throttle throttle = startThrottle();
     
     
     private static Settings startSettings() {
@@ -61,6 +62,19 @@ public class Global {
             ex.printStackTrace();
         }
         return setting;
+    } 
+    
+    private static Throttle startThrottle() {
+        Throttle throttle = new Throttle();
+        try{
+            throttle.setFileName(throttleName);
+            throttle.loadFile();
+        }
+        catch (Exception ex){
+            System.out.println("SETTINGS FAILED TO LOAD");
+            ex.printStackTrace();
+        }
+        return throttle;
     }
     
     public static String getTimestamp(Event event){

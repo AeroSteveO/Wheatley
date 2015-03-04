@@ -63,7 +63,7 @@ public class Settings {
                 if (!channelSettings.containsKey(channel)){
                     Map<String, String> newSetting = new TreeMap<String,String>();
                     channelSettings.put(channel,newSetting);
-                    System.out.println("CHANNEL ADDED TO SETTINGS: "+channel);
+//                    System.out.println("CHANNEL ADDED TO SETTINGS: "+channel);
                 }
             }
             else{
@@ -76,7 +76,7 @@ public class Settings {
             for (int i=0;i<channels.size();i++){
                 if(!channelSettings.get(channels.get(i)).containsKey(key)){
                     channelSettings.get(channels.get(i)).put(key, value);
-                    System.out.println("SETTING "+key+" WAS ADDED TO "+channels.get(i));
+//                    System.out.println("SETTING "+key+" WAS ADDED TO "+channels.get(i));
                 }
 //                System.out.println(channelSettings.get(channels.get(i)).get(key));
             }
@@ -133,10 +133,14 @@ public class Settings {
             throw new UnsupportedOperationException("KEY MISSING");
     }
     public String get(String key, String channel){
-        if(channelSettings.get(channel).containsKey(key))
-            return channelSettings.get(channel).get(key).toString();
+        if (channelSettings.containsKey(channel)){
+            if(channelSettings.get(channel).containsKey(key))
+                return channelSettings.get(channel).get(key).toString();
+            else
+                throw new UnsupportedOperationException("KEY MISSING");
+        }
         else
-            throw new UnsupportedOperationException("KEY MISSING");
+            throw new UnsupportedOperationException("CHANNEL MISSING");
     }
     public ArrayList<String> getChannelList(){
         
@@ -309,7 +313,7 @@ public class Settings {
 //            else
 //                System.out.println("AWW HELL, "+key+" failed");
             map.put(key, value);
-            System.out.println("KEY: "+key+" VALUE: "+value);
+//            System.out.println("KEY: "+key+" VALUE: "+value);
         }
         return map;
     }

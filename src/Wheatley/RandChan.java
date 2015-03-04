@@ -7,7 +7,7 @@
 package Wheatley;
 
 import Objects.KeyFinder;
-import Objects.Throttle;
+import com.google.common.collect.ImmutableSortedSet;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -15,11 +15,13 @@ import java.util.LinkedList;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 
 /**
@@ -64,8 +66,9 @@ public class RandChan extends ListenerAdapter {
 //    private List<String> boardList = getBoardList();
 //    private List<String> boardTitles = getBoardTitles();
     private List<List<String>> boardInfo = getBoardInfo();
-    private Throttle rThrottle = new Throttle("randchan");
+//    private Throttle rThrottle = new Throttle("randchan");
     boolean setup = setupThrottle(maxLog,maxTime);
+    private String type = "randchan";
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -100,13 +103,13 @@ public class RandChan extends ListenerAdapter {
                                 i++;
                             }
                             if (!found){
-                                    event.getBot().sendIRC().message(event.getChannel().getName(), "Board is not allowed/Does not exist");
+                                event.getBot().sendIRC().message(event.getChannel().getName(), "Board is not allowed/Does not exist");
                             }
                         }
                     }
                 }
                 else if(message.toLowerCase().matches("!randchan(\\s+\\p{Alnum}+)?")) {
-                    if(!rThrottle.isThrottleActive()){
+                    if(!Global.throttle.isThrottleActive(type,event.getChannel().getName())){
                         String[] splitString = event.getMessage().split("\\s+");
                         if(splitString.length>1) {
                             if(isBoardAllowed(splitString[1])) {
@@ -127,20 +130,24 @@ public class RandChan extends ListenerAdapter {
                 if (message.toLowerCase().matches("!set rcall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
                     maxLog = Integer.parseInt(message.split(" ")[2])-1;
                     long sec = maxTime/1000;
-                    rThrottle.setMaxLog(maxLog);
+                    Global.throttle.setMaxLog(type, maxLog, event.getChannel().getName());
                     event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
                 }
                 
                 if (message.toLowerCase().matches("!set rtime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
                     maxTime = Integer.parseInt(message.split(" ")[2])*1000;
                     long sec = maxTime/1000;
-                    rThrottle.setMaxTime(maxTime);
+                    Global.throttle.setMaxTime(type, maxTime, event.getChannel().getName());
                     event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
                 }
                 
                 if (message.equalsIgnoreCase("!set rcall")||message.equalsIgnoreCase("!set rtime")){
                     long sec = maxTime/1000;
                     event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
+                }
+                if (message.equalsIgnoreCase("!setup")){
+                    
+                    setupThrottle(maxLog,maxTime, event);
                 }
             }
             catch(Exception ex){
@@ -232,7 +239,7 @@ public class RandChan extends ListenerAdapter {
             try{
                 filename = JSONKeyFinder(jsonText,"tim");
                 extension = JSONKeyFinder(jsonText,"ext");
-                int filenum = (int) (Math.random()*filename.size());
+                int filenum = (int) (Math.random()*(filename.size()-1));
                 image = "http://i.4cdn.org/"+board+"/"+filename.get(filenum)+extension.get(filenum);
             }
             catch(ParseException pe){
@@ -258,12 +265,28 @@ public class RandChan extends ListenerAdapter {
         }
         return(matchedJson);
     }
-    private boolean setupThrottle(int maxLog, long maxTime) {
-        rThrottle.setMaxLog(maxLog);
-        rThrottle.setMaxTime(maxTime);
+    private boolean setupThrottle(int maxLog, long maxTime){
+        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
+        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
+        return(true);
+        
+    }
+    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
+        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();
+        
+        Iterator<Channel> iterator = channels.iterator();
+        while(iterator.hasNext()) {
+            Channel element = iterator.next();
+            
+            Global.throttle.create("NA", "NA", element.getName());
+            
+        }
+        
+        Global.throttle.createMaxLog(type, String.valueOf(maxLog), "ALL");
+        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
         return(true);
     }
-
+    
     private List<List<String>> getBoardInfo() {
         List<List<String>> info = new ArrayList<>();
         JSONParser parser = new JSONParser();

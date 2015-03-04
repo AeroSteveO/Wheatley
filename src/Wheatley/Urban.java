@@ -7,7 +7,7 @@
 package Wheatley;
 
 import Objects.KeyFinder;
-import Objects.Throttle;
+import com.google.common.collect.ImmutableSortedSet;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -15,9 +15,11 @@ import java.util.LinkedList;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 
 /**
@@ -26,7 +28,7 @@ import org.pircbotx.Colors;
  * --created the json grabbing and parsing parts
  * Previous Bot: SRSBSNS
  * --utilizes the randchan function from poopsock/khwain as a base
- * 
+ *
  * Requirements:
  * - APIs
  *    JSON-Simple-1.1.1
@@ -35,7 +37,7 @@ import org.pircbotx.Colors;
  *    Throttle
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate Commands with:
  *      !udict [word]
  *          responds with the urban dictionary reference to the given word
@@ -55,54 +57,58 @@ public class Urban extends ListenerAdapter {
     private LinkedList<Long> timeLog = new LinkedList<Long>();
     private int maxLog = 2;
     private long maxTime = 30*1000;
-    private Throttle uThrottle = new Throttle("udict");
+//    private Throttle uThrottle = new Throttle("udict");
     boolean setup = setupThrottle(maxLog,maxTime);
+    private String type = "udict";
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
 //        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
-            try{
-                String message = Colors.removeFormattingAndColors(event.getMessage().trim());
-                if(message.toLowerCase().matches("!udict[\\sA-Za-z0-9\\'\\-\\_\\.]*")) {
-                    int defNum = 0;
-                    if(!uThrottle.isThrottleActive()){
-                        String[] splitString = message.split("\\s+",2);
-                        if(splitString.length>1) {
-                            event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1],defNum));
-                        }
-                        else {
-                            event.getBot().sendIRC().notice(event.getUser().getNick(),"Please input a word to get the definition of");
-                        }
-                        
-                    }else{
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Please Wait Before Sending Another Call for Udict");
+        try{
+            String message = Colors.removeFormattingAndColors(event.getMessage().trim());
+            if(message.toLowerCase().matches("!udict[\\sA-Za-z0-9\\'\\-\\_\\.]*")) {
+                int defNum = 0;
+                if(!Global.throttle.isThrottleActive(type, event.getChannel().getName())){
+                    String[] splitString = message.split("\\s+",2);
+                    if(splitString.length>1) {
+                        event.getBot().sendIRC().message(event.getChannel().getName(),getDefinition(splitString[1],defNum));
                     }
-                }
-                else if(message.toLowerCase().split(" ",2)[0].equalsIgnoreCase("!udict")) {
-                    event.getBot().sendIRC().message(event.getChannel().getName(),"Udict only accepts a-z, 0-9, and ['-_.]");
-                }
-                if (message.toLowerCase().matches("!set ucall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
-                    maxLog = Integer.parseInt(message.split(" ")[2]);
-                    long sec = maxTime/1000;
-                    uThrottle.setMaxLog(maxLog);
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
-                }
-                if (message.toLowerCase().matches("!set utime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
-                    maxTime = Integer.parseInt(message.split(" ")[2])*1000;
-                    uThrottle.setMaxTime(maxTime);
-                    long sec = maxTime/1000;
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
-                }
-                if (message.equalsIgnoreCase("!set ucall")||message.equalsIgnoreCase("!set utime")){
-                    long sec = maxTime/1000;
+                    else {
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Please input a word to get the definition of");
+                    }
                     
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+                }else{
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Please Wait Before Sending Another Call for Udict");
                 }
+            }
+            else if(message.toLowerCase().split(" ",2)[0].equalsIgnoreCase("!udict")) {
+                event.getBot().sendIRC().message(event.getChannel().getName(),"Udict only accepts a-z, 0-9, and ['-_.]");
+            }
+            if (message.toLowerCase().matches("!set ucall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
+                maxLog = Integer.parseInt(message.split(" ")[2]);
+                long sec = maxTime/1000;
+                Global.throttle.setMaxLog(type, maxLog, event.getChannel().getName());
+                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+            }
+            if (message.toLowerCase().matches("!set utime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
+                maxTime = Integer.parseInt(message.split(" ")[2])*1000;
+                Global.throttle.setMaxTime(type, maxTime, event.getChannel().getName());
+                long sec = maxTime/1000;
+                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
+            }
+            if (message.equalsIgnoreCase("!set ucall")||message.equalsIgnoreCase("!set utime")){
+                long sec = maxTime/1000;
                 
+                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
             }
-            catch(Exception ex){
-                event.respond("Error: Definition Not Found"); // Throws hanson if theres an error
+            if (message.equalsIgnoreCase("!setup")){
+                setupThrottle(maxLog,maxTime, event);
             }
+            
+        }
+        catch(Exception ex){
+            event.respond("Error: Definition Not Found"); // Throws hanson if theres an error
+        }
 //        }
     }
     
@@ -172,10 +178,25 @@ public class Urban extends ListenerAdapter {
         }
         return(matchedJson);
     }
-
-    private boolean setupThrottle(int maxLog, long maxTime) {
-        uThrottle.setMaxLog(maxLog);
-        uThrottle.setMaxTime(maxTime);
+    
+    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
+        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();
+        
+        Iterator<Channel> iterator = channels.iterator();
+        while(iterator.hasNext()) {
+            Channel element = iterator.next();
+            
+            Global.throttle.create("NA", "NA", element.getName());
+            
+        }
+        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
+        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
         return(true);
+    }
+    private boolean setupThrottle(int maxLog, long maxTime){
+        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
+        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
+        return(true);
+        
     }
 }
