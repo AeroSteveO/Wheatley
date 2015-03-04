@@ -158,12 +158,12 @@ public class GameControl extends ListenerAdapter {
                     }
                     
                     else if (!score.matches("[0-9]+")){
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Input number must be an integer");
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Input number must be a positive integer");
                     }
                     
-                    else if(score.matches("\\-[0-9]+")){
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"You cannot give a user a negative score");
-                    }
+//                    else if(score.matches("\\-[0-9]+")){
+//                        event.getBot().sendIRC().notice(event.getUser().getNick(),"You cannot give a user a negative score");
+//                    }
                     
                     else{
                         scores.setScore(user, Integer.parseInt(score));
@@ -230,10 +230,10 @@ public class GameControl extends ListenerAdapter {
                 if (cmdSplit.length==1){
                     event.getBot().sendIRC().message(event.getChannel().getName(),"Current lottery winnings are at $"+lottoWinnings);
                 }
-                else if(lottoCost>GameControl.scores.getScoreObj(event.getUser().getNick()).getScore()){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to buy a lotto ticket");
-                }
-                if (cmdSplit.length==2){
+//                else if(lottoCost>GameControl.scores.getScoreObj(event.getUser().getNick()).getScore()){
+//                    event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to buy a lotto ticket");
+//                }
+                else if (cmdSplit.length==2){
                     if (cmdSplit[1].equalsIgnoreCase("list")){
                         String guesses = "";
                         
@@ -256,31 +256,88 @@ public class GameControl extends ListenerAdapter {
                         }
                     }
                     else if(cmdSplit[1].matches("[0-9]{1,3}")){
-                        int guess = Integer.parseInt(cmdSplit[1]);
-                        if (guessList.contains(guess)){
-                            event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Value already guessed | Use "+Colors.BOLD+"!lotto list"+Colors.NORMAL+" to see the full guess list");
-                        }
-                        else if (guess>100){
-                            event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Input must be an integer value between 0 and 100");
-                        }
-                        else if (guess==lottoNumber){
-                            int WheatleyGain = (int) (lottoWinnings * .4);
-                            lottoWinnings = (int) (lottoWinnings *.6);
-                            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Congratulations "+Colors.NORMAL+event.getUser().getNick()+", you won $"+lottoWinnings);
-                            GameControl.scores.addScore(event.getUser().getNick(), lottoWinnings);
-                            GameControl.scores.addScore(event.getBot().getNick(), WheatleyGain);
-                            GameControl.scores.subtractScore(event.getBot().getNick(), lottoBaseWin);
-                            lottoNumber = (int) (0+(Math.random()*100-0+1));
-                            lottoWinnings = lottoBaseWin;
-                            guessList.clear();
+                        if(lottoCost>GameControl.scores.getScoreObj(event.getUser().getNick()).getScore()){
+                            event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to buy a lotto ticket");
                         }
                         else{
-                            event.getBot().sendIRC().message(event.getChannel().getName(),"Sorry "+event.getUser().getNick()+", but you lost $"+lottoCost);
-                            GameControl.scores.subtractScore(event.getUser().getNick(), lottoCost);
-                            lottoWinnings += lottoCost;
-                            guessList.add(guess);
+                            int guess = Integer.parseInt(cmdSplit[1]);
+                            if (guessList.contains(guess)){
+                                event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Value already guessed | Use "+Colors.BOLD+"!lotto list"+Colors.NORMAL+" to see the full guess list");
+                            }
+                            else if (guess>100){
+                                event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Input must be an integer value between 0 and 100");
+                            }
+                            else if (guess==lottoNumber){
+                                int WheatleyGain = (int) (lottoWinnings * .4);
+                                lottoWinnings = (int) (lottoWinnings *.6);
+                                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Congratulations "+Colors.NORMAL+event.getUser().getNick()+", you won $"+lottoWinnings);
+                                GameControl.scores.addScore(event.getUser().getNick(), lottoWinnings);
+                                GameControl.scores.addScore(event.getBot().getNick(), WheatleyGain);
+                                GameControl.scores.subtractScore(event.getBot().getNick(), lottoBaseWin);
+                                lottoNumber = (int) (0+(Math.random()*100-0+1));
+                                lottoWinnings = lottoBaseWin;
+                                guessList.clear();
+                            }
+                            else{
+                                event.getBot().sendIRC().message(event.getChannel().getName(),"Sorry "+event.getUser().getNick()+", but you lost $"+lottoCost);
+                                GameControl.scores.subtractScore(event.getUser().getNick(), lottoCost);
+                                lottoWinnings += lottoCost;
+                                guessList.add(guess);
+                            }
                         }
                     }
+                    else if(cmdSplit[1].matches("[0-9]{1,3}\\-[0-9]{1,3}")){
+//                        if(lottoCost>GameControl.scores.getScoreObj(event.getUser().getNick()).getScore()){
+//                            event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to buy a lotto ticket");
+//                        }
+//                        else{
+                            int min = Integer.parseInt(cmdSplit[1].split("-")[0]);
+                            int max = Integer.parseInt(cmdSplit[1].split("-")[1]);
+                            int range = max - min + 1;
+                            
+                            if (min>max){
+                                event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Input minimum must be less than the maximum");
+                            }
+                            else if (max>100){
+                                event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Input maximum greater than maximum lottery number");
+                            }
+                            else if (min<0){
+                                event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Input must be a non-negative integer value between 0 and 100");
+                            }
+                            else{
+                                if((lottoCost*range)>GameControl.scores.getScoreObj(event.getUser().getNick()).getScore()){
+                                    event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to buy a lotto ticket");
+                                }
+                                else{
+                                    int current = min;
+                                    boolean win = false;
+                                    while(current<=max&&!win){
+                                        
+                                        if (current==lottoNumber){
+                                            int WheatleyGain = (int) (lottoWinnings * .4);
+                                            lottoWinnings = (int) (lottoWinnings *.6);
+                                            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Congratulations "+Colors.NORMAL+event.getUser().getNick()+", you won $"+lottoWinnings);
+                                            GameControl.scores.addScore(event.getUser().getNick(), lottoWinnings);
+                                            GameControl.scores.addScore(event.getBot().getNick(), WheatleyGain);
+                                            GameControl.scores.subtractScore(event.getBot().getNick(), lottoBaseWin);
+                                            lottoNumber = (int) (0+(Math.random()*100-0+1));
+                                            lottoWinnings = lottoBaseWin;
+                                            guessList.clear();
+                                            win=true;
+                                        }
+                                        else{
+                                            event.getBot().sendIRC().message(event.getChannel().getName(),"Sorry "+event.getUser().getNick()+", but "+current+" is incorrect, you lost $"+lottoCost);
+                                            GameControl.scores.subtractScore(event.getUser().getNick(), lottoCost);
+                                            lottoWinnings += lottoCost;
+                                            guessList.add(current);
+                                        }
+                                        current++;
+                                    }
+                                }
+                            }
+//                        }
+                    }
+                    
                     else
                         event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Input must be an integer value between 0 and 100");
                 }
@@ -297,9 +354,9 @@ public class GameControl extends ListenerAdapter {
 //                            event.getBot().sendIRC().notice(event.getUser().getNick(), "You don't have enough to make it rain that much");
 //                        }
 //                        else{
-//                            
+//
 //                        }
-//                        
+//
 //                    }
 //                    else{
 //                        event.getBot().sendIRC().notice(event.getUser().getNick(), "!MakeItRain only accepts non-negative integer as an input");
@@ -310,7 +367,7 @@ public class GameControl extends ListenerAdapter {
 //                    if(scores.getScoreObj(event.getUser().getNick()).getScore()<rain){
 //                        event.getBot().sendIRC().notice(event.getUser().getNick(), "You don't have enough to make it rain that much");
 //                    }else{
-//                        
+//
 //                    }
 //                }
 //            }
