@@ -49,6 +49,7 @@ public class UpdateFiles extends ListenerAdapter{
             
             if (cmdSplit[0].equalsIgnoreCase("save")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
                 Global.settings.save();
+                Global.throttle.save();
                 event.getBot().sendIRC().notice(event.getUser().getNick(), "Settings file saved");
             }
             else if (cmdSplit[0].equalsIgnoreCase("set")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
