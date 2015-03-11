@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeMap;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +37,26 @@ import org.json.simple.JSONArray;
  * - Linked Classes
  *    N/A
  *
+ * Object:
+ *      Settings
+ * - Object that extends the generic settings object and adds the necessary functions
+ *   and ability to handle throttling
+ *
+ * Methods:
+ *      contains  - Returns true if the input key or channel/key pair exists in the map
+ *      create    - Creates the input key/value or key/channel/value pair
+ *      get       - Gets the value for the input key or key/channel
+ *      getChannelList - Returns an ArrayList of channels that exist in the settings file
+ *      loadFile       - Parses the file string into a map
+ *      loadText       - Loads an input file to string
+ *      save           - Saves the settings to file
+ *      setFileName    - Sets the file name to be used for saving the settings
+ *     *toList         - Converts JSON list to list
+ *     *toMap          - Converts JSONObject to map
+ *     *jsonToMap      - Recursively uses toList and toMap to convert JSON objects
+ *                       to maps/lists
+ *
+ * Note: Only commands marked with a * are available for use outside the object
  */
 public class Settings {
 //    Map<String, String> stuff = new TreeMap<String, String>();
@@ -57,13 +76,34 @@ public class Settings {
         return(channelSettings.get(channel).containsKey(key));
     }
     
-    public void create (String key, String value, String channel){
+    public boolean contains(List<String> tree){
+        if (tree.size()==0){
+            throw new UnsupportedOperationException("Input tree cannot be of ZERO size");
+        }
+        else if (tree.size()==1){
+            return (generalSettings.containsKey(tree.get(0)));
+        }
+        else{
+            if (generalSettings.containsKey(tree.get(0))){
+                return contains(tree.remove(0));
+            }
+            else
+                return false;
+        }
+    }
+    public void create(List<String> tree){
+        
+    }
+    
+    
+    public void create (String key, String value, String channel) {
         if (key=="NA"&&value=="NA"){
             if (channel.startsWith("#")&&channel.split(" ").length==1){
                 if (!channelSettings.containsKey(channel)){
                     Map<String, String> newSetting = new TreeMap<String,String>();
                     channelSettings.put(channel,newSetting);
 //                    System.out.println("CHANNEL ADDED TO SETTINGS: "+channel);
+                    save();
                 }
             }
             else{
@@ -80,6 +120,7 @@ public class Settings {
                 }
 //                System.out.println(channelSettings.get(channels.get(i)).get(key));
             }
+            save();
         }
         else if (channel.startsWith("#")&&channel.split(" ").length==1){
             if (channelSettings.containsKey(channel)){
@@ -91,38 +132,49 @@ public class Settings {
                 newSetting.put(key, value);
                 channelSettings.put(channel,newSetting);
             }
+            save();
         }
         else
             throw new UnsupportedOperationException("Input channel is neither an accepted wildcard nor a channel name");
     }
     
-    public boolean set(String key, String value, String channel){
-        if (channel.equalsIgnoreCase("ALL")){
-            ArrayList<String> channels = getChannelList();
-            for (int i=0;i<channels.size();i++){
-                if (channelSettings.get(channels.get(i)).containsKey(key)){
-                    channelSettings.get(channels.get(i)).put(key, value);
+    public boolean set(String key, String value, String channel) {
+//        try{
+            if (channel.equalsIgnoreCase("ALL")){
+                ArrayList<String> channels = getChannelList();
+                for (int i=0;i<channels.size();i++){
+                    if (channelSettings.get(channels.get(i)).containsKey(key)){
+                        channelSettings.get(channels.get(i)).put(key, value);
 //                    System.out.println(channelSettings.get(channels.get(i)).get(key));
+                    }
                 }
-            }
-            return true;
-        }
-        else if (channel.startsWith("#")&&channel.split(" ").length==1){
-            
-            if (channelSettings.containsKey(channel)){
-                if (channelSettings.get(channel).containsKey(key)){
-                    channelSettings.get(channel).put(key, value);
-//                    System.out.println(channelSettings.get(channel).get(key));
-                    return true;
-                }
-            }
-            else if (generalSettings.containsKey(key)){
-                generalSettings.put(key,value);
+                save();
                 return true;
             }
-        }
-        else
-            throw new UnsupportedOperationException("Input channel is neither an accepted wildcard nor a channel name");
+            else if (channel.startsWith("#")&&channel.split(" ").length==1){
+                
+                if (channelSettings.containsKey(channel)){
+                    if (channelSettings.get(channel).containsKey(key)){
+                        channelSettings.get(channel).put(key, value);
+//                    System.out.println(channelSettings.get(channel).get(key));
+                        return true;
+                    }
+                }
+                else if (generalSettings.containsKey(key)){
+                    generalSettings.put(key,value);
+                    return true;
+                }
+                save();
+            }
+            else
+                throw new UnsupportedOperationException("Input channel is neither an accepted wildcard nor a channel name");
+//        }
+//        catch (Exception ex){
+//            System.out.println("SET SETTING FAILED");
+//            ex.printStackTrace();
+//            
+//            return false;
+//        }
         return false;
     }
     
@@ -154,8 +206,8 @@ public class Settings {
         }
         return(channels);
     }
-    public void save() throws JSONException{
-        
+    public void save() {
+        try{
         if (!this.filename.equalsIgnoreCase("doNotSave")){
             JSONObject writeJSON = new JSONObject();
             JSONObject genJSON = new JSONObject(generalSettings);
@@ -207,6 +259,11 @@ public class Settings {
         }
         else
             System.out.println("FILE HAS NOT BEEN SAVED, NO FILENAME INPUT");
+        }
+        catch (Exception ex){
+            System.out.println("FILE SAVE HAS FAILED");
+            ex.printStackTrace();
+        }
     }
     public boolean loadFile() throws IOException, JSONException{
         
