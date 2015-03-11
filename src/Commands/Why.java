@@ -32,7 +32,7 @@ public class Why implements Command{
     @Override
     public boolean isCommand(String toCheck){
         
-        return((toCheck.equalsIgnoreCase("why")||(toCheck.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why"))));
+        return(toCheck.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why"));
     }
         
     @Override
