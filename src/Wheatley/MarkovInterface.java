@@ -85,7 +85,7 @@ public class MarkovInterface extends ListenerAdapter{
             String[] cmdSplit = command.split(" ");
             
             if (cmdSplit[0].equalsIgnoreCase("words")){
-                event.getBot().sendIRC().message(currentChan, "I know "+borg.words.size()+" ("+borg.numContexts+" contexts, "+String.valueOf(borg.numContexts/borg.words.size())+" per word), "+borg.lines.size()+" lines.");
+                event.getBot().sendIRC().message(currentChan, "I know "+borg.words.size()+" words ("+borg.numContexts+" contexts, "+String.valueOf(borg.numContexts/borg.words.size())+" per word), "+borg.lines.size()+" lines.");
             }
         }
         
