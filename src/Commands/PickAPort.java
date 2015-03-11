@@ -30,7 +30,7 @@ public class PickAPort implements Command{
     
     @Override
     public boolean isCommand(String toCheck){
-        return(toCheck.equalsIgnoreCase("pickaport"));
+        return false;
     }
     
     @Override
