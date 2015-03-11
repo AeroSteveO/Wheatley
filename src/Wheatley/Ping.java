@@ -45,20 +45,55 @@ public class Ping extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if ((message.toLowerCase().startsWith("!ping"))) { 
-            String[] totalip = event.getMessage().split(" ");
-            String[] pingresponse = new String[2];
-            String[] address = new String[2];
-            String pingmessage = new String();
+        String command = message.split(Global.commandPrefix)[1];
+        String[] cmdSplit = command.split(" ");
+        
+        
+        if (message.startsWith(Global.commandPrefix)){
+            if(cmdSplit[0].equalsIgnoreCase("ping")) {
+                String[] totalip = new String[2];
+                String[] pingresponse = new String[2];;
+                String[] address = new String[2];
+                String pingmessage = new String();
+                if (cmdSplit.length==1){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"Ping: "+Colors.NORMAL+"too few inputs");
+                    return;
+                }
+                else if (cmdSplit[1].equalsIgnoreCase("check")){
+                    
+                }
+                else if (cmdSplit.length==2){
+                    if (cmdSplit[1].contains(":")){
+                        totalip=cmdSplit[1].split(":");
+                    }
+                    else{
+                        totalip[0]=cmdSplit[1];
+                        totalip[1]="80";
+                    }
+                }
+                else if (cmdSplit.length==3){
+                    totalip[0]=cmdSplit[1];
+                    totalip[1]=cmdSplit[2];
+                }
+                else{
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"Ping: "+Colors.NORMAL+"too many inputs");
+                    return;
+                }
+                
+                    
+//            totalip = event.getMessage().split(" ");
+//            pingresponse = new String[2];
+//            address = new String[2];
+            
             System.setProperty("java.net.preferIPv4Stack" , "true");
-            if (totalip.length==3&&totalip[1].equalsIgnoreCase("check")&&event.getUser().getNick().equals(Global.botOwner)&&!event.getChannel().getName().equals("#dtella")){
+            if (cmdSplit.length==3&&cmdSplit[1].equalsIgnoreCase("check")&&event.getUser().getNick().equals(Global.botOwner)&&!event.getChannel().getName().equals("#dtella")){
                 try{
                     File fXmlFile = new File("SettingPing.xml");
                     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                     Element serverelement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("ping").item(0);
                     for (int i=0;i<serverelement.getElementsByTagName("server").getLength();i++){
-                        if(totalip[2].equalsIgnoreCase(serverelement.getElementsByTagName("category").item(i).getTextContent())){
+                        if(cmdSplit[2].equalsIgnoreCase(serverelement.getElementsByTagName("category").item(i).getTextContent())){
                             address[0]=serverelement.getElementsByTagName("address").item(i).getTextContent();
                             address[1]="80";
                             pingresponse = pinghost(address);
@@ -95,24 +130,24 @@ public class Ping extends ListenerAdapter {
                     ex.printStackTrace();
                 }
             }
-            else if (totalip.length < 2&& !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SamwiseGamgee")).contains(event.getChannel())) {
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "You didn't enter a vaild lookup. Enter !ping <HOSTNAME OR IP> <PORT>");
-            }
+//            else if (totalip.length < 2&& !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SamwiseGamgee")).contains(event.getChannel())) {
+//                event.getBot().sendIRC().notice(event.getUser().getNick(), "You didn't enter a vaild lookup. Enter !ping <HOSTNAME OR IP> <PORT>");
+//            }
             else {
-                if (totalip.length>2){
-                    address[0] = totalip[1];
-                    address[1] = totalip[2];
-                }
-                else{
-                    address[0] = totalip[1];
-                    address[1] = "80";
-                }
-                pingresponse = pinghost(address);
+//                if (totalip.length>2){
+//                    address = totalip;
+//                }
+//                else{
+//                    address[0] = totalip[1];
+//                    address[1] = "80";
+//                }
+                pingresponse = pinghost(totalip);
                 if (pingresponse[0].equals("true"))
-                    event.getBot().sendIRC().message(event.getChannel().getName(),address[0]+":"+address[1] + " is " +Colors.GREEN + "online"+Colors.NORMAL);
+                    event.getBot().sendIRC().message(event.getChannel().getName(),totalip[0]+":"+totalip[1] + " is " +Colors.GREEN + "online"+Colors.NORMAL);
                 else
-                    event.getBot().sendIRC().message(event.getChannel().getName(), address[0]+":"+address[1] + " is " + Colors.RED + "offline"+Colors.NORMAL);
+                    event.getBot().sendIRC().message(event.getChannel().getName(), totalip[0]+":"+totalip[1] + " is " + Colors.RED + "offline"+Colors.NORMAL);
             }
+                }
         }
     }
     
