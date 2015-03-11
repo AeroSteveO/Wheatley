@@ -20,6 +20,15 @@ import org.pircbotx.hooks.events.MessageEvent;
  * original bot functions by Blarghedy
  * Who's lazy and doesn't run his bot much
  * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ *    UpdateFiles
+ * 
  * Activate Command with:
  *      !badwords
  *      !list bad words
@@ -53,7 +62,7 @@ public class BadWords extends ListenerAdapter{
                         if(!event.getChannel().isHalfOp(event.getUser())&&!event.getChannel().isOwner(event.getUser())&&!event.getChannel().isOp(event.getUser())&&!event.getChannel().isSuperOp(event.getUser())){
                             event.getChannel().send().kick(event.getUser(), "Don't say "+badwords.get(i)+".  That's just turrable!");
                         }
-                        System.out.println("bad word found");
+//                        System.out.println("bad word found");
                         break;
                     }
                 }
