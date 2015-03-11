@@ -18,6 +18,15 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Command
+ * - Linked Classes
+ *    Global
+ * 
  */
 @CMD
 @GenCMD

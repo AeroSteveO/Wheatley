@@ -7,15 +7,22 @@
 package Utils;
 
 import Wheatley.Global;
-import org.json.JSONException;
 
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  */
 public class GameUtils {
     public static boolean areGamesBlocked(String channel) {
-//        try{
         if (Global.settings.contains("areGamesBlocked",channel)){
             return(Boolean.parseBoolean(Global.settings.get("areGamesBlocked",channel)));
         }
@@ -26,12 +33,5 @@ public class GameUtils {
         else{
             return false;
         }
-        
-//        }
-//        catch (Exception ex){
-//            ex.printStackTrace();
-//            return(false);
-//        }
-        
     }
 }

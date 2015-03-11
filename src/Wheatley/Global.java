@@ -19,6 +19,16 @@ import org.pircbotx.hooks.Event;
 
 /**
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Settings
+ *    Throttle
+ *    ChannelStore
+ * - Linked Classes
+ *    N/A
+ * 
  * @author Steve-O
  * botOwner      - User with all powers over the bot, and ability to shut the bot down
  * mainNick      - The intended nickname for the bot, not necessarily the current nickname
