@@ -6,7 +6,6 @@
 
 package Objects;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
@@ -24,7 +23,22 @@ import java.util.TreeMap;
  *    Settings
  * - Linked Classes
  *    N/A
+ * 
+ * Object:
+ *      Throttle
+ * - Object that contains an int score for the input user, and keeps track of it
+ * - Object can be completely controlled through the score array
  *
+ * Methods:
+ *      createMaxLog     - Creates the input channel/type/value pair in the map
+ *      createMaxTime    - Creates the input channel/type/value pair in the map
+ *      isThrottleActive - Returns true if the input command should be blocked for throttling
+ *      setMaxLog        - Sets the maximum calls for throttling
+ *      setMaxTime       - Sets the maximum time an item will stay in the time log
+ *     *addChannelToLog  - Adds a channel to the time log mapping
+ *     *addTypeToLog     - Adds a throttle type to the time log mapping
+ *     
+ * Note: Only commands marked with a * are available for use outside the object
  */
 public class Throttle extends Settings{
 
