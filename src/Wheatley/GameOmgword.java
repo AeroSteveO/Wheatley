@@ -7,6 +7,7 @@
 package Wheatley;
 import Objects.Game;
 import Objects.TimedWaitForQueue;
+import Utils.GameUtils;
 import java.io.FileNotFoundException;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.*;
@@ -45,7 +46,7 @@ public class GameOmgword extends ListenerAdapter {
         String gameChan = event.getChannel().getName();
 //        int currentIndex=0;
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
-        if (message.equalsIgnoreCase("!omgword")&&!Global.channels.areGamesBlocked(gameChan)) {
+        if (message.equalsIgnoreCase("!omgword")&&!GameUtils.areGamesBlocked(gameChan)) {
             
             if (!GameControl.activeGame.isGameActive(gameChan, "omgword")){
 //                GameControl.activeGame.add(gameChan, "omgword", "short");

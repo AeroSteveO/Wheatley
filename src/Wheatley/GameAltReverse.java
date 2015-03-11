@@ -8,6 +8,7 @@ package Wheatley;
 
 import Objects.Game;
 import Objects.TimedWaitForQueue;
+import Utils.GameUtils;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
@@ -47,7 +48,7 @@ public class GameAltReverse extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String gameChan = event.getChannel().getName();
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
-        if ((message.equalsIgnoreCase("!altreverse")||message.equalsIgnoreCase("esrever!"))&&!Global.channels.areGamesBlocked(gameChan)) {
+        if ((message.equalsIgnoreCase("!altreverse")||message.equalsIgnoreCase("esrever!"))&&!GameUtils.areGamesBlocked(gameChan)) {
             
             if (!GameControl.activeGame.isGameActive(gameChan, "altreverse")){
                 

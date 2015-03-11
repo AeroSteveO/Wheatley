@@ -8,6 +8,7 @@ package Wheatley;
 
 import Objects.Game;
 import Objects.TimedWaitForQueue;
+import Utils.GameUtils;
 import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
 import org.pircbotx.Colors;
@@ -44,7 +45,7 @@ public class GameHangman extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String gameChan = event.getChannel().getName();
         
-        if (message.equalsIgnoreCase("!hangman")&&!Global.channels.areGamesBlocked(gameChan)) {
+        if (message.equalsIgnoreCase("!hangman")&&!GameUtils.areGamesBlocked(gameChan)) {
             
             if (!GameControl.activeGame.isGameActive(gameChan, "hangman", "long")){
                 

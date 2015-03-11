@@ -8,6 +8,7 @@ package Wheatley;
 
 import Objects.Game;
 import Objects.TimedWaitForQueue;
+import Utils.GameUtils;
 import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
 import org.pircbotx.Colors;
@@ -49,7 +50,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
         String gameChan = event.getChannel().getName();
         int currentIndex=0;
         
-        if ((message.split(" ")[0].equalsIgnoreCase("!GuessTheNumber")||message.split(" ")[0].equalsIgnoreCase("!guessnumber"))&&!Global.channels.areGamesBlocked(gameChan)) {
+        if ((message.split(" ")[0].equalsIgnoreCase("!GuessTheNumber")||message.split(" ")[0].equalsIgnoreCase("!guessnumber"))&&!GameUtils.areGamesBlocked(gameChan)) {
             
             int length = 100;
             

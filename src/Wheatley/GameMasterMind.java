@@ -8,6 +8,7 @@ package Wheatley;
 
 import Objects.Game;
 import Objects.TimedWaitForQueue;
+import Utils.GameUtils;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -53,7 +54,7 @@ public class GameMasterMind extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String gameChan = event.getChannel().getName();
         
-        if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!Global.channels.areGamesBlocked(gameChan)) {
+        if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!GameUtils.areGamesBlocked(gameChan)) {
             
             if (!GameControl.activeGame.contains(new String[] {gameChan, "mastermind", "long"})){
                 

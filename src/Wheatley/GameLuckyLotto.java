@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Objects.TimedWaitForQueue;
+import Utils.GameUtils;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -37,7 +38,7 @@ public class GameLuckyLotto extends ListenerAdapter {
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             
-            if(cmdSplit[0].equalsIgnoreCase("luckylotto")&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
+            if(cmdSplit[0].equalsIgnoreCase("luckylotto")&&!GameUtils.areGamesBlocked(event.getChannel().getName())){
                 
                 if(cmdSplit.length==2){
                     

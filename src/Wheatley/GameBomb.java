@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Objects.TimedWaitForQueue;
+import Utils.GameUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class GameBomb extends ListenerAdapter {
             String[] cmdSplit = command.split(" ");
             
             
-            if (cmdSplit[0].equalsIgnoreCase("bomb")&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
+            if (cmdSplit[0].equalsIgnoreCase("bomb")&&!GameUtils.areGamesBlocked(event.getChannel().getName())){
                 List<String> colours = new ArrayList<>();
                 String colorlist = "";
                 

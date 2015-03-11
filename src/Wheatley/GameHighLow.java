@@ -9,6 +9,7 @@ package Wheatley;
 import Objects.DeckOfCards;
 import Objects.PlayingCard;
 import Objects.QueueTime;
+import Utils.GameUtils;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.WaitForQueue;
@@ -51,7 +52,7 @@ public class GameHighLow extends ListenerAdapter {
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             
-            if (cmdSplit[0].equalsIgnoreCase("highlow")&&!Global.channels.areGamesBlocked(event.getChannel().getName())){
+            if (cmdSplit[0].equalsIgnoreCase("highlow")&&!GameUtils.areGamesBlocked(event.getChannel().getName())){
                 
                 if (!GameControl.activeGame.isGameActive(event.getChannel().getName(), "highlow", "long")){
                     
