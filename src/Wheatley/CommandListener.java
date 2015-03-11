@@ -6,7 +6,7 @@
 
 package Wheatley;
 
-import Commands.PickAPort;
+import Commands.*;
 import Commands.Why;
 import Objects.Command;
 import java.util.ArrayList;
@@ -77,9 +77,9 @@ public class CommandListener extends ListenerAdapter{
 
     private List<Command> getCommandList() {
         List<Command> listOfCommands = new ArrayList<>();
-        listOfCommands.add(new PickAPort());
+//        listOfCommands.add(new PickAPort());
         listOfCommands.add(new Why());
-        
+        listOfCommands.add(new ThrottleCMD());
         return(listOfCommands);
     }
 }
