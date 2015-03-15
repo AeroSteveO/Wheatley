@@ -67,7 +67,7 @@ public class RandChan extends ListenerAdapter {
 //    private List<String> boardTitles = getBoardTitles();
     private List<List<String>> boardInfo = getBoardInfo();
 //    private Throttle rThrottle = new Throttle("randchan");
-    boolean setup = setupThrottle(maxLog,maxTime);
+//    boolean setup = setupThrottle(maxLog,maxTime);
     private String type = "randchan";
     
     @Override
@@ -145,9 +145,10 @@ public class RandChan extends ListenerAdapter {
 //                    long sec = maxTime/1000;
 //                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
 //                }
-                if (message.equalsIgnoreCase("!setup")){
-                    setupThrottle(maxLog,maxTime, event);
-                }
+                
+//                if (message.equalsIgnoreCase("!setup")){
+//                    setupThrottle(maxLog,maxTime, event);
+//                }
             }
             catch(Exception ex){
                 ex.printStackTrace();
@@ -264,27 +265,27 @@ public class RandChan extends ListenerAdapter {
         }
         return(matchedJson);
     }
-    private boolean setupThrottle(int maxLog, long maxTime){
-        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
-        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
-        return(true);
-        
-    }
-    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
-        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();
-        
-        Iterator<Channel> iterator = channels.iterator();
-        while(iterator.hasNext()) {
-            Channel element = iterator.next();
-            
-            Global.throttle.create("NA", "NA", element.getName());
-            
-        }
-        
-        Global.throttle.createMaxLog(type, String.valueOf(maxLog), "ALL");
-        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
-        return(true);
-    }
+//    private boolean setupThrottle(int maxLog, long maxTime){
+//        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
+//        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
+//        return(true);
+//        
+//    }
+//    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
+//        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();
+//        
+//        Iterator<Channel> iterator = channels.iterator();
+//        while(iterator.hasNext()) {
+//            Channel element = iterator.next();
+//            
+//            Global.throttle.create("NA", "NA", element.getName());
+//            
+//        }
+//        
+//        Global.throttle.createMaxLog(type, String.valueOf(maxLog), "ALL");
+//        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
+//        return(true);
+//    }
     
     private List<List<String>> getBoardInfo() {
         List<List<String>> info = new ArrayList<>();

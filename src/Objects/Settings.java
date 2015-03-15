@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,10 +71,33 @@ public class Settings {
             generalSettings.put(key,value);
     }
     
+    public Set<String> keySet(){
+        Set<String> genSet = generalSettings.keySet();
+        Set<String> chanSet = channelSettings.keySet();
+        Set<String> allSet = new HashSet<>();
+//        System.out.println("general settings size: "+genSet.size());
+//        System.out.println("channel settings size: "+chanSet.size());
+
+                Iterator<String> keyIterator = chanSet.iterator();
+        
+        while (keyIterator.hasNext()){
+            String key = keyIterator.next();
+            allSet.addAll(channelSettings.get(key).keySet());
+            
+        }
+        
+        allSet.addAll(genSet);
+//        allSet.addAll(chanSet);
+        System.out.println("combined size: "+allSet.size());
+        return allSet;
+    }
+    
     public boolean contains(String key){
         return(generalSettings.containsKey(key));
     }
     public boolean contains(String key, String channel){
+        if (!channelSettings.containsKey(channel))
+            create("NA","NA",channel);
         return(channelSettings.get(channel).containsKey(key));
     }
     

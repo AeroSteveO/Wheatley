@@ -58,7 +58,7 @@ public class Urban extends ListenerAdapter {
     private int maxLog = 2;
     private long maxTime = 30*1000;
 //    private Throttle uThrottle = new Throttle("udict");
-    boolean setup = setupThrottle(maxLog,maxTime);
+//    boolean setup = setupThrottle(maxLog,maxTime);
     private String type = "udict";
     
     @Override
@@ -101,9 +101,10 @@ public class Urban extends ListenerAdapter {
 //                
 //                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
 //            }
-            if (message.equalsIgnoreCase("!setup")){
-                setupThrottle(maxLog,maxTime, event);
-            }
+            
+//            if (message.equalsIgnoreCase("!setup")){
+//                setupThrottle(maxLog,maxTime, event);
+//            }
             
         }
         catch(Exception ex){
@@ -179,24 +180,24 @@ public class Urban extends ListenerAdapter {
         return(matchedJson);
     }
     
-    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
-        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();
-        
-        Iterator<Channel> iterator = channels.iterator();
-        while(iterator.hasNext()) {
-            Channel element = iterator.next();
-            
-            Global.throttle.create("NA", "NA", element.getName());
-            
-        }
-        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
-        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
-        return(true);
-    }
-    private boolean setupThrottle(int maxLog, long maxTime){
-        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
-        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
-        return(true);
-        
-    }
+//    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
+//        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();
+//        
+//        Iterator<Channel> iterator = channels.iterator();
+//        while(iterator.hasNext()) {
+//            Channel element = iterator.next();
+//            
+//            Global.throttle.create("NA", "NA", element.getName());
+//            
+//        }
+//        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
+//        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
+//        return(true);
+//    }
+//    private boolean setupThrottle(int maxLog, long maxTime){
+//        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
+//        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
+//        return(true);
+//        
+//    }
 }

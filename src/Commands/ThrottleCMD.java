@@ -84,6 +84,20 @@ public class ThrottleCMD implements Command {
             return;
         }
         
+        if (cmdSplit[1].equalsIgnoreCase("list")){
+            
+            ArrayList<String> types = Global.throttle.getAllTypes();
+            String response = Colors.BOLD+"Throttle Types: "+Colors.NORMAL;
+            
+            for (int i=0;i<types.size()-1;i++){
+                response+=types.get(i)+", ";
+            }
+            response+=types.get(types.size()-1);
+            
+            event.getBot().sendIRC().notice(caller, response );
+            return;
+        }
+        
         int throttleModification = Integer.MIN_VALUE;
         
         for (int i=0;i<cmdSplit.length;i++){
