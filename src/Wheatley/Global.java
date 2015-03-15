@@ -87,23 +87,23 @@ public class Global {
         return throttle;
     }
     
-    public static String getTimestamp(Event event){
-        TimeZone tz = TimeZone.getDefault();
-        Date timestamp = new Date(Long.parseLong(String.valueOf(event.getTimestamp())));
-        DateFormat timeFormat = new SimpleDateFormat("M/d/yy h:mm aa");
-        String tzShortString = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
-        String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
-        return outputTime;
-    }
-    
-    public static String getTimestamp(String date) {
-        TimeZone tz = TimeZone.getDefault();
-        Date timestamp = new Date(Long.parseLong(date));
-        DateFormat timeFormat = new SimpleDateFormat("M/d/yy h:mm aa");
-        String tzShortString = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
-        String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
-        return outputTime;
-    }
+//    public static String getTimestamp(Event event){
+//        TimeZone tz = TimeZone.getDefault();
+//        Date timestamp = new Date(Long.parseLong(String.valueOf(event.getTimestamp())));
+//        DateFormat timeFormat = new SimpleDateFormat("M/d/yy h:mm aa");
+//        String tzShortString = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
+//        String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
+//        return outputTime;
+//    }
+//    
+//    public static String getTimestamp(String date) {
+//        TimeZone tz = TimeZone.getDefault();
+//        Date timestamp = new Date(Long.parseLong(date));
+//        DateFormat timeFormat = new SimpleDateFormat("M/d/yy h:mm aa");
+//        String tzShortString = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
+//        String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
+//        return outputTime;
+//    }
     
     private static ArrayList<String> getBotAdmins() {
         ArrayList<String> admins = new ArrayList<>();

@@ -7,6 +7,7 @@ package Wheatley;
 
 import Objects.BanLog;
 import Objects.BanLog.BanList;
+import Utils.IRCUtils;
 import com.google.common.collect.ImmutableList;
 import org.pircbotx.Colors;
 import org.pircbotx.ReplyConstants;
@@ -70,7 +71,7 @@ class KickBanWatcher extends ListenerAdapter {
         String user = event.getRecipient().getNick();
         String kicker = event.getUser().getNick();
         String reason = Colors.removeFormattingAndColors(event.getReason());
-        String time = Global.getTimestamp(event);
+        String time = IRCUtils.getTimestamp(event);
         event.getBot().sendIRC().message(event.getChannel().getName(), time);//time.toString());
     }
     
@@ -79,7 +80,7 @@ class KickBanWatcher extends ListenerAdapter {
         String hostmask = event.getUser().getHostmask();
         String banner = event.getUser().getNick();
         String channel = event.getChannel().getName();
-        String time = Global.getTimestamp(event);
+        String time = IRCUtils.getTimestamp(event);
         userBans.safeAdd(new BanLog(hostmask, channel, banner,time));
         event.getBot().sendIRC().message(channel,"Ban added: "+userBans.getBan(hostmask, channel).getSimpleInfo());
         System.out.println("BAN SET");
@@ -90,7 +91,7 @@ class KickBanWatcher extends ListenerAdapter {
         String hostmask = event.getUser().getHostmask();
         String banner = event.getUser().getNick();
         String channel = event.getChannel().getName();
-        String time = Global.getTimestamp(event);
+        String time = IRCUtils.getTimestamp(event);
         event.getBot().sendIRC().message(channel,"Ban removed: "+userBans.getBan(hostmask, channel).getSimpleInfo());
         userBans.safeRemove(hostmask, channel);
         System.out.println("BAN REMOVED");
@@ -111,7 +112,7 @@ class KickBanWatcher extends ListenerAdapter {
                 String channel = (String) ban.get(1);
                 String hostmask =(String) ban.get(2);
                 String banner = (String) ban.get(3);
-                String time = Global.getTimestamp(event);
+                String time = IRCUtils.getTimestamp(event);
                 userBans.safeAdd(new BanLog(hostmask, channel, banner, time));
             }
             else if (event.getRawLine().contains("MODE")){
