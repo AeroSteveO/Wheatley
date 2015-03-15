@@ -32,7 +32,7 @@ import org.pircbotx.hooks.events.*;
  *    N/A
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate Commands with:
  *      s/replaceThis/replaceWithThis
  *          Replaces the text replaceThis with the text replaceWithThis, using the log of previous messages in Global.channels
@@ -62,8 +62,6 @@ public class Blarghlebot extends ListenerAdapter {
         
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
             
-            String[] messageArray = message.split(" ");
-            
             if (message.toLowerCase().startsWith("s/")||message.toLowerCase().startsWith("sed/")){
                 String[] findNreplace = Colors.removeFormattingAndColors(message.toLowerCase()).split("/");
                 Pattern findThis = Pattern.compile(findNreplace[1]);
@@ -79,7 +77,7 @@ public class Blarghlebot extends ListenerAdapter {
 //            if (message.equalsIgnoreCase("!dtellausers")){
 //                int counter = 0;
 //                ImmutableSortedSet users = event.getBot().getUserChannelDao().getAllUsers();
-//                
+//
 //                Iterator<User> iterator = users.iterator();
 //                while(iterator.hasNext()) {
 //                    User element = iterator.next();
@@ -140,82 +138,6 @@ public class Blarghlebot extends ListenerAdapter {
                         break;
                 }
             }
-            if (message.equalsIgnoreCase("!banme")){
-                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " 1m " + event.getUser().getNick() + "!*@*");
-                event.getChannel().send().kick(event.getUser(), "You're Welcome");
-            }
-            
-            if (message.equalsIgnoreCase("i put on my robe and wizard hat"))
-                event.getChannel().send().kick(event.getUser(), "LIGHTNING BOLT");
-            
-            if (message.equalsIgnoreCase("!suicide"))
-                event.getChannel().send().kick(event.getUser(), "SOMETHING WITTY ABOUT DYING");
-            
-            if (message.equalsIgnoreCase("!kickme"))
-                event.getChannel().send().kick(event.getUser(), "you += dead");
-            
-            if (message.toLowerCase().startsWith("!troll")){
-                if((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
-                    String[] kill = message.split(" ");
-                    event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(kill[1]),"YOO GAWT TROLLED " + kill[1]);
-                }
-                else{
-                    event.getChannel().send().kick(event.getUser(),"YOO GAWT TROLLED " + event.getUser().getNick());
-                }
-            }
-            
-            //Mildly Useful functions
-            if (messageArray[0].equalsIgnoreCase("!g")) {
-                String searchquery;
-                searchquery = message.substring(message.indexOf(" ") + 1);
-                String url = "http://lmgtfy.com/?q=" + URLEncoder.encode(searchquery, "UTF-8");
-                event.respond(url);
-            }
-            
-            if (message.equalsIgnoreCase("!russianroulette")) {
-                if (shoot==0){
-                    shoot = (int) (Math.random()*6+1);
-                    if (shoot==1){
-                        event.getChannel().send().kick(event.getUser(), "BANG");
-                        event.getBot().sendIRC().message(event.getChannel().getName(), "-Reloaded-");
-                        shoot = 0;
-                    }
-                    else{
-                        event.getBot().sendIRC().message(event.getChannel().getName(), "-click-");
-                    }
-                }
-                else{
-                    shoot = shoot - 1;
-                    if (shoot==1){
-                        event.getChannel().send().kick(event.getUser(), "BANG");
-                        event.getBot().sendIRC().message(event.getChannel().getName(), "-Reloaded-");
-                        shoot = 0;
-                    }
-                    else{
-                        event.getBot().sendIRC().message(event.getChannel().getName(), "-click-");
-                    }
-                }
-            }
-            
-            if (message.equalsIgnoreCase("!headon")){
-                event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
-                event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
-                event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
-            }
-            
-            //Functions Using REGEX
-            if (Pattern.matches("!hm[m]+", message.toLowerCase()))
-                //<BlarghleBot> Vanilla, the old what for quite so cheerio good chap good sir why certainly old bean
-                //<BlarghleBot> Vanilla, I say good chap indeed verily why certainly old bean good sir
-                //<BlarghleBot> Steve-O, hm yes good sir quite so cheerio the old what for why certainly good chap
-                event.getBot().sendIRC().message(event.getChannel().getName(), event.getUser().getNick()+", good sir old bean good chap verily mm why certainly the old what for");//indeed good chap the old what for ah yes hm yes good sir old bean
-            
-            if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("!trolo[lo]+", message.toLowerCase()))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://youtu.be/v1PBptSDIh8");
-            // REGEX for creating IRC quote links
-            if (Pattern.matches("![0-9]+", message))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
-            
             //OTHER Functions
             if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")&&message.endsWith("?"))){
                 //Messages from : http://en.wikipedia.org/wiki/Magic_8-Ball
@@ -243,76 +165,157 @@ public class Blarghlebot extends ListenerAdapter {
                 event.respond(magic.get((int) (Math.random()*magic.size()-1)));
             }
             
-            if (message.equalsIgnoreCase("!passthepoop")) {
-                if ("null".equals(poop)){
-                    poop = event.getUser().getNick();
-                }
-                else if (event.getUser().getNick().equals(poop)) {
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "You can't pass the poop with yourself!");
-                    poop = "null";
-                }
-                else {
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "Pass the poop!  " + poop + " will poop into " + event.getUser().getNick() + "'s butthole, and then " + event.getUser().getNick() + " will poop it back... into " + poop + "'s butthole.  And then they'll just keep doing it back and forth... forever.");
-                    poop = "null";
-                }
-            }
-            //<Blarghedy> !roll 5d5+4d4+3d3+2d2+8*9d3
-            //<BlarghleBot> Blarghedy rolled 16, 8, 5, 3, 22, 23, 17, 19, 21, 15, 21, 18 for a total of 188
-            //<Blarghedy> !roll 5*3d3
-            //<BlarghleBot> Blarghedy rolled 2 1 3 : 6, 3 2 3 : 8, 3 1 3 : 7, 1 2 2 : 5, 1 1 2 : 4, for a total of 30
-            //<Blarghedy> !roll 1000d1000
-            //<BlarghleBot> Blarghedy rolled 506063 for a total of 506063
-            if (message.startsWith("!roll")&&(Pattern.matches("!roll [0-9]{1,2}?d[0-9]{1,3}?", message.toLowerCase()))){
-                String[] rolls = message.split(" ")[1].split("d");
-                String dice = "You rolled: ";
-                int total=0;
-                int temp=(int) (Math.random()*Integer.parseInt(rolls[1]) + 1);
-                total = temp+total;
-                dice = dice + Integer.toString(temp);
-                for (int i=1; i<=Integer.parseInt(rolls[0])-1;i++){
-                    temp = (int)(Math.random() * Integer.parseInt(rolls[1]) + 1);
-                    total = temp + total;
-                    dice = dice + ", " + Integer.toString(temp);
-                }
-                event.getBot().sendIRC().message(event.getChannel().getName(),dice + " for a total of " + Integer.toString(total));
-            }
-            else if (message.toLowerCase().startsWith("!roll")&&(Pattern.matches("!roll [0-9]+d[0-9]+", message.toLowerCase()))){
-                event.getBot().sendIRC().message(event.getChannel().getName(),"NO");
-            }
-            
-            if (message.toLowerCase().startsWith("!xzibit")&&(Pattern.matches("!xzibit [a-zA-Z]+ [a-zA-Z]+", message.toLowerCase()))){
-                event.getBot().sendIRC().message(event.getChannel().getName(),"Yo dawg I heard you like " + messageArray[1] + " so I put an " + messageArray[1] + " in your " + messageArray[2] + " so you can " + messageArray[1] + " while you " + messageArray[2] + ".");
-            }
-            //<Evidlo> [15:02:31] !yodawg b a
-            // <BlarghleBot> [15:02:31] Yo dawg I heard you like bs so I put an b in your a so you can b while you a.
-            //DUMB CHAT
-            if (message.equalsIgnoreCase("!burn"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1076");
-            
-            if (message.equalsIgnoreCase("!udon"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1019");
-            
-            if (message.equalsIgnoreCase("!rimshot"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.instantrimshot.com/");
-            
-            if (message.equalsIgnoreCase("!clitoris"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1050");
-            
-            if (message.equalsIgnoreCase("!vuvuzela"))
-                event.getBot().sendIRC().message(event.getChannel().getName(), "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-            
-            if (message.equalsIgnoreCase("ba dum")||message.equalsIgnoreCase("badum"))
+            if (message.equalsIgnoreCase("i put on my robe and wizard hat"))
+                event.getChannel().send().kick(event.getUser(), "LIGHTNING BOLT");
+            else if (message.equalsIgnoreCase("ba dum")||message.equalsIgnoreCase("badum"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "psh");
+            
+            if (message.startsWith(Global.commandPrefix)){
+                
+                String command = message.split(Global.commandPrefix)[1];
+                String[] cmdSplit = command.split(" ");
+                
+                if (command.equalsIgnoreCase("banme")){
+                    event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " 1m " + event.getUser().getNick() + "!*@*");
+                    event.getChannel().send().kick(event.getUser(), "You're Welcome");
+                }
+                
+                else if (command.equalsIgnoreCase("suicide"))
+                    event.getChannel().send().kick(event.getUser(), "SOMETHING WITTY ABOUT DYING");
+                
+                else if (command.equalsIgnoreCase("kickme"))
+                    event.getChannel().send().kick(event.getUser(), "you += dead");
+                
+                else if (cmdSplit[0].toLowerCase().startsWith("troll")){
+                    if((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
+//                        String[] kill = message.split(" ");
+                        event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(cmdSplit[1]),"YOO GAWT TROLLED " + cmdSplit[1]);
+                    }
+                    else{
+                        event.getChannel().send().kick(event.getUser(),"YOO GAWT TROLLED " + event.getUser().getNick());
+                    }
+                }
+                
+                //Mildly Useful functions
+                else if (cmdSplit[0].equalsIgnoreCase("g")) {
+                    String searchquery;
+                    searchquery = message.substring(message.indexOf(" ") + 1);
+                    String url = "http://lmgtfy.com/?q=" + URLEncoder.encode(searchquery, "UTF-8");
+                    event.respond(url);
+                }
+                
+                else if (command.equalsIgnoreCase("russianroulette")) {
+                    if (shoot==0){
+                        shoot = (int) (Math.random()*6+1);
+                        if (shoot==1){
+                            event.getChannel().send().kick(event.getUser(), "BANG");
+                            event.getBot().sendIRC().message(event.getChannel().getName(), "-Reloaded-");
+                            shoot = 0;
+                        }
+                        else{
+                            event.getBot().sendIRC().message(event.getChannel().getName(), "-click-");
+                        }
+                    }
+                    else{
+                        shoot = shoot - 1;
+                        if (shoot==1){
+                            event.getChannel().send().kick(event.getUser(), "BANG");
+                            event.getBot().sendIRC().message(event.getChannel().getName(), "-Reloaded-");
+                            shoot = 0;
+                        }
+                        else{
+                            event.getBot().sendIRC().message(event.getChannel().getName(), "-click-");
+                        }
+                    }
+                }
+                
+                else if (command.equalsIgnoreCase("headon")){
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "APPLY DIRECTLY TO FOREHEAD");
+                }
+                
+                //Functions Using REGEX
+                else if (Pattern.matches("!hm[m]+", message.toLowerCase()))
+                    //<BlarghleBot> Vanilla, the old what for quite so cheerio good chap good sir why certainly old bean
+                    //<BlarghleBot> Vanilla, I say good chap indeed verily why certainly old bean good sir
+                    //<BlarghleBot> Steve-O, hm yes good sir quite so cheerio the old what for why certainly good chap
+                    event.getBot().sendIRC().message(event.getChannel().getName(), event.getUser().getNick()+", good sir old bean good chap verily mm why certainly the old what for");//indeed good chap the old what for ah yes hm yes good sir old bean
+                
+                else if (Pattern.matches("!trol[ol]+", message.toLowerCase())||Pattern.matches("!trolo[lo]+", message.toLowerCase()))
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://youtu.be/v1PBptSDIh8");
+                // REGEX for creating IRC quote links
+                else if (Pattern.matches("![0-9]+", message))
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
+                
+                else if (command.equalsIgnoreCase("passthepoop")) {
+                    if ("null".equals(poop)){
+                        poop = event.getUser().getNick();
+                    }
+                    else if (event.getUser().getNick().equals(poop)) {
+                        event.getBot().sendIRC().message(event.getChannel().getName(), "You can't pass the poop with yourself!");
+                        poop = "null";
+                    }
+                    else {
+                        event.getBot().sendIRC().message(event.getChannel().getName(), "Pass the poop!  " + poop + " will poop into " + event.getUser().getNick() + "'s butthole, and then " + event.getUser().getNick() + " will poop it back... into " + poop + "'s butthole.  And then they'll just keep doing it back and forth... forever.");
+                        poop = "null";
+                    }
+                }
+                //<Blarghedy> !roll 5d5+4d4+3d3+2d2+8*9d3
+                //<BlarghleBot> Blarghedy rolled 16, 8, 5, 3, 22, 23, 17, 19, 21, 15, 21, 18 for a total of 188
+                //<Blarghedy> !roll 5*3d3
+                //<BlarghleBot> Blarghedy rolled 2 1 3 : 6, 3 2 3 : 8, 3 1 3 : 7, 1 2 2 : 5, 1 1 2 : 4, for a total of 30
+                //<Blarghedy> !roll 1000d1000
+                //<BlarghleBot> Blarghedy rolled 506063 for a total of 506063
+                else if (cmdSplit[0].equalsIgnoreCase("roll")&&Pattern.matches("[0-9]{1,2}?d[0-9]{1,3}?", cmdSplit[1])){
+                        String[] rolls = message.split(" ")[1].split("d");
+                        String dice = "You rolled: ";
+                        int total=0;
+                        int temp=(int) (Math.random()*Integer.parseInt(rolls[1]) + 1);
+                        total = temp+total;
+                        dice = dice + Integer.toString(temp);
+                        for (int i=1; i<=Integer.parseInt(rolls[0])-1;i++){
+                            temp = (int)(Math.random() * Integer.parseInt(rolls[1]) + 1);
+                            total = temp + total;
+                            dice = dice + ", " + Integer.toString(temp);
+                        }
+                        event.getBot().sendIRC().message(event.getChannel().getName(),dice + " for a total of " + Integer.toString(total));
+                }
+                else if (cmdSplit[0].equalsIgnoreCase("roll") && Pattern.matches("[0-9]+d[0-9]+", cmdSplit[1])){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),"NO");
+                }
+                
+                else if (cmdSplit[0].equalsIgnoreCase("xzibit")&&(cmdSplit.length==3)){
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"Yo dawg I heard you like " + cmdSplit[1] + " so I put an " + cmdSplit[1] + " in your " + cmdSplit[2] + " so you can " + cmdSplit[1] + " while you " + cmdSplit[2] + ".");
+                }
+                //<Evidlo> [15:02:31] !yodawg b a
+                // <BlarghleBot> [15:02:31] Yo dawg I heard you like bs so I put an b in your a so you can b while you a.
+                //DUMB CHAT
+                else if (command.equalsIgnoreCase("burn"))
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1076");
+                
+                else if (command.equalsIgnoreCase("udon"))
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1019");
+                
+                else if (command.equalsIgnoreCase("rimshot"))
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.instantrimshot.com/");
+                
+                else if (command.equalsIgnoreCase("clitoris"))
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1050");
+                
+                else if (command.equalsIgnoreCase("vuvuzela"))
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+                
+                else if (cmdSplit[0].equalsIgnoreCase("bash")&&Pattern.matches("[0-9]+", cmdSplit[1]))
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://bash.org/?"+message.split(" ")[1]);
+                
+                else if (cmdSplit[0].equalsIgnoreCase("xkcdb")&&Pattern.matches("[0-9]+", cmdSplit[1]))
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.xkcdb.com/"+message.split(" ")[1]);
+                
+                else if (command.equalsIgnoreCase("dropthebass"))
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"WUB WUB WUBWUBWUBWUB WUB WUB");
+            }
         }
-        if (Pattern.matches("!bash [0-9]+", message))
-            event.getBot().sendIRC().message(event.getChannel().getName(), "http://bash.org/?"+message.split(" ")[1]);
-        
-        if (Pattern.matches("!xkcdb [0-9]+", message))
-            event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.xkcdb.com/"+message.split(" ")[1]);
-        
-        if (message.equalsIgnoreCase("!dropthebass"))
-            event.getBot().sendIRC().message(event.getChannel().getName(),"WUB WUB WUBWUBWUBWUB WUB WUB");
-        
     }
     private String findReplace(int i, String[] findNreplace, Pattern findThis, int idx){
         String reply="";
