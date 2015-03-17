@@ -22,10 +22,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.json.simple.JSONArray;
+
 
 /**
  *
@@ -59,6 +60,10 @@ import org.json.simple.JSONArray;
  *                       to maps/lists
  *
  * Note: Only commands marked with a * are available for use outside the object
+ * 
+ * Useful Resources
+ * - http://developer.android.com/reference/org/json/package-summary.html
+ * - http://developer.android.com/reference/java/util/Map.html
  */
 public class Settings {
 //    Map<String, String> stuff = new TreeMap<String, String>();
@@ -77,8 +82,8 @@ public class Settings {
         Set<String> allSet = new HashSet<>();
 //        System.out.println("general settings size: "+genSet.size());
 //        System.out.println("channel settings size: "+chanSet.size());
-
-                Iterator<String> keyIterator = chanSet.iterator();
+        
+        Iterator<String> keyIterator = chanSet.iterator();
         
         while (keyIterator.hasNext()){
             String key = keyIterator.next();
@@ -102,22 +107,106 @@ public class Settings {
     }
     
     public boolean contains(List<String> tree){
+        
         if (tree.size()==0){
             throw new UnsupportedOperationException("Input tree cannot be of ZERO size");
         }
         else if (tree.size()==1){
+            if(tree.get(0).startsWith("#"))
+                return (channelSettings.containsKey(tree.get(0)));
             return (generalSettings.containsKey(tree.get(0)));
         }
         else{
-            if (generalSettings.containsKey(tree.get(0))){
-                return contains(tree.remove(0));
+            Map<String,Object> tempMap = new TreeMap<String,Object>();
+            boolean found = true;
+            
+            if (tree.get(0).startsWith("#")){
+                // We gotta check channel settings, not general
+                if (channelSettings.containsKey(tree.get(0))){
+                    
+                    Iterator treeIterator = tree.iterator();
+                    tempMap.putAll(channelSettings);
+                    
+                    while (treeIterator.hasNext() && found){
+                        
+                        String key = (String) treeIterator.next();
+                        
+                        if (tempMap.containsKey(key)){
+                            if (tempMap.get(key) instanceof Map){
+                                tempMap = (Map) tempMap.get(key);
+                            }
+                        }
+                        else
+                            found = false;
+                    }
+                    return found;
+                }
+                else
+                    return false;
             }
-            else
-                return false;
+            else{
+                if (generalSettings.containsKey(tree.get(0))){
+                    Iterator treeIterator = tree.iterator();
+                    tempMap.putAll(generalSettings);
+                    
+                    while (treeIterator.hasNext() && found){
+                        
+                        String key = (String) treeIterator.next();
+                        
+                        if (tempMap.containsKey(key)){
+                            if (tempMap.get(key) instanceof Map){
+                                tempMap = (Map) tempMap.get(key);
+                            }
+                        }
+                        else
+                            found = false;
+                    }
+                    return found;
+                    
+                }
+                else
+                    return false;
+            }
         }
     }
+    
+    
+    
+    
     public void create(List<String> tree){
-        
+        if (!contains(tree.subList(0, tree.size()-2))){
+            
+            
+            if (tree.size()==1){
+                throw new UnsupportedOperationException("TREE MUST CONTAIN AT LEAST 2 VALUES, A KEY AND A VALUE");
+            }
+            else if (tree.size()==2){
+                if (tree.get(0).startsWith("#"))
+                    throw new UnsupportedOperationException("CHANNELS CANNOT HAVE VALUES ASSOCIATED WITH THEM, ONLY KEY/VALUE PAIRS");
+                generalSettings.put(tree.get(0), tree.get(1)); 
+            }
+            else{
+                Iterator treeIterator = tree.iterator();
+                
+                if (tree.get(0).startsWith("#")){
+                    
+                    while (treeIterator.hasNext()){
+                        String key =(String) treeIterator.next();
+                        
+                        
+                        
+                    }
+                }
+                else{
+                    while (treeIterator.hasNext()){
+                        String key =(String) treeIterator.next();
+                        
+                        
+                        
+                    }
+                }
+            }
+        }
     }
     
     
@@ -165,39 +254,39 @@ public class Settings {
     
     public boolean set(String key, String value, String channel) {
 //        try{
-            if (channel.equalsIgnoreCase("ALL")){
-                ArrayList<String> channels = getChannelList();
-                for (int i=0;i<channels.size();i++){
-                    if (channelSettings.get(channels.get(i)).containsKey(key)){
-                        channelSettings.get(channels.get(i)).put(key, value);
+        if (channel.equalsIgnoreCase("ALL")){
+            ArrayList<String> channels = getChannelList();
+            for (int i=0;i<channels.size();i++){
+                if (channelSettings.get(channels.get(i)).containsKey(key)){
+                    channelSettings.get(channels.get(i)).put(key, value);
 //                    System.out.println(channelSettings.get(channels.get(i)).get(key));
-                    }
                 }
-                save();
-                return true;
             }
-            else if (channel.startsWith("#")&&channel.split(" ").length==1){
-                
-                if (channelSettings.containsKey(channel)){
-                    if (channelSettings.get(channel).containsKey(key)){
-                        channelSettings.get(channel).put(key, value);
+            save();
+            return true;
+        }
+        else if (channel.startsWith("#")&&channel.split(" ").length==1){
+            
+            if (channelSettings.containsKey(channel)){
+                if (channelSettings.get(channel).containsKey(key)){
+                    channelSettings.get(channel).put(key, value);
 //                    System.out.println(channelSettings.get(channel).get(key));
-                        return true;
-                    }
-                }
-                else if (generalSettings.containsKey(key)){
-                    generalSettings.put(key,value);
                     return true;
                 }
-                save();
             }
-            else
-                throw new UnsupportedOperationException("Input channel is neither an accepted wildcard nor a channel name");
+            else if (generalSettings.containsKey(key)){
+                generalSettings.put(key,value);
+                return true;
+            }
+            save();
+        }
+        else
+            throw new UnsupportedOperationException("Input channel is neither an accepted wildcard nor a channel name");
 //        }
 //        catch (Exception ex){
 //            System.out.println("SET SETTING FAILED");
 //            ex.printStackTrace();
-//            
+//
 //            return false;
 //        }
         return false;
@@ -233,57 +322,57 @@ public class Settings {
     }
     public void save() {
         try{
-        if (!this.filename.equalsIgnoreCase("doNotSave")){
-            JSONObject writeJSON = new JSONObject();
-            JSONObject genJSON = new JSONObject(generalSettings);
-            JSONObject chanJSON = new JSONObject();
-            
-            writeJSON.put("generalSettings", genJSON);
-            
-            Collection chanSet = channelSettings.values();
-            Iterator<Map.Entry<String, Map<String, String>>> chanIterator = channelSettings.entrySet().iterator();
-            
-            while(chanIterator.hasNext()){
-                Map.Entry channelEntry = chanIterator.next();
+            if (!this.filename.equalsIgnoreCase("doNotSave")){
+                JSONObject writeJSON = new JSONObject();
+                JSONObject genJSON = new JSONObject(generalSettings);
+                JSONObject chanJSON = new JSONObject();
                 
-                JSONObject channelSettingJSON = new JSONObject();
-                Iterator<Map.Entry<String, String>> settingIterator = channelSettings.get(channelEntry.getKey().toString()).entrySet().iterator();
+                writeJSON.put("generalSettings", genJSON);
                 
-                while(settingIterator.hasNext()){
-                    Map.Entry settingEntry = settingIterator.next();
-                    channelSettingJSON.put(settingEntry.getKey().toString(), settingEntry.getValue().toString());
+                Collection chanSet = channelSettings.values();
+                Iterator<Map.Entry<String, Map<String, String>>> chanIterator = channelSettings.entrySet().iterator();
+                
+                while(chanIterator.hasNext()){
+                    Map.Entry channelEntry = chanIterator.next();
+                    
+                    JSONObject channelSettingJSON = new JSONObject();
+                    Iterator<Map.Entry<String, String>> settingIterator = channelSettings.get(channelEntry.getKey().toString()).entrySet().iterator();
+                    
+                    while(settingIterator.hasNext()){
+                        Map.Entry settingEntry = settingIterator.next();
+                        channelSettingJSON.put(settingEntry.getKey().toString(), settingEntry.getValue().toString());
+                    }
+                    
+                    chanJSON.put(channelEntry.getKey().toString(), channelSettingJSON);
                 }
                 
-                chanJSON.put(channelEntry.getKey().toString(), channelSettingJSON);
-            }
-            
-            writeJSON.put("channelSettings",chanJSON);
+                writeJSON.put("channelSettings",chanJSON);
 //            For channel in channels
 //                    ....JSONObject settings = new JSONObject();
 //                    ....settings.addValue(settingName, settingValue);//for each setting
 //                    ....channelJson.addValue(channelName, settings);
-            String json = writeJSON.toString(2);
-            try{
-                File file =new File(filename);
-                
-                //if file doesnt exists, then create it
+                String json = writeJSON.toString(2);
+                try{
+                    File file =new File(filename);
+                    
+                    //if file doesnt exists, then create it
 //                if(!file.exists()){
-                file.createNewFile(); // We're just replacing the old file, not modifying it
+                    file.createNewFile(); // We're just replacing the old file, not modifying it
 //                }
-                
-                //true = append file
-                FileWriter fileWritter = new FileWriter(file.getName());
-                BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                bufferWritter.write(json);
-                bufferWritter.close();
-                System.out.println("FILE SAVED");
-            }catch(IOException e){
-                System.out.println(filename+" HAS NOT BEEN SAVED");
-                e.printStackTrace();
+                    
+                    //true = append file
+                    FileWriter fileWritter = new FileWriter(file.getName());
+                    BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+                    bufferWritter.write(json);
+                    bufferWritter.close();
+                    System.out.println("FILE SAVED");
+                }catch(IOException e){
+                    System.out.println(filename+" HAS NOT BEEN SAVED");
+                    e.printStackTrace();
+                }
             }
-        }
-        else
-            System.out.println("FILE HAS NOT BEEN SAVED, NO FILENAME INPUT");
+            else
+                System.out.println("FILE HAS NOT BEEN SAVED, NO FILENAME INPUT");
         }
         catch (Exception ex){
             System.out.println("FILE SAVE HAS FAILED");
@@ -298,34 +387,14 @@ public class Settings {
             
             if (json!=null&&!json.equals("")){
                 JSONObject object = (JSONObject) new JSONTokener(json).nextValue();
-//                System.out.println(object.toString());
-//                    object.
-//                Set keys = object.keySet();
+
                 Map convertedJSON = jsonToMap(object);
-//                Map convertedChan = jsonToMap(object.getJSONObject("channelSettings"));
-//                System.out.println(convertedJSON);
+
                 generalSettings =(Map) convertedJSON.get("generalSettings");
                 channelSettings =(Map) convertedJSON.get("channelSettings");
                 
                 
-//                    for (int i=0;i<keys.size();i++){
-//                        generalSettings.put(keys., json)
-//                    }
-            }
-//                    JSONObject scores = (JSONObject) parser.parse(jsonText);
-//                    Set users = scores.keySet();
-//                    Iterator<String> iterator = users.iterator();
-//                    while(iterator.hasNext()) {
-//                        String element = iterator.next();
-//                        this.add(new Score(element, (int) (long) scores.get(element)));
-//                    }
-////                String user = users.toArray();
-////                    for (int i=0;i<users.length;i++){
-////                        this.add(new Score(users[i],(int) scores.get(users[i])));
-////                        System.out.println(this.get(i).toString());
-////                    }
-//                }
-            
+            }            
             else{
                 System.out.println(filename+" IS EMPTY");
             }
@@ -402,7 +471,7 @@ public class Settings {
     
     private static List toList(JSONArray array) throws JSONException {
         List<Object> list = new ArrayList<Object>();
-        for(int i = 0; i < array.size(); i++) {
+        for(int i = 0; i < array.length(); i++) {
             Object value = array.get(i);
             if(value instanceof JSONArray) {
                 value = toList((JSONArray) value);
