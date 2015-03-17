@@ -19,16 +19,27 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 /**
  *
  * @author Stephen
- * 
+ *
  * Requirements:
  * - APIs
  *    N/A
  * - Custom Objects
  *    Command
+ *    Throttle
  * - Linked Classes
  *    Global
- * 
+ *
  */
+//!throttle [type] [time|call] [int]
+//!throttle [type] [time|call] [int] [channel]
+//Use !set for a more general command
+//**Parse the int out of the call string, allow inputs in any order
+//**channel begins with #
+//If no strong begins with #, error
+//If string doesn't begin with # and is neither "time" nor "call" then the string is the type
+
+//**Get channel by checking for #, splitting by it if it exists, splitting by space, and grabbing the middle section
+
 @CMD
 @GenCMD
 
@@ -37,6 +48,16 @@ public class ThrottleCMD implements Command {
     @Override
     public String toString(){
         return("THROTTLE");
+    }
+    @Override
+    public ArrayList<String> commandTerms(){
+        ArrayList<String> a = new ArrayList<>();
+        a.add("throttle");
+        return a;
+    }
+    @Override
+    public boolean isCommand(String toCheck){
+        return false;
     }
     
     @Override
@@ -48,7 +69,8 @@ public class ThrottleCMD implements Command {
         String responseChan = null;
         boolean isVerified = false;
         
-        if (event instanceof MessageEvent){
+        // START EVENT SPECIFIC PARSING
+        if (event instanceof MessageEvent){ // MESSAGE EVENT SPECIFIC PARSING
             MessageEvent mEvent = (MessageEvent) event;
             message = Colors.removeFormattingAndColors(mEvent.getMessage());
             caller = mEvent.getUser().getNick();
@@ -61,43 +83,27 @@ public class ThrottleCMD implements Command {
             else if (message.split(" ").length==4){
                 isVerified=((mEvent.getChannel().isOp(mEvent.getUser())||caller.equalsIgnoreCase(Global.botOwner))&&mEvent.getUser().isVerified());
             }
-        }
-        else if (event instanceof PrivateMessageEvent){
+        }// END MESSAGE EVENT SPECIFIC PARSING
+        else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
             PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
             message = Colors.removeFormattingAndColors(pmEvent.getMessage());
             caller = pmEvent.getUser().getNick();
             
             if (message.split(" ").length==5)
-                isVerified=(pmEvent.getUser().isVerified()&&(caller.equalsIgnoreCase(Global.botOwner))||pmEvent.getUser().getChannelsOwnerIn().contains(pmEvent.getBot().getUserChannelDao().getChannel("#" + message.split("\\#")[1].split(" ")[0])));
-        }
+                isVerified=(caller.equalsIgnoreCase(Global.botOwner)||pmEvent.getUser().getChannelsOwnerIn().contains(pmEvent.getBot().getUserChannelDao().getChannel("#" + message.split("\\#")[1].split(" ")[0])))&&pmEvent.getUser().isVerified();
+        }// END PRIVATE MESSAGE EVENT SPECIFIC PARSING
         else{
             return;
         }
+        // END EVENT SPECIFIC PARSING
         
+        // COMMAND SPLITTING
         String command = message.split(Global.commandPrefix)[1];
         String[] cmdSplit = command.split(" ");
+        
+        // INITIAL VALUES
         String type = null;
         String modifier = null;
-        
-        if (cmdSplit.length>5){
-            event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Too many inputs");
-            return;
-        }
-        
-        if (cmdSplit[1].equalsIgnoreCase("list")){
-            
-            ArrayList<String> types = Global.throttle.getAllTypes();
-            String response = Colors.BOLD+"Throttle Types: "+Colors.NORMAL;
-            
-            for (int i=0;i<types.size()-1;i++){
-                response+=types.get(i)+", ";
-            }
-            response+=types.get(types.size()-1);
-            
-            event.getBot().sendIRC().notice(caller, response );
-            return;
-        }
-        
         int throttleModification = Integer.MIN_VALUE;
         
         for (int i=0;i<cmdSplit.length;i++){
@@ -107,18 +113,36 @@ public class ThrottleCMD implements Command {
                 modifier = cmdSplit[i];
             else if (cmdSplit[i].matches("[0-9]+"))
                 throttleModification = Integer.parseInt(cmdSplit[i]);
-            else
+            else if (!cmdSplit[i].equalsIgnoreCase("list")) // list isn't a type
                 type = cmdSplit[i];
         }
         
         
-        if (cmdSplit.length==1){
+        if (cmdSplit.length>5){
+            event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Too many inputs");
+        }
+        else if (cmdSplit.length==1){
             event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Not enough inputs, requires [type] [channel] minimum");
         }
-        
-        else if (throttleModification==Integer.MIN_VALUE&&!type.equalsIgnoreCase(null)){
+        else{
             
-            if (!channel.equalsIgnoreCase(null)){
+            if (cmdSplit[1].equalsIgnoreCase("list")){
+                
+                ArrayList<String> types = Global.throttle.getAllTypes();
+                String response = Colors.BOLD+"Throttle Types: "+Colors.NORMAL;
+                
+                for (int i=0;i<types.size()-1;i++){
+                    response+=types.get(i)+", ";
+                }
+                response+=types.get(types.size()-1);
+                
+                event.getBot().sendIRC().notice(caller, response );
+            }
+            
+            else if (channel == null){
+                event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Channel is a required input (!Throttle [channel] [type] [modifier] [int])");
+            }
+            else if (cmdSplit.length<=4){
                 if (Global.throttle.contains(type+"log",channel)){
                     String calls = Global.throttle.get(type+"log",channel);
                     String time = Global.throttle.get(type+"time",channel);
@@ -131,68 +155,40 @@ public class ThrottleCMD implements Command {
                 else
                     event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Channel does not exist in throttle settings");
             }
-            else
-                event.getBot().sendIRC().message(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Channel is a required input");
-            
-        }
-//    else if (cmdSplit.length==3){
-//
-//    }
-        else if (throttleModification!=Integer.MIN_VALUE&&!type.equalsIgnoreCase(null)){
-            if (isVerified){
-                if (!channel.equalsIgnoreCase(null)){
-                    if(!modifier.equalsIgnoreCase(null)){
-                        if (Global.throttle.contains(type+"log",channel)){
-                            if (modifier.equalsIgnoreCase("log"))
-                                Global.throttle.setMaxLog(type, throttleModification, channel);
-                            else if (modifier.equalsIgnoreCase("time"))
-                                Global.throttle.setMaxTime(type, throttleModification*1000, channel);
-                            
-                            
-                            String calls = Global.throttle.get(type+"log",channel);
-                            String time = Global.throttle.get(type+"time",channel);
-                            int timeSeconds = Integer.parseInt(time)/1000;
-                            
-                            if (event instanceof MessageEvent)
-                                event.getBot().sendIRC().message(responseChan, Colors.BOLD+type+": "+Colors.NORMAL+calls+" calls may be made per every "+timeSeconds+"s in "+channel);
+            else{
+                if(modifier == null){
+                    event.getBot().sendIRC().message(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Modifier is a required input (!Throttle [channel] [type] [modifier] [int])");
+                }
+                else if (type == null){
+                    event.getBot().sendIRC().message(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Type is a required input (!Throttle [channel] [type] [modifier] [int])");
+                }
+                else{
+                    if (throttleModification!=Integer.MIN_VALUE){
+                        if (isVerified){
+                            if (Global.throttle.contains(type+"log",channel)){
+                                if (modifier.equalsIgnoreCase("log"))
+                                    Global.throttle.setMaxLog(type, throttleModification, channel);
+                                else if (modifier.equalsIgnoreCase("time"))
+                                    Global.throttle.setMaxTime(type, throttleModification*1000, channel);
+                                
+                                
+                                String calls = Global.throttle.get(type+"log",channel);
+                                String time = Global.throttle.get(type+"time",channel);
+                                int timeSeconds = Integer.parseInt(time)/1000;
+                                
+                                if (event instanceof MessageEvent)
+                                    event.getBot().sendIRC().message(responseChan, Colors.BOLD+type+": "+Colors.NORMAL+calls+" calls may be made per every "+timeSeconds+"s in "+channel);
+                                else
+                                    event.getBot().sendIRC().message(caller, Colors.BOLD+type+": "+Colors.NORMAL+calls+" calls may be made per every "+timeSeconds+"s in "+channel);
+                            }
                             else
-                                event.getBot().sendIRC().message(caller, Colors.BOLD+type+": "+Colors.NORMAL+calls+" calls may be made per every "+timeSeconds+"s in "+channel);
+                                event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Channel does not exist in throttle settings");
                         }
                         else
-                            event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Channel does not exist in throttle settings");
+                            event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"You don't have access to this command");
                     }
-                    else
-                        event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Modifier (log or time) is a required input");
                 }
-                else
-                    event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"Channel is a required input");
             }
-            else
-                event.getBot().sendIRC().notice(caller, Colors.BOLD+"Throttle: "+Colors.NORMAL+"You don't have access to this command");
         }
-        
-//!throttle [type] [time|call] [int]
-//!throttle [type] [time|call] [int] [channel]
-//Use !set for a more general command
-//**Parse the int out of the call string, allow inputs in any order
-//**channel begins with #
-//If no strong begins with #, error
-//If string doesn't begin with # and is neither "time" nor "call" then the string is the type
-        
-//**Get channel by checking for #, splitting by it if it exists, splitting by space, and grabbing the middle section
-        
     }
-    
-    @Override
-    public ArrayList<String> commandTerms(){
-        ArrayList<String> a = new ArrayList<>();
-        a.add("throttle");
-        return a;
-    }
-    
-    @Override
-    public boolean isCommand(String toCheck){
-        return false;
-    }
-    
 }
