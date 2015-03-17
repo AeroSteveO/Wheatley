@@ -77,25 +77,25 @@ public class Throttle extends Settings{
         
         allSet.addAll(logKeys);
         
-        System.out.println(allSet.size());
+//        System.out.println(allSet.size());
         
         allSet.addAll(setKeys);
         
-        System.out.println(allSet.size());
+//        System.out.println(allSet.size());
         
         Iterator<String> keyIterator = allSet.iterator();
         
         while (keyIterator.hasNext()){
             
             String key = keyIterator.next();
-            System.out.println(key);
+//            System.out.println(key);
             if (key.toLowerCase().endsWith("log")){
                 
-                System.out.println(key);
+//                System.out.println(key);
                 key = key.split("log")[0];
                 
                 if (!types.contains(key)){
-                    System.out.println(key);
+//                    System.out.println(key);
                     types.add(key);
                 }
             }
@@ -142,11 +142,11 @@ public class Throttle extends Settings{
         long currentTime = d.getTime();
         
         
-        if(timeLog.get(channel).get(type+"log").size() > inputMaxLog) {
+        if(timeLog.get(channel).get(type+"log").size() >= inputMaxLog) {
             while(timeLog.get(channel).get(type+"log").size()>0 && currentTime - timeLog.get(channel).get(type+"log").getLast() > inputMaxTime) {
                 timeLog.get(channel).get(type+"log").pollLast();
             }
-            if(timeLog.get(channel).get(type+"log").size()>inputMaxLog) {
+            if(timeLog.get(channel).get(type+"log").size() >= inputMaxLog) {
 //                System.out.println("THROTTLED! BAM");
                 return(true);
             }
@@ -171,7 +171,7 @@ public class Throttle extends Settings{
     
     private void createMaxTime(String type, String maxTime, String channel) {
         this.create(type+"time", maxTime, channel);
-        System.out.println("YAY TIMES");
+//        System.out.println("YAY TIMES");
     }
     
     private void addChannelToLog(String channel){
