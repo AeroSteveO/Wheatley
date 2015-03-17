@@ -6,10 +6,12 @@
 
 package Wheatley;
 
-import Objects.Settings;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -77,6 +79,14 @@ public class UpdateFiles extends ListenerAdapter{
                     Global.settings.create(cmdSplit[1],cmdSplit[2],cmdSplit[3]);
                 }
             }
+            
+            else if (cmdSplit[0].equalsIgnoreCase("contains")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                
+                ArrayList<String> tree = new ArrayList<String>(Arrays.asList(cmdSplit));
+                tree.remove(0);
+                event.respond(String.valueOf(Global.settings.contains(tree)));
+            }
+
             
             else if (cmdSplit[0].equalsIgnoreCase("get")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
                 
