@@ -6,7 +6,7 @@
 
 package Wheatley;
 
-import Objects.KeyFinder;
+//import Objects.KeyFinder;
 import com.google.common.collect.ImmutableSortedSet;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,8 +17,9 @@ import org.pircbotx.hooks.events.MessageEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 
@@ -31,7 +32,7 @@ import org.pircbotx.Colors;
  *
  * Requirements:
  * - APIs
- *    JSON-Simple-1.1.1
+ *    JSON (AOSP JSON parser)
  * - Custom Objects
  *    KeyFinder
  *    Throttle
@@ -42,13 +43,6 @@ import org.pircbotx.Colors;
  *      !udict [word]
  *          responds with the urban dictionary reference to the given word
  *          includes the first definition, example, and link to the page
- *      !set ucall
- *          Changes the number of udict calls that can be made per specified
- *          amount of time, if no value is input, gives the current settings
- *      !set utime
- *          Changes the amount of time between udict call flushes, udict
- *          is stopped when # of calls > ucall over the course of utime, if
- *          no value is input, gives the current settings
  *
  *
  */
@@ -62,7 +56,7 @@ public class Urban extends ListenerAdapter {
     private String type = "udict";
     
     @Override
-    public void onMessage(MessageEvent event) throws Exception {
+    public void onMessage(MessageEvent event) {
 //        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
         try{
             String message = Colors.removeFormattingAndColors(event.getMessage().trim());
@@ -131,32 +125,46 @@ public class Urban extends ListenerAdapter {
         }
     }
     private String getDefinition(String term, int defNum){
-        JSONParser parser = new JSONParser();
+//        JSONParser parser = new JSONParser();
         try{
             String jsonObject = (readUrl("http://api.urbandictionary.com/v0/define?term="+term.trim().replaceAll(" ", "%20")));
-            List<String> directLink = JSONKeyFinder(jsonObject,"permalink");
-            List<String> word = JSONKeyFinder(jsonObject,"word");
-            List<String> definition = JSONKeyFinder(jsonObject,"definition");
-            List<String> example = JSONKeyFinder(jsonObject,"example");
-            List<String> results = JSONKeyFinder(jsonObject,"result_type");
-            String slimmedDef;
-            String slimmedExample;
-            if(results.get(defNum).equalsIgnoreCase("no_results"))
+            
+            JSONObject defObject = (JSONObject) new JSONTokener(jsonObject).nextValue();
+            JSONArray defList = defObject.getJSONArray("list");
+            JSONObject chosenDefinition = defList.getJSONObject(defNum);
+            
+            String results = defObject.getString("result_type");
+            if(results.equalsIgnoreCase("no_results"))
                 return("Error: Definition Not Found");
             
-            if (definition.get(defNum).length()>150){
-                definition.add(defNum,definition.get(defNum).replaceAll("[\t\r\n]", ""));
-                slimmedDef = definition.get(defNum).substring(0,Math.min(definition.get(defNum).length(),150))+"...";
-            }else
-                slimmedDef = definition.get(defNum).replaceAll("[\t\r\n]", "");
             
-            if (example.get(defNum).length()>150){
-                example.add(defNum,example.get(defNum).replaceAll("[\t\r\n]", ""));
-                slimmedExample = example.get(defNum).substring(0,Math.min(example.get(defNum).length(),150))+"... ";
-            }else
-                slimmedExample = example.get(defNum).replaceAll("[\t\r\n]", "")+" ";
+//            List<String> directLink = JSONKeyFinder(jsonObject,"permalink");
+//            List<String> word = JSONKeyFinder(jsonObject,"word");
+//            List<String> definition = JSONKeyFinder(jsonObject,"definition");
+//            List<String> example = JSONKeyFinder(jsonObject,"example");
+//            List<String> results = JSONKeyFinder(jsonObject,"result_type");
+            String slimmedDef;
+            String slimmedExample;
             
-            return(Colors.BOLD+word.get(defNum)+Colors.NORMAL+" : "+slimmedDef+" "+Colors.BOLD+"Example : "+Colors.NORMAL+slimmedExample + directLink.get(defNum));
+            
+            String directLink = chosenDefinition.getString("permalink");
+            String word = chosenDefinition.getString("word");
+            String definition = chosenDefinition.getString("definition");
+            String example = chosenDefinition.getString("example");
+
+            if (definition.length()>150){
+                definition = definition.replaceAll("[\t\r\n]", "");
+                slimmedDef = definition.substring(0,Math.min(definition.length(),150))+"...";
+            }else
+                slimmedDef = definition.replaceAll("[\t\r\n]", "");
+            
+            if (example.length()>150){
+                example=example.replaceAll("[\t\r\n]", "");
+                slimmedExample = example.substring(0,Math.min(example.length(),150))+"... ";
+            }else
+                slimmedExample = example.replaceAll("[\t\r\n]", "")+" ";
+            
+            return(Colors.BOLD+word+Colors.NORMAL+" : "+slimmedDef+" "+Colors.BOLD+"Example : "+Colors.NORMAL+slimmedExample + directLink);
         }catch (Exception e){
             e.printStackTrace();
             return("Error: Definition Not Found");
@@ -165,20 +173,20 @@ public class Urban extends ListenerAdapter {
     }
     
     //Finds the given key in the json string using keyfinder.java
-    private List<String> JSONKeyFinder(String jsonText,String jsonKey) throws ParseException{
-        JSONParser parser = new JSONParser();
-        KeyFinder finder = new KeyFinder();
-        List<String> matchedJson = new ArrayList<>();
-        finder.setMatchKey(jsonKey);
-        while(!finder.isEnd()){
-            parser.parse(jsonText, finder, true);
-            if(finder.isFound()){
-                finder.setFound(false);
-                matchedJson.add(finder.getValue().toString());
-            }
-        }
-        return(matchedJson);
-    }
+//    private List<String> JSONKeyFinder(String jsonText,String jsonKey) {
+//        JSONParser parser = new JSONParser();
+//        KeyFinder finder = new KeyFinder();
+//        List<String> matchedJson = new ArrayList<>();
+//        finder.setMatchKey(jsonKey);
+//        while(!finder.isEnd()){
+//            parser.parse(jsonText, finder, true);
+//            if(finder.isFound()){
+//                finder.setFound(false);
+//                matchedJson.add(finder.getValue().toString());
+//            }
+//        }
+//        return(matchedJson);
+//    }
     
 //    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
 //        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();

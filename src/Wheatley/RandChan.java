@@ -6,8 +6,6 @@
 
 package Wheatley;
 
-import Objects.KeyFinder;
-import com.google.common.collect.ImmutableSortedSet;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -15,13 +13,10 @@ import java.util.LinkedList;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.pircbotx.Channel;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.pircbotx.Colors;
 
 /**
@@ -33,9 +28,8 @@ import org.pircbotx.Colors;
  *
  * Requirements:
  * - APIs
- *    JSON-Simple-1.1.1
+ *    JSON (AOSP JSON parser)
  * - Custom Objects
- *    KeyFinder
  *    Throttle
  * - Linked Classes
  *    Global
@@ -108,6 +102,14 @@ public class RandChan extends ListenerAdapter {
                         }
                     }
                 }
+                else if (command.equalsIgnoreCase("randchan list")){
+                    String boards = "";
+                    for(int i=0;i<boardInfo.size()-1;i++){
+                        boards = boards+Colors.RED+boardInfo.get(i).get(0)+": "+Colors.NORMAL+boardInfo.get(i).get(1)+", ";
+                    }
+                    event.getBot().sendIRC().message(event.getUser().getNick(),boards);
+                }
+
                 else if(message.toLowerCase().matches("!randchan(\\s+\\p{Alnum}+)?")) {
                     if(!Global.throttle.isThrottleActive(type,event.getChannel().getName())){
                         String[] splitString = event.getMessage().split("\\s+");
@@ -133,14 +135,14 @@ public class RandChan extends ListenerAdapter {
 //                    Global.throttle.setMaxLog(type, maxLog, event.getChannel().getName());
 //                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
 //                }
-//                
+//
 //                if (message.toLowerCase().matches("!set rtime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
 //                    maxTime = Integer.parseInt(message.split(" ")[2])*1000;
 //                    long sec = maxTime/1000;
 //                    Global.throttle.setMaxTime(type, maxTime, event.getChannel().getName());
 //                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
 //                }
-//                
+//
 //                if (message.equalsIgnoreCase("!set rcall")||message.equalsIgnoreCase("!set rtime")){
 //                    long sec = maxTime/1000;
 //                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
@@ -226,23 +228,33 @@ public class RandChan extends ListenerAdapter {
     
     private String get4ChanImage(String board) throws Exception {
         String image = new String();
-        List<String> threads = new ArrayList<>();
-        List<String> filename = new ArrayList<>();
+//        List<String> threads = new ArrayList<>();
+//        List<String> filename = new ArrayList<>();
         List<String> extension = new ArrayList<>();
         
         String jsonText = readUrl("http://a.4cdn.org/"+board+"/threads.json");
-        threads = JSONKeyFinder(jsonText,"no");
-        while(extension.isEmpty()){ //If theres nothing added into the extension list, then there must not be any images in that thread
+        
+        JSONArray pages = (JSONArray) new JSONTokener(jsonText).nextValue();
+        
+//        threads = JSONKeyFinder(jsonText,"no");
+        boolean find = false;
+        
+        while(!find){ //If theres nothing added into the extension list, then there must not be any images in that thread
             
-            String threadNumber = threads.get((int) (Math.random()*threads.size()-1));
+            JSONArray threadList = pages.getJSONObject((int) (Math.random()*pages.length()-1)).getJSONArray("threads");
+            String threadNumber = threadList.getJSONObject((int) (Math.random()*threadList.length()-1)).getString("no");
+            
             jsonText = readUrl("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
             try{
-                filename = JSONKeyFinder(jsonText,"tim");
-                extension = JSONKeyFinder(jsonText,"ext");
-                int filenum = (int) (Math.random()*(filename.size()-1));
-                image = "http://i.4cdn.org/"+board+"/"+filename.get(filenum)+extension.get(filenum);
+                JSONObject postsObject = (JSONObject) new JSONTokener(jsonText).nextValue();
+                JSONArray posts = postsObject.getJSONArray("posts");
+                JSONObject choice = posts.getJSONObject((int) (Math.random()*posts.length()-1));
+                
+                find = choice.has("ext")&&choice.has("tim");
+                if(find)
+                    image = "http://i.4cdn.org/"+board+"/"+choice.getLong("tim")+choice.getString("ext");
             }
-            catch(ParseException pe){
+            catch(Exception pe){
                 pe.printStackTrace();
                 image="http://i.imgur.com/JaKGGo7.jpg"; // Throw Hanson if theres an error
             }
@@ -251,37 +263,37 @@ public class RandChan extends ListenerAdapter {
     }
     
     //Finds the given key in the json string using keyfinder.java
-    private List<String> JSONKeyFinder(String jsonText,String jsonKey) throws ParseException{
-        JSONParser parser = new JSONParser();
-        KeyFinder finder = new KeyFinder();
-        List<String> matchedJson = new ArrayList<>();
-        finder.setMatchKey(jsonKey);
-        while(!finder.isEnd()){
-            parser.parse(jsonText, finder, true);
-            if(finder.isFound()){
-                finder.setFound(false);
-                matchedJson.add(finder.getValue().toString());
-            }
-        }
-        return(matchedJson);
-    }
+//    private List<String> JSONKeyFinder(String jsonText,String jsonKey) {
+//        JSONParser parser = new JSONParser();
+//        KeyFinder finder = new KeyFinder();
+//        List<String> matchedJson = new ArrayList<>();
+//        finder.setMatchKey(jsonKey);
+//        while(!finder.isEnd()){
+//            parser.parse(jsonText, finder, true);
+//            if(finder.isFound()){
+//                finder.setFound(false);
+//                matchedJson.add(finder.getValue().toString());
+//            }
+//        }
+//        return(matchedJson);
+//    }
 //    private boolean setupThrottle(int maxLog, long maxTime){
 //        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
 //        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
 //        return(true);
-//        
+//
 //    }
 //    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
 //        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();
-//        
+//
 //        Iterator<Channel> iterator = channels.iterator();
 //        while(iterator.hasNext()) {
 //            Channel element = iterator.next();
-//            
+//
 //            Global.throttle.create("NA", "NA", element.getName());
-//            
+//
 //        }
-//        
+//
 //        Global.throttle.createMaxLog(type, String.valueOf(maxLog), "ALL");
 //        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
 //        return(true);
@@ -289,15 +301,15 @@ public class RandChan extends ListenerAdapter {
     
     private List<List<String>> getBoardInfo() {
         List<List<String>> info = new ArrayList<>();
-        JSONParser parser = new JSONParser();
+//        JSONParser parser = new JSONParser();
         try{
-            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
+            JSONObject jsonObject = (JSONObject) new JSONTokener(readUrl("http://a.4cdn.org/boards.json")).nextValue();
             JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
-            for (int i=0; i<boardsTemp.size(); i++) {
+            for (int i=0; i<boardsTemp.length(); i++) {
                 List<String> singleBoardInfo = new ArrayList<>();
-                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
-                singleBoardInfo.add((String) jsonObject.get("board"));
-                singleBoardInfo.add((String) jsonObject.get("title"));
+                jsonObject = (JSONObject) new JSONTokener(boardsTemp.get(i).toString()).nextValue();
+                singleBoardInfo.add( jsonObject.getString("board"));
+                singleBoardInfo.add( jsonObject.getString("title"));
                 info.add(singleBoardInfo);
             }
         }

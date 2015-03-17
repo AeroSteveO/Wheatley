@@ -6,23 +6,21 @@
 
 package Wheatley;
 
-import Objects.WeatherLog;
-import Objects.KeyFinder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import Objects.WeatherLog;
 import Objects.WeatherLog.WeatherCache;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  *
@@ -31,52 +29,52 @@ import java.util.List;
  *
  * Requirements:
  * - APIs
- * JSON-Simple-1.1.1
+ *    JSON (AOSP JSON parser)
  * - Custom Objects
- * WeatherLog
- * AlertTime (Built in)
+ *    WeatherLog
+ *    AlertTime (Built in)
  * - Linked Classes
- * Global
+ *    Global
  *
  * Activate Command with:
- * !w [location]
- * !weather [location]
- * Location can be:
- * [cities, states 2 digit code]
- * [zip]
- * Responds with the weather for that cities, if nothing is input,
- * Responds with the weather for the stock zip code
- * !f [location]
- * !forecast [location]
- * Location can be:
- * [cities, states 2 digit code]
- * [zip]
- * Responds with the 7 day forecast for that cities, if nothing is input,
- * Responds with the 7 day forecast for the stock zip code
- * !a [location]
- * !alert [location]
- * !alerts [location]
- * Location can be:
- * [cities, states 2 digit code]
- * [zip]
- * Responds with the any available weather alerts for that cities, if nothing is input,
- * Responds with the any available weather alerts for the stock zip code
- * !a full [location]
- * !alert full [location]
- * !alerts full [location]
- * !a [location] full
- * !alert [location] full
- * !alerts [location] full
- * Location can be:
- * [cities, states 2 digit code]
- * [zip]
- * Responds with a PM containing the full text of the current alerts
- * !nuke local cache
- * Clears the local cache of weather, alerts, and forecast data
- * Can help clear up errors
+ *      !w [location]
+ *      !weather [location]
+ *          Location can be:
+ *            [cities, states 2 digit code]
+ *            [zip]
+ *          Responds with the weather for that cities, if nothing is input,
+ *          Responds with the weather for the stock zip code
+ *      !f [location]
+ *      !forecast [location]
+ *          Location can be:
+ *            [cities, states 2 digit code]
+ *            [zip]
+ *          Responds with the 7 day forecast for that cities, if nothing is input,
+ *          Responds with the 7 day forecast for the stock zip code
+ *      !a [location]
+ *      !alert [location]
+ *      !alerts [location]
+ *          Location can be:
+ *            [cities, states 2 digit code]
+ *            [zip]
+ *          Responds with the any available weather alerts for that cities, if nothing is input,
+ *          Responds with the any available weather alerts for the stock zip code
+ *      !a full [location]
+ *      !alert full [location]
+ *      !alerts full [location]
+ *      !a [location] full
+ *      !alert [location] full
+ *      !alerts [location] full
+ *          Location can be:
+ *            [cities, states 2 digit code]
+ *            [zip]
+ *          Responds with a PM containing the full text of the current alerts
+ *      !nuke local cache
+ *          Clears the local cache of weather, alerts, and forecast data
+ *          Can help clear up errors
  *
  * Latent Functionality
- * Automatically updates the main channel with weather alerts
+ *      Automatically updates the main channel with weather alerts
  */
 
 public class Weather extends ListenerAdapter{
@@ -158,10 +156,10 @@ public class Weather extends ListenerAdapter{
                     
                     if(localCache.size()>0&&localCache.containsEntry(search,"alert")){
                         ArrayList<String> alertResponses = localCache.getFormattedAlertArray(search,"alert");
-                        
-                        for (int i=0;i<alertResponses.size();i++){
-                            event.getBot().sendIRC().message(event.getChannel().getName(),alertResponses.get(i));
-                        }
+                        if (!alertResponses.get(0).equalsIgnoreCase("No Current Weather Alerts"))
+                            for (int i=0;i<alertResponses.size();i++){
+                                event.getBot().sendIRC().message(event.getChannel().getName(),alertResponses.get(i));
+                            }
                     }
                     
                     else{
@@ -172,9 +170,10 @@ public class Weather extends ListenerAdapter{
                         ArrayList<String> alertResponse = getCurrentAlerts(readUrl(alertUrl(location)),locationData);
                         
                         if (alertResponse.size()>0){
-                            for (int i=0;i<alertResponse.size();i++){
-                                event.getBot().sendIRC().message(event.getChannel().getName(),alertResponse.get(i));
-                            }
+                            if (!alertResponse.get(0).equalsIgnoreCase("No Current Weather Alerts"))
+                                for (int i=0;i<alertResponse.size();i++){
+                                    event.getBot().sendIRC().message(event.getChannel().getName(),alertResponse.get(i));
+                                }
                         }
                     }
                 }
@@ -319,15 +318,15 @@ public class Weather extends ListenerAdapter{
             }
         }
         private boolean updateCurrentAlerts(String jsonData) {
-            JSONParser parser = new JSONParser();
+//            JSONParser parser = new JSONParser();
             ArrayList<String> alertType = new ArrayList<>();
             ArrayList<String> alertExpiration = new ArrayList<>();
             ArrayList<String> alertText = new ArrayList<>();
             try{
-                JSONObject alertJSON = (JSONObject) parser.parse(jsonData);
+                JSONObject alertJSON = (JSONObject) new JSONTokener(jsonData).nextValue();
                 JSONArray alertArrayJSON = (JSONArray) alertJSON.get("alerts");
-                if (!alertArrayJSON.isEmpty()){
-                    for (int i=0;i<alertArrayJSON.size();i++){
+                if (alertArrayJSON.length()!=0){
+                    for (int i=0;i<alertArrayJSON.length();i++){
                         JSONObject alert = (JSONObject) alertArrayJSON.get(i);
                         alertType.add((String) alert.get("description"));
                         alertExpiration.add((String) alert.get("expires"));
@@ -381,16 +380,16 @@ public class Weather extends ListenerAdapter{
     }
     
     private ArrayList<String> getCurrentAlerts(String jsonData, ArrayList<String> locationData) {
-        JSONParser parser = new JSONParser();
+//        JSONParser parser = new JSONParser();
         ArrayList<String> alertType = new ArrayList<>();
         ArrayList<String> alertExpiration = new ArrayList<>();
         ArrayList<String> alertText = new ArrayList<>();
         try{
-            JSONObject alertJSON = (JSONObject) parser.parse(jsonData);
+            JSONObject alertJSON = (JSONObject) new JSONTokener(jsonData).nextValue();
             JSONArray alertArrayJSON = (JSONArray) alertJSON.get("alerts");
 //            System.out.println(alertArrayJSON);
-            if (alertArrayJSON!=null && !alertArrayJSON.isEmpty()){
-                for (int i=0;i<alertArrayJSON.size();i++){
+            if (alertArrayJSON!=null && alertArrayJSON.length()!=0){
+                for (int i=0;i<alertArrayJSON.length();i++){
                     JSONObject alert = (JSONObject) alertArrayJSON.get(i);
                     alertType.add((String) alert.get("description"));
                     alertExpiration.add((String) alert.get("expires"));
@@ -415,10 +414,10 @@ public class Weather extends ListenerAdapter{
             return new ArrayList<String>(Arrays.asList("Error Parsing Alerts"));
         }
     }
-    private String getCurrentForecast(String jsonData, String location) throws ParseException{
-        JSONParser parser = new JSONParser();
+    private String getCurrentForecast(String jsonData, String location) {
+//        JSONParser parser = new JSONParser();
         String response;
-        ArrayList<String> weekDay;
+        ArrayList<String> weekDay = new ArrayList<>();
         ArrayList<String> highF = new ArrayList<>();
         ArrayList<String> highC = new ArrayList<>();
         ArrayList<String> lowF = new ArrayList<>();
@@ -427,24 +426,30 @@ public class Weather extends ListenerAdapter{
         String date = "";
         //simpleforecast
         try{
-            JSONObject forecastJSON = (JSONObject) parser.parse(jsonData);
-            forecastJSON = (JSONObject) forecastJSON.get("forecast");
-            forecastJSON = (JSONObject) forecastJSON.get("simpleforecast");
-            JSONArray forecastDay = (JSONArray) forecastJSON.get("forecastday");
-            JSONObject day = (JSONObject) forecastDay.get(0);
-            day = (JSONObject) day.get("date");
-            date = (String) day.get("pretty");
-            weekDay = JSONKeyFinder(forecastDay.toString(),"weekday"); //all thats needed for the weekday array
+            JSONObject forecastJSON = (JSONObject) new JSONTokener(jsonData).nextValue();
+            forecastJSON = forecastJSON.getJSONObject("forecast");
+            forecastJSON = forecastJSON.getJSONObject("simpleforecast");
+            JSONArray forecastDay = forecastJSON.getJSONArray("forecastday");
+            JSONObject day = forecastDay.getJSONObject(0);
+            day = day.getJSONObject("date");
+            date = day.getString("pretty");
             
-            for (int i=0;i<forecastDay.size();i++){
-                JSONObject period = (JSONObject) forecastDay.get(i);
-                JSONObject high = (JSONObject) period.get("high");
-                highF.add((String) high.get("fahrenheit"));
-                highC.add((String) high.get("celsius"));
-                JSONObject low = (JSONObject) period.get("low");
-                lowF.add((String) low.get("fahrenheit"));
-                lowC.add((String) low.get("celsius"));
-                forecastConditions.add((String) period.get("conditions"));
+            
+            //weekDay = JSONKeyFinder(forecastDay.toString(),"weekday"); //all thats needed for the weekday array
+//            weekDay.add("stuff");weekDay.add("stuff");weekDay.add("stuff");weekDay.add("stuff");
+//            weekDay.add("stuff");weekDay.add("stuff");weekDay.add("stuff");
+            
+            for (int i=0;i<forecastDay.length();i++){
+                JSONObject period = forecastDay.getJSONObject(i);
+                JSONObject high = period.getJSONObject("high");
+                highF.add(high.getString("fahrenheit"));
+                highC.add(high.getString("celsius"));
+                JSONObject low = period.getJSONObject("low");
+                lowF.add(low.getString("fahrenheit"));
+                lowC.add(low.getString("celsius"));
+                forecastConditions.add(period.getString("conditions"));
+                
+                weekDay.add(period.getJSONObject("date").getString("weekday"));
             }
             
             ArrayList<String> locationData = getLocationData(location);
@@ -461,11 +466,11 @@ public class Weather extends ListenerAdapter{
     }
     
     private ArrayList<String> getLocationData(String location) throws Exception{
-        JSONParser parser = new JSONParser();
+//        JSONParser parser = new JSONParser();
         ArrayList<String> locationData = new ArrayList<>();
         String jsonData = readUrl(geoLookupUrl(location));
         try{
-            JSONObject jsonObject = (JSONObject) parser.parse(jsonData);
+            JSONObject jsonObject = (JSONObject) new JSONTokener(jsonData).nextValue();
             
 //            System.out.println(jsonObject.toString());
             if (jsonObject.toString().toLowerCase().matches(".*\"results\".*")){
@@ -474,18 +479,18 @@ public class Weather extends ListenerAdapter{
                 ArrayList<String> states = new ArrayList<>();
                 String city;
                 String state;
-                jsonObject = (JSONObject) jsonObject.get("response");
+                jsonObject = jsonObject.getJSONObject("response");
                 
 //                System.out.println(jsonObject.toString());
                 
                 JSONArray locationJSON = (JSONArray) jsonObject.get("results");
                 
-                for (int i=0;i<locationJSON.size();i++){
-                    JSONObject period = (JSONObject) locationJSON.get(i);
-                    cities.add((String) period.get("city"));
-                    states.add((String) period.get("state"));
+                for (int i=0;i<locationJSON.length();i++){
+                    JSONObject period = locationJSON.getJSONObject(i);
+                    cities.add(period.getString("city"));
+                    states.add(period.getString("state"));
                 }
-                int randLocation = (int) (Math.random()*locationJSON.size());
+                int randLocation = (int) (Math.random()*locationJSON.length());
                 city = (cities.get(randLocation));
                 state = (states.get(randLocation));
 //                System.out.println(city+", "+state);
@@ -494,13 +499,13 @@ public class Weather extends ListenerAdapter{
                 
             } else{
                 
-                JSONObject locationJSON = (JSONObject) jsonObject.get("location");
+                JSONObject locationJSON = jsonObject.getJSONObject("location");
                 
 //                System.out.println(locationJSON.toString());
                 
-                locationData.add((String) locationJSON.get("city"));
-                locationData.add((String) locationJSON.get("state"));
-                locationData.add((String) locationJSON.get("zip"));
+                locationData.add(locationJSON.getString("city"));
+                locationData.add(locationJSON.getString("state"));
+                locationData.add(locationJSON.getString("zip"));
             }
         }catch (Exception ex){
             locationData.add("Error");
@@ -511,22 +516,22 @@ public class Weather extends ListenerAdapter{
     }
     
     //Finds the given key in the json string using keyfinder.java
-    private ArrayList<String> JSONKeyFinder(String jsonText,String jsonKey) throws ParseException{
-        JSONParser parser = new JSONParser();
-        KeyFinder finder = new KeyFinder();
-        ArrayList<String> matchedJson = new ArrayList<>();
-        finder.setMatchKey(jsonKey);
-        while(!finder.isEnd()){
-            parser.parse(jsonText, finder, true);
-            if(finder.isFound()){
-                finder.setFound(false);
-                matchedJson.add(finder.getValue().toString());
-            }
-        }
-        return(matchedJson);
-    }
-    private String getCurrentWeather(String jsonData) throws ParseException{
-        JSONParser parser = new JSONParser();
+//    private ArrayList<String> JSONKeyFinder(String jsonText,String jsonKey) {
+////        JSONParser parser = new JSONParser();
+//        KeyFinder finder = new KeyFinder();
+//        ArrayList<String> matchedJson = new ArrayList<>();
+//        finder.setMatchKey(jsonKey);
+//        while(!finder.isEnd()){
+//            parser.parse(jsonText, finder, true);
+//            if(finder.isFound()){
+//                finder.setFound(false);
+//                matchedJson.add(finder.getValue().toString());
+//            }
+//        }
+//        return(matchedJson);
+//    }
+    private String getCurrentWeather(String jsonData) {
+//        JSONParser parser = new JSONParser();
         String zip = "Unavailable";
         String cityState = "";
         String tempString = "";
@@ -542,21 +547,21 @@ public class Weather extends ListenerAdapter{
         try{
             
             // GRABBING ALL THE LOCATION DATA
-            JSONObject jsonObject = (JSONObject) parser.parse(jsonData);
-            JSONObject weatherTemp = (JSONObject) jsonObject.get("current_observation");
-            JSONObject locationData = (JSONObject) weatherTemp.get("display_location");
-            zip =  (String) locationData.get("zip");
-            cityState = (String)locationData.get("full");
+            JSONObject jsonObject = (JSONObject) new JSONTokener(jsonData).nextValue();
+            JSONObject weatherTemp = jsonObject.getJSONObject("current_observation");
+            JSONObject locationData = weatherTemp.getJSONObject("display_location");
+            zip = locationData.getString("zip");
+            cityState = locationData.getString("full");
             
             // GRABBING ALL THE WEATHER DATA
             JSONObject currentWeather = weatherTemp;//(JSONObject) weatherTemp.get("estimated");
-            tempString =(String) currentWeather.get("temperature_string");
-            weather =(String) currentWeather.get("weather");
-            windDir =(String) currentWeather.get("wind_dir");
-            windMPH =(String) currentWeather.get("wind_mph").toString()+" mph";
-            windKPH =(String) currentWeather.get("wind_kph").toString()+" Kph";
-            humidity =(String) currentWeather.get("relative_humidity");
-            observationTime =(String) currentWeather.get("observation_time").toString().split("Last Updated on",2)[1];
+            tempString = currentWeather.getString("temperature_string");
+            weather = currentWeather.getString("weather");
+            windDir = currentWeather.getString("wind_dir");
+            windMPH = currentWeather.getString("wind_mph").toString()+" mph";
+            windKPH = currentWeather.getString("wind_kph").toString()+" Kph";
+            humidity = currentWeather.getString("relative_humidity");
+            observationTime =currentWeather.getString("observation_time").split("Last Updated on",2)[1];
             WeatherLog weatherData = new WeatherLog(cityState,zip, weather, humidity, tempString, windMPH, windKPH, windDir, observationTime);
             localCache.add(weatherData);
             return(weatherData.getFormattedResponse());
@@ -590,6 +595,7 @@ public class Weather extends ListenerAdapter{
         return("http://api.wunderground.com/api/"+key+"/conditions/q/"+inputLocation+".json");
     }
     private String forecastUrl(String inputLocation){
+//        System.out.println("http://api.wunderground.com/api/"+key+"/forecast10day/q/"+inputLocation+".json");
         return ("http://api.wunderground.com/api/"+key+"/forecast10day/q/"+inputLocation+".json");
     }
     private String geoLookupUrl(String inputLocation){

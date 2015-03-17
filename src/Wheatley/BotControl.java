@@ -11,8 +11,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Random;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -208,9 +208,9 @@ public class BotControl extends ListenerAdapter{
                 &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
             
             String ipInfo = readUrl("http://ipinfo.io/json");
-            JSONParser parser = new JSONParser();
+//            JSONParser parser = new JSONParser();
             try{
-                JSONObject ipJSON = (JSONObject) parser.parse(ipInfo);
+                JSONObject ipJSON = (JSONObject) new JSONTokener(ipInfo).nextValue();
                 String ipAddress = (String) ipJSON.get("ip");
                 event.getBot().sendIRC().notice(event.getUser().getNick(), "Current IP Address is: "+ipAddress);
             }

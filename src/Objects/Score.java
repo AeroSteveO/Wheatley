@@ -17,9 +17,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 
 /**
  *
@@ -338,6 +338,7 @@ public class Score implements Comparable<Score> {
         
         public boolean saveToJSON(){
             if (!this.filename.equalsIgnoreCase("doNotSave")){
+                try{
                 JSONObject scoreList = new JSONObject();
 //            JSONArray score = new JSONArray();
                 synchronized(scores){
@@ -345,8 +346,12 @@ public class Score implements Comparable<Score> {
                         scoreList.put(scores.get(i).user,scores.get(i).score);
                     }
                 }
-                String addition = JSONValue.toJSONString(scoreList);
-                try{
+                String addition = scoreList.toString(2);
+//                }
+//                catch (Exception ex){
+//                    ex.printStackTrace();
+//                }
+//                try{
                     File file =new File(filename);
                     
                     //if file doesnt exists, then create it
@@ -360,7 +365,7 @@ public class Score implements Comparable<Score> {
                     bufferWritter.write(addition);
                     bufferWritter.close();
                     
-                }catch(IOException e){
+                }catch(Exception e){
                     System.out.println(filename+" HAS NOT BEEN SAVED");
                     e.printStackTrace();
                     return false;
@@ -375,13 +380,13 @@ public class Score implements Comparable<Score> {
                 String jsonText = loadText(); // Should only have one line of text
                 
                 if (jsonText!=null&&!jsonText.equals("")){
-                    JSONParser parser = new JSONParser();
-                    JSONObject scores = (JSONObject) parser.parse(jsonText);
+//                    JSONParser parser = new JSONParser();
+                    JSONObject scores = (JSONObject) new JSONTokener(jsonText).nextValue();
                     Set users = scores.keySet();
                     Iterator<String> iterator = users.iterator();
                     while(iterator.hasNext()) {
                         String element = iterator.next();
-                        this.add(new Score(element, (int) (long) scores.get(element)));
+                        this.add(new Score(element, (int) scores.get(element)));
                     }
 //                String user = users.toArray();
 //                    for (int i=0;i<users.length;i++){

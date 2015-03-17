@@ -11,9 +11,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -23,6 +23,14 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Steve-O
  *      Original Bot: SRSBSNS by: saigon
  *
+ * Requirements:
+ * - APIs
+ *    JSON (AOSP JSON parser)
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  * IMDb searches implement the OMDb API
  * http://www.omdbapi.com/
  * Rotten Tomato searches implement the Rotten Tomato API
@@ -119,7 +127,7 @@ public class MovieRatings extends ListenerAdapter {
     }
     private String parseRottenSimilarMovies(String id) throws Exception{
         String similarJSON = readUrl(rottenMovieSimilarURL(id));
-        JSONParser parser = new JSONParser();
+//        JSONParser parser = new JSONParser();
 //        ArrayList<String> movieTitles = new ArrayList<>();
 //        ArrayList<String> movieYears = new ArrayList<>();
 //        ArrayList<String> movieRatings = new ArrayList<>();
@@ -129,27 +137,27 @@ public class MovieRatings extends ListenerAdapter {
         String response = "";
         try{
             
-            JSONObject movieJSON = (JSONObject) parser.parse(similarJSON);
-            JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
+            JSONObject movieJSON = (JSONObject) new JSONTokener(similarJSON).nextValue();
+            JSONArray movieMatches = movieJSON.getJSONArray("movies");
             
-            if (movieMatches.size()>0){
+            if (movieMatches.length()>0){
                 
                 response =Colors.BOLD+"Similar Movies Found: "+Colors.NORMAL;
-                for (int i=0;i<movieMatches.size()-1;i++){
-                    JSONObject movie = (JSONObject) movieMatches.get(i);
-                    title = (String) movie.get("title");
-                    year = (long) movie.get("year");
-                    rating = (String) movie.get("mpaa_rating");
+                for (int i=0;i<movieMatches.length()-1;i++){
+                    JSONObject movie = movieMatches.getJSONObject(i);
+                    title = movie.getString("title");
+                    year = movie.getLong("year");
+                    rating = movie.getString("mpaa_rating");
 //                    movieTitles.add((String) movie.get("title"));
 //                    movieYears.add((String) movie.get("year"));
 //                    movieRatings.add((String) movie.get("mpaa_rating"));
                     response = response +Colors.BOLD+ title+Colors.NORMAL + " ("+year+", "+rating+"), ";
                     
                 }
-                JSONObject movie = (JSONObject) movieMatches.get(movieMatches.size()-1);
-                title = (String) movie.get("title");
-                year = (long) movie.get("year");
-                rating = (String) movie.get("mpaa_rating");
+                JSONObject movie = (JSONObject) movieMatches.get(movieMatches.length()-1);
+                title = movie.getString("title");
+                year = movie.getLong("year");
+                rating = movie.getString("mpaa_rating");
                 response = response +Colors.BOLD+ title+Colors.NORMAL + " ("+year+", "+rating+")";
                 
                 return(response);
@@ -164,16 +172,16 @@ public class MovieRatings extends ListenerAdapter {
     }
     private String getRottenMovieID(String url) throws Exception{
         String movieSearchJSON = readUrl(url);
-        JSONParser parser = new JSONParser();
+//        JSONParser parser = new JSONParser();
         
         try{
             
-            JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
-            long total = (long) movieJSON.get("total");
+            JSONObject movieJSON = (JSONObject) new JSONTokener(movieSearchJSON).nextValue();
+            long total = movieJSON.getLong("total");
             if (total>0){
-                JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
-                JSONObject movieMatched = (JSONObject) movieMatches.get(0);
-                String movieId = (String) movieMatched.get("id");
+                JSONArray movieMatches = movieJSON.getJSONArray("movies");
+                JSONObject movieMatched = movieMatches.getJSONObject(0);
+                String movieId = movieMatched.getString("id");
                 return(movieId);
             }
             else
@@ -187,25 +195,27 @@ public class MovieRatings extends ListenerAdapter {
     }
     private String parseImdbMovieSearch(String url) throws Exception{
         String movieSearchJSON = readUrl(url);
-        JSONParser parser = new JSONParser();
+//        JSONParser parser = new JSONParser();
         
         try{
-            JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
-            String title = (String) (String) movieJSON.get("Title");
+            JSONObject movieJSON = (JSONObject) new JSONTokener(movieSearchJSON).nextValue();
+            String title = movieJSON.getString("Title");
 //            String year = (String) (String) movieJSON.get("Year");
-            String mpaaRating = (String) (String) movieJSON.get("Rated");
-            String imdbRating = (String) (String) movieJSON.get("imdbRating");
-            String id = (String) (String) movieJSON.get("imdbID");
-            String release = (String) (String) movieJSON.get("Released");
+            String mpaaRating = movieJSON.getString("Rated");
+            String imdbRating = movieJSON.getString("imdbRating");
+            String id = movieJSON.getString("imdbID");
+            String release = movieJSON.getString("Released");
+            System.out.println(release);
             String link = "http://imdb.com/title/"+id+"/";
             String response = Colors.BOLD+title+": "+Colors.NORMAL+"("+mpaaRating+") "+Colors.BOLD+"IMDb: "+Colors.NORMAL+imdbRating+"/10 "+Colors.BOLD+"Release Date: "+Colors.NORMAL+formatImdbDate(release)+Colors.BOLD+" Link: "+Colors.NORMAL+link;
             
             return(response);
         }
         catch (Exception ex){
+            ex.printStackTrace();
             try{
-                JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
-                String error = (String) (String) movieJSON.get("Error");
+                JSONObject movieJSON = (JSONObject) new JSONTokener(movieSearchJSON).nextValue();
+                String error = movieJSON.getString("Error");
                 return(error);
             }
             catch(Exception e){
@@ -216,11 +226,11 @@ public class MovieRatings extends ListenerAdapter {
     }
     private String parseImdbRating(String url) throws Exception{
         String movieSearchJSON = readUrl(url);
-        JSONParser parser = new JSONParser();
+//        JSONParser parser = new JSONParser();
         
         try{
-            JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
-            String imdbRating = (String) (String) movieJSON.get("imdbRating");
+            JSONObject movieJSON = (JSONObject) new JSONTokener(movieSearchJSON).nextValue();
+            String imdbRating = movieJSON.getString("imdbRating");
             return(imdbRating);
         }
         catch (Exception ex){
@@ -229,8 +239,13 @@ public class MovieRatings extends ListenerAdapter {
         }
     }
     private String formatImdbDate(String date){
-        String[] dateSplit = date.split(" ");
-        return(dateSplit[1]+" "+dateSplit[0]+", "+dateSplit[2]);
+        String[] dateSplit = date.split("-");
+        try{
+            return(dateSplit[1]+" "+dateSplit[2]+", "+dateSplit[0]);
+        }
+        catch(Exception ex){
+            return("N/A");
+        }
     }
     
     //converts URL to string, primarily used to string-ify json text
@@ -258,20 +273,20 @@ public class MovieRatings extends ListenerAdapter {
     */
     private String parseRottenMovieSearch(String url, String year) throws Exception {
         String movieSearchJSON = readUrl(url);
-        JSONParser parser = new JSONParser();
+//        JSONParser parser = new JSONParser();
         
         try{
             
-            JSONObject movieJSON = (JSONObject) parser.parse(movieSearchJSON);
-            long total = (long) movieJSON.get("total");
+            JSONObject movieJSON = (JSONObject) new JSONTokener(movieSearchJSON).nextValue();
+            long total = movieJSON.getLong("total");
 //            System.out.println(total);
             if (total>0){
                 int movieLocation = 0;
                 JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
                 if (year!=null){
-                    for (int i=0;i<movieMatches.size();i++){
+                    for (int i=0;i<movieMatches.length();i++){
                         JSONObject movieMatched = (JSONObject) movieMatches.get(i);
-                        long movieYear = (long) movieMatched.get("year");
+                        long movieYear = movieMatched.getLong("year");
                         if (year.equalsIgnoreCase(String.valueOf(movieYear))){
                             movieLocation=i;
                             break;
@@ -279,17 +294,17 @@ public class MovieRatings extends ListenerAdapter {
                     }
                 }
 //                JSONArray movieMatches = (JSONArray) movieJSON.get("movies");
-                JSONObject movieMatched = (JSONObject) movieMatches.get(movieLocation);
-                JSONObject movieLinks = (JSONObject) movieMatched.get("links");
-                String movieLink = (String) movieLinks.get("alternate");
-                String movieTitle = (String) movieMatched.get("title");
-                long movieYear = (long) movieMatched.get("year");
+                JSONObject movieMatched = movieMatches.getJSONObject(movieLocation);
+                JSONObject movieLinks = movieMatched.getJSONObject("links");
+                String movieLink = movieLinks.getString("alternate");
+                String movieTitle = movieMatched.getString("title");
+                long movieYear = movieMatched.getLong("year");
 //                System.out.println(movieYear);
-                String movieMpaaRating = (String) movieMatched.get("mpaa_rating");
-                JSONObject movieRatings = (JSONObject) movieMatched.get("ratings");
-                String criticRating = (String) movieRatings.get("critics_rating");
-                long criticScore  = (long) movieRatings.get("critics_score");
-                long audienceScore = (long) movieRatings.get("audience_score");
+                String movieMpaaRating = movieMatched.getString("mpaa_rating");
+                JSONObject movieRatings = movieMatched.getJSONObject("ratings");
+                String criticRating = movieRatings.getString("critics_rating");
+                long criticScore = movieRatings.getLong("critics_score");
+                long audienceScore = movieRatings.getLong("audience_score");
                 String response = Colors.BOLD+movieTitle+Colors.NORMAL+" ("+movieYear+", "+movieMpaaRating+") ";
                 if(criticRating!=null){
                     if (wideSearch)
