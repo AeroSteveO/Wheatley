@@ -80,6 +80,7 @@ public class CommandListener extends ListenerAdapter{
 //        listOfCommands.add(new PickAPort());
         listOfCommands.add(new Why());
         listOfCommands.add(new ThrottleCMD());
+        listOfCommands.add(new ManualBotControl());
         return(listOfCommands);
     }
 }

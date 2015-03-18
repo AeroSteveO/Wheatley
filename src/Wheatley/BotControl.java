@@ -69,35 +69,35 @@ public class BotControl extends ListenerAdapter{
             BadWords.badwords = null;
         }
         
-        if (msgSplit[0].equalsIgnoreCase("!say")){
-            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                if (msgSplit.length>2&&msgSplit[1].contains("#")){
-                    String chan = msgSplit[1];
-                    if (chan.contains("#")){
-                        System.out.println(chan);
-                        Channel c = event.getBot().getUserChannelDao().getChannel(chan);
-                        if(event.getBot().getUserBot().getChannels().contains(c)){
-                            
-                            String msg = message.split(" ",3)[2];
-                            event.getBot().sendIRC().message(chan, msg);
-                        }
-                        else{
-                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Bot not in this channel");
-                        }
-                    }
-                    else{
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Improperly formed channel string");
-                    }
-                }
-                else{
-                    String msg = message.split(" ",2)[1];
-                    event.getBot().sendIRC().message(event.getChannel().getName(), msg);
-                }
-            }
-            else{
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
-            }
-        }
+//        if (msgSplit[0].equalsIgnoreCase("!say")){
+//            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+//                if (msgSplit.length>2&&msgSplit[1].contains("#")){
+//                    String chan = msgSplit[1];
+//                    if (chan.contains("#")){
+////                        System.out.println(chan);
+//                        Channel c = event.getBot().getUserChannelDao().getChannel(chan);
+//                        if(event.getBot().getUserBot().getChannels().contains(c)){
+//                            
+//                            String msg = message.split(" ",3)[2];
+//                            event.getBot().sendIRC().message(chan, msg);
+//                        }
+//                        else{
+//                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Bot not in this channel");
+//                        }
+//                    }
+//                    else{
+//                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Improperly formed channel string");
+//                    }
+//                }
+//                else{
+//                    String msg = message.split(" ",2)[1];
+//                    event.getBot().sendIRC().message(event.getChannel().getName(), msg);
+//                }
+//            }
+//            else{
+//                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
+//            }
+//        }
         
         if (message.equalsIgnoreCase("!ram")){
             if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
