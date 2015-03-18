@@ -81,7 +81,7 @@ public class ThrottleCMD implements Command {
                 isVerified=(caller.equalsIgnoreCase(Global.botOwner)||mEvent.getUser().getChannelsOwnerIn().contains(mEvent.getBot().getUserChannelDao().getChannel("#" + message.split("\\#")[1].split(" ")[0])))&&mEvent.getUser().isVerified();
             }
             else if (message.split(" ").length==4){
-                isVerified=((mEvent.getChannel().isOp(mEvent.getUser())||caller.equalsIgnoreCase(Global.botOwner))&&mEvent.getUser().isVerified());
+                isVerified=((mEvent.getChannel().isOwner(mEvent.getUser())||caller.equalsIgnoreCase(Global.botOwner))&&mEvent.getUser().isVerified());
             }
         }// END MESSAGE EVENT SPECIFIC PARSING
         else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
