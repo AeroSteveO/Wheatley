@@ -6,6 +6,11 @@
 
 package Wheatley;
 
+import Objects.WeatherAlerts;
+import Objects.WeatherCache2;
+import Objects.WeatherCacheInterface;
+import Objects.WeatherConditions;
+import Objects.WeatherForecast;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -13,8 +18,6 @@ import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-import Objects.WeatherLog;
-import Objects.WeatherLog.WeatherCache;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +34,11 @@ import org.json.JSONTokener;
  * - APIs
  *    JSON (AOSP JSON parser)
  * - Custom Objects
- *    WeatherLog
+ *    WeatherCache
+ *    WeatherAlerts
+ *    WeatherConditions
+ *    WeatherForecast
+ *    WeatherCacheInterface
  *    AlertTime (Built in)
  * - Linked Classes
  *    Global
@@ -80,7 +87,7 @@ import org.json.JSONTokener;
 public class Weather extends ListenerAdapter{
     String key = "***REMOVED***";    // API KEY, DO NOT LOSE
     String stockZip = "47906";          // Stock location for weather/alerts/forecast/auto alerts
-    WeatherCache localCache = new WeatherCache(); // Initiate cache of weather data
+    WeatherCache2 localCache = new WeatherCache2(); // Initiate cache of weather data
     
     
     // Initiate Auto-Alert System
@@ -340,7 +347,7 @@ public class Weather extends ListenerAdapter{
                     if (!localCache.containsEntry( zip,"alert")){
                         
                         for (int i=0;i<alertType.size();i++){
-                            WeatherLog alert = new WeatherLog( cityState, zip,alertType.get(i), alertExpiration.get(i), alertText.get(i));
+                            WeatherAlerts alert = new WeatherAlerts( cityState, zip,alertType.get(i), alertExpiration.get(i), alertText.get(i));
                             localCache.add(alert);
                         }
                         
@@ -351,19 +358,23 @@ public class Weather extends ListenerAdapter{
                         }
                     }
                     else{
-                        List<WeatherLog> oldAlerts = localCache.getCacheArray(zip, "alert");
-                        
+                        List<WeatherCacheInterface> temp = localCache.getCacheArray(zip, "alert");
+                        List<WeatherAlerts> oldAlerts = new ArrayList<>();
+                        for (int i=0;i<temp.size();i++){
+                            if(temp.get(i) instanceof WeatherAlerts)
+                                oldAlerts.add((WeatherAlerts) temp.get(i));
+                        }
                         for (int j=0;j<alertType.size();j++){
                             boolean isAlertNew = true;
                             for (int i=0;i<oldAlerts.size();i++){
                                 
                                 if (oldAlerts.get(i).getAlertType().equalsIgnoreCase(alertType.get(j))){
-                                    localCache.getCacheEntry(zip, "alert").updateExpiration(i,alertExpiration.get(j));
+                                    ((WeatherAlerts) localCache.getCacheEntry(zip, "alert")).updateExpiration(i,alertExpiration.get(j));
                                     isAlertNew=false;
                                 }
                             }
                             if (isAlertNew){
-                                WeatherLog newAlert = new WeatherLog(cityState, zip,alertType.get(j), alertExpiration.get(j), alertText.get(j));
+                                WeatherAlerts newAlert = new WeatherAlerts(cityState, zip,alertType.get(j), alertExpiration.get(j), alertText.get(j));
                                 localCache.add(newAlert);
                                 Global.bot.sendIRC().message(channel,Colors.RED+Colors.BOLD+"WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+alertType.get(j)+Colors.BOLD+" Ending: "+Colors.NORMAL+alertExpiration.get(j)+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alerts full [zip]' for the full alert text");
                             }
@@ -400,7 +411,7 @@ public class Weather extends ListenerAdapter{
                 String cityState = locationData.get(0)+", "+locationData.get(1);
                 
                 for (int i=0;i<alertType.size();i++){
-                    WeatherLog alert = new WeatherLog( cityState,  locationData.get(2),alertType.get(i),alertExpiration.get(i), alertText.get(i));
+                    WeatherAlerts alert = new WeatherAlerts( cityState,  locationData.get(2),alertType.get(i),alertExpiration.get(i), alertText.get(i));
                     localCache.add(alert);
                 }
                 return(localCache.getFormattedAlertArray(cityState, locationData.get(2)));
@@ -454,7 +465,7 @@ public class Weather extends ListenerAdapter{
             
             ArrayList<String> locationData = getLocationData(location);
             String cityState = locationData.get(0)+", "+locationData.get(1);
-            WeatherLog forecast = new WeatherLog( cityState,  locationData.get(2),  highF, lowF, highC, lowC, forecastConditions, weekDay, date);
+            WeatherForecast forecast = new WeatherForecast( cityState,  locationData.get(2),  highF, lowF, highC, lowC, forecastConditions, weekDay, date);
             response = forecast.getFormattedResponse();
             localCache.add(forecast);
             return(response);
@@ -562,7 +573,7 @@ public class Weather extends ListenerAdapter{
             windKPH = currentWeather.getString("wind_kph").toString()+" Kph";
             humidity = currentWeather.getString("relative_humidity");
             observationTime =currentWeather.getString("observation_time").split("Last Updated on",2)[1];
-            WeatherLog weatherData = new WeatherLog(cityState,zip, weather, humidity, tempString, windMPH, windKPH, windDir, observationTime);
+            WeatherConditions weatherData = new WeatherConditions(cityState,zip, weather, humidity, tempString, windMPH, windKPH, windDir, observationTime);
             localCache.add(weatherData);
             return(weatherData.getFormattedResponse());
         }
