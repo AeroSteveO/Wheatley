@@ -7,7 +7,7 @@
 package Wheatley;
 
 import Objects.WeatherAlerts;
-import Objects.WeatherCache2;
+import Objects.WeatherCache;
 import Objects.WeatherCacheInterface;
 import Objects.WeatherConditions;
 import Objects.WeatherForecast;
@@ -87,7 +87,7 @@ import org.json.JSONTokener;
 public class Weather extends ListenerAdapter{
     String key = "***REMOVED***";    // API KEY, DO NOT LOSE
     String stockZip = "47906";          // Stock location for weather/alerts/forecast/auto alerts
-    WeatherCache2 localCache = new WeatherCache2(); // Initiate cache of weather data
+    WeatherCache localCache = new WeatherCache(); // Initiate cache of weather data
     
     
     // Initiate Auto-Alert System

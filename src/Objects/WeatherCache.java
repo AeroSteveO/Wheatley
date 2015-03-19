@@ -16,7 +16,7 @@ import org.pircbotx.Colors;
  *
  * @author Stephen
  */
-public class WeatherCache2 {
+public class WeatherCache {
     private final List<WeatherCacheInterface> cache = Collections.synchronizedList( new ArrayList<WeatherCacheInterface>());
     
     public void add(WeatherCacheInterface log){
