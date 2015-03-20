@@ -443,7 +443,7 @@ public class GameControl extends ListenerAdapter {
     
     @Override
     public void onJoin(JoinEvent event){
-        if (!Global.channels.areGamesBlocked(event.getChannel().getName())){
+        if (!GameUtils.areGamesBlocked(event.getChannel().getName())){
             if (!scores.containsUser(event.getUser().getNick())){
                 scores.addUser(event.getUser().getNick());
                 scores.saveToJSON();
@@ -454,7 +454,7 @@ public class GameControl extends ListenerAdapter {
     @Override
     public void onUserList(UserListEvent event){
         
-        if (!Global.channels.areGamesBlocked(event.getChannel().getName())){
+        if (!GameUtils.areGamesBlocked(event.getChannel().getName())){
             
             ImmutableSortedSet users = event.getUsers();
             
