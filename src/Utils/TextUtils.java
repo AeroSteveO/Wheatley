@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -33,13 +34,13 @@ public class TextUtils {
         
         return (loadText(file));
         /**
-         * 
+         *
          * //if file doesnt exists, then create it
          * if(!file.exists()){
          * file.createNewFile();
          * return null;
          * }
-         * 
+         *
          * try{
          * Scanner wordfile = new Scanner(new File(filename));
          * String wordls = "";
@@ -77,7 +78,25 @@ public class TextUtils {
             return null;
         }
     }
+    public static ArrayList<String> loadTextAsList(String filename) throws FileNotFoundException{
+        return loadTextAsList(new File(filename));
+    }
     
+    public static ArrayList<String> loadTextAsList(File file) throws FileNotFoundException{
+        try{
+            Scanner wordfile = new Scanner(file);
+//new File("wordlist.txt")
+            ArrayList<String> wordls = new ArrayList<String>();
+            while (wordfile.hasNext()){
+                wordls.add(wordfile.next());
+            }
+            wordfile.close();
+            return (wordls);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
     
     //converts URL to string, primarily used to string-ify json text
     private static String readUrl(String urlString) throws Exception {
