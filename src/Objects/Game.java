@@ -6,6 +6,7 @@
 
 package Objects;
 
+import Utils.TextUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ import org.joda.time.Period;
 public class Game {
 //    private String channelName;
 //    private String gameType;
-    private List<String> wordList = getWordList();
+    private List<String> wordList = TextUtils.loadTextAsList("wordlist.txt");//getWordList();
 //    private int timeLimit;
     private String chosenWord;
 //    private String winner = "";
@@ -164,20 +165,20 @@ public class Game {
 //        return(this.channelName);
 //    }
     
-    private ArrayList<String> getWordList() throws FileNotFoundException{
-        try{
-            Scanner wordfile = new Scanner(new File("wordlist.txt"));
-            ArrayList<String> wordls = new ArrayList<String>();
-            while (wordfile.hasNext()){
-                wordls.add(wordfile.next());
-            }
-            wordfile.close();
-            return (wordls);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
+//    private ArrayList<String> getWordList() throws FileNotFoundException{
+//        try{
+//            Scanner wordfile = new Scanner(new File("wordlist.txt"));
+//            ArrayList<String> wordls = new ArrayList<String>();
+//            while (wordfile.hasNext()){
+//                wordls.add(wordfile.next());
+//            }
+//            wordfile.close();
+//            return (wordls);
+//        } catch (FileNotFoundException ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
+//    }
     
     private static String modify(String mod, String word){
         
