@@ -31,7 +31,7 @@ import org.pircbotx.Colors;
  *    N/A
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate Commands With
  *     !mute
  *     !speak
@@ -44,7 +44,7 @@ import org.pircbotx.Colors;
  *         To command the bot to respond with a line
  *     [botnick], what do you think of [item]
  *         To force a seed word into the generator and command a reply
- * 
+ *
  * ToDo:
  *      Wheatley, go on
  *          Makes Wheatley continue his current markov chain of thought, not sure
@@ -79,38 +79,34 @@ public class MarkovInterface extends ListenerAdapter{
             Global.channels.get(channelIndex).setSpeakValue(true);
             event.getBot().sendIRC().notice(event.getUser().getNick(), "Markov chain system un-muted");
         }
-        if (message.startsWith(Global.commandPrefix)){
-            
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             
             if (cmdSplit[0].equalsIgnoreCase("words")){
                 event.getBot().sendIRC().message(currentChan, "I know "+borg.words.size()+" words ("+borg.numContexts+" contexts, "+String.valueOf(borg.numContexts/borg.words.size())+" per word), "+borg.lines.size()+" lines.");
             }
-        }
-        
-        
-        //||event.getChannel().isOwner(event.getUser())
-        if (message.toLowerCase().startsWith("!set chance ")
-                &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))
-                &&event.getUser().isVerified())){
-            
-            String[] chanceSplit = message.split(" ");
-            String chance = chanceSplit[chanceSplit.length-1];
-            
-            if(chance.matches("[0-9]+")){
-                int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
+            if (message.toLowerCase().startsWith("!set chance ")
+                    &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))
+                    &&event.getUser().isVerified())){
                 
-                if (inputChance>0){
-                    Global.channels.get(channelIndex).setChanceValue(inputChance);
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance set to: 1/"+inputChance);
+                String[] chanceSplit = message.split(" ");
+                String chance = chanceSplit[chanceSplit.length-1];
+                
+                if(chance.matches("[0-9]+")){
+                    int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
+                    
+                    if (inputChance>0){
+                        Global.channels.get(channelIndex).setChanceValue(inputChance);
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance set to: 1/"+inputChance);
+                    }
+                    
+                    else
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance must be an integer value greater than 0");
                 }
-                
                 else
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance must be an integer value greater than 0");
             }
-            else
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance must be an integer value greater than 0");
         }
         
         if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")){
@@ -205,7 +201,7 @@ public class MarkovInterface extends ListenerAdapter{
             return(null);
         }
     }
-   
+    
     public boolean isBot(String nick) throws FileNotFoundException {
         if (botList==null){
             botList = getBotList();

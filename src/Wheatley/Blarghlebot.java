@@ -170,7 +170,7 @@ public class Blarghlebot extends ListenerAdapter {
             else if (message.equalsIgnoreCase("ba dum")||message.equalsIgnoreCase("badum"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "psh");
             
-            if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
                 
                 String command = message.split(Global.commandPrefix)[1];
                 String[] cmdSplit = command.split(" ");
@@ -185,8 +185,7 @@ public class Blarghlebot extends ListenerAdapter {
                 
                 else if (command.equalsIgnoreCase("kickme"))
                     event.getChannel().send().kick(event.getUser(), "you += dead");
-                
-                else if (cmdSplit[0].toLowerCase().startsWith("troll")){
+                if (cmdSplit[0].toLowerCase().startsWith("troll")){
                     if((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
 //                        String[] kill = message.split(" ");
                         event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(cmdSplit[1]),"YOO GAWT TROLLED " + cmdSplit[1]);
@@ -268,21 +267,21 @@ public class Blarghlebot extends ListenerAdapter {
                 //<Blarghedy> !roll 1000d1000
                 //<BlarghleBot> Blarghedy rolled 506063 for a total of 506063
                 else if (cmdSplit[0].equalsIgnoreCase("roll")&&Pattern.matches("[0-9]{1,2}?d[0-9]{1,3}?", cmdSplit[1])){
-                        String[] rolls = message.split(" ")[1].split("d");
-                        String dice = "You rolled: ";
-                        int total=0;
-                        int temp=(int) (Math.random()*Integer.parseInt(rolls[1]) + 1);
-                        total = temp+total;
-                        dice = dice + Integer.toString(temp);
-                        for (int i=1; i<=Integer.parseInt(rolls[0])-1;i++){
-                            temp = (int)(Math.random() * Integer.parseInt(rolls[1]) + 1);
-                            total = temp + total;
-                            dice = dice + ", " + Integer.toString(temp);
-                        }
-                        event.getBot().sendIRC().message(event.getChannel().getName(),dice + " for a total of " + Integer.toString(total));
+                    String[] rolls = message.split(" ")[1].split("d");
+                    String dice = "You rolled: ";
+                    int total=0;
+                    int temp=(int) (Math.random()*Integer.parseInt(rolls[1]) + 1);
+                    total = temp+total;
+                    dice = dice + Integer.toString(temp);
+                    for (int i=1; i<=Integer.parseInt(rolls[0])-1;i++){
+                        temp = (int)(Math.random() * Integer.parseInt(rolls[1]) + 1);
+                        total = temp + total;
+                        dice = dice + ", " + Integer.toString(temp);
+                    }
+                    event.getBot().sendIRC().message(event.getChannel().getName(),dice + " for a total of " + Integer.toString(total));
                 }
                 else if (cmdSplit[0].equalsIgnoreCase("roll") && Pattern.matches("[0-9]+d[0-9]+", cmdSplit[1])){
-                        event.getBot().sendIRC().message(event.getChannel().getName(),"NO");
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"NO");
                 }
                 
                 else if (cmdSplit[0].equalsIgnoreCase("xzibit")&&(cmdSplit.length==3)){

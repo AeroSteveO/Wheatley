@@ -28,7 +28,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    N/A
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate commands with:
  *      !update [filename] [singleWordItem]
  *          !update badwords defenetely
@@ -38,115 +38,116 @@ public class UpdateFiles extends ListenerAdapter{
 //        String filename = "settings.json";
 //    public static Settings settings = new Settings();
 //    boolean start = startSettings();
-
+    
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.startsWith(Global.commandPrefix)){
-            
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}!{1,}[ ]{0,}){1,}")){
+//            if (!message.matches("([ ]{0,}!{1,}[ ]{0,}){1,}")){
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
-            
-            if (cmdSplit[0].equalsIgnoreCase("save")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                Global.settings.save();
-                Global.throttle.save();
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "Settings file saved");
-            }
-            else if (cmdSplit[0].equalsIgnoreCase("set")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                if (cmdSplit.length==3){
-                    
-                    boolean success = Global.settings.set(cmdSplit[1], cmdSplit[2], event.getChannel().getName());
-                    if (!success){
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Setting failed to update: Setting does not exist");
-                    }
+            if (cmdSplit.length>0){
+                if (cmdSplit[0].equalsIgnoreCase("save")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                    Global.settings.save();
+                    Global.throttle.save();
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Settings file saved");
                 }
-                else if(cmdSplit.length==4){
-                    boolean success = Global.settings.set(cmdSplit[1], cmdSplit[2], cmdSplit[3]);
-                    if (!success){
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Setting failed to update: Setting does not exist");
-                    }
-                    
-                }
-            }
-            else if (cmdSplit[0].equalsIgnoreCase("create")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                if (cmdSplit.length==3){
-                    Global.settings.create(cmdSplit[1],cmdSplit[2]);
-                    
-                }
-                else if (cmdSplit.length==4){
-                    Global.settings.create(cmdSplit[1],cmdSplit[2],cmdSplit[3]);
-                }
-            }
-            
-            else if (cmdSplit[0].equalsIgnoreCase("contains")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                
-                ArrayList<String> tree = new ArrayList<String>(Arrays.asList(cmdSplit));
-                tree.remove(0);
-                event.respond(String.valueOf(Global.settings.contains(tree)));
-            }
-
-            
-            else if (cmdSplit[0].equalsIgnoreCase("get")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                
-                if (cmdSplit.length==2){
-                    event.respond(Global.settings.get(cmdSplit[1]));
-                    
-                }
-                else if (cmdSplit.length==3){
-                    event.respond(Global.settings.get(cmdSplit[1],cmdSplit[2]));
-                }
-            }
-
-            
-            else if (cmdSplit[0].equalsIgnoreCase("update")){
-                if(event.getUser().getNick().equals(Global.botOwner)&&event.getUser().isVerified()){
-                    
-//                    String[] properties = message.split(" ");
-                    if (cmdSplit.length== 3){
-                        String filename = cmdSplit[1];
-                        String addition = cmdSplit[2];
+                else if (cmdSplit[0].equalsIgnoreCase("set")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                    if (cmdSplit.length==3){
                         
-                        try{
+                        boolean success = Global.settings.set(cmdSplit[1], cmdSplit[2], event.getChannel().getName());
+                        if (!success){
+                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Setting failed to update: Setting does not exist");
+                        }
+                    }
+                    else if(cmdSplit.length==4){
+                        boolean success = Global.settings.set(cmdSplit[1], cmdSplit[2], cmdSplit[3]);
+                        if (!success){
+                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Setting failed to update: Setting does not exist");
+                        }
+                        
+                    }
+                }
+                else if (cmdSplit[0].equalsIgnoreCase("create")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                    if (cmdSplit.length==3){
+                        Global.settings.create(cmdSplit[1],cmdSplit[2]);
+                        
+                    }
+                    else if (cmdSplit.length==4){
+                        Global.settings.create(cmdSplit[1],cmdSplit[2],cmdSplit[3]);
+                    }
+                }
+                
+                else if (cmdSplit[0].equalsIgnoreCase("contains")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                    
+                    ArrayList<String> tree = new ArrayList<String>(Arrays.asList(cmdSplit));
+                    tree.remove(0);
+                    event.respond(String.valueOf(Global.settings.contains(tree)));
+                }
+                
+                
+                else if (cmdSplit[0].equalsIgnoreCase("get")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+                    
+                    if (cmdSplit.length==2){
+                        event.respond(Global.settings.get(cmdSplit[1]));
+                        
+                    }
+                    else if (cmdSplit.length==3){
+                        event.respond(Global.settings.get(cmdSplit[1],cmdSplit[2]));
+                    }
+                }
+                
+                
+                else if (cmdSplit[0].equalsIgnoreCase("update")){
+                    if(event.getUser().getNick().equals(Global.botOwner)&&event.getUser().isVerified()){
+                        
+//                    String[] properties = message.split(" ");
+                        if (cmdSplit.length== 3){
+                            String filename = cmdSplit[1];
+                            String addition = cmdSplit[2];
                             
-                            File file;
-                            
-                            if (filename.split("\\.").length==1){
-                                file =new File(filename+".txt");
-                                filename = filename+".txt";
-                            }
-                            
-                            
-                            
-                            else{
-                                file =new File(filename);
-                            }
-                            
+                            try{
+                                
+                                File file;
+                                
+                                if (filename.split("\\.").length==1){
+                                    file =new File(filename+".txt");
+                                    filename = filename+".txt";
+                                }
+                                
+                                
+                                
+                                else{
+                                    file =new File(filename);
+                                }
+                                
 //                            if file doesnt exists, then create it
-                            if(!file.exists()){
-                                file.createNewFile();
+                                if(!file.exists()){
+                                    file.createNewFile();
+                                }
+                                
+                                //true = append file
+                                FileWriter fileWritter = new FileWriter(file.getName(),true);
+                                BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+                                bufferWritter.write("\n"+addition);
+                                bufferWritter.close();
+                                
+                                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+addition+" was added to "+ filename);
+                                
+                            }catch(Exception e){
+                                e.printStackTrace();
+                                event.getBot().sendIRC().notice(event.getUser().getNick(),"FAILURE: "+addition+" was NOT added to "+ filename);
                             }
-                            
-                            //true = append file
-                            FileWriter fileWritter = new FileWriter(file.getName(),true);
-                            BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                            bufferWritter.write("\n"+addition);
-                            bufferWritter.close();
-                            
-                            event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+addition+" was added to "+ filename);
-                            
-                        }catch(Exception e){
-                            e.printStackTrace();
-                            event.getBot().sendIRC().notice(event.getUser().getNick(),"FAILURE: "+addition+" was NOT added to "+ filename);
+                        }
+                        else{
+                            event.getBot().sendIRC().notice(event.getUser().getNick(), "Update reqires 2 inputs: the filename and the single word addition");
                         }
                     }
                     else{
-                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Update reqires 2 inputs: the filename and the single word addition");
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
                     }
-                }
-                else{
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
                 }
             }
         }
@@ -164,5 +165,5 @@ public class UpdateFiles extends ListenerAdapter{
 //        }
 //        return true;
 //    }
-
+    
 }

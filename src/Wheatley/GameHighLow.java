@@ -47,7 +47,7 @@ public class GameHighLow extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
         
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");

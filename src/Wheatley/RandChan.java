@@ -66,9 +66,9 @@ public class RandChan extends ListenerAdapter {
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
-        String message = Colors.removeFormattingAndColors(event.getMessage().trim());
+        String message = Colors.removeFormattingAndColors(event.getMessage());//.trim());
         
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
@@ -109,7 +109,7 @@ public class RandChan extends ListenerAdapter {
                     }
                     event.getBot().sendIRC().message(event.getUser().getNick(),boards);
                 }
-
+                
                 else if(message.toLowerCase().matches("!randchan(\\s+\\p{Alnum}+)?")) {
                     if(!Global.throttle.isThrottleActive(type,event.getChannel().getName())){
                         String[] splitString = event.getMessage().split("\\s+");

@@ -15,7 +15,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Stephen
- * 
+ *
  * Requirements:
  * - APIs
  *    N/A
@@ -24,7 +24,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - Linked Classes
  *    Global
  *    GameControl
- * 
+ *
  * Activate Command with:
  *      !slot
  *      !slots
@@ -42,7 +42,7 @@ public class GameSlots extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             String command = message.split(Global.commandPrefix)[1].toLowerCase();
             String[] cmdSplit = command.split(" ");
             if ((cmdSplit[0].equalsIgnoreCase("slot")||cmdSplit[0].equalsIgnoreCase("slots"))&&!GameUtils.areGamesBlocked(event.getChannel().getName())){

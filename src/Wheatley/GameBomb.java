@@ -50,8 +50,8 @@ public class GameBomb extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.startsWith(Global.commandPrefix)){
-            String command = message.split(Global.commandPrefix)[1].toLowerCase();
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
+            String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             
             

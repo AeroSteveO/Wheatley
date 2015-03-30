@@ -48,7 +48,7 @@ public class Ping extends ListenerAdapter {
         
         
         
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             if(cmdSplit[0].equalsIgnoreCase("ping")) {
@@ -87,48 +87,53 @@ public class Ping extends ListenerAdapter {
 //            address = new String[2];
                 
                 System.setProperty("java.net.preferIPv4Stack" , "true");
-                if (cmdSplit.length==3&&cmdSplit[1].equalsIgnoreCase("check")&&event.getUser().getNick().equals(Global.botOwner)&&!event.getChannel().getName().equals("#dtella")){
-                    try{
-                        File fXmlFile = new File("SettingPing.xml");
-                        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                        Element serverelement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("ping").item(0);
-                        for (int i=0;i<serverelement.getElementsByTagName("server").getLength();i++){
-                            if(cmdSplit[2].equalsIgnoreCase(serverelement.getElementsByTagName("category").item(i).getTextContent())){
-                                address[0]=serverelement.getElementsByTagName("address").item(i).getTextContent();
-                                address[1]="80";
-                                pingresponse = pinghost(address);
-                                if (pingresponse[0].equals("true"))
-                                    pingmessage = serverelement.getElementsByTagName("name").item(i).getTextContent() + " is " +Colors.GREEN + "online"+Colors.NORMAL;
-                                else
-                                    pingmessage = serverelement.getElementsByTagName("name").item(i).getTextContent() + " is " + Colors.RED + "offline"+Colors.NORMAL;
-                                
-                                if (!serverelement.getElementsByTagName("port").item(i).getTextContent().isEmpty()&&serverelement.getElementsByTagName("serviceaddr").item(i).getTextContent().isEmpty()){
-                                    address[1]=serverelement.getElementsByTagName("port").item(i).getTextContent();
+                if (cmdSplit.length==3&&cmdSplit[1].equalsIgnoreCase("check")&&!event.getChannel().getName().equals("#dtella")){
+                    if(event.getUser().getNick().equals(Global.botOwner)){
+                        try{
+                            File fXmlFile = new File("SettingPing.xml");
+                            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                            Element serverelement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("ping").item(0);
+                            for (int i=0;i<serverelement.getElementsByTagName("server").getLength();i++){
+                                if(cmdSplit[2].equalsIgnoreCase(serverelement.getElementsByTagName("category").item(i).getTextContent())){
+                                    address[0]=serverelement.getElementsByTagName("address").item(i).getTextContent();
+                                    address[1]="80";
                                     pingresponse = pinghost(address);
-                                    if (pingresponse[0].equalsIgnoreCase("true"))
-                                        pingmessage = pingmessage + " and " + serverelement.getElementsByTagName("service").item(i).getTextContent() + " is " +Colors.GREEN + "online"+Colors.NORMAL;
+                                    if (pingresponse[0].equals("true"))
+                                        pingmessage = serverelement.getElementsByTagName("name").item(i).getTextContent() + " is " +Colors.GREEN + "online"+Colors.NORMAL;
                                     else
-                                        pingmessage = pingmessage + " and " + serverelement.getElementsByTagName("service").item(i).getTextContent() + " is " + Colors.RED + "offline"+Colors.NORMAL;
-                                }
-                                if (!serverelement.getElementsByTagName("serviceaddr").item(i).getTextContent().isEmpty()){
-                                    address[0]=serverelement.getElementsByTagName("serviceaddr").item(i).getTextContent();
-                                    address[1]=serverelement.getElementsByTagName("port").item(i).getTextContent();
-                                    pingresponse = pinghost(address);
-                                    if (pingresponse[0].equalsIgnoreCase("true"))
-                                        pingmessage = pingmessage + " and " + serverelement.getElementsByTagName("service").item(i).getTextContent() + " is " +Colors.GREEN + "online"+Colors.NORMAL;
-                                    else
-                                        pingmessage = pingmessage + " and " + serverelement.getElementsByTagName("service").item(i).getTextContent() + " is " + Colors.RED + "offline"+Colors.NORMAL;
-                                }
-                                if (pingmessage!=null){
-                                    event.getBot().sendIRC().message(event.getChannel().getName(),pingmessage);
-                                    pingmessage = null;
+                                        pingmessage = serverelement.getElementsByTagName("name").item(i).getTextContent() + " is " + Colors.RED + "offline"+Colors.NORMAL;
+                                    
+                                    if (!serverelement.getElementsByTagName("port").item(i).getTextContent().isEmpty()&&serverelement.getElementsByTagName("serviceaddr").item(i).getTextContent().isEmpty()){
+                                        address[1]=serverelement.getElementsByTagName("port").item(i).getTextContent();
+                                        pingresponse = pinghost(address);
+                                        if (pingresponse[0].equalsIgnoreCase("true"))
+                                            pingmessage = pingmessage + " and " + serverelement.getElementsByTagName("service").item(i).getTextContent() + " is " +Colors.GREEN + "online"+Colors.NORMAL;
+                                        else
+                                            pingmessage = pingmessage + " and " + serverelement.getElementsByTagName("service").item(i).getTextContent() + " is " + Colors.RED + "offline"+Colors.NORMAL;
+                                    }
+                                    if (!serverelement.getElementsByTagName("serviceaddr").item(i).getTextContent().isEmpty()){
+                                        address[0]=serverelement.getElementsByTagName("serviceaddr").item(i).getTextContent();
+                                        address[1]=serverelement.getElementsByTagName("port").item(i).getTextContent();
+                                        pingresponse = pinghost(address);
+                                        if (pingresponse[0].equalsIgnoreCase("true"))
+                                            pingmessage = pingmessage + " and " + serverelement.getElementsByTagName("service").item(i).getTextContent() + " is " +Colors.GREEN + "online"+Colors.NORMAL;
+                                        else
+                                            pingmessage = pingmessage + " and " + serverelement.getElementsByTagName("service").item(i).getTextContent() + " is " + Colors.RED + "offline"+Colors.NORMAL;
+                                    }
+                                    if (pingmessage!=null){
+                                        event.getBot().sendIRC().message(event.getChannel().getName(),pingmessage);
+                                        pingmessage = null;
+                                    }
                                 }
                             }
                         }
+                        catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
-                    catch (Exception ex) {
-                        ex.printStackTrace();
+                    else{
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"You do not have access to this function");
                     }
                 }
 //            else if (totalip.length < 2&& !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("SamwiseGamgee")).contains(event.getChannel())) {

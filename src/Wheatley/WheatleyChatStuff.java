@@ -29,7 +29,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
         
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
@@ -69,7 +69,7 @@ public class WheatleyChatStuff extends ListenerAdapter {
         
         if (Pattern.matches(Global.mainNick+",?\\s+(youre|you're|you\\s+are)\\s+a?\\s*moron.*",message))
             event.getBot().sendIRC().message(event.getChannel().getName(),"I AM NOT A MORON");
-                
+        
         if ((message.equalsIgnoreCase("!space"))||(message.equalsIgnoreCase("SPACE"))) {
             switch((int) (Math.random()*3+1)) {
                 case 1:

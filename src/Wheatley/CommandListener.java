@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 
 package Wheatley;
 
@@ -29,17 +29,15 @@ public class CommandListener extends ListenerAdapter{
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
-            
             for (int i=0;i<commandList.size();i++){
                 if (commandList.get(i).commandTerms().contains(cmdSplit[0])){
                     commandList.get(i).processCommand(event);
                 }
             }
         }
-        
         else if (message.startsWith(Global.mainNick+", ")){
 //            String command = message.split(Global.commandPrefix)[1];
 //            String[] cmdSplit = command.split(" ");
@@ -51,15 +49,14 @@ public class CommandListener extends ListenerAdapter{
             }
         }
     }
-
+    
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
-            
             for (int i=0;i<commandList.size();i++){
                 if (commandList.get(i).commandTerms().contains(cmdSplit[0])){
                     commandList.get(i).processCommand(event);
@@ -74,7 +71,7 @@ public class CommandListener extends ListenerAdapter{
             }
         }
     }
-
+    
     private List<Command> getCommandList() {
         List<Command> listOfCommands = new ArrayList<>();
 //        listOfCommands.add(new PickAPort());
