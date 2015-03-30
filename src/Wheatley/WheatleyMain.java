@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Element;
 import java.io.File;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.managers.BackgroundListenerManager;
 
 /**
@@ -52,10 +53,14 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  */
 public class WheatleyMain extends ListenerAdapter {
     
-//    @Override
-//    public void onMessage(final MessageEvent event) throws Exception {
-//// in case something should be done here
-//    }
+    @Override
+    public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
+// in case something should be done here
+        String message = Colors.removeFormattingAndColors(event.getMessage());
+        if (!message.startsWith(Global.commandPrefix)&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase())){
+            event.respond("I am a bot, I cannot respond to private messages");
+        }
+    }
     @Override
     // Rejoin on Kick
     public void onKick(KickEvent event) throws Exception {
@@ -130,12 +135,13 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameMasterMind())     //mastermind game listener
                     .addListener(new GameGuessTheNumber()) //guess the number game listener
                     .addListener(new GameControl())
+//                    .addListener(new GameListener())
 //                    .addListener(new GameLuckyLotto())
                     .addListener(new GameHighLow())
                     .addListener(new GameBlackjack())
                     .addListener(new GameSlots())
                     .addListener(new GameAltReverse())     //alternate reverse game listener
-                    .addListener(new Why())                // gives a random reason as to 'why?'
+//                    .addListener(new Why())                // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
                     .addListener(new EnglishSayings())
@@ -153,7 +159,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new BlarghleRandom())
 //                    .addListener(new Weather())
 //                    .addListener(new Urban())
-//                    .addListener(new CommandListener())
+                    .addListener(new CommandListener())
 //                    .addListener(new MovieRatings())
                     .addListener(new BadWords())
                     .addListener(new MarkovInterface())
@@ -164,15 +170,17 @@ public class WheatleyMain extends ListenerAdapter {
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
             
-            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++) //Add channels from XML and load into channels Object
-            {
+            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++){ //Add channels from XML and load into channels Object
                 configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
                 Global.channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
+                Global.settings.create("NA", "NA", eElement.getElementsByTagName("channel").item(i).getTextContent());
+                Global.throttle.create("NA", "NA", eElement.getElementsByTagName("channel").item(i).getTextContent());
             }
             Configuration config = configuration.buildConfiguration();
             
-            Global.bot = new PircBotX(config);
+            
             try {
+                Global.bot = new PircBotX(config);
                 Runner parallel = new Runner(Global.bot);
                 Thread t = new Thread(parallel);
                 parallel.giveT(t);
