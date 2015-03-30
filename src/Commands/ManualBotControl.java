@@ -20,6 +20,26 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Command
+ * - Linked Classes
+ *    Global
+ * 
+ * ADMIN COMMANDS
+ * Activate Commands with:
+ *      !act [action]
+ *          Repeats the given action in the channel the command was run from
+ *      !act [#channel] [action]
+ *          Repeats the given action in the input channel
+ *      !say [message]
+ *          Repeats the given message in the channel the command was run from
+ *      !say [#channel] [message]
+ *          Repeats the given message in the input channel
+ * 
  */
 @GenCMD
 @CMD
@@ -40,8 +60,8 @@ public class ManualBotControl implements Command{
         ArrayList<String> a = new ArrayList<>();
         a.add("say");
         a.add("act");
-        a.add("kick");
-        a.add("ban");
+//        a.add("kick");
+//        a.add("ban");
         return a;
     }
     
@@ -51,7 +71,7 @@ public class ManualBotControl implements Command{
         String message = new String();
         String caller = new String();
         String channel = null;
-        String responseChan = null;
+//        String responseChan = null;
         boolean isVerified = false;
         
         // START EVENT SPECIFIC PARSING
@@ -60,7 +80,7 @@ public class ManualBotControl implements Command{
             message = Colors.removeFormattingAndColors(mEvent.getMessage());
             caller = mEvent.getUser().getNick();
             channel = mEvent.getChannel().getName();
-            responseChan = channel;
+//            responseChan = channel;
             
 //            if (message.split(" ").length==5){
                 isVerified=(caller.equalsIgnoreCase(Global.botOwner))&&mEvent.getUser().isVerified();
@@ -87,8 +107,7 @@ public class ManualBotControl implements Command{
         String[] cmdSplit = command.split(" ");
         if(isVerified){
             if (cmdSplit[0].equalsIgnoreCase("say")){
-                
-                if (cmdSplit.length>2&&cmdSplit[1].contains("#")){
+                if (cmdSplit.length>2&&cmdSplit[1].startsWith("#")){
                     String chan = cmdSplit[1];
                     if (!chan.startsWith("#")&&channel!=null)
                         chan = channel;
@@ -117,12 +136,11 @@ public class ManualBotControl implements Command{
                 }
             }
 //        }
-            if (cmdSplit[0].equalsIgnoreCase("act")){
-                if (cmdSplit.length>2&&cmdSplit[1].contains("#")){
+            else if (cmdSplit[0].equalsIgnoreCase("act")){
+                if (cmdSplit.length>2&&cmdSplit[1].startsWith("#")){
                     String chan = cmdSplit[1];
                     if (!chan.startsWith("#")&&channel!=null)
                         chan = channel;
-                    
                     if (chan.contains("#")){
 //                        System.out.println(chan);
                         Channel c = event.getBot().getUserChannelDao().getChannel(chan);
