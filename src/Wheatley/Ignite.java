@@ -29,7 +29,7 @@ public class Ignite extends ListenerAdapter {
     
     @Override
     public void onMessage(MessageEvent event) {
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("matrapter")).contains(event.getChannel())) {
+//        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("matrapter")).contains(event.getChannel())) {
             String message = Colors.removeFormattingAndColors(event.getMessage());
             if (message.toLowerCase().startsWith("!ignite")){
                 String it;
@@ -43,7 +43,7 @@ public class Ignite extends ListenerAdapter {
                 String chat = simpleFront()+ " " + it + " " + simpleEnd();
                 event.getBot().sendIRC().message(event.getChannel().getName(), chat.toUpperCase());
             }
-        }
+//        }
     }
     public static String simpleFront() {
         List<String> a = new ArrayList<>();

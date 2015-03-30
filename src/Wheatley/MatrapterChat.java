@@ -52,7 +52,7 @@ public class MatrapterChat extends ListenerAdapter {
     
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("matrapter")).contains(event.getChannel())) {
+//        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("matrapter")).contains(event.getChannel())) {
             String currentChan = event.getChannel().getName();
             String message = Colors.removeFormattingAndColors(event.getMessage());
             
@@ -182,7 +182,7 @@ public class MatrapterChat extends ListenerAdapter {
                 else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
                     event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"user not in channel");
                 }
-            }
+//            }
         }
     }
     

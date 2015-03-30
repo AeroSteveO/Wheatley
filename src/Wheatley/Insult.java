@@ -36,7 +36,7 @@ public class Insult extends ListenerAdapter {
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if((message.startsWith("!insult")&&!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("Pankeiko")).contains(event.getChannel()))||message.startsWith("!slander")){
+        if((message.split(" ")[0].equalsIgnoreCase("!insult")&&!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("Pankeiko")).contains(event.getChannel()))||message.split(" ")[0].equalsIgnoreCase("!slander")){
             String it;
             String[] check = message.split(" ",2);
             if (check.length!=2){
@@ -63,7 +63,7 @@ public class Insult extends ListenerAdapter {
                     break;
             }
         }
-        if (message.startsWith("!shakespeare"))    {
+        if (message.split(" ")[0].equalsIgnoreCase("!shakespeare"))    {
             String it;
             String[] check = message.split(" ",2);
             if (check.length!=2){
