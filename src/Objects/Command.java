@@ -12,6 +12,15 @@ import org.pircbotx.hooks.Event;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
  */
 public interface Command {
     
