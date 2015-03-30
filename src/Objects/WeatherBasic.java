@@ -17,12 +17,7 @@ public abstract class WeatherBasic implements WeatherCacheInterface{
     public String zip = new String();       // ALL Cache Types
     public DateTime expiration;                   // ALL Cache Types
     public String cityState = new String(); // ALL Cache Types
-    
-//    public WeatherBasic(String inputLocation, String inputZip, String alertDescription, String alertExpiration, String alertText){
-//        this.cityState = inputLocation;
-//        this.zip = inputZip;
-//    }
-    
+        
     @Override
     public String getZip(){
         return(zip);
