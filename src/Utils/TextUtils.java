@@ -26,6 +26,8 @@ import java.util.Scanner;
  *    N/A
  * - Linked Classes
  *    N/A
+ * 
+ * 
  *
  */
 public class TextUtils {
@@ -33,28 +35,6 @@ public class TextUtils {
         File file =new File(filename);
         
         return (loadText(file));
-        /**
-         *
-         * //if file doesnt exists, then create it
-         * if(!file.exists()){
-         * file.createNewFile();
-         * return null;
-         * }
-         *
-         * try{
-         * Scanner wordfile = new Scanner(new File(filename));
-         * String wordls = "";
-         * while (wordfile.hasNext()){
-         * wordls= wordls+(wordfile.next());
-         * }
-         * wordfile.close();
-         * return (wordls);
-         * } catch (FileNotFoundException ex) {
-         * System.out.println("TEXT LOADER FAILED");
-         * ex.printStackTrace();
-         * return null;
-         * }
-         */
     }
     public static String loadText(File file) throws FileNotFoundException, IOException{
 //        File file =new File(filename);
