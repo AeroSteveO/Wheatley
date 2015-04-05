@@ -14,7 +14,7 @@ import org.pircbotx.Colors;
  *
  * @author Stephen
  */
-public class WeatherForecast extends WeatherBasic{
+public class WeatherForecast extends WeatherBasic implements WeatherCacheInterface{
     private String observationTime; // FORECAST AND WEATHER
     private ArrayList<String> weekDay; // FORECAST
     private ArrayList<String> highF;   // FORECAST
@@ -51,5 +51,15 @@ public class WeatherForecast extends WeatherBasic{
             response = response+(Colors.BOLD+this.weekDay.get(i)+": "+Colors.NORMAL+this.forecastConditions.get(i)+", "+this.highF.get(i)+"/"+this.lowF.get(i)+"°F ("+this.highC.get(i)+"/"+this.lowC.get(i)+"°C); ");
         }
         return response;
+    }
+
+    @Override
+    public String getExtendedResponse() {
+        throw new UnsupportedOperationException("getExtendedResponse Unavailable for this type of Weather Log");
+    }
+
+    @Override
+    public ArrayList<String> getExtendedResponseArray() {
+        throw new UnsupportedOperationException("ExtendedResponseArray Unavailable for this type of Weather Log");
     }
 }

@@ -14,7 +14,7 @@ import org.pircbotx.Colors;
  *
  * @author Stephen
  */
-public class WeatherConditions extends WeatherBasic {
+public class WeatherConditions extends WeatherBasic implements WeatherCacheInterface{
     
     private String observationTime; // FORECAST AND WEATHER
     
@@ -48,4 +48,16 @@ public class WeatherConditions extends WeatherBasic {
         return (Colors.BOLD+this.cityState+"; Updated: "+Colors.NORMAL+this.observationTime+"; "+Colors.BOLD+"Conditions: "+Colors.NORMAL+this.conditions+"; "+
                 Colors.BOLD+"Temperature: "+Colors.NORMAL+this.temp+"; "+Colors.BOLD+"Humidity: "+Colors.NORMAL+this.humidity+"; "+Colors.BOLD+"Wind: "+Colors.NORMAL+this.windMPH+" ("+this.windKPH+") "+this.windDir);
     }
+
+    @Override
+    public String getExtendedResponse() {
+        throw new UnsupportedOperationException("getExtendedResponse Unavailable for this type of Weather Log");
+    }
+
+    @Override
+    public ArrayList<String> getExtendedResponseArray() {
+        throw new UnsupportedOperationException("ExtendedResponseArray Unavailable for this type of Weather Log");
+    }
+    
+    
 }

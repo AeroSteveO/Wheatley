@@ -14,7 +14,7 @@ import org.pircbotx.Colors;
  *
  * @author Stephen
  */
-public class WeatherAlerts extends WeatherBasic{
+public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface{
     private String alertType;     // ALERT
     private String alertExpires;  // ALERT
     private String alertText;     // ALERT
@@ -70,5 +70,10 @@ public class WeatherAlerts extends WeatherBasic{
     public void updateExpiration(int index, String expiration){
         this.alertExpires = expiration;
         this.expiration = new DateTime().plusMinutes(30);
+    }
+
+    @Override
+    public String getExtendedResponse() {
+        throw new UnsupportedOperationException("getExtendedResponse Unavailable for this type of Weather Log");
     }
 }
