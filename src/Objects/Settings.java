@@ -60,7 +60,7 @@ import org.json.JSONTokener;
  *                       to maps/lists
  *
  * Note: Only commands marked with a * are available for use outside the object
- * 
+ *
  * Useful Resources
  * - http://developer.android.com/reference/org/json/package-summary.html
  * - http://developer.android.com/reference/java/util/Map.html
@@ -68,10 +68,13 @@ import org.json.JSONTokener;
 public class Settings {
 //    Map<String, String> stuff = new TreeMap<String, String>();
     String filename = "doNotSave";
-    Map <String, String> generalSettings = Collections.synchronizedMap(new TreeMap<String, String>());
-    Map <String, Map<String, String>> channelSettings = Collections.synchronizedMap(new TreeMap<String, Map<String, String>>());
+    Map <String, String> generalSettings = Collections.synchronizedMap(new TreeMap<String, String>( ));
+//String.CASE_INSENSITIVE_ORDER
+    Map <String, Map<String, String>> channelSettings = Collections.synchronizedMap(new TreeMap<String, Map<String, String>>( ));
+//String.CASE_INSENSITIVE_ORDER
     
     public void create(String key, String value){
+        key=key.toLowerCase();
         if (!generalSettings.containsKey(key))
             generalSettings.put(key,value);
     }
@@ -98,9 +101,13 @@ public class Settings {
     }
     
     public boolean contains(String key){
+        key=key.toLowerCase();
         return(generalSettings.containsKey(key));
     }
+    
     public boolean contains(String key, String channel){
+        key=key.toLowerCase();
+        channel = channel.toLowerCase();
         if (!channelSettings.containsKey(channel))
             create("NA","NA",channel);
         return(channelSettings.get(channel).containsKey(key));
@@ -129,7 +136,7 @@ public class Settings {
                     
                     while (treeIterator.hasNext() && found){
                         
-                        String key = (String) treeIterator.next();
+                        String key = ((String) treeIterator.next()).toLowerCase();
                         
                         if (tempMap.containsKey(key)){
                             if (tempMap.get(key) instanceof Map){
@@ -151,7 +158,7 @@ public class Settings {
                     
                     while (treeIterator.hasNext() && found){
                         
-                        String key = (String) treeIterator.next();
+                        String key = ((String) treeIterator.next()).toLowerCase();
                         
                         if (tempMap.containsKey(key)){
                             if (tempMap.get(key) instanceof Map){
@@ -173,44 +180,46 @@ public class Settings {
     
     
     
-    public void create(List<String> tree){
-        if (!contains(tree.subList(0, tree.size()-2))){
-            
-            
-            if (tree.size()==1){
-                throw new UnsupportedOperationException("TREE MUST CONTAIN AT LEAST 2 VALUES, A KEY AND A VALUE");
-            }
-            else if (tree.size()==2){
-                if (tree.get(0).startsWith("#"))
-                    throw new UnsupportedOperationException("CHANNELS CANNOT HAVE VALUES ASSOCIATED WITH THEM, ONLY KEY/VALUE PAIRS");
-                generalSettings.put(tree.get(0), tree.get(1)); 
-            }
-            else{
-                Iterator treeIterator = tree.iterator();
-                
-                if (tree.get(0).startsWith("#")){
-                    
-                    while (treeIterator.hasNext()){
-                        String key =(String) treeIterator.next();
-                        
-                        
-                        
-                    }
-                }
-                else{
-                    while (treeIterator.hasNext()){
-                        String key =(String) treeIterator.next();
-                        
-                        
-                        
-                    }
-                }
-            }
-        }
-    }
+//    public void create(List<String> tree){
+//        if (!contains(tree.subList(0, tree.size()-2))){
+//            
+//            
+//            if (tree.size()==1){
+//                throw new UnsupportedOperationException("TREE MUST CONTAIN AT LEAST 2 VALUES, A KEY AND A VALUE");
+//            }
+//            else if (tree.size()==2){
+//                if (tree.get(0).startsWith("#"))
+//                    throw new UnsupportedOperationException("CHANNELS CANNOT HAVE VALUES ASSOCIATED WITH THEM, ONLY KEY/VALUE PAIRS");
+//                generalSettings.put(tree.get(0), tree.get(1));
+//            }
+//            else{
+//                Iterator treeIterator = tree.iterator();
+//                
+//                if (tree.get(0).startsWith("#")){
+//                    
+//                    while (treeIterator.hasNext()){
+//                        String key =(String) treeIterator.next();
+//                        
+//                        
+//                        
+//                    }
+//                }
+//                else{
+//                    while (treeIterator.hasNext()){
+//                        String key =(String) treeIterator.next();
+//                        
+//                        
+//                        
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     
     public void create (String key, String value, String channel) {
+        key=key.toLowerCase();
+        channel = channel.toLowerCase();
         if (key=="NA"&&value=="NA"){
             if (channel.startsWith("#")&&channel.split(" ").length==1){
                 if (!channelSettings.containsKey(channel)){
@@ -271,14 +280,15 @@ public class Settings {
                 if (channelSettings.get(channel).containsKey(key)){
                     channelSettings.get(channel).put(key, value);
 //                    System.out.println(channelSettings.get(channel).get(key));
+                    save();
                     return true;
                 }
             }
             else if (generalSettings.containsKey(key)){
                 generalSettings.put(key,value);
+                save();
                 return true;
             }
-            save();
         }
         else
             throw new UnsupportedOperationException("Input channel is neither an accepted wildcard nor a channel name");
@@ -293,12 +303,17 @@ public class Settings {
     }
     
     public String get(String key){
+        key=key.toLowerCase();
+        
         if(generalSettings.containsKey(key))
             return generalSettings.get(key).toString();
         else
             throw new UnsupportedOperationException("KEY MISSING");
     }
+    
     public String get(String key, String channel){
+        key=key.toLowerCase();
+        channel = channel.toLowerCase();
         if (channelSettings.containsKey(channel)){
             if(channelSettings.get(channel).containsKey(key))
                 return channelSettings.get(channel).get(key).toString();
@@ -308,6 +323,7 @@ public class Settings {
         else
             throw new UnsupportedOperationException("CHANNEL MISSING");
     }
+    
     public ArrayList<String> getChannelList(){
         
         ArrayList<String> channels = new ArrayList<>();
@@ -320,6 +336,7 @@ public class Settings {
         }
         return(channels);
     }
+    
     public void save() {
         try{
             if (!this.filename.equalsIgnoreCase("doNotSave")){
@@ -387,14 +404,14 @@ public class Settings {
             
             if (json!=null&&!json.equals("")){
                 JSONObject object = (JSONObject) new JSONTokener(json).nextValue();
-
+                
                 Map convertedJSON = jsonToMap(object);
-
+                
                 generalSettings =(Map) convertedJSON.get("generalSettings");
                 channelSettings =(Map) convertedJSON.get("channelSettings");
                 
                 
-            }            
+            }
             else{
                 System.out.println(filename+" IS EMPTY");
             }
