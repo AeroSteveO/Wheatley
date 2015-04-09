@@ -70,6 +70,10 @@ public class WeatherCache {
         return(formattedAlerts);
     }
     
+    public WeatherCacheInterface get(int i){
+        return cache.get(i);
+    }
+    
     public ArrayList<String> getAllAlertsLongResponse(String locationString, String type){
         ArrayList<String> formattedAlerts = new ArrayList<>();
         List<WeatherCacheInterface> alerts = getCacheArray(locationString, type);
@@ -119,6 +123,7 @@ public class WeatherCache {
         synchronized(cache){
             for (int i=0;i<cache.size();i++){
                 if(cache.get(i).isAfterExpiration()){
+//                    System.out.println("REMOVED: "+cache.get(i).getType()+" "+cache.get(i).getZip());
                     cache.remove(i);
                     i--;
                 }

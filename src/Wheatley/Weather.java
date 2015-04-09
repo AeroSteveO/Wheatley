@@ -92,7 +92,7 @@ public class Weather extends ListenerAdapter{
     
     // Initiate Auto-Alert System
     String alertChannel = "#dtella";              // Channel to send weather alert updates to
-    int alertUpdateTime = 15*60;                  // 15 min converted to seconds
+    int alertUpdateTime = 1*60;                  // 15 min converted to seconds
     boolean updateAlerts = true;                  // True if the bot should send weather alert updates
     AlertTime alertUpdater = new AlertTime(alertChannel,updateAlerts,alertUpdateTime,stockZip);     // Initiate auto-alert object
     Thread t = new Thread(alertUpdater);          // Give it a thread to run in
@@ -344,6 +344,11 @@ public class Weather extends ListenerAdapter{
                     String cityState = locationData.get(0)+", "+locationData.get(1);
                     String zip = locationData.get(2);
                     
+                    ArrayList<WeatherCacheInterface> newAlerts = new ArrayList<>();
+                    for (int i=0;i<alertType.size();i++){
+                        newAlerts.add(new WeatherAlerts(cityState, zip,alertType.get(i), alertExpiration.get(i), alertText.get(i)));
+                    }
+                    
                     if (!localCache.containsEntry( zip,"alert")){
                         
                         for (int i=0;i<alertType.size();i++){
@@ -358,26 +363,22 @@ public class Weather extends ListenerAdapter{
                         }
                     }
                     else{
-                        List<WeatherCacheInterface> temp = localCache.getCacheArray(zip, "alert");
-                        List<WeatherAlerts> oldAlerts = new ArrayList<>();
-                        for (int i=0;i<temp.size();i++){
-                            if(temp.get(i) instanceof WeatherAlerts)
-                                oldAlerts.add((WeatherAlerts) temp.get(i));
-                        }
-                        for (int j=0;j<alertType.size();j++){
+                        for (int j=0;j<newAlerts.size();j++){
+                            if (newAlerts.get(j) instanceof WeatherAlerts){
                             boolean isAlertNew = true;
-                            for (int i=0;i<oldAlerts.size();i++){
+                            for (int i=0;i<localCache.size();i++){
                                 
-                                if (oldAlerts.get(i).getAlertType().equalsIgnoreCase(alertType.get(j))){
-                                    ((WeatherAlerts) localCache.getCacheEntry(zip, "alert")).updateExpiration(i,alertExpiration.get(j));
+                                if (((WeatherAlerts) localCache.get(i)).getAlertType().equalsIgnoreCase(((WeatherAlerts) newAlerts.get(j)).getAlertType())){
+                                    ((WeatherAlerts) localCache.get(i)).updateExpiration(((WeatherAlerts) newAlerts.get(j)).getExpiration());
                                     isAlertNew=false;
                                 }
                             }
                             if (isAlertNew){
-                                WeatherAlerts newAlert = new WeatherAlerts(cityState, zip,alertType.get(j), alertExpiration.get(j), alertText.get(j));
-                                localCache.add(newAlert);
+//                                WeatherAlerts newAlert = new WeatherAlerts(cityState, zip,alertType.get(j), alertExpiration.get(j), alertText.get(j));
+                                localCache.add(newAlerts.get(j));
                                 Global.bot.sendIRC().message(channel,Colors.RED+Colors.BOLD+"WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+alertType.get(j)+Colors.BOLD+" Ending: "+Colors.NORMAL+alertExpiration.get(j)+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alerts full [zip]' for the full alert text");
                             }
+                        }
                         }
                     }
                     return(true);

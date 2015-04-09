@@ -67,7 +67,12 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
     public String getAlertType(){
         return this.alertType;
     }
-    public void updateExpiration(int index, String expiration){
+    
+    public String getExpiration(){
+        return this.alertExpires;
+    }
+    
+    public void updateExpiration(String expiration){
         this.alertExpires = expiration;
         this.expiration = new DateTime().plusMinutes(30);
     }
