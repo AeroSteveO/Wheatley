@@ -53,11 +53,11 @@ public class PickAPort implements Command{
     public void processCommand(Event event){
         if (event instanceof MessageEvent){
             MessageEvent mEvent = (MessageEvent) event;
-            mEvent.getBot().sendIRC().message(mEvent.getChannel().getName(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*65534-1025+1)));
+            mEvent.getBot().sendIRC().message(mEvent.getChannel().getName(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*(65534-1025+1))));
         }
         else   if (event instanceof PrivateMessageEvent){
             PrivateMessageEvent mEvent = (PrivateMessageEvent) event;
-            mEvent.getBot().sendIRC().message(mEvent.getUser().getNick(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*65534-1025+1)));
+            mEvent.getBot().sendIRC().message(mEvent.getUser().getNick(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*(65534-1025+1))));
         }
 //        System.out.println("Port Number: "+(int) (1025+(Math.random()*65534-1025+1)));
     }
