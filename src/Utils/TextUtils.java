@@ -7,8 +7,10 @@
 package Utils;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -26,14 +28,14 @@ import java.util.Scanner;
  *    N/A
  * - Linked Classes
  *    N/A
- * 
+ *
  * Methods:
  *     *loadText       - loads the input file as a string
  *     *loadTextAsList - loads the input file as an array, where each line in the file is a new item in the array
  *     *readUrl        - loads the url and returns a string of the contents
  *     *addToDoc       - adds the input text as a new line at the bottom of the input text file
  *
- * Note: Only commands marked with a * are available for use outside the object 
+ * Note: Only commands marked with a * are available for use outside the object
  *
  */
 public class TextUtils {
@@ -104,7 +106,7 @@ public class TextUtils {
                 reader.close();
         }
     }
-}    public static void addToDoc(String filename, String addition){
+    public static void addToDoc(String filename, String addition){
         try{
             File file;
             
