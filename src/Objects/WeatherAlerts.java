@@ -47,7 +47,7 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
     public ArrayList<String>  getExtendedResponseArray(){
         ArrayList<String> respond = new ArrayList<>();
         
-        if (!this.alertType.equalsIgnoreCase("Error Parsing Alerts")||this.alertType.equalsIgnoreCase("No Current Weather Alerts")){
+        if (!this.alertType.equalsIgnoreCase("Error Parsing Alerts")&&!this.alertType.equalsIgnoreCase("No Current Weather Alerts")){
 //                for (int i=0;i<alertText.size();i++){
 //                response = response + "Alert Full Text: "+Colors.NORMAL+response+alertText+ " !";
             String[] alertLines = alertText.split("\\u000A");
@@ -58,6 +58,9 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
                 respond.add(alertLines[i]);
             }
         }
+//        else if (this.alertType.equalsIgnoreCase("No Current Weather Alerts")){
+//            respond.add("No Current Weather Alerts");
+//        }
         else{
             respond.add(alertType);
         }

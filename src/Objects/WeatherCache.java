@@ -74,12 +74,12 @@ public class WeatherCache {
         return cache.get(i);
     }
     
-    public ArrayList<String> getAllAlertsLongResponse(String locationString, String type){
+    public ArrayList<String> getAllAlertsLongResponse(String locationString){
         ArrayList<String> formattedAlerts = new ArrayList<>();
-        List<WeatherCacheInterface> alerts = getCacheArray(locationString, type);
+        List<WeatherCacheInterface> alerts = getCacheArray(locationString, "alert");
         
         for (int i=0;i<alerts.size();i++){
-//            formattedAlerts.addAll(alerts.get(i).getLongResponse());
+            formattedAlerts.addAll(alerts.get(i).getExtendedResponseArray());
             
         }
         return(formattedAlerts);
