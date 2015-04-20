@@ -19,6 +19,11 @@ import Wheatley.Global;
  *    N/A
  * - Linked Classes
  *    Global
+ *
+ * Methods:
+ *     *areGamesBlocked - Checks the global bot settings to see if games are blocked in the input channel
+ *
+ * Note: Only commands marked with a * are available for use outside the object 
  * 
  */
 public class GameUtils {

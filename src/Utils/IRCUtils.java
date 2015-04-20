@@ -24,6 +24,11 @@ import org.pircbotx.hooks.Event;
  * 
  * @author Steve-O
  * 
+ * Methods:
+ *     *getTimeStamp - returns a nicely formatted time stamp
+ *
+ * Note: Only commands marked with a * are available for use outside the object 
+ *
  *
  */
 
