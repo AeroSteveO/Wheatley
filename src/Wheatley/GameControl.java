@@ -80,7 +80,7 @@ public class GameControl extends ListenerAdapter {
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (message.startsWith(Global.commandPrefix)&&!GameUtils.areGamesBlocked(event.getChannel().getName())&&!message.matches("([ ]{0,}!{1,}[ ]{0,}){1,}")){
-
+            
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             
@@ -395,34 +395,40 @@ public class GameControl extends ListenerAdapter {
                 }
             }
             
-//            else if (cmdSplit[0].equalsIgnoreCase("makeitrain")){
-//                if(cmdSplit.length>1){
-//                    if (cmdSplit.length>2){
-//                        event.getBot().sendIRC().notice(event.getUser().getNick(), "!MakeItRain only accepts up to 2 inputs");
-//                    }
-//                    else if(cmdSplit[1].matches("[0-9]+")){
-//                        int rain = Integer.parseInt(cmdSplit[1]);
-//                        if(scores.getScoreObj(event.getUser().getNick()).getScore()<rain){
-//                            event.getBot().sendIRC().notice(event.getUser().getNick(), "You don't have enough to make it rain that much");
-//                        }
-//                        else{
-//
-//                        }
-//
-//                    }
-//                    else{
-//                        event.getBot().sendIRC().notice(event.getUser().getNick(), "!MakeItRain only accepts non-negative integer as an input");
-//                    }
-//                }
-//                else{
-//                    int rain = 0;
-//                    if(scores.getScoreObj(event.getUser().getNick()).getScore()<rain){
-//                        event.getBot().sendIRC().notice(event.getUser().getNick(), "You don't have enough to make it rain that much");
-//                    }else{
-//
-//                    }
-//                }
-//            }
+            else if (cmdSplit[0].equalsIgnoreCase("makeitrain")){
+                if (cmdSplit.length>2){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "!MakeItRain only accepts only 1 input");
+                }
+                else if(cmdSplit.length==1 || cmdSplit[1].matches("[0-9]+")){
+                    int rain = 100;
+                    if (cmdSplit.length==2){
+                        rain = Integer.parseInt(cmdSplit[1]);
+                    }
+                    ArrayList<String> people = new ArrayList<>();
+                    
+                    if(scores.getScoreObj(event.getUser().getNick()).getScore()<rain){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "You don't have enough to make it rain that much");
+                    }
+                    else{
+                        Iterator<User> userList = event.getChannel().getUsers().iterator();
+                        int numUsers = event.getChannel().getUsers().size();
+                        int earnings = rain/(numUsers-2);
+                        scores.subtractScore(event.getUser().getNick(), rain);
+                        
+                        while (userList.hasNext()){
+                            User person = userList.next();
+                            if (!person.getNick().equalsIgnoreCase(Global.mainNick)&&!person.getNick().equalsIgnoreCase(event.getUser().getNick())){
+                                scores.addScore(person.getNick(), earnings);
+                                event.getBot().sendIRC().message(event.getChannel().getName(),person.getNick()+" is now $"+earnings+" richer");
+                            }
+                        }
+                    }
+                    
+                }
+                else{
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "!MakeItRain only accepts non-negative integer as an input");
+                }
+            }
         }
     }
     
