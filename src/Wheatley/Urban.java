@@ -7,20 +7,15 @@
 package Wheatley;
 
 //import Objects.KeyFinder;
-import com.google.common.collect.ImmutableSortedSet;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.LinkedList;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 
 /**
