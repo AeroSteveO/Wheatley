@@ -78,6 +78,7 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new Why());
         listOfCommands.add(new ThrottleCMD());
         listOfCommands.add(new ManualBotControl());
+        listOfCommands.add(new ListChannels());
         return(listOfCommands);
     }
 }
