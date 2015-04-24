@@ -1,8 +1,8 @@
- /**
-  *
-  *
-  *
-  */
+/**
+ *
+ *
+ *
+ */
 package Wheatley;
 
 import Objects.Runner;
@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Element;
 import java.io.File;
+import java.util.Arrays;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.managers.BackgroundListenerManager;
 
@@ -30,8 +31,8 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  *    Runner
  *    ChannelStore
  * - Linked Classes
- *    Global  
- * 
+ *    Global
+ *
  * Wheatley, the derp bot
  *  With Functions from
  *      theTardis   -- by theDoctor
@@ -40,10 +41,10 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  *      Bellagio    -- by http://casinobot.codeplex.com/
  *      RoyalBot    -- by http://www.msclemens.com/royaldev/royalbot
  *      SrsBsns     -- by saigon
- *      LilWayne    -- by 
+ *      LilWayne    -- by
  *      Hermes      -- by aaahhh
  *      Poopsock    -- by khwain
- * 
+ *
  *
  * @author Stephen
  * often by siphoning code from other bots by tangd, and Vanilla, and theDoctor
@@ -76,8 +77,15 @@ public class WheatleyMain extends ListenerAdapter {
     @Override
     // Joins channels it has been invited to
     public void onInvite(InviteEvent event) {
-        event.getBot().sendIRC().joinChannel(event.getChannel());
-        Global.channels.add(new ChannelStore(event.getChannel())); //think this will work?
+        
+        if (!Global.settings.contains(Arrays.asList(event.getChannel(),"acceptinvites"))){
+            Global.settings.create("acceptinvites","true",event.getChannel());
+        }
+//        System.out.println(Boolean.parseBoolean(Global.settings.get("acceptinvites",event.getChannel())));
+        if (Boolean.parseBoolean(Global.settings.get("acceptinvites",event.getChannel()))){
+            event.getBot().sendIRC().joinChannel(event.getChannel());
+            Global.channels.add(new ChannelStore(event.getChannel())); //think this will work
+        }
     }
     @Override
     // Something from the example script that has continued to stay in my bots code
@@ -124,7 +132,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use
                     .setCapEnabled(true)     //Enable CAP features
                     .setAutoReconnect(true)
-                    .setMaxLineLength(425)
+                    .setMaxLineLength(469)
                     .setListenerManager(BackgroundListener)//Allow for logger background listener
                     .addListener(new WheatleyMain())       //This main class's listener
                     .addListener(new Blarghlebot())        //Trollbot Listener
@@ -141,7 +149,6 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameBlackjack())
                     .addListener(new GameSlots())
                     .addListener(new GameAltReverse())     //alternate reverse game listener
-//                    .addListener(new Why())                // gives a random reason as to 'why?'
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
                     .addListener(new EnglishSayings())
@@ -157,7 +164,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new Ping())
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
-//                    .addListener(new Weather())
+                    .addListener(new Weather())
 //                    .addListener(new Urban())
                     .addListener(new CommandListener())
 //                    .addListener(new MovieRatings())
