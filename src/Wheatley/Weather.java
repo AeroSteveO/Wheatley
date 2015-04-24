@@ -20,7 +20,6 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -92,7 +91,7 @@ public class Weather extends ListenerAdapter{
     
     // Initiate Auto-Alert System
     String alertChannel = "#dtella";              // Channel to send weather alert updates to
-    int alertUpdateTime = 1*60;                  // 15 min converted to seconds
+    int alertUpdateTime = 15*60;                  // 15 min converted to seconds
     boolean updateAlerts = true;                  // True if the bot should send weather alert updates
     AlertTime alertUpdater = new AlertTime(alertChannel,updateAlerts,alertUpdateTime,stockZip);     // Initiate auto-alert object
     Thread t = new Thread(alertUpdater);          // Give it a thread to run in
@@ -158,7 +157,7 @@ public class Weather extends ListenerAdapter{
                         event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"weather").getFormattedResponse());
                     }
                     else{
-                        event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentWeather(readUrl(weatherUrl(location))));
+                        event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentWeather(location));
                     }
                     
                     if(localCache.size()>0&&localCache.containsEntry(search,"alert")){
@@ -174,7 +173,7 @@ public class Weather extends ListenerAdapter{
                             locationData = localCache.getCacheEntry(search,"weather").getLocationData();
                         }
                         
-                        ArrayList<String> alertResponse = getCurrentAlerts(readUrl(alertUrl(location)),locationData);
+                        ArrayList<String> alertResponse = getCurrentAlerts(location,locationData);
                         
                         if (alertResponse.size()>0){
                             if (!alertResponse.get(0).equalsIgnoreCase("No Current Weather Alerts"))
@@ -193,7 +192,7 @@ public class Weather extends ListenerAdapter{
                         event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"forecast").getFormattedResponse());
                     }
                     else{
-                        event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentForecast(readUrl(forecastUrl(location)),location));
+                        event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentForecast(location));
                     }
                 }// END FORECAST COMMAND LOGIC
                 
@@ -212,18 +211,24 @@ public class Weather extends ListenerAdapter{
                             }
                         }
                         else { // IF THE COMMAND IS FOR THE FULL ALERT TEXT
-                            ArrayList<String> alertFullText = localCache.getAllAlertsLongResponse(search,"alert");
+                            ArrayList<String> alertFullText = localCache.getAllAlertsLongResponse(search);
                             for (int c = 0;c<alertFullText.size();c++){
                                 event.getBot().sendIRC().message(event.getUser().getNick(),alertFullText.get(c));
                             }
                         }
                     } // END CACHE PROCESSING
                     else{
-                        if (!message.matches("(?i).*full.*")){
-                            if (!locationDataRetrieved){
+                        
+                        if (!locationDataRetrieved){
                                 locationData = getLocationData(location);
-                            }
-                            ArrayList<String> alertResponse = getCurrentAlerts(readUrl(alertUrl(location)),locationData);
+                        }
+                        ArrayList<String> alertResponse = getCurrentAlerts(location,locationData);
+                        
+                        if (!message.matches("(?i).*full.*")){
+//                            if (!locationDataRetrieved){
+//                                locationData = getLocationData(location);
+//                            }
+//                            ArrayList<String> alertResponse = getCurrentAlerts(readUrl(alertUrl(location)),locationData);
                             if (alertResponse.size()>0){
                                 if (alertResponse.get(0).equalsIgnoreCase("Error Parsing Alerts")||alertResponse.get(0).equalsIgnoreCase("No Current Weather Alerts")||alertResponse.get(0).equalsIgnoreCase("ERROR")){
                                     event.getBot().sendIRC().message(event.getChannel().getName(),alertResponse.get(0).trim());
@@ -236,9 +241,9 @@ public class Weather extends ListenerAdapter{
                             }
                         }
                         else {
-                            ArrayList<String> derpina = getCurrentAlerts(readUrl(alertUrl(location)),locationData);
+                            ArrayList<String> derpina = getCurrentAlerts(location,locationData);
                             
-                            ArrayList<String> alertFullText = localCache.getAllAlertsLongResponse(search,"alert");
+                            ArrayList<String> alertFullText = localCache.getAllAlertsLongResponse(search);
                             
                             for (int i=0;i<alertFullText.size();i++){
                                 event.getBot().sendIRC().message(event.getUser().getNick(),alertFullText.get(i));
@@ -319,13 +324,14 @@ public class Weather extends ListenerAdapter{
             while(updateAlerts){
                 try {
                     Thread.sleep(time*1000);
-                    boolean updated = updateCurrentAlerts(readUrl(alertUrl(stockZip)));
+                    boolean updated = updateCurrentAlerts(stockZip);
                 } catch (Exception ex) {
                 }
             }
         }
-        private boolean updateCurrentAlerts(String jsonData) {
+        private boolean updateCurrentAlerts(String location) throws Exception {
 //            JSONParser parser = new JSONParser();
+            String jsonData = readUrl(alertUrl(location));
             ArrayList<String> alertType = new ArrayList<>();
             ArrayList<String> alertExpiration = new ArrayList<>();
             ArrayList<String> alertText = new ArrayList<>();
@@ -391,8 +397,11 @@ public class Weather extends ListenerAdapter{
         }
     }
     
-    private ArrayList<String> getCurrentAlerts(String jsonData, ArrayList<String> locationData) {
+    private ArrayList<String> getCurrentAlerts(String location, ArrayList<String> locationData) throws Exception {
 //        JSONParser parser = new JSONParser();
+        
+        String jsonData = readUrl(alertUrl(location));
+        
         ArrayList<String> alertType = new ArrayList<>();
         ArrayList<String> alertExpiration = new ArrayList<>();
         ArrayList<String> alertText = new ArrayList<>();
@@ -426,7 +435,10 @@ public class Weather extends ListenerAdapter{
             return new ArrayList<String>(Arrays.asList("Error Parsing Alerts"));
         }
     }
-    private String getCurrentForecast(String jsonData, String location) {
+    private String getCurrentForecast(String location) throws Exception {
+        
+        String jsonData = readUrl(forecastUrl(location));
+        
 //        JSONParser parser = new JSONParser();
         String response;
         ArrayList<String> weekDay = new ArrayList<>();
@@ -542,8 +554,10 @@ public class Weather extends ListenerAdapter{
 //        }
 //        return(matchedJson);
 //    }
-    private String getCurrentWeather(String jsonData) {
+    private String getCurrentWeather(String location) throws Exception {
 //        JSONParser parser = new JSONParser();
+        String jsonData = readUrl(weatherUrl(location));
+        
         String zip = "Unavailable";
         String cityState = "";
         String tempString = "";
