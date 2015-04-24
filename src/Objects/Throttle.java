@@ -44,6 +44,9 @@ import java.util.TreeMap;
  *      verifyExistance  -
  *
  * Note: Only commands marked with a * are available for use outside the object
+ * 
+ * Version: 0.5
+ * 
  */
 public class Throttle extends Settings{
     
@@ -52,7 +55,8 @@ public class Throttle extends Settings{
     
     private String filename = "doNotSave";
     
-    Map <String, Map<String, LinkedList<Long>>> timeLog = Collections.synchronizedMap(new TreeMap<String, Map<String, LinkedList<Long>>>());
+    Map <String, Map<String, LinkedList<Long>>> timeLog = Collections.synchronizedMap(new TreeMap<String, Map<String, LinkedList<Long>>>(  ));
+//String.CASE_INSENSITIVE_ORDER
     //   CHAN        TYPE     TIMELOG
     
     public Throttle (){
@@ -177,10 +181,10 @@ public class Throttle extends Settings{
     private void addChannelToLog(String channel){
         LinkedList<Long> logList = new LinkedList<>();
         Map<String,LinkedList<Long>> log = new TreeMap<>();
-        String thing = new String();
-        log.put(thing,logList);
-        if (!timeLog.containsKey(channel))
-            timeLog.put(channel, log);
+
+        log.put(new String(),logList);
+        if (!timeLog.containsKey(channel.toLowerCase()))
+            timeLog.put(channel.toLowerCase(), log);
     }
     
     private void createMaxLog(String type, String maxLog, String channel) {
