@@ -42,8 +42,6 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Responds with an ascii butt (single line)
  *      !Meatlab
  *          Responds with saying
- *      !Matlab
- *          Responds with matrab
  *      !Meatpod
  *      Meatpod
  *          Responds with link to meatspin
@@ -81,13 +79,6 @@ public class MatrapterChat extends ListenerAdapter {
             }
             if (message.equalsIgnoreCase("!meatlab"))
                 event.getBot().sendIRC().message(currentChan, "u so funny, me ruv u rong time");
-            if (message.toLowerCase().startsWith("!matlab")){
-                if (message.split(" ").length==1)
-                    event.getBot().sendIRC().message(currentChan, "MATRABBB");
-                else
-                    event.getBot().sendIRC().notice(event.getUser().getNick(),"This bot doesn't contain 100% of Matrapter's original capability");
-            }
-            
             //Meatpod Functions
 //            if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("meatpod")).contains(event.getChannel())) {
 //                if (message.equalsIgnoreCase("!meatpod")||message.equalsIgnoreCase("meatpod"))
