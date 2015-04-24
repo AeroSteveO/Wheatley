@@ -61,7 +61,7 @@ public class GameBlackjack extends ListenerAdapter {
         
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
@@ -155,7 +155,8 @@ public class GameBlackjack extends ListenerAdapter {
                             event.getBot().sendIRC().notice(hands.get(counter).getPlayer(),"Your hand: "+hands.get(counter).toColoredString()+"Total: "+hands.get(counter).getBlackjackHandValue());
                             event.getBot().sendIRC().message(gameChan,hands.get(counter).getPlayer()+"'s turn, will you hit (h) or stay (s)?");
                             prev = counter;
-                        }else{
+                        }
+                        else{
                             event.getBot().sendIRC().message(gameChan,"Your hand: "+hands.get(counter).toColoredString()+"Total: "+hands.get(counter).getBlackjackHandValue()+" Will you hit (h) or stay (s)?");
                         }
                         
@@ -324,6 +325,9 @@ public class GameBlackjack extends ListenerAdapter {
                                     }
                                 }
                                 
+                                for (int i=0; i<hands.size();i++)
+                                    System.out.println(hands.get(i).getPlayer());
+                                
                                 for (int i=0;i<hands.size();i++){ // START SCORING
                                     
                                     if (hands.get(i).getBlackjackHandValue()<=21){
@@ -354,7 +358,7 @@ public class GameBlackjack extends ListenerAdapter {
                                                 winner.clear();
                                                 winner.add(0);
                                             }
-                                            else{
+                                            else if (!winner.contains(i)){
                                                 winner.add(i);
                                             }
                                         }
@@ -368,8 +372,8 @@ public class GameBlackjack extends ListenerAdapter {
                                 int earnings = (int) ((minBet*(hands.size()-1) * multiplier) / winner.size());
                                 
                                 for (int i=0;i<winner.size();i++){
-                                    event.getBot().sendIRC().message(gameChan,hands.get(winner.get(i)).getPlayer()+" has won! The winning hand was "+ hands.get(winner.get(i)).toColoredString()+"totaling "+hands.get(winner.get(i)).getBlackjackHandValue()+" and earning $"+minBet*(hands.size()-1)+", everyone else has lost $"+minBet);
-                                    GameControl.scores.addScore(hands.get(winner.get(i)).getPlayer(),minBet*(hands.size()-1));
+                                    event.getBot().sendIRC().message(gameChan,hands.get(winner.get(i)).getPlayer()+" has won! The winning hand was "+ hands.get(winner.get(i)).toColoredString()+"totaling "+hands.get(winner.get(i)).getBlackjackHandValue()+" and earning $"+earnings+", everyone else has lost $"+minBet);
+                                    GameControl.scores.addScore(hands.get(winner.get(i)).getPlayer(),earnings);
                                 }
                                 
 //subtract bet from all players scores, winners included
