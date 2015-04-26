@@ -49,7 +49,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Sends a pm to the user with the definition of the give word/phrase
  *
  */
-public class Definitions extends ListenerAdapter {
+public class DefinitionsListener extends ListenerAdapter {
     ArrayList<String> definitions = getDefinitions();
     ArrayList<String> words = getWordsFromDefs(definitions);
     String definitionsFileName = "definitions.txt";
@@ -86,7 +86,7 @@ public class Definitions extends ListenerAdapter {
             event.getBot().sendIRC().message(event.getUser().getNick(),wordList);
         }
         
-        if (msgSplit[0].equalsIgnoreCase("tell ")&&msgSplit[2].equalsIgnoreCase("about")){
+        if (msgSplit[0].equalsIgnoreCase("tell")&&msgSplit[2].equalsIgnoreCase("about")){
             String user = message.split(" ")[1];
             if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(user))) {
                 
