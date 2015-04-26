@@ -87,7 +87,7 @@ public class TextUtils {
     }
     
     //converts URL to string, primarily used to string-ify json text
-    private static String readUrl(String urlString) throws Exception {
+    public static String readUrl(String urlString) throws Exception {
 //        System.out.println(urlString);
         BufferedReader reader = null;
         try {
@@ -106,6 +106,7 @@ public class TextUtils {
                 reader.close();
         }
     }
+    
     public static void addToDoc(String filename, String addition){
         try{
             File file;
