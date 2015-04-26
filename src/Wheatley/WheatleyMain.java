@@ -170,7 +170,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new CommandListener())
 //                    .addListener(new MovieRatings())
                     .addListener(new BadWords())
-//                    .addListener(new MarkovInterface())
+                    .addListener(new MarkovInterface())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
                     .addListener(new RandChan())             // generates random 4chan image links
