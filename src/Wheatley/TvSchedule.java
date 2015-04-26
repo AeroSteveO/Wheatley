@@ -22,6 +22,33 @@ import org.w3c.dom.NodeList;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    jaxen-1.1.6 XML Parser
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
+ * Activate commands with:
+ *      !schedule [YYYY-MM-DD]
+ *          Looks up the TV rage schedule for the given day (only shows after 8PM)
+ *      !schedule min
+ *          Looks up the earliest available dates in the TV rage schedule
+ *      !schedule max
+ *          Looks up the date thats furthest in the future in the TV rage schedule
+ *      !Tonight
+ *          Looks up the TV rage schedule for the current night (shows after 8PM)
+ *      !Tomorrow
+ *          Looks up the TV rage schedule for tomorrow night (shows after 8PM)
+ *      !Yesterday
+ *          Looks up the TV rage schedule for last night (shows after 8PM)
+ * 
+ * 
+ * http://jaxen.org/apidocs/index.html
+ * 
+ * 
  */
 public class TvSchedule extends ListenerAdapter{
     ArrayList<String> nightTimes = getNightTvTimes();
@@ -97,11 +124,40 @@ public class TvSchedule extends ListenerAdapter{
                         }
                     }
                 }
+                else if (cmdSplit[1].equalsIgnoreCase("max")){
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"The last date available is "+earliestDate()+" (Note: The schedule for dates far in the future may be incomplete/non-existant)");
+                }
+                else if (cmdSplit[1].equalsIgnoreCase("min")){
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"The earliest date available is "+lastDate());
+                }
+                else if (cmdSplit[1].equalsIgnoreCase("format")){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Schedule inputs take the format of [YYYY-MM-DD], for example: !schedule 2015-4-25");
+                }
                 else{
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Schedule date does not match the YYYY-MM-DD");
+                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Schedule date does not match the YYYY-MM-DD format");
                 }
             }
         }
+    }
+    
+    // Provides the earliest date available in the TV rage api (in YYYY-MM-DD format)
+    private String earliestDate(){
+        Element baseElement = getTvRageData();
+        ArrayList<String> schedule = new ArrayList<>();
+        NodeList day = baseElement.getElementsByTagName("DAY");
+        
+        String minimumDate = day.item(0).getAttributes().getNamedItem("attr").getNodeValue();
+        return minimumDate;
+    }
+    
+    //Provides the last date available in the TV rage api (in YYYY-MM-DD format)
+    private String lastDate(){
+        Element baseElement = getTvRageData();
+        ArrayList<String> schedule = new ArrayList<>();
+        NodeList day = baseElement.getElementsByTagName("DAY");
+        
+        String minimumDate = day.item(day.getLength()-1).getAttributes().getNamedItem("attr").getNodeValue();
+        return minimumDate;
     }
     
     private ArrayList<String> getSchedule(String today){
