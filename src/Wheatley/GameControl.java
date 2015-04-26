@@ -79,7 +79,7 @@ public class GameControl extends ListenerAdapter {
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.startsWith(Global.commandPrefix)&&!GameUtils.areGamesBlocked(event.getChannel().getName())&&!message.matches("([ ]{0,}!{1,}[ ]{0,}){1,}")){
+        if (message.startsWith(Global.commandPrefix)&&!GameUtils.areGamesBlocked(event.getChannel().getName())&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
