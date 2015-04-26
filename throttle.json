@@ -1,0 +1,24 @@
+{
+  "generalSettings": {},
+  "channelSettings": {
+    "#rapterverse": {
+      "udictlog": "5",
+      "randchanlog": "5",
+      "na": "NA",
+      "udicttime": "100000",
+      "randchantime": "100000"
+    },
+    "#markov": {
+      "randchanlog": "5",
+      "na": "NA",
+      "randchantime": "100000"
+    },
+    "#dtella": {
+      "udictlog": "5",
+      "randchanlog": "5",
+      "na": "NA",
+      "udicttime": "100000",
+      "randchantime": "100000"
+    }
+  }
+}
