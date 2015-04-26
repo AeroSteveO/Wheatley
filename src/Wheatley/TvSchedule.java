@@ -34,10 +34,10 @@ import org.w3c.dom.NodeList;
  * Activate commands with:
  *      !schedule [YYYY-MM-DD]
  *          Looks up the TV rage schedule for the given day (only shows after 8PM)
- *      !schedule min
- *          Looks up the earliest available dates in the TV rage schedule
- *      !schedule max
- *          Looks up the date thats furthest in the future in the TV rage schedule
+ *      !schedule first
+ *          Looks up the first available date in the TV rage schedule
+ *      !schedule last
+ *          Looks up the last available date in the TV rage schedule
  *      !Tonight
  *          Looks up the TV rage schedule for the current night (shows after 8PM)
  *      !Tomorrow
@@ -124,11 +124,11 @@ public class TvSchedule extends ListenerAdapter{
                         }
                     }
                 }
-                else if (cmdSplit[1].equalsIgnoreCase("max")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),"The last date available is "+earliestDate()+" (Note: The schedule for dates far in the future may be incomplete/non-existant)");
+                else if (cmdSplit[1].equalsIgnoreCase("last")){
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"The last date available is "+lastDate()+" (Note: The schedule for dates far in the future may be incomplete/non-existant)");
                 }
-                else if (cmdSplit[1].equalsIgnoreCase("min")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),"The earliest date available is "+lastDate());
+                else if (cmdSplit[1].equalsIgnoreCase("first")){
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"The first date available is "+earliestDate());
                 }
                 else if (cmdSplit[1].equalsIgnoreCase("format")){
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "Schedule inputs take the format of [YYYY-MM-DD], for example: !schedule 2015-4-25");
