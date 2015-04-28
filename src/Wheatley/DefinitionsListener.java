@@ -112,7 +112,7 @@ public class DefinitionsListener extends ListenerAdapter {
             if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 
                 if(message.split("@").length!=2){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: !adddef word or phrase @ definition phrase");
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: !mkdef word or phrase @ definition phrase");
                 }
                 
                 else if (StringUtils.countMatches(message.split("@")[0], "?")>0){
@@ -202,7 +202,7 @@ public class DefinitionsListener extends ListenerAdapter {
             if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 
                 if(!(message.split("@").length==2)){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed update command: !updef word phrase @ definition phrase");
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed update command: !overdef word phrase @ definition phrase");
                 }
                 
                 else if (!containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
