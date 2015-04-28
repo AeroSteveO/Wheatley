@@ -30,10 +30,11 @@ import java.util.Scanner;
  *    N/A
  *
  * Methods:
- *     *loadText       - loads the input file as a string
- *     *loadTextAsList - loads the input file as an array, where each line in the file is a new item in the array
- *     *readUrl        - loads the url and returns a string of the contents
- *     *addToDoc       - adds the input text as a new line at the bottom of the input text file
+ *     *loadText         - Loads the input file as a string
+ *     *loadTextAsList   - Loads the input file as an array, where each line in the file is a new item in the array
+ *     *readUrl          - Loads the url and returns a string of the contents
+ *     *addToDoc         - Adds the input text as a new line at the bottom of the input text file
+ *     *addToDocIfUnique - Adds a line to the end of the input text file if that line is unique in that file
  *
  * Note: Only commands marked with a * are available for use outside the object
  *
@@ -106,6 +107,55 @@ public class TextUtils {
                 reader.close();
         }
     }
+    public static void addToDocIfUnique(String filename, String addition){
+        try{
+            File file;
+            
+            if (filename.split("\\.").length==1){
+                file =new File(filename+".txt");
+                filename = filename+".txt";
+            }
+            else{
+                file =new File(filename);
+            }
+            
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            
+            addToDocIfUnique(file,addition);
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            return;
+        }
+    }
+    
+    public static void addToDocIfUnique(File file, String addition){
+        try{
+            
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            ArrayList<String> listing = loadTextAsList(file);
+            CaseInsensitiveList current = new CaseInsensitiveList();
+            
+            current.addAll(listing);
+            
+            if (current.contains(addition)){
+                return;
+            }
+            else{
+                FileWriter fileWritter = new FileWriter(file.getName(),true);
+                BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+                bufferWritter.write("\n"+addition);
+                bufferWritter.close();
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    
     
     public static void addToDoc(String filename, String addition){
         try{
@@ -147,5 +197,14 @@ public class TextUtils {
             ex.printStackTrace();
         }
     }
+    public static class CaseInsensitiveList extends ArrayList<String> {
+        @Override
+        public boolean contains(Object o) {
+            String paramStr = (String)o;
+            for (String s : this) {
+                if (paramStr.equalsIgnoreCase(s)) return true;
+            }
+            return false;
+        }
+    }
 }
-
