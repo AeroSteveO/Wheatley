@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Utils.TextUtils;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -58,9 +59,10 @@ public class UpdateFiles extends ListenerAdapter{
                     if (cmdSplit.length==3){
                         
                         boolean success = Global.settings.set(cmdSplit[1], cmdSplit[2], event.getChannel().getName());
-                        if (!success){
+                        if (!success)
                             event.getBot().sendIRC().notice(event.getUser().getNick(), "Setting failed to update: Setting does not exist");
-                        }
+                        else
+                            event.respond("SUCCESS IN MODIFYING SETTING");
                     }
                     else if(cmdSplit.length==4){
                         boolean success = Global.settings.set(cmdSplit[1], cmdSplit[2], cmdSplit[3]);
@@ -71,13 +73,12 @@ public class UpdateFiles extends ListenerAdapter{
                     }
                 }
                 else if (cmdSplit[0].equalsIgnoreCase("create")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                    if (cmdSplit.length==3){
-                        Global.settings.create(cmdSplit[1],cmdSplit[2]);
-                        
-                    }
-                    else if (cmdSplit.length==4){
-                        Global.settings.create(cmdSplit[1],cmdSplit[2],cmdSplit[3]);
-                    }
+                    
+                    ArrayList<String> tree = new ArrayList<String>(Arrays.asList(cmdSplit));
+                    tree.remove(0);
+                    Global.settings.create(tree);
+                    event.respond(String.valueOf("Maybe its been modified? "+Global.settings.contains(tree.subList(0, tree.size()-1))));
+                    
                 }
                 
                 else if (cmdSplit[0].equalsIgnoreCase("contains")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
@@ -107,32 +108,8 @@ public class UpdateFiles extends ListenerAdapter{
                         if (cmdSplit.length== 3){
                             String filename = cmdSplit[1];
                             String addition = cmdSplit[2];
-                            
                             try{
-                                
-                                File file;
-                                
-                                if (filename.split("\\.").length==1){
-                                    file =new File(filename+".txt");
-                                    filename = filename+".txt";
-                                }
-                                
-                                
-                                
-                                else{
-                                    file =new File(filename);
-                                }
-                                
-//                            if file doesnt exists, then create it
-                                if(!file.exists()){
-                                    file.createNewFile();
-                                }
-                                
-                                //true = append file
-                                FileWriter fileWritter = new FileWriter(file.getName(),true);
-                                BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                                bufferWritter.write("\n"+addition);
-                                bufferWritter.close();
+                                TextUtils.addToDocIfUnique(filename, addition);
                                 
                                 event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+addition+" was added to "+ filename);
                                 
