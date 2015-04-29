@@ -7,12 +7,8 @@
 package Wheatley;
 
 import Utils.TextUtils;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -27,6 +23,8 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    N/A
  * - Custom Objects
  *    N/A
+ * - Utilities
+ *    TextUtils
  * - Linked Classes
  *    Global
  *
@@ -109,13 +107,15 @@ public class UpdateFiles extends ListenerAdapter{
                             String filename = cmdSplit[1];
                             String addition = cmdSplit[2];
                             try{
-                                TextUtils.addToDocIfUnique(filename, addition);
-                                
-                                event.getBot().sendIRC().message(event.getChannel().getName(),"Success: "+addition+" was added to "+ filename);
+                                boolean success = TextUtils.addToDocIfUnique(filename, addition);
+                                if (success)
+                                    event.getBot().sendIRC().message(event.getChannel().getName(),Colors.GREEN+"Success: "+Colors.NORMAL+addition+" was added to "+ filename);
+                                else
+                                    event.getBot().sendIRC().message(event.getChannel().getName(),Colors.RED+"Failure: "+Colors.NORMAL+addition+" is already in "+ filename);
                                 
                             }catch(Exception e){
                                 e.printStackTrace();
-                                event.getBot().sendIRC().notice(event.getUser().getNick(),"FAILURE: "+addition+" was NOT added to "+ filename);
+                                event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.RED+"FAILURE: "+Colors.NORMAL+addition+" was NOT added to "+ filename);
                             }
                         }
                         else{
