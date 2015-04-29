@@ -80,8 +80,8 @@ public class Blarghlebot extends ListenerAdapter {
 //
 //                Iterator<User> iterator = users.iterator();
 //                while(iterator.hasNext()) {
-//                    User element = iterator.next();
-//                        if (element.getNick().startsWith("|")){
+//                    User user = iterator.next();
+//                        if (user.getNick().startsWith("|")){
 //                            counter++;
 //                        }
 //                }
@@ -95,14 +95,14 @@ public class Blarghlebot extends ListenerAdapter {
                 
                 Iterator<User> iterator = users.iterator();
                 while(iterator.hasNext()) {
-                    User element = iterator.next();
-//                    if (element.getNick().startsWith("|")){
+                    User user = iterator.next();
+//                    if (user.getNick().startsWith("|")){
 //                        dtellaUsers++;
 //                    }
-                    if (element.getServer().toLowerCase().matches(".*bridge.*")){
+                    if (user.getServer().toLowerCase().matches(".*bridge.*")&&!user.getNick().equalsIgnoreCase("***REMOVED***")){
                         dtellaUsers++;
                     }
-                    Iterator<Channel> chanIterator = element.getChannels().iterator();
+                    Iterator<Channel> chanIterator = user.getChannels().iterator();
                     while (chanIterator.hasNext()){
                         Channel chanElement = chanIterator.next();
                         if(chanElement.getName().equalsIgnoreCase("#dtella")){
@@ -110,12 +110,12 @@ public class Blarghlebot extends ListenerAdapter {
                             break;
                         }
                     }
-                    if (element.getChannels().size()>0)
+                    if (user.getChannels().size()>0)
                         totalUsers++;
                 }
-                if (dtellaUsers == 0)
-                    dtellaUsers++; //Adding one so that its not negative
-                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Dtella Shares: "+Colors.NORMAL+(dtellaUsers-1)+Colors.BOLD+" #Dtella Users: "+Colors.NORMAL+dtellaChanUsers+Colors.BOLD+" Total Visible Users "+Colors.NORMAL+totalUsers);
+//                if (dtellaUsers == 0)
+//                    dtellaUsers++; //Adding one so that its not negative
+                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Dtella Shares: "+Colors.NORMAL+(dtellaUsers)+Colors.BOLD+" #Dtella Users: "+Colors.NORMAL+dtellaChanUsers+Colors.BOLD+" Total Visible Users "+Colors.NORMAL+totalUsers);
             }
             
             //KICKS ON KICKS ON KICKS
