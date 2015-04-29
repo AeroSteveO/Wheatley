@@ -107,7 +107,7 @@ public class TextUtils {
                 reader.close();
         }
     }
-    public static void addToDocIfUnique(String filename, String addition){
+    public static boolean addToDocIfUnique(String filename, String addition){
         try{
             File file;
             
@@ -123,15 +123,16 @@ public class TextUtils {
                 file.createNewFile();
             }
             
-            addToDocIfUnique(file,addition);
+            return addToDocIfUnique(file,addition);
+            
         }
         catch(Exception ex){
             ex.printStackTrace();
-            return;
+            return false;
         }
     }
     
-    public static void addToDocIfUnique(File file, String addition){
+    public static boolean addToDocIfUnique(File file, String addition){
         try{
             
             if(!file.exists()){
@@ -143,16 +144,18 @@ public class TextUtils {
             current.addAll(listing);
             
             if (current.contains(addition)){
-                return;
+                return false;
             }
             else{
                 FileWriter fileWritter = new FileWriter(file.getName(),true);
                 BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                 bufferWritter.write("\n"+addition);
                 bufferWritter.close();
+                return true;
             }
         } catch (Exception ex){
             ex.printStackTrace();
+            return false;
         }
     }
     
