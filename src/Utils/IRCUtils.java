@@ -14,15 +14,17 @@ import org.pircbotx.hooks.Event;
 
 /**
  *
+ * @author Steve-O
+ * 
  * Requirements:
  * - APIs
  *    N/A
  * - Custom Objects
  *    N/A
+ * - Utilities
+ *    N/A
  * - Linked Classes
  *    N/A
- * 
- * @author Steve-O
  * 
  * Methods:
  *     *getTimeStamp - returns a nicely formatted time stamp

@@ -26,6 +26,8 @@ import java.util.Scanner;
  *    N/A
  * - Custom Objects
  *    N/A
+ *  - Utilities
+ *    N/A
  * - Linked Classes
  *    N/A
  *
@@ -200,7 +202,7 @@ public class TextUtils {
             ex.printStackTrace();
         }
     }
-    public static class CaseInsensitiveList extends ArrayList<String> {
+    private static class CaseInsensitiveList extends ArrayList<String> {
         @Override
         public boolean contains(Object o) {
             String paramStr = (String)o;
