@@ -6,6 +6,7 @@
 
 package Commands;
 
+import Objects.CommandMetaData;
 import Objects.Command;
 import Wheatley.Global;
 import com.google.common.collect.ImmutableSortedSet;
@@ -40,33 +41,38 @@ public class ListChannels implements Command {
     
     @Override
     public void processCommand(Event event){
-        
-        String message = new String();
-        String caller = new String();
-        String channel = null;
-        String respondTo = null;
-        boolean isVerified = false;
+
+        CommandMetaData data = new CommandMetaData(event,true);
+        String message = data.getMessage();
+        String caller = data.getCaller();
+        String channel = data.getEventChannel();
+        String respondTo = new String();
+        if (channel==null)
+        respondTo = caller;
+        else
+        respondTo = channel;
+        boolean isVerified = data.isVerifiedBotOwner();
         
         // START EVENT SPECIFIC PARSING
-        if (event instanceof MessageEvent){ // MESSAGE EVENT SPECIFIC PARSING
-            MessageEvent mEvent = (MessageEvent) event;
-            message = Colors.removeFormattingAndColors(mEvent.getMessage());
-            caller = mEvent.getUser().getNick();
-            channel = mEvent.getChannel().getName();
-            respondTo = channel;
+//        if (event instanceof MessageEvent){ // MESSAGE EVENT SPECIFIC PARSING
+//            MessageEvent mEvent = (MessageEvent) event;
+//            message = Colors.removeFormattingAndColors(mEvent.getMessage());
+//            caller = mEvent.getUser().getNick();
+//            channel = mEvent.getChannel().getName();
+//            respondTo = channel;
             
-            isVerified=(caller.equalsIgnoreCase(Global.botOwner)&&mEvent.getUser().isVerified());
-        }// END MESSAGE EVENT SPECIFIC PARSING
-        else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
-            PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
-            message = Colors.removeFormattingAndColors(pmEvent.getMessage());
-            caller = pmEvent.getUser().getNick();
-            respondTo = caller;
-            isVerified=(caller.equalsIgnoreCase(Global.botOwner)&&pmEvent.getUser().isVerified());
-        }// END PRIVATE MESSAGE EVENT SPECIFIC PARSING
-        else{
-            return;
-        }
+//            isVerified=(caller.equalsIgnoreCase(Global.botOwner)&&mEvent.getUser().isVerified());
+//        }// END MESSAGE EVENT SPECIFIC PARSING
+//        else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
+//            PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
+//            message = Colors.removeFormattingAndColors(pmEvent.getMessage());
+//            caller = pmEvent.getUser().getNick();
+//            respondTo = caller;
+//            isVerified=(caller.equalsIgnoreCase(Global.botOwner)&&pmEvent.getUser().isVerified());
+//        }// END PRIVATE MESSAGE EVENT SPECIFIC PARSING
+//        else{
+//            return;
+//        }
         // END EVENT SPECIFIC PARSING
         
         if(!isVerified){
