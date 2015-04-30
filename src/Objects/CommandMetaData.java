@@ -59,7 +59,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *
  * Useful Resources
  * - N/A
- *
+ *  
  * Version: 0.5.0
  */
 public class CommandMetaData {
@@ -218,6 +218,20 @@ public class CommandMetaData {
         }
         else
             return (null);
+    }
+    public String respondToCallerOrMessageChan(){
+        if (eventType.equalsIgnoreCase("PrivateMessage")&&refChan==null){
+            return caller;
+        }
+        else
+            return getCommandChannel();
+    }
+    public String respondToIgnoreMessage(){
+        if (eventType.equalsIgnoreCase("PrivateMessage")){
+            return caller;
+        }
+        else
+            return getEventChannel();
     }
     //ORIGINAL CONSTRUCTOR THAT WAS NEVER USED
 //    public CommandMetaData(Event event){
