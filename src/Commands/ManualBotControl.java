@@ -10,13 +10,9 @@ import Annot.CMD;
 import Annot.GenCMD;
 import Objects.Command;
 import Objects.CommandMetaData;
-import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.Channel;
-import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
-import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 /**
  *
@@ -27,8 +23,10 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *    N/A
  * - Custom Objects
  *    Command
+ * - Utilities
+ *    N/A
  * - Linked Classes
- *    Global
+ *    N/A
  * 
  * ADMIN COMMANDS
  * Activate Commands with:

@@ -9,7 +9,6 @@ package Commands;
 import Objects.Command;
 import Objects.CommandMetaData;
 import Utils.TextUtils;
-import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
@@ -17,12 +16,23 @@ import org.pircbotx.hooks.Event;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Command
+ * - Utilities
+ *    TextUtils
+ * - Linked Classes
+ *    N/A
+ * 
  */
 public class UpdateFile implements Command{
     
     @Override
     public String toString(){
-        return("Manually control the bots output");
+        return("Simple text file updater");
     }
     
     @Override

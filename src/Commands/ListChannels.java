@@ -8,19 +8,27 @@ package Commands;
 
 import Objects.CommandMetaData;
 import Objects.Command;
-import Wheatley.Global;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
-import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 /**
  *
  * @author Stephen
+ *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Command
+ * - Utilities
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ *
  */
 public class ListChannels implements Command {
     
@@ -41,16 +49,18 @@ public class ListChannels implements Command {
     
     @Override
     public void processCommand(Event event){
-
+        
         CommandMetaData data = new CommandMetaData(event,true);
         String message = data.getMessage();
         String caller = data.getCaller();
         String channel = data.getEventChannel();
         String respondTo = new String();
+        
         if (channel==null)
-        respondTo = caller;
+            respondTo = caller;
         else
-        respondTo = channel;
+            respondTo = channel;
+        
         boolean isVerified = data.isVerifiedBotOwner();
         
         // START EVENT SPECIFIC PARSING
@@ -60,7 +70,7 @@ public class ListChannels implements Command {
 //            caller = mEvent.getUser().getNick();
 //            channel = mEvent.getChannel().getName();
 //            respondTo = channel;
-            
+        
 //            isVerified=(caller.equalsIgnoreCase(Global.botOwner)&&mEvent.getUser().isVerified());
 //        }// END MESSAGE EVENT SPECIFIC PARSING
 //        else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING

@@ -15,7 +15,6 @@ import Objects.CommandMetaData;
 import Wheatley.Global;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 /**
  *
@@ -27,6 +26,8 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  * - Custom Objects
  *    Command
  *    Throttle
+ * - Utilities
+ *    N/A
  * - Linked Classes
  *    Global
  *

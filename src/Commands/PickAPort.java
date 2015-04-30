@@ -24,8 +24,10 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *    N/A
  * - Custom Objects
  *    Command
+ * - Utilities
+ *    N/A
  * - Linked Classes
- *    Global
+ *    N/A
  * 
  */
 @CMD
