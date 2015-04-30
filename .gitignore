@@ -30,6 +30,7 @@ nbproject/private/profiler/configurations.xml
 # Package Files #
 *.war
 *.ear
+*.class
 hs_err_pid*
 nbproject/private/
 nbproject/private/*
