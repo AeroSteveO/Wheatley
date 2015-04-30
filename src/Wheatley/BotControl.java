@@ -8,6 +8,7 @@ package Wheatley;
 
 import Objects.ChannelStore;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Random;
@@ -15,6 +16,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Element;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
@@ -32,7 +36,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *    ChannelStore
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate Commands with:
  *      Wheatley, join #[channel]
  *          Makes the bot join the given channel
@@ -77,7 +81,7 @@ public class BotControl extends ListenerAdapter{
 ////                        System.out.println(chan);
 //                        Channel c = event.getBot().getUserChannelDao().getChannel(chan);
 //                        if(event.getBot().getUserBot().getChannels().contains(c)){
-//                            
+//
 //                            String msg = message.split(" ",3)[2];
 //                            event.getBot().sendIRC().message(chan, msg);
 //                        }
@@ -130,21 +134,21 @@ public class BotControl extends ListenerAdapter{
             }
         }
         
-        if (message.equalsIgnoreCase(Global.mainNick+", fix yourself")
-                &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)
-                ||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified())){
-            
-            event.getBot().sendIRC().message("NickServ", "ghost " + Global.mainNick + " " + Global.nickPass);  //ghost is a depricated command, if it doesn't work, the next command should work
-            event.getBot().sendIRC().message("NickServ", "recover " + Global.mainNick + " " + Global.nickPass);//sends both commands, NS can yell about one and do the other
-            
-            Thread.sleep(5000); // wait between killing the ghost to changing nick and registering
-            event.getBot().sendIRC().changeNick(Global.mainNick);
-            event.getBot().sendIRC().message("NickServ", "identify " + Global.nickPass);
-            Global.channels.removeDupes();
-            for (int i=0;i<Global.channels.size();i++){
-                event.getBot().sendIRC().joinChannel(Global.channels.get(i).toString());
-            }
-        }
+//        if (message.equalsIgnoreCase(Global.mainNick+", fix yourself")
+//                &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)
+//                ||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified())){
+//
+//            event.getBot().sendIRC().message("NickServ", "ghost " + Global.mainNick + " " + Global.nickPass);  //ghost is a depricated command, if it doesn't work, the next command should work
+//            event.getBot().sendIRC().message("NickServ", "recover " + Global.mainNick + " " + Global.nickPass);//sends both commands, NS can yell about one and do the other
+//
+//            Thread.sleep(5000); // wait between killing the ghost to changing nick and registering
+//            event.getBot().sendIRC().changeNick(Global.mainNick);
+//            event.getBot().sendIRC().message("NickServ", "identify " + Global.nickPass);
+//            Global.channels.removeDupes();
+//            for (int i=0;i<Global.channels.size();i++){
+//                event.getBot().sendIRC().joinChannel(Global.channels.get(i).toString());
+//            }
+//        }
         
         if (message.equalsIgnoreCase(Global.mainNick+", please shutdown")
                 ||message.equalsIgnoreCase("!shutdown")
@@ -204,41 +208,41 @@ public class BotControl extends ListenerAdapter{
                 Global.channels.remove(Global.channels.getChanIdx(event.getChannel().getName().toString()));
             }
         }
-        if((message.equalsIgnoreCase(Global.mainNick+", whats your ip")||message.equalsIgnoreCase("!ip"))
-                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
-            
-            String ipInfo = readUrl("http://ipinfo.io/json");
-//            JSONParser parser = new JSONParser();
-            try{
-                JSONObject ipJSON = (JSONObject) new JSONTokener(ipInfo).nextValue();
-                String ipAddress = (String) ipJSON.get("ip");
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "Current IP Address is: "+ipAddress);
-            }
-            catch (Exception ex){
-                System.out.println(ex.getMessage());
-                ex.printStackTrace();
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "ERROR PARSING IP ADDRESS");
-            }
-        }
-    }
-    
-    @Override
-    public void onPrivateMessage(PrivateMessageEvent event) throws InterruptedException{
-        String message = Colors.removeFormattingAndColors(event.getMessage());
-        if (message.equalsIgnoreCase(Global.mainNick+", fix yourself")
-                &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified())){
-            
-            event.getBot().sendIRC().message("NickServ", "ghost " + Global.mainNick + " " + Global.nickPass);  //ghost is a depricated command, if it doesn't work, the next command should work
-            event.getBot().sendIRC().message("NickServ", "recover " + Global.mainNick + " " + Global.nickPass);//sends both commands, NS can yell about one and do the other
-            
-            Thread.sleep(5000); // wait between killing the ghost to changing nick and registering
-            event.getBot().sendIRC().changeNick(Global.mainNick);
-            event.getBot().sendIRC().message("NickServ", "identify " + Global.nickPass);
-            Global.channels.removeDupes();
-            for (int i=0;i<Global.channels.size();i++){
-                event.getBot().sendIRC().joinChannel(Global.channels.get(i).toString());
-            }
-        }
+//        if((message.equalsIgnoreCase(Global.mainNick+", whats your ip")||message.equalsIgnoreCase("!ip"))
+//                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
+//
+//            String ipInfo = readUrl("http://ipinfo.io/json");
+////            JSONParser parser = new JSONParser();
+//            try{
+//                JSONObject ipJSON = (JSONObject) new JSONTokener(ipInfo).nextValue();
+//                String ipAddress = (String) ipJSON.get("ip");
+//                event.getBot().sendIRC().notice(event.getUser().getNick(), "Current IP Address is: "+ipAddress);
+//            }
+//            catch (Exception ex){
+//                System.out.println(ex.getMessage());
+//                ex.printStackTrace();
+//                event.getBot().sendIRC().notice(event.getUser().getNick(), "ERROR PARSING IP ADDRESS");
+//            }
+//        }
+//    }
+        
+//    @Override
+//    public void onPrivateMessage(PrivateMessageEvent event) throws InterruptedException{
+//        String message = Colors.removeFormattingAndColors(event.getMessage());
+//        if (message.equalsIgnoreCase(Global.mainNick+", fix yourself")
+//                &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified())){
+        
+//            event.getBot().sendIRC().message("NickServ", "ghost " + Global.mainNick + " " + Global.nickPass);  //ghost is a depricated command, if it doesn't work, the next command should work
+//            event.getBot().sendIRC().message("NickServ", "recover " + Global.mainNick + " " + Global.nickPass);//sends both commands, NS can yell about one and do the other
+        
+//            Thread.sleep(5000); // wait between killing the ghost to changing nick and registering
+//            event.getBot().sendIRC().changeNick(Global.mainNick);
+//            event.getBot().sendIRC().message("NickServ", "identify " + Global.nickPass);
+//            Global.channels.removeDupes();
+//            for (int i=0;i<Global.channels.size();i++){
+//                event.getBot().sendIRC().joinChannel(Global.channels.get(i).toString());
+//            }
+//        }
     }
     //converts URL to string, primarily used to string-ify json text
     private static String readUrl(String urlString) throws Exception {
@@ -255,6 +259,29 @@ public class BotControl extends ListenerAdapter{
         } finally {
             if (reader != null)
                 reader.close();
+        }
+    }
+    private void updateChannelsFromXML(){
+        
+        try{
+            File fXmlFile = new File("Settings.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
+            int test = Integer.parseInt(baseElement.getElementsByTagName("test").item(0).getTextContent());
+            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(test);
+            
+            
+            
+            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++){ //Add channels from XML and load into channels Object
+                
+                Global.channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
+                
+            }
+            
+        }
+        catch (Exception ex){
+            
         }
     }
 }
