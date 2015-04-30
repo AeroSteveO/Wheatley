@@ -9,6 +9,7 @@ package Commands;
 import Annot.CMD;
 import Annot.GenCMD;
 import Objects.Command;
+import Objects.CommandMetaData;
 import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.Channel;
@@ -68,50 +69,22 @@ public class ManualBotControl implements Command{
     @Override
     public void processCommand(Event event){
         
-        String message = new String();
-        String caller = new String();
-        String channel = null;
-//        String responseChan = null;
-        boolean isVerified = false;
+        CommandMetaData commandData = new CommandMetaData(event, true);
         
-        // START EVENT SPECIFIC PARSING
-        if (event instanceof MessageEvent){ // MESSAGE EVENT SPECIFIC PARSING
-            MessageEvent mEvent = (MessageEvent) event;
-            message = Colors.removeFormattingAndColors(mEvent.getMessage());
-            caller = mEvent.getUser().getNick();
-            channel = mEvent.getChannel().getName();
-//            responseChan = channel;
-            
-//            if (message.split(" ").length==5){
-                isVerified=(caller.equalsIgnoreCase(Global.botOwner))&&mEvent.getUser().isVerified();
-//            }
-//            else if (message.split(" ").length==4){
-//                isVerified=((caller.equalsIgnoreCase(Global.botOwner))&&mEvent.getUser().isVerified());
-//            }
-        }// END MESSAGE EVENT SPECIFIC PARSING
-        else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
-            PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
-            message = Colors.removeFormattingAndColors(pmEvent.getMessage());
-            caller = pmEvent.getUser().getNick();
-            
-//            if (message.split(" ").length==5)
-                isVerified=(caller.equalsIgnoreCase(Global.botOwner))&&pmEvent.getUser().isVerified();
-        }// END PRIVATE MESSAGE EVENT SPECIFIC PARSING
-        else{
-            return;
-        }
-        // END EVENT SPECIFIC PARSING
+        String message = commandData.getMessage();
+        String caller = commandData.getCaller();
+        String channel = commandData.getEventChannel();
+        boolean isVerified = commandData.isVerifiedBotOwner();
+        String[] cmdSplit = commandData.getCommandSplit();
         
-        // COMMAND SPLITTING
-        String command = message.split(Global.commandPrefix)[1];
-        String[] cmdSplit = command.split(" ");
+        
         if(isVerified){
             if (cmdSplit[0].equalsIgnoreCase("say")){
                 if (cmdSplit.length>2&&cmdSplit[1].startsWith("#")){
                     String chan = cmdSplit[1];
                     if (!chan.startsWith("#")&&channel!=null)
                         chan = channel;
-                    if (chan.contains("#")){
+                    if (chan.startsWith("#")){
 //                        System.out.println(chan);
                         Channel c = event.getBot().getUserChannelDao().getChannel(chan);
                         if(event.getBot().getUserBot().getChannels().contains(c)){
