@@ -27,7 +27,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    N/A
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate Command with:
  *      !lasturl
  *          Pulls up the last url seen in the current channel
@@ -70,7 +70,7 @@ public class SRSBSNS extends ListenerAdapter {
 //                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " 1m " + event.getBot().getUserChannelDao().getUser(messageArray[1]).getNick() + "!*@*");
 ////                output.kick(event.getBot().getUserChannelDao().getUser(kill[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
 //                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(messageArray[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
-//            } 
+//            }
 //            else if (messageArray.length>4){
 //                String time;
 //                String[] kill;
@@ -85,7 +85,7 @@ public class SRSBSNS extends ListenerAdapter {
 //                    time = "1m";
 //                    reason = kill[2];
 //                }
-//                
+//
 //                String user = event.getBot().getUserChannelDao().getUser(kill[1]).getNick();
 //                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " " + time + " " + event.getBot().getUserChannelDao().getUser(user).getNick() + "!*@*");
 //                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(user), "<"+event.getUser().getNick()+"> "+reason);
@@ -113,14 +113,13 @@ public class SRSBSNS extends ListenerAdapter {
                 if (!Global.channels.getChan(currentChan).getLastUrl().equals("")){
                     String title;
                     
-                    try{
                     org.jsoup.nodes.Document finaldoc = Jsoup.connect(Global.channels.getChan(currentChan).getLastUrl()).get();
-                    title = finaldoc.title();
-                    }
-                    catch (Exception ex){
-                        title = "No Title Found";
-                    }
-                    event.getBot().sendIRC().message(currentChan,Colors.BOLD+"Last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
+                    if (finaldoc == null) {
+                        title= "No Title Found";
+                    } else {
+                        title = finaldoc.title();
+                    }                    
+                event.getBot().sendIRC().message(currentChan,Colors.BOLD+"Last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
                 }
                 else
                     event.getBot().sendIRC().message(currentChan,"No previous URL found");
