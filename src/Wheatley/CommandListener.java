@@ -80,6 +80,8 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new ManualBotControl());
         listOfCommands.add(new ListChannels());
         listOfCommands.add(new UpdateFile());
+        listOfCommands.add(new IpCmd());
+        listOfCommands.add(new FixCmd());
         return(listOfCommands);
     }
 }
