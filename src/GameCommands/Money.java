@@ -41,7 +41,7 @@ public class Money implements Command{
         String command = message.split(Global.commandPrefix)[1];
         String[] cmdSplit = command.split(" ");
         
-        if (command.equalsIgnoreCase("money")){ // Get your current score
+        if (cmdSplit.length==1){ // Get your current score
             int userScore = scores.getScore(caller);
             if (userScore == Integer.MIN_VALUE){
                 event.getBot().sendIRC().notice(caller, "USER NOT FOUND");
@@ -50,7 +50,7 @@ public class Money implements Command{
                 event.respond("You currently have $"+userScore);
         }
         
-        else if (cmdSplit[0].equalsIgnoreCase("money")&&command.split(" ").length==2){ // Get someone elses current score
+        else if (command.split(" ").length==2){ // Get someone elses current score
             String user = command.split(" ")[1];
             int userScore = scores.getScore(user);
             if (userScore ==Integer.MIN_VALUE){
@@ -60,7 +60,7 @@ public class Money implements Command{
                 event.respond(user+" currently has $"+userScore);
         }
         
-        else if (cmdSplit[0].equalsIgnoreCase("money")&&command.split(" ").length==3&&caller.equalsIgnoreCase(Global.botOwner)){
+        else if (cmdSplit.length==3&&caller.equalsIgnoreCase(Global.botOwner)){
             boolean isVerified = false;
             String responseLocation = "";
             
