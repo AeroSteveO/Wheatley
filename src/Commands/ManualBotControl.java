@@ -17,7 +17,7 @@ import org.pircbotx.hooks.Event;
 /**
  *
  * @author Stephen
- * 
+ *
  * Requirements:
  * - APIs
  *    N/A
@@ -27,7 +27,7 @@ import org.pircbotx.hooks.Event;
  *    N/A
  * - Linked Classes
  *    N/A
- * 
+ *
  * ADMIN COMMANDS
  * Activate Commands with:
  *      !act [action]
@@ -38,7 +38,7 @@ import org.pircbotx.hooks.Event;
  *          Repeats the given message in the channel the command was run from
  *      !say [#channel] [message]
  *          Repeats the given message in the input channel
- * 
+ *
  */
 @GenCMD
 @CMD
@@ -77,63 +77,72 @@ public class ManualBotControl implements Command{
         
         
         if(isVerified){
-            if (cmdSplit[0].equalsIgnoreCase("say")){
-                if (cmdSplit.length>2&&cmdSplit[1].startsWith("#")){
-                    String chan = cmdSplit[1];
-                    if (!chan.startsWith("#")&&channel!=null)
-                        chan = channel;
-                    if (chan.startsWith("#")){
+//            if (cmdSplit[0].equalsIgnoreCase("say")){
+//                if (cmdSplit.length>2&&cmdSplit[1].startsWith("#")){
+//                    String chan = cmdSplit[1];
+//                    if (!chan.startsWith("#")&&channel!=null)
+//                        chan = channel;
+//                    if (chan.startsWith("#")){
+////                        System.out.println(chan);
+//                        Channel c = event.getBot().getUserChannelDao().getChannel(chan);
+//                        if(event.getBot().getUserBot().getChannels().contains(c)){
+//
+//                            String msg = message.split(" ",3)[2];
+//                            event.getBot().sendIRC().message(chan, msg);
+//                        }
+//                        else{
+//                            event.getBot().sendIRC().notice(caller, "Bot not in this channel");
+//                        }
+//                    }
+//                    else{
+//                        event.getBot().sendIRC().notice(caller, "Improperly formed channel string");
+//                    }
+//                }
+//                else{
+//                    String msg = message.split(" ",2)[1];
+//                    if (channel!=null)
+//                        event.getBot().sendIRC().message(channel, msg);
+//                    else
+//                        event.getBot().sendIRC().message(caller, msg);
+//                }
+//            }
+//        }
+            if (cmdSplit.length>2&&cmdSplit[1].startsWith("#")){
+                String chan = cmdSplit[1];
+                if (!chan.startsWith("#")&&channel!=null)
+                    chan = channel;
+                if (chan.contains("#")){
 //                        System.out.println(chan);
-                        Channel c = event.getBot().getUserChannelDao().getChannel(chan);
-                        if(event.getBot().getUserBot().getChannels().contains(c)){
-                            
-                            String msg = message.split(" ",3)[2];
+                    Channel c = event.getBot().getUserChannelDao().getChannel(chan);
+                    if(event.getBot().getUserBot().getChannels().contains(c)){
+                        
+                        String msg = message.split(" ",3)[2];
+                        if (cmdSplit[0].equalsIgnoreCase("act"))
+                            event.getBot().sendIRC().action(chan, msg);
+                        else
                             event.getBot().sendIRC().message(chan, msg);
-                        }
-                        else{
-                            event.getBot().sendIRC().notice(caller, "Bot not in this channel");
-                        }
                     }
                     else{
-                        event.getBot().sendIRC().notice(caller, "Improperly formed channel string");
+                        event.getBot().sendIRC().notice(caller, "Bot not in this channel");
                     }
                 }
                 else{
-                    String msg = message.split(" ",2)[1];
-                    if (channel!=null)
-                        event.getBot().sendIRC().message(channel, msg);
-                    else
-                        event.getBot().sendIRC().message(caller, msg);
+                    event.getBot().sendIRC().notice(caller, "Improperly formed channel string");
                 }
             }
-//        }
-            else if (cmdSplit[0].equalsIgnoreCase("act")){
-                if (cmdSplit.length>2&&cmdSplit[1].startsWith("#")){
-                    String chan = cmdSplit[1];
-                    if (!chan.startsWith("#")&&channel!=null)
-                        chan = channel;
-                    if (chan.contains("#")){
-//                        System.out.println(chan);
-                        Channel c = event.getBot().getUserChannelDao().getChannel(chan);
-                        if(event.getBot().getUserBot().getChannels().contains(c)){
-                            
-                            String msg = message.split(" ",3)[2];
-                            event.getBot().sendIRC().action(chan, msg);
-                        }
-                        else{
-                            event.getBot().sendIRC().notice(caller, "Bot not in this channel");
-                        }
-                    }
-                    else{
-                        event.getBot().sendIRC().notice(caller, "Improperly formed channel string");
-                    }
-                }
-                else{
-                    String msg = message.split(" ",2)[1];
-                    if (channel!=null)
+            else{
+                String msg = message.split(" ",2)[1];
+                if (channel!=null){
+                    if(cmdSplit[0].equalsIgnoreCase("act"))
                         event.getBot().sendIRC().action(channel, msg);
                     else
+                        event.getBot().sendIRC().message(channel, msg);
+                }
+                else{
+                    if(cmdSplit[0].equalsIgnoreCase("act"))
                         event.getBot().sendIRC().action(caller, msg);
+                    else
+                        event.getBot().sendIRC().message(caller, msg);
                 }
             }
         }
