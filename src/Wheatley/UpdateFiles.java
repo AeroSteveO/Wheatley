@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import Utils.TextUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.pircbotx.Colors;
@@ -142,5 +141,4 @@ public class UpdateFiles extends ListenerAdapter{
 //        }
 //        return true;
 //    }
-    
 }

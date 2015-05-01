@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import static Wheatley.GameControl.scores;
 import com.google.common.collect.ImmutableSortedSet;
 import java.net.URLEncoder;
 import java.util.ArrayList;
