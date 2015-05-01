@@ -21,16 +21,21 @@
     <server id="dtella">
         <address>irc.dhirc.com</address>
         <channel>#rapterverse</channel>
+		<channel>#casino</channel>
         <channel>#AlternateUniverse</channel>
-        <channel>#fluke42land</channel>
         <channel>#SirMatthias</channel>
         <channel>#Frictionverse</channel>
+<!--		<channel>#dtella</channel>   -->
+		<channel>#techtalk</channel>
+		<channel>#markov</channel>
+		<channel>#saigon</channel>
     </server>
    
     <server id="test">
-        <address>irc.Stevensnet.info</address>
+        <address>***REMOVED***</address>
         <channel>#rapterverse</channel> 
 		<channel>#dtella</channel>
+		<channel>#casino</channel>
     </server>
     
     <email>
