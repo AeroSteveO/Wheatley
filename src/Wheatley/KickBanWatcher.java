@@ -7,6 +7,7 @@ package Wheatley;
 
 import Objects.BanLog;
 import Objects.BanLog.BanList;
+import Utils.ColorUtils;
 import Utils.IRCUtils;
 import com.google.common.collect.ImmutableList;
 import org.pircbotx.Colors;
@@ -52,7 +53,7 @@ class KickBanWatcher extends ListenerAdapter {
             }
         }
         if(message.equalsIgnoreCase("!test colors")){
-            event.respond(Colors2.getRandomColorAndBackground()+"COOL STUFF"+Colors.NORMAL+Colors2.getRandomColor()+" IS COOL");
+            event.respond(ColorUtils.getRandomColorAndBackground()+"COOL STUFF"+Colors.NORMAL+ColorUtils.getRandomColor()+" IS COOL");
         }
     }
     

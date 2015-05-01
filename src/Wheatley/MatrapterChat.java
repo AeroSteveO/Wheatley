@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Utils.ColorUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.pircbotx.Colors;
@@ -179,19 +180,19 @@ public class MatrapterChat extends ListenerAdapter {
     
     public ArrayList<String> getFlag() {
         ArrayList<String> a = new ArrayList();
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+"* * * * * * * * * * "+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+" * * * * * * * * *  "+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+"* * * * * * * * * * "+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+" * * * * * * * * *  "+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+"* * * * * * * * * * "+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+" * * * * * * * * *  "+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+"::::::::::::::::::::;::::"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.BLUE)+"* * * * * * * * * * "+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::::::::::::::::::::::"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::::::::::::::::::::::"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.LIGHT_GRAY,Colors2.LIGHT_GRAY)+":::::::::::::::::::::::::::::::::::::::::::::"+Colors.NORMAL+"|");
-        a.add("|"+Colors2.getColors(Colors2.RED,Colors2.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.BLUE)+"* * * * * * * * * * "+ColorUtils.getColors(ColorUtils.RED,ColorUtils.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.BLUE)+" * * * * * * * * *  "+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.LIGHT_GRAY)+":::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.BLUE)+"* * * * * * * * * * "+ColorUtils.getColors(ColorUtils.RED,ColorUtils.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.BLUE)+" * * * * * * * * *  "+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.LIGHT_GRAY)+":::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.BLUE)+"* * * * * * * * * * "+ColorUtils.getColors(ColorUtils.RED,ColorUtils.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.BLUE)+" * * * * * * * * *  "+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.LIGHT_GRAY)+"::::::::::::::::::::;::::"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.BLUE)+"* * * * * * * * * * "+ColorUtils.getColors(ColorUtils.RED,ColorUtils.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.LIGHT_GRAY)+":::::::::::::::::::::::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.RED,ColorUtils.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.LIGHT_GRAY)+":::::::::::::::::::::::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.RED,ColorUtils.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.LIGHT_GRAY,ColorUtils.LIGHT_GRAY)+":::::::::::::::::::::::::::::::::::::::::::::"+Colors.NORMAL+"|");
+        a.add("|"+ColorUtils.getColors(ColorUtils.RED,ColorUtils.RED)+"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+Colors.NORMAL+"|");
         return a;
     }
 }

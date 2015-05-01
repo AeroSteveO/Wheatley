@@ -4,7 +4,7 @@
 * and open the template in the editor.
 */
 
-package Wheatley;
+package Utils;
 
 /**
  *
@@ -19,7 +19,7 @@ package Wheatley;
  *    N/A
  * 
  */
-public final class Colors2 {
+public final class ColorUtils {
     /**
      * Removes all previously applied color and formatting attributes.
      */
@@ -102,9 +102,6 @@ public final class Colors2 {
     public static final String LIGHT_GRAY = "15";
     
     public static final String BASE = "\u0003";
-    private Colors2(){
-        
-    }
     
     public static final String getColors(String color) {
         return(BASE+color);
@@ -115,6 +112,12 @@ public final class Colors2 {
     public static final String getRandomColor(){
         int color = (int) (Math.random()*16);
         return (BASE+Integer.toString(color));
+    }
+    public static String getRandomBackground(){
+
+int color = (int) (Math.random()*16);
+        return (BASE+BLACK+","+ Integer.toString(color));
+
     }
     public static final String getRandomColorAndBackground(){
         int color = (int) (Math.random()*16);
