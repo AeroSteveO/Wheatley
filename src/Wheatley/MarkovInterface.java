@@ -109,7 +109,7 @@ public class MarkovInterface extends ListenerAdapter{
             }
         }
         
-        if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")){
+        if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")|| message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think about")){
             
             String[] keyWord = message.replace("?","").split(" ");
             
