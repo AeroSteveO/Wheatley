@@ -70,13 +70,13 @@ public class MarkovInterface extends ListenerAdapter{
         
         //Toggle off Markov Chain Talking
         if (Pattern.matches(Global.mainNick + ", (shutup|shut\\s+up)",message)||message.equalsIgnoreCase("!mute")||Pattern.matches("(shutup|shut\\s+up)\\s+"+Global.mainNick,message)){
-            Global.channels.get(channelIndex).setSpeakValue(false);
+            setMarkovSpeech("false", event.getChannel().getName());
             event.getBot().sendIRC().notice(event.getUser().getNick(), "Markov chain system muted");
         }
         
         //Toggle on Markov Chain Talking
         if (message.equalsIgnoreCase(Global.mainNick + ", speak up")||message.equalsIgnoreCase("!speak")){
-            Global.channels.get(channelIndex).setSpeakValue(true);
+            setMarkovSpeech("true", event.getChannel().getName());
             event.getBot().sendIRC().notice(event.getUser().getNick(), "Markov chain system un-muted");
         }
         if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
@@ -97,7 +97,7 @@ public class MarkovInterface extends ListenerAdapter{
                     int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
                     
                     if (inputChance>0){
-                        Global.channels.get(channelIndex).setChanceValue(inputChance);
+                        setMarkovChance(String.valueOf(inputChance), event.getChannel().getName());
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance set to: 1/"+inputChance);
                     }
                     
@@ -146,7 +146,7 @@ public class MarkovInterface extends ListenerAdapter{
             }
             
             //Automatically speak with a 1/chance probability
-            if (Global.channels.get(channelIndex).getChance()==((int) (Math.random()*Global.channels.get(channelIndex).getChance())+1)&&Global.channels.get(channelIndex).canSpeak()){
+            if (getMarkovChance(event.getChannel().getName())==((int) (Math.random()*getMarkovChance(event.getChannel().getName()))+1)&&getMarkovSpeech(event.getChannel().getName())){
                 String reply;
                 try{
                     reply = borg.generateReply(message);
@@ -202,7 +202,7 @@ public class MarkovInterface extends ListenerAdapter{
         }
     }
     
-    public boolean isBot(String nick) throws FileNotFoundException {
+    private boolean isBot(String nick) throws FileNotFoundException {
         if (botList==null){
             botList = getBotList();
         }
@@ -213,5 +213,39 @@ public class MarkovInterface extends ListenerAdapter{
             }
         }
         return(false);
+    }
+    private void setMarkovSpeech(String speak, String channel){
+        if (Global.settings.contains("markovspeak",channel)){
+            Global.settings.set("markovspeak", speak, channel);
+        }
+        else{
+            Global.settings.create("markovspeak", speak, channel);
+        }
+    }
+    private void setMarkovChance(String chance, String channel){
+        if (Global.settings.contains("markovchance",channel)){
+            Global.settings.set("markovchance", chance, channel);
+        }
+        else{
+            Global.settings.create("markovchance", chance, channel);
+        }
+    }
+    private boolean getMarkovSpeech(String channel){
+        if (Global.settings.contains("markovspeak",channel)){
+            return Boolean.valueOf(Global.settings.get("markovspeak", channel));
+        }
+        else{
+            Global.settings.create("markovspeak", "true", channel);
+            return true;
+        }
+    }
+    private int getMarkovChance(String channel){
+        if (Global.settings.contains("markovchance",channel)){
+            return Integer.valueOf(Global.settings.get("markovchance", channel));
+        }
+        else{
+            Global.settings.create("markovchance", String.valueOf(100), channel);
+            return(100);
+        }
     }
 }
