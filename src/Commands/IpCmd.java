@@ -55,7 +55,10 @@ public class IpCmd implements Command{
     @Override
     public void processCommand(Event event){
         
-        CommandMetaData data = new CommandMetaData(event,true);
+        CommandMetaData data = new CommandMetaData(event,false);
+        
+        if (data.getMessage().equalsIgnoreCase(Global.commandPrefix+"ip"))
+              data = new CommandMetaData(event,true);
         
         String caller = data.getCaller();
         boolean isVerified = data.isVerifiedBotOwner();
