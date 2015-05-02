@@ -33,7 +33,7 @@ import org.pircbotx.hooks.Event;
  *    N/A
  *
  */
-public class IpCmd implements Command{
+public class IpInfoCMD implements Command{
     
     @Override
     public String toString(){
