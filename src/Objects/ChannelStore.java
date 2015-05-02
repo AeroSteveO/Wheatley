@@ -34,8 +34,8 @@ public class ChannelStore {
     private String lastUrl;                          // last url seen in this channel
     private String secondLastUrl;                    // second last url seen in this channel
     private List<String> msgLog = new ArrayList<>();                       // for use in s/find/replace commands
-//    private ArrayList<String> gameChanBlocks = getBlockedGameChannels();   // List of channels that games are blocked from
-//    private boolean gamesBlocked;                                          // Are games currently blocked in this channel
+    private ArrayList<String> gameChanBlocks = getBlockedGameChannels();   // List of channels that games are blocked from
+    private boolean gamesBlocked;                                          // Are games currently blocked in this channel
 //    private ThrottleArray throttle = new ThrottleArray();
     
     public ChannelStore(String aName) {
@@ -46,7 +46,7 @@ public class ChannelStore {
         this.lastUrl = "";
         this.secondLastUrl = "";
         this.msgLog.add("");
-//        this.gamesBlocked = isChanBlocked();
+        this.gamesBlocked = isChanBlocked();
     }
     @Override
     public String toString(){
@@ -101,28 +101,28 @@ public class ChannelStore {
     public String getMessage(){
         return(this.msgLog.get(this.msgLog.size()-1));
     }
-//    public boolean getGameBlockStatus(){
-//        return(this.gamesBlocked);
-//    }
-//    private ArrayList<String> getBlockedGameChannels() {
-//        ArrayList<String> channelsBlocked = new ArrayList<String>();
-//        
-//        channelsBlocked.add("#dtella");
-//        channelsBlocked.add("#dtella2.0");
-//        
-//        return(channelsBlocked);
-//    }
-//    public void addBlockedChannel(String channelName){
-//        this.gameChanBlocks.add(channelName);
-//    }
-//    
-//    private boolean isChanBlocked() {
-//        if(gameChanBlocks.contains(this.name))
-//            return(true);
-//        else{
-//            return(false);
-//        }
-//    }
+    public boolean getGameBlockStatus(){
+        return(this.gamesBlocked);
+    }
+    private ArrayList<String> getBlockedGameChannels() {
+        ArrayList<String> channelsBlocked = new ArrayList<String>();
+        
+        channelsBlocked.add("#dtella");
+        channelsBlocked.add("#dtella2.0");
+        
+        return(channelsBlocked);
+    }
+    public void addBlockedChannel(String channelName){
+        this.gameChanBlocks.add(channelName);
+    }
+    
+    private boolean isChanBlocked() {
+        if(gameChanBlocks.contains(this.name))
+            return(true);
+        else{
+            return(false);
+        }
+    }
 //    public void addThrottleSetting(String type){
 //        this.throttle.add(new Throttle(type));
 //    }
@@ -160,9 +160,9 @@ public class ChannelStore {
             }
             return (this.get(idx));
         }
-//        public boolean areGamesBlocked(String channel){
-//            return(getChan(channel).getGameBlockStatus());
-//        }
+        public boolean areGamesBlocked(String channel){
+            return(getChan(channel).getGameBlockStatus());
+        }
         public boolean containsChan(String toCheck){
             for(int i = 0; i < this.size(); i++) {
                 if (this.get(i).name.equalsIgnoreCase(toCheck)) {
