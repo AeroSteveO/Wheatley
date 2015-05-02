@@ -9,8 +9,11 @@ package Wheatley;
 import com.google.common.collect.ImmutableSortedSet;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.*;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
@@ -52,40 +55,33 @@ import org.pircbotx.hooks.events.*;
 public class Blarghlebot extends ListenerAdapter {
     int shoot = 0;
     static String poop = "null";
+    Map<String,ArrayList<ArrayList<String>>> log = new TreeMap<>();
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        int idx = Global.channels.getChanIdx(event.getChannel().getName());
-        Global.channels.get(idx).addMessageToLog("<"+event.getUser().getNick()+"> "+message.toLowerCase());
+        String channel = event.getChannel().getName();
+        
+        addToLog(channel, new ArrayList(Arrays.asList("<"+event.getUser().getNick()+">",message)));
+        
+        if (message.toLowerCase().startsWith("sw/")||((message.toLowerCase().startsWith("s/")||message.toLowerCase().startsWith("sed/"))&&!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel()))){
+            
+            if (message.endsWith("/"))
+                    message+="poop";
+            
+            String[] findNreplace = Colors.removeFormattingAndColors(message.toLowerCase()).split("/");
+            
+            int i=log.get(channel).size()-2;
+            ArrayList<String> reply = findReplace(i, findNreplace, channel);
+            if (reply.size()==2&&!reply.get(1).equalsIgnoreCase("")){
+                event.getBot().sendIRC().message(event.getChannel().getName(),reply.get(0)+" "+reply.get(1).substring(0,Math.min(reply.get(1).length(),400)));
+                addToLog(channel, reply);
+            }
+        }
+        
         
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
-            
-            if (message.toLowerCase().startsWith("s/")||message.toLowerCase().startsWith("sed/")){
-                String[] findNreplace = Colors.removeFormattingAndColors(message.toLowerCase()).split("/");
-                Pattern findThis = Pattern.compile(findNreplace[1]);
-                String reply = "";
-                int i=Global.channels.get(idx).getMessageLogSize()-2;
-                reply = findReplace(i, findNreplace, findThis, idx);
-                if (!reply.equalsIgnoreCase("")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),reply.substring(0,Math.min(reply.length(),400)));
-                    Global.channels.get(idx).addMessageToLog(reply);
-                }
-            }
-            
-//            if (message.equalsIgnoreCase("!dtellausers")){
-//                int counter = 0;
-//                ImmutableSortedSet users = event.getBot().getUserChannelDao().getAllUsers();
-//
-//                Iterator<User> iterator = users.iterator();
-//                while(iterator.hasNext()) {
-//                    User user = iterator.next();
-//                        if (user.getNick().startsWith("|")){
-//                            counter++;
-//                        }
-//                }
-//                event.getBot().sendIRC().message(event.getChannel().getName(),"There are "+(counter-1)+" users on Dtella");
-//            }
+                        
             if (message.equalsIgnoreCase("!users")||message.equalsIgnoreCase("!dtellausers")){
                 int totalUsers = 0;
                 int dtellaChanUsers = 0;
@@ -112,8 +108,6 @@ public class Blarghlebot extends ListenerAdapter {
                     if (user.getChannels().size()>0)
                         totalUsers++;
                 }
-//                if (dtellaUsers == 0)
-//                    dtellaUsers++; //Adding one so that its not negative
                 event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Dtella Shares: "+Colors.NORMAL+(dtellaUsers)+Colors.BOLD+" #Dtella Users: "+Colors.NORMAL+dtellaChanUsers+Colors.BOLD+" Total Visible Users "+Colors.NORMAL+totalUsers);
             }
             
@@ -169,7 +163,7 @@ public class Blarghlebot extends ListenerAdapter {
             else if (message.equalsIgnoreCase("ba dum")||message.equalsIgnoreCase("badum"))
                 event.getBot().sendIRC().message(event.getChannel().getName(), "psh");
             
-        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
+            if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
                 
                 String command = message.split(Global.commandPrefix)[1];
                 String[] cmdSplit = command.split(" ");
@@ -315,30 +309,26 @@ public class Blarghlebot extends ListenerAdapter {
             }
         }
     }
-    private String findReplace(int i, String[] findNreplace, Pattern findThis, int idx){
-        String reply="";
-        String[] backReply;
+    private ArrayList<String> findReplace(int i, String[] findNreplace, String channel){
+        ArrayList<String> reply = new ArrayList<>();
         Boolean found = false;
+        Pattern findThis = Pattern.compile(findNreplace[1]);
         
         while (i>=0&&!found){
             try{
-                if (findThis.matcher(Global.channels.get(idx).getMessage(i).split(" ",2)[1]).find()){
+                System.out.println(log.get(channel).get(i).get(1));
+                if (findThis.matcher(log.get(channel).get(i).get(1)).find()){
                     
-                    reply = Global.channels.get(idx).getMessage(i).split(" ",2)[0]+" "+Global.channels.get(idx).getMessage(i).split(" ",2)[1].replaceAll(findNreplace[1],findNreplace[2]);
-                    backReply = reply.split(" ");
+                    reply = new ArrayList(Arrays.asList(log.get(channel).get(i).get(0),log.get(channel).get(i).get(1).replaceAll(findNreplace[1],findNreplace[2])));
                     
-//                if (backReply.length>1){
-                    if(backReply[1].startsWith("s/")||backReply[1].startsWith("sed/")){
+                    if(reply.get(1).startsWith("sw/")||reply.get(1).startsWith("s/")||reply.get(1).startsWith("sed/")){
                         i--;
-                        reply=backReply[1];
-                        for(int c = 2;c<backReply.length;c++){
-                            reply = reply +" "+ backReply[c];
-                        }
-                        findNreplace = reply.split("/");
-                        findThis = Pattern.compile(findNreplace[1]);
-                        reply = findReplace(i, findNreplace, findThis, idx);
+                        if (reply.get(1).endsWith("/"))
+                            reply.set(1, reply.get(1)+"poop");
+                        findNreplace = reply.get(1).split("/");
+                        reply = findReplace(i, findNreplace, channel);
                     }
-//                }
+                    
                     found = true;
                 }
                 i--;
@@ -347,5 +337,37 @@ public class Blarghlebot extends ListenerAdapter {
             }
         }
         return(reply);
+    }
+    
+    @Override
+    public void onAction(ActionEvent event) {
+        addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList("* "+event.getUser().getNick(),event.getAction())));
+    }
+    
+    @Override
+    public void onKick(KickEvent event) {
+        System.out.println(event.getChannel().getName() + ", "+ event.getUser().getNick()+", "+event.getReason());
+        addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList("* "+event.getUser().getNick(),"has kicked "+event.getRecipient().getNick()+" from "+event.getChannel().getName()+" ("+event.getReason()+")")));
+    }
+//    @Override
+//    public void onNotice(NoticeEvent event) {
+//        addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList("-"+event.getUser().getNick()+"-",event.getNotice())));
+//    }
+    
+    
+    private void addToLog(String channel, ArrayList<String> message) {
+        if (!log.containsKey(channel)){
+//            ArrayList<String> message = new ArrayList<>();
+            ArrayList<ArrayList<String>> channelLog = new ArrayList<>();
+            channelLog.add(message);
+            log.put(channel, channelLog);
+        }
+        else{
+            log.get(channel).add(message);
+            
+            if (log.get(channel).size()>100){
+                log.get(channel).remove(0);
+            }
+        }
     }
 }
