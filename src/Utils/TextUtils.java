@@ -59,7 +59,7 @@ public class TextUtils {
             Scanner wordfile = new Scanner(file);
             String wordls = "";
             while (wordfile.hasNext()){
-                wordls= wordls+(wordfile.next());
+                wordls= wordls+(wordfile.nextLine());
             }
             wordfile.close();
             return (wordls);
@@ -79,7 +79,7 @@ public class TextUtils {
 //new File("wordlist.txt")
             ArrayList<String> wordls = new ArrayList<String>();
             while (wordfile.hasNext()){
-                wordls.add(wordfile.next());
+                wordls.add(wordfile.nextLine());
             }
             wordfile.close();
             return (wordls);
