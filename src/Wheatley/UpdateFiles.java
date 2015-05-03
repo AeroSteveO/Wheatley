@@ -16,7 +16,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * @author Steve-O
  * Used to update .txt files
- * 
+ *
  * Requirements:
  * - APIs
  *    N/A
@@ -26,16 +26,12 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    TextUtils
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate commands with:
  *      !update [filename] [singleWordItem]
  *          !update badwords defenetely
  */
 public class UpdateFiles extends ListenerAdapter{
-    
-//        String filename = "settings.json";
-//    public static Settings settings = new Settings();
-//    boolean start = startSettings();
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -100,7 +96,7 @@ public class UpdateFiles extends ListenerAdapter{
                 
 //                else if (cmdSplit[0].equalsIgnoreCase("update")){
 //                    if(event.getUser().getNick().equals(Global.botOwner)&&event.getUser().isVerified()){
-//                        
+//
 ////                    String[] properties = message.split(" ");
 //                        if (cmdSplit.length== 3){
 //                            String filename = cmdSplit[1];
@@ -111,7 +107,7 @@ public class UpdateFiles extends ListenerAdapter{
 //                                    event.getBot().sendIRC().message(event.getChannel().getName(),Colors.GREEN+"Success: "+Colors.NORMAL+addition+" was added to "+ filename);
 //                                else
 //                                    event.getBot().sendIRC().message(event.getChannel().getName(),Colors.RED+"Failure: "+Colors.NORMAL+addition+" is already in "+ filename);
-//                                
+//
 //                            }catch(Exception e){
 //                                e.printStackTrace();
 //                                event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.RED+"FAILURE: "+Colors.NORMAL+addition+" was NOT added to "+ filename);
@@ -128,17 +124,4 @@ public class UpdateFiles extends ListenerAdapter{
             }
         }
     }
-    
-//        private boolean startSettings() {
-//        try{
-//            settings.setFileName(filename);
-//            settings.loadFile();
-//        }
-//        catch (Exception ex){
-//            System.out.println("SETTINGS FAILED TO LOAD");
-//            ex.printStackTrace();
-//            return false;
-//        }
-//        return true;
-//    }
 }
