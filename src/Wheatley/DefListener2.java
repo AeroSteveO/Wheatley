@@ -49,6 +49,10 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Responds with a random definition form the DB
  *      tell [user] about [definition]
  *          Sends a pm to the user with the definition of the give word/phrase
+ *      !whodef [word/phrase]
+ *          Responds with who created the def and when the def was created
+ *      !load
+ *          Loads defs from previous generation def text files of the form "word or phrase @ defintion text"
  *
  */
 public class DefListener2 extends ListenerAdapter {
