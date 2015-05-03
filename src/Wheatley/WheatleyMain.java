@@ -132,7 +132,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use
                     .setCapEnabled(true)     //Enable CAP features
                     .setAutoReconnect(true)
-                    .setMaxLineLength(469)
+                    .setMaxLineLength(425)
                     .setListenerManager(BackgroundListener)//Allow for logger background listener
                     .addListener(new WheatleyMain())       //This main class's listener
                     .addListener(new Blarghlebot())        //Trollbot Listener
@@ -152,7 +152,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
                     .addListener(new EnglishSayings())
-                    .addListener(new DefinitionsListener())
+                    .addListener(new DefListener2())
                     .addListener(new AutodlText())
 //                    .addListener(new Fuckingweather())
 //                    .addListener(new KickBanWatcher())
@@ -165,7 +165,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
 //                    .addListener(new Weather())
-                    .addListener(new TvSchedule())
+//                    .addListener(new TvSchedule())
 //                    .addListener(new Urban())
                     .addListener(new CommandListener())
 //                    .addListener(new MovieRatings())
