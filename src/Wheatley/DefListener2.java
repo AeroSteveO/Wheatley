@@ -6,6 +6,8 @@
 
 package Wheatley;
 
+import Objects.Definitions;
+import Utils.IRCUtils;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,10 +30,10 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - APIs
  *    N/A
  * - Custom Objects
- *    N/A
+ *    Definitions
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate Commands With
  *      [definition]?
  *          respond with the definition of that word/phrase (if there is a definition in the db)
@@ -49,11 +51,9 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Sends a pm to the user with the definition of the give word/phrase
  *
  */
-public class DefinitionsListener extends ListenerAdapter {
-    ArrayList<String> definitions = getDefinitions();
-    ArrayList<String> words = getWordsFromDefs(definitions);
-    String definitionsFileName = "definitions.txt";
-    String definitionLogName   = "definitionLog.txt";
+public class DefListener2 extends ListenerAdapter {
+    Definitions defs = new Definitions("definitions.json");
+    Definitions defsLog = new Definitions("definitionLog.json");
     
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
@@ -61,22 +61,35 @@ public class DefinitionsListener extends ListenerAdapter {
         String[] msgSplit = message.split(" ");
         
         if (message.equalsIgnoreCase("!randef")||message.equalsIgnoreCase("!randdef")){
-            
-            int randNum = (int) (Math.random()*definitions.size()-1);
-            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+definitions.get(randNum).split("@")[0].trim()+": "+Colors.NORMAL+definitions.get(randNum).split("@")[1].trim());
+            String word = defs.getRandomWord();
+            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+defs.getWordWithCase(word)+": "+Colors.NORMAL+defs.getDefOfWord(word));
         }
-        
-        if (message.endsWith("?")&&message.split("\\?",2)[0].length()>0&&message.split("\\?").length==1&&StringUtils.countMatches(message, "?")==1){
-            if (containsIgnoreCase(words,message.split("\\?")[0])){
-                int index = indexOfIgnoreCase(words,message.split("\\?")[0]);
-                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+words.get(index)+Colors.NORMAL+": "+definitions.get(index).split("@")[1].trim());
+        else if (message.split(" ")[0].equalsIgnoreCase("!whodef")){
+            String word = message.split(" ",2)[1];
+            if(defs.containsDef(word)){
+                
+                event.getBot().sendIRC().message(event.getChannel().getName(), Colors.BOLD+defs.getWordWithCase(word)+Colors.NORMAL+" was defined by "+defs.getOriginator(word)+" at "+IRCUtils.getTimestamp(String.valueOf(Long.parseLong(defs.getTimeOfDef(word))*1000)));
+            }
+            else{
+                
             }
         }
         
+        if (message.endsWith("?")&&message.split("\\?",2)[0].length()>0&&message.split("\\?").length==1&&StringUtils.countMatches(message, "?")==1){
+            if (defs.containsDef(message.split("\\?")[0])){
+                String word = message.split("\\?")[0];
+//                int index = indexOfIgnoreCase(words,message.split("\\?")[0]);
+                event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+defs.getWordWithCase(word)+Colors.NORMAL+": "+defs.getDefOfWord(word));
+            }
+        }
+        //Global.getTimestamp(Long.toString(rs.getLong("TIME")*1000))
+        //event.getTimestamp() / 1000
+        
+        
         if (message.equalsIgnoreCase("!list defs")){
             
-            ArrayList<String> sortedWords = new ArrayList<>();
-            sortedWords.addAll(words);
+            ArrayList<String> sortedWords = defs.getDefList();
+//            sortedWords.addAll(words);
             Collections.sort(sortedWords, String.CASE_INSENSITIVE_ORDER);
             
             String wordList = "";
@@ -92,10 +105,10 @@ public class DefinitionsListener extends ListenerAdapter {
                 
                 //If the user is in the same channel as the summon
                 String defWord = message.split("about")[1].trim();//.split(" ",2)[2];
-                if (containsIgnoreCase(words,defWord)){
-                    String def = definitions.get(indexOfIgnoreCase(words,defWord)).split("@")[1].trim();
+                if (defs.containsDef(defWord)){
+                    String def = defs.getDefOfWord(defWord);
                     event.getBot().sendIRC().notice(event.getUser().getNick(),user+" has been PMed");
-                    event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(user).getNick(),event.getUser().getNick()+" wants me to tell you about: "+Colors.BOLD+defWord+Colors.NORMAL+ ": "+Colors.NORMAL+def);
+                    event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(user).getNick(),event.getUser().getNick()+" wants me to tell you about: "+Colors.BOLD+defs.getWordWithCase(defWord)+Colors.NORMAL+ ": "+Colors.NORMAL+def);
                 }
                 else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
                     event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"definition not found");
@@ -105,6 +118,20 @@ public class DefinitionsListener extends ListenerAdapter {
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"user not in channel");
             }
         }
+        
+        
+        
+        if(msgSplit[0].equalsIgnoreCase("!load")){//||msgSplit[0].equalsIgnoreCase("!addef")
+            
+            if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
+                
+                addDefsFromFile("definitions.txt", String.valueOf(event.getTimestamp()/1000));
+                addDefLogFromFile("definitionLog.txt", String.valueOf(event.getTimestamp()/1000));
+            }
+        }
+        
+        
+        
         
         // ADDING DEFINITIONS
         if(msgSplit[0].equalsIgnoreCase("!mkdef")){//||msgSplit[0].equalsIgnoreCase("!addef")
@@ -119,32 +146,17 @@ public class DefinitionsListener extends ListenerAdapter {
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: Definition terms may not contain a \"?\"");
                 }
                 
-                else if (containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+                else if (defs.containsDef(message.split(" ",2)[1].split("@")[0].trim())){
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition already exists");
                 }
                 
                 else {
-                    
-                    String addition = message.split(" ",2)[1];
-                    
-                    try{
-                        File file =new File(definitionsFileName);
-                        //if file doesnt exists, then create it
-                        if(!file.exists()){
-                            file.createNewFile();
-                        }
-                        //true = append file
-                        FileWriter fileWritter = new FileWriter(file.getName(),true);
-                        BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                        bufferWritter.write("\n"+addition);
-                        bufferWritter.close();
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+addition+" was added to "+ definitionsFileName);
-                    }catch(IOException e){
-                        e.printStackTrace();
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
-                    }
-                    definitions = getDefinitions();
-                    words = getWordsFromDefs(definitions);
+                    String word = message.split(" ",2)[1].split("@")[0].trim();
+                    String def = message.split("@")[1].trim();
+                    String user = event.getUser().getNick();
+                    String time = String.valueOf(event.getTimestamp()/1000);
+                    defs.createDef(word,def,user,time);
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+word+" was added to the definitions file");
                 }
             }
             else
@@ -155,40 +167,26 @@ public class DefinitionsListener extends ListenerAdapter {
         if(msgSplit[0].equalsIgnoreCase("!rmdef")){//||msgSplit[0].equalsIgnoreCase("!deletedef")
             
             if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
-                
-                if (!containsIgnoreCase(words, message.split(" ",2)[1])){
+                String word = message.split(" ",2)[1];
+                if (!defs.containsDef(word)){
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition not found");
                 }
                 else{
-                    int index = indexOfIgnoreCase(words, message.split(" ",2)[1]);
-                    try{
-                        File log = new File(definitionLogName);
-                        if(!log.exists()){
-                            log.createNewFile();
-                        }
-                        FileWriter fileWritter = new FileWriter(log.getName(),true);
-                        BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                        bufferWritter.write("\n"+definitions.get(index));
-                        bufferWritter.close();
-                    }catch (Exception e){
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: LOG NOT UPDATED");
+                    String logWord = defs.getWordWithCase(word);
+                    int i = 0;
+                    while(defsLog.containsDef(logWord)){
+                        logWord = word+String.valueOf(i);
+                        i++;
                     }
+                    defsLog.createDef(logWord,defs.getDefOfWord(word),defs.getOriginator(word),defs.getTimeOfDef(word));
                     
-                    definitions.remove(index);
-                    words.remove(index);
-                    File fnew=new File(definitionsFileName);
-                    try{
-                        FileWriter f2 = new FileWriter(fnew, false);
-                        for (int i=0;i<definitions.size()-1;i++)
-                            f2.write(definitions.get(i)+"\n");
-                        
-                        f2.write(definitions.get(definitions.size()-1));
-                        f2.close();
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+message.split(" ",2)[1]+" was removed from "+definitionsFileName);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    
+                    boolean success = defs.deleteDef(word);
+                    if(success)
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+word+" was removed from the definitions file");
+                    else
                         event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: DEF NOT DELETED");
-                    }
+                    
                 }
             }
             else
@@ -198,49 +196,36 @@ public class DefinitionsListener extends ListenerAdapter {
         // Updating definitions already in the db
         
         if(msgSplit[0].equalsIgnoreCase("!overdef")) {//||msgSplit[0].equalsIgnoreCase("!updef")
-                        
+            
             if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 
                 if(!(message.split("@").length==2)){
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed update command: !overdef word phrase @ definition phrase");
                 }
                 
-                else if (!containsIgnoreCase(words,message.split(" ",2)[1].split("@")[0].trim())){
+                else if (!defs.containsDef(message.split(" ",2)[1].split("@")[0].trim())){
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Def currently does not exist, please use !adddef");
                 }
                 
                 else{
                     
-                    int index = indexOfIgnoreCase(words, message.split(" ",2)[1].split("@")[0].trim());
-                    try{
-                        File log = new File(definitionLogName);
-                        if(!log.exists()){
-                            log.createNewFile();
-                        }
-                        FileWriter fileWritter = new FileWriter(log.getName(),true);
-                        BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                        bufferWritter.write("\n"+definitions.get(index));
-                        bufferWritter.close();
-                    }catch (Exception e){
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: LOG NOT UPDATED");
+                    String word = message.split(" ",2)[1].split("@")[0].trim();
+                    System.out.println(word);
+                    String logWord = defs.getWordWithCase(word);
+                    int i = 0;
+                    while(defsLog.containsDef(logWord)){
+                        logWord = word+String.valueOf(i);
+                        i++;
                     }
-                    definitions.remove(index);
-                    words.remove(index);
-                    definitions.add(message.split(" ",2)[1].trim());
-                    words = getWordsFromDefs(definitions);
-                    File fnew=new File(definitionsFileName);
-                    try {
-                        FileWriter f2 = new FileWriter(fnew, false);
-                        for (int i=0;i<definitions.size()-1;i++)
-                            f2.write(definitions.get(i)+"\n");
-                        
-                        f2.write(definitions.get(definitions.size()-1));
-                        f2.close();
-                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+message.split(" ",2)[1].split("@")[0].trim()+" was updated in "+definitionsFileName);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    defsLog.createDef(logWord,defs.getDefOfWord(word),defs.getOriginator(word),defs.getTimeOfDef(word));
+                    boolean success = defs.deleteDef(word);
+                    defs.createDef(word, message.split("@")[1], event.getUser().getNick(), String.valueOf(event.getTimestamp()/1000));
+                    
+                    if (success)
+                        event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+message.split(" ",2)[1].split("@")[0].trim()+" was updated in the definitions file");
+                    else
                         event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
-                    }
+                    
                 }
             }
             else
@@ -248,40 +233,52 @@ public class DefinitionsListener extends ListenerAdapter {
         }
     }
     
-    private ArrayList<String> getDefinitions() {
+    
+    private void addDefsFromFile(String filename, String time){
+        File file = new File(filename);
+        if (!file.exists())
+            return;
         try{
-            Scanner wordfile = new Scanner(new File("definitions.txt"));
+            Scanner wordfile = new Scanner(new File(filename));
             ArrayList<String> wordls = new ArrayList<String>();
             while (wordfile.hasNext()){
                 wordls.add(wordfile.nextLine());
             }
             wordfile.close();
-            return (wordls);
+            
+            for(int i=0;i<wordls.size();i++){
+                defs.createDef(wordls.get(i).split("@")[0].trim(), wordls.get(i).split("@")[1].trim(), Global.botOwner, time);
+            }
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
-            return null;
+            return;
         }
     }
-    
-    private ArrayList<String> getWordsFromDefs(ArrayList<String> definitions){
-        ArrayList<String> words = new ArrayList<>();
-        for (int i=0;i<definitions.size();i++){
-            words.add(definitions.get(i).split("@")[0].trim());
+    private void addDefLogFromFile(String filename, String time){
+        File file = new File(filename);
+        if (!file.exists())
+            return;
+        try{
+            Scanner wordfile = new Scanner(new File(filename));
+            ArrayList<String> wordls = new ArrayList<String>();
+            while (wordfile.hasNext()){
+                wordls.add(wordfile.nextLine());
+            }
+            wordfile.close();
+            
+            for(int i=0;i<wordls.size();i++){
+                String word = wordls.get(i).split("@")[0].trim();
+                String logWord = word;
+                int o = 0;
+                while (defsLog.containsDef(logWord)){
+                    logWord = word + String.valueOf(o);
+                    o++;
+                }
+                defsLog.createDef(logWord, wordls.get(i).split("@")[1].trim(), Global.botOwner, time);
+            }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+            return;
         }
-        return words;
-    }
-    
-    private boolean containsIgnoreCase(ArrayList<String> o,String thing) {
-        for (String s : o) {
-            if (thing.equalsIgnoreCase(s)) return true;
-        }
-        return false;
-    }
-    
-    private int indexOfIgnoreCase(ArrayList<String> o,String thing) {
-        for (int i=0;i<o.size();i++) {
-            if (thing.equalsIgnoreCase(o.get(i))) return i;
-        }
-        return -1;
     }
 }
