@@ -68,14 +68,14 @@ public class DefListener2 extends ListenerAdapter {
             String word = defs.getRandomWord();
             event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+defs.getWordWithCase(word)+": "+Colors.NORMAL+defs.getDefOfWord(word));
         }
-        else if (message.split(" ")[0].equalsIgnoreCase("!whodef")){
+        else if (msgSplit[0].equalsIgnoreCase("!whodef")){
             String word = message.split(" ",2)[1];
             if(defs.containsDef(word)){
                 
                 event.getBot().sendIRC().message(event.getChannel().getName(), Colors.BOLD+defs.getWordWithCase(word)+Colors.NORMAL+" was defined by "+defs.getOriginator(word)+" at "+IRCUtils.getTimestamp(String.valueOf(Long.parseLong(defs.getTimeOfDef(word))*1000)));
             }
-            else{
-                
+            else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
+                event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"WhoDef: "+Colors.NORMAL+"Definition not found");
             }
         }
         
