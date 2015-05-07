@@ -1,20 +1,13 @@
 package Wheatley;
 
-import Objects.HTTPGET;
 import Objects.MultiRegexExtractor;
-import java.io.BufferedReader;
+import Utils.TextUtils;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -60,7 +53,7 @@ extends ListenerAdapter {
         System.out.println(searchURL);
         
 //        HTTPGET h = new HTTPGET();
-        String page = readUrl(searchURL);
+        String page = TextUtils.readUrl(searchURL);
         Matcher m = makeSure.matcher(page);
         
         if (!m.find()) {
@@ -74,51 +67,51 @@ extends ListenerAdapter {
         }
         return "!fuckingweather WRONG FUCKING ZIP";
     }
-    public String getHTML(String url) throws IOException{
-        URL oracle = new URL(url);
-        BufferedReader in = new BufferedReader(
-        new InputStreamReader(oracle.openStream()));
-
-        String inputLine = null;
-        while (in.readLine()!= null)
-            inputLine = in.readLine();
-//            System.out.println(inputLine);
-        in.close();
-        
-        return(inputLine);//.replace("[\t\r\n]", ""));
-
-    }
-    private static String readUrl(String urlString) throws Exception {
-        BufferedReader reader = null;
-        try {
-            URL url = new URL(urlString);
-            reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            StringBuffer buffer = new StringBuffer();
-            int read;
-            char[] chars = new char[1024];
-            while ((read = reader.read(chars)) != -1)
-                buffer.append(chars, 0, read);
-            return buffer.toString();
-        } finally {
-            if (reader != null)
-                reader.close();
-        }
-    }
-    
-    public String getPage(String url) {
-        HttpClient client = new HttpClient();
-        HttpMethod method = new GetMethod(url);
-        String result = "";
-        try {
-            client.executeMethod(method);
-            result = method.getResponseBodyAsString();
-        } catch (HttpException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            method.releaseConnection();
-        }
-        return result;
-    }
+//    public String getHTML(String url) throws IOException{
+//        URL oracle = new URL(url);
+//        BufferedReader in = new BufferedReader(
+//        new InputStreamReader(oracle.openStream()));
+//
+//        String inputLine = null;
+//        while (in.readLine()!= null)
+//            inputLine = in.readLine();
+////            System.out.println(inputLine);
+//        in.close();
+//        
+//        return(inputLine);//.replace("[\t\r\n]", ""));
+//
+//    }
+//    private static String readUrl(String urlString) throws Exception {
+//        BufferedReader reader = null;
+//        try {
+//            URL url = new URL(urlString);
+//            reader = new BufferedReader(new InputStreamReader(url.openStream()));
+//            StringBuffer buffer = new StringBuffer();
+//            int read;
+//            char[] chars = new char[1024];
+//            while ((read = reader.read(chars)) != -1)
+//                buffer.append(chars, 0, read);
+//            return buffer.toString();
+//        } finally {
+//            if (reader != null)
+//                reader.close();
+//        }
+//    }
+//    
+//    public String getPage(String url) {
+//        HttpClient client = new HttpClient();
+//        HttpMethod method = new GetMethod(url);
+//        String result = "";
+//        try {
+//            client.executeMethod(method);
+//            result = method.getResponseBodyAsString();
+//        } catch (HttpException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            method.releaseConnection();
+//        }
+//        return result;
+//    }
 }
