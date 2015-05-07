@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
 /**
  *
  * @author Stephen
- * 
+ *
  * Requirements:
  * - APIs
  *    jaxen-1.1.6 XML Parser
@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
  *    N/A
  * - Linked Classes
  *    N/A
- * 
+ *
  * Activate commands with:
  *      !schedule [YYYY-MM-DD]
  *          Looks up the TV rage schedule for the given day (only shows after 8PM)
@@ -44,11 +44,11 @@ import org.w3c.dom.NodeList;
  *          Looks up the TV rage schedule for tomorrow night (shows after 8PM)
  *      !Yesterday
  *          Looks up the TV rage schedule for last night (shows after 8PM)
- * 
- * 
+ *
+ *
  * http://jaxen.org/apidocs/index.html
- * 
- * 
+ *
+ *
  */
 public class TvSchedule extends ListenerAdapter{
     ArrayList<String> nightTimes = getNightTvTimes();
@@ -58,83 +58,84 @@ public class TvSchedule extends ListenerAdapter{
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        
-        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}!{1,}[ ]{0,}){1,}")){
-            String command = message.split(Global.commandPrefix)[1];
-            String[] cmdSplit = command.split(" ");
-            
-            if (command.equalsIgnoreCase("t")||command.equalsIgnoreCase("tonight")){
-                String today = getTodaysDate();
-                ArrayList<String> schedule = getSchedule(today);
+        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
+            if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}!{1,}[ ]{0,}){1,}")){
+                String command = message.split(Global.commandPrefix)[1];
+                String[] cmdSplit = command.split(" ");
                 
-                
-                if (schedule==null || schedule.isEmpty()){
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "No shows found for date "+today);
-                }
-                else{
-                    event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+"Schedule for: "+Colors.NORMAL+today);
-                    for (int i=0;i<schedule.size();i++){
-                        event.getBot().sendIRC().message(event.getUser().getNick(),schedule.get(i));
-                    }
-                }
-            }
-            else if (command.equalsIgnoreCase("yesterday")){
-                String today = getYesterdaysDate();
-                ArrayList<String> schedule = getSchedule(today);
-                
-                
-                if (schedule==null || schedule.isEmpty()){
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "No shows found for date "+today);
-                }
-                else{
-                    event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+"Schedule for: "+Colors.NORMAL+today);
-                    for (int i=0;i<schedule.size();i++){
-                        event.getBot().sendIRC().message(event.getUser().getNick(),schedule.get(i));
-                    }
-                }
-            }
-            else if (command.equalsIgnoreCase("tomorrow")){
-                String today = getTomorrowsDate();
-                ArrayList<String> schedule = getSchedule(today);
-                
-                if (schedule==null || schedule.isEmpty()){
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "No shows found for date "+today);
-                }
-                else{
-                    event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+"Schedule for: "+Colors.NORMAL+today);
-                    for (int i=0;i<schedule.size();i++){
-                        event.getBot().sendIRC().message(event.getUser().getNick(),schedule.get(i));
-                    }
-                }
-            }
-            else if (cmdSplit[0].equalsIgnoreCase("schedule")&&cmdSplit.length==2){
-                DateTime date = new DateTime();
-//                System.out.println(date.getYear());
-                if(cmdSplit[1].matches(date.getYear()+"\\-((0|1)*[0-9])\\-((0|1|2|3)[0-9])")){
-                    ArrayList<String> schedule = getSchedule(cmdSplit[1]);
+                if (command.equalsIgnoreCase("t")||command.equalsIgnoreCase("tonight")){
+                    String today = getTodaysDate();
+                    ArrayList<String> schedule = getSchedule(today);
                     
                     
                     if (schedule==null || schedule.isEmpty()){
-                        event.getBot().sendIRC().message(event.getChannel().getName(), "No shows found for date "+cmdSplit[1]);
+                        event.getBot().sendIRC().message(event.getChannel().getName(), "No shows found for date "+today);
                     }
                     else{
-                        event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+"Schedule for: "+Colors.NORMAL+cmdSplit[1]);
+                        event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+"Schedule for: "+Colors.NORMAL+today);
                         for (int i=0;i<schedule.size();i++){
                             event.getBot().sendIRC().message(event.getUser().getNick(),schedule.get(i));
                         }
                     }
                 }
-                else if (cmdSplit[1].equalsIgnoreCase("last")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),"The last date available is "+lastDate()+" (Note: The schedule for dates far in the future may be incomplete/non-existant)");
+                else if (command.equalsIgnoreCase("yesterday")){
+                    String today = getYesterdaysDate();
+                    ArrayList<String> schedule = getSchedule(today);
+                    
+                    
+                    if (schedule==null || schedule.isEmpty()){
+                        event.getBot().sendIRC().message(event.getChannel().getName(), "No shows found for date "+today);
+                    }
+                    else{
+                        event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+"Schedule for: "+Colors.NORMAL+today);
+                        for (int i=0;i<schedule.size();i++){
+                            event.getBot().sendIRC().message(event.getUser().getNick(),schedule.get(i));
+                        }
+                    }
                 }
-                else if (cmdSplit[1].equalsIgnoreCase("first")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),"The first date available is "+earliestDate());
+                else if (command.equalsIgnoreCase("tomorrow")){
+                    String today = getTomorrowsDate();
+                    ArrayList<String> schedule = getSchedule(today);
+                    
+                    if (schedule==null || schedule.isEmpty()){
+                        event.getBot().sendIRC().message(event.getChannel().getName(), "No shows found for date "+today);
+                    }
+                    else{
+                        event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+"Schedule for: "+Colors.NORMAL+today);
+                        for (int i=0;i<schedule.size();i++){
+                            event.getBot().sendIRC().message(event.getUser().getNick(),schedule.get(i));
+                        }
+                    }
                 }
-                else if (cmdSplit[1].equalsIgnoreCase("format")){
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Schedule inputs take the format of [YYYY-MM-DD], for example: !schedule 2015-4-25");
-                }
-                else{
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), "Schedule date does not match the YYYY-MM-DD format");
+                else if (cmdSplit[0].equalsIgnoreCase("schedule")&&cmdSplit.length==2){
+                    DateTime date = new DateTime();
+//                System.out.println(date.getYear());
+                    if(cmdSplit[1].matches(date.getYear()+"\\-((0|1)*[0-9])\\-((0|1|2|3)[0-9])")){
+                        ArrayList<String> schedule = getSchedule(cmdSplit[1]);
+                        
+                        
+                        if (schedule==null || schedule.isEmpty()){
+                            event.getBot().sendIRC().message(event.getChannel().getName(), "No shows found for date "+cmdSplit[1]);
+                        }
+                        else{
+                            event.getBot().sendIRC().message(event.getUser().getNick(),Colors.BOLD+"Schedule for: "+Colors.NORMAL+cmdSplit[1]);
+                            for (int i=0;i<schedule.size();i++){
+                                event.getBot().sendIRC().message(event.getUser().getNick(),schedule.get(i));
+                            }
+                        }
+                    }
+                    else if (cmdSplit[1].equalsIgnoreCase("last")){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),"The last date available is "+lastDate()+" (Note: The schedule for dates far in the future may be incomplete/non-existant)");
+                    }
+                    else if (cmdSplit[1].equalsIgnoreCase("first")){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),"The first date available is "+earliestDate());
+                    }
+                    else if (cmdSplit[1].equalsIgnoreCase("format")){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Schedule inputs take the format of [YYYY-MM-DD], for example: !schedule 2015-4-25");
+                    }
+                    else{
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Schedule date does not match the YYYY-MM-DD format");
+                    }
                 }
             }
         }
@@ -143,7 +144,7 @@ public class TvSchedule extends ListenerAdapter{
     // Provides the earliest date available in the TV rage api (in YYYY-MM-DD format)
     private String earliestDate(){
         Element baseElement = getTvRageData();
-        ArrayList<String> schedule = new ArrayList<>();
+//        ArrayList<String> schedule = new ArrayList<>();
         NodeList day = baseElement.getElementsByTagName("DAY");
         
         String minimumDate = day.item(0).getAttributes().getNamedItem("attr").getNodeValue();
@@ -153,7 +154,7 @@ public class TvSchedule extends ListenerAdapter{
     //Provides the last date available in the TV rage api (in YYYY-MM-DD format)
     private String lastDate(){
         Element baseElement = getTvRageData();
-        ArrayList<String> schedule = new ArrayList<>();
+//        ArrayList<String> schedule = new ArrayList<>();
         NodeList day = baseElement.getElementsByTagName("DAY");
         
         String minimumDate = day.item(day.getLength()-1).getAttributes().getNamedItem("attr").getNodeValue();
