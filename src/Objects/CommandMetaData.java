@@ -32,34 +32,34 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *   owner from the channel in the message
  *
  * Methods:
- *      getCommands       - Sets the command and cmdSplit variables from the 
+ *      getCommands       - Sets the command and cmdSplit variables from the
  *                          message string
- *     *getChannel        - Returns the channel the event was sent from, if the 
+ *     *getChannel        - Returns the channel the event was sent from, if the
  *                          event was in a channel, else returns null
  *     *getCaller         - Returns the nickname of the user who sent the event
  *     *getCommand        - Gets the command string minus prefix
- *     *getCommandChannel - Returns the channel that was in the command, or the 
+ *     *getCommandChannel - Returns the channel that was in the command, or the
  *                          channel the command was sent from
- *     *getCommandSplit   - Returns a String[] of the command data without the 
+ *     *getCommandSplit   - Returns a String[] of the command data without the
  *                          prefix, and split by spaces
  *     *getEventChannel   - Returns the channel the event was sent from, or null
  *     *getEventType      - Returns either "privatemessage" or "channelmessage"
  *     *getMessage        - Returns the event message
- *     *isVerifiedChanOwner    - Returns true if the event user is verified and 
- *                               is the owner of the channel in the command or 
+ *     *isVerifiedChanOwner    - Returns true if the event user is verified and
+ *                               is the owner of the channel in the command or
  *                               that the command was sent from
- *     *isVerifiedBotOwner     - Returns true if the event user is verified and 
+ *     *isVerifiedBotOwner     - Returns true if the event user is verified and
  *                               is the bot owner
- *     *isVerifiedChanBotOwner - Returns true if the event user is verified and 
- *                               is either the bot owner, or the channel owner 
- *                               of the channel the command was sent from, or 
+ *     *isVerifiedChanBotOwner - Returns true if the event user is verified and
+ *                               is either the bot owner, or the channel owner
+ *                               of the channel the command was sent from, or
  *                               channel contained in the event
  *
  * Note: Only commands marked with a * are available for use outside the object
  *
  * Useful Resources
  * - N/A
- *  
+ *
  * Version: 0.5.0
  */
 public class CommandMetaData {
@@ -89,12 +89,10 @@ public class CommandMetaData {
             MessageEvent mEvent = (MessageEvent) event;
             caller = mEvent.getUser().getNick();
             message = Colors.removeFormattingAndColors(mEvent.getMessage());
+            channel = mEvent.getChannel().getName();
             
             if (message.contains("#")){
                 refChan ="#" + message.split("#")[0].split(" ")[0];
-            }
-            else{
-                channel = mEvent.getChannel().getName();
             }
             
             getCommands(); // REPLACES THE FOLLOWING IF STATEMENT
@@ -119,6 +117,7 @@ public class CommandMetaData {
             MessageEvent mEvent = (MessageEvent) event;
             caller = mEvent.getUser().getNick();
             message = Colors.removeFormattingAndColors(mEvent.getMessage());
+            channel = mEvent.getChannel().getName();
             
             if (message.contains("#")){
                 refChan ="#" + message.split("#")[0].split(" ")[0];
@@ -127,7 +126,7 @@ public class CommandMetaData {
                 isChanOwner = mEvent.getUser().getChannelsOwnerIn().contains(mEvent.getBot().getUserChannelDao().getChannel(refChan));
             }
             else{
-                channel = mEvent.getChannel().getName();
+                
                 isVerified  = mEvent.getUser().isVerified();
                 isBotOwner  = caller.equalsIgnoreCase(Global.botOwner);
                 isChanOwner = mEvent.getChannel().isOwner(mEvent.getUser());
@@ -236,13 +235,13 @@ public class CommandMetaData {
     //ORIGINAL CONSTRUCTOR THAT WAS NEVER USED
 //    public CommandMetaData(Event event){
 //        this.event = event;
-//        
+//
 //        if (event instanceof MessageEvent){ // MESSAGE EVENT SPECIFIC PARSING
 //            eventType = "ChannelMessage";
 //            MessageEvent mEvent = (MessageEvent) event;
 //            caller = mEvent.getUser().getNick();
 //            message = Colors.removeFormattingAndColors(mEvent.getMessage());
-//            
+//
 //            if (message.contains("#")){
 //                refChan ="#" + message.split("#")[0].split(" ")[0];
 //                isVerified  = mEvent.getUser().isVerified();
@@ -255,7 +254,7 @@ public class CommandMetaData {
 //                isBotOwner  = caller.equalsIgnoreCase(Global.botOwner);
 //                isChanOwner = mEvent.getChannel().isOwner(mEvent.getUser());
 //            }
-//            
+//
 //            getCommands(); // REPLACES THE FOLLOWING IF STATEMENT
 ////            if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}!{1,}[ ]{0,}){1,}")){
 ////
@@ -263,13 +262,13 @@ public class CommandMetaData {
 ////                cmdSplit = command.split(" ");
 ////            }
 //        }// END MESSAGE EVENT SPECIFIC PARSING
-//        
+//
 //        else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
 //            eventType = "PrivateMessage";
 //            PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
 //            message = Colors.removeFormattingAndColors(pmEvent.getMessage());
 //            caller = pmEvent.getUser().getNick();
-//            
+//
 //            if (message.contains("#")){
 //                refChan = "#" + message.split("#")[0].split(" ")[0];
 //                isVerified  = pmEvent.getUser().isVerified();
