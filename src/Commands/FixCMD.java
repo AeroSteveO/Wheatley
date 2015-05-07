@@ -33,7 +33,7 @@ import org.w3c.dom.Element;
  *    Global
  * 
  */
-public class FixCmd implements Command{
+public class FixCMD implements Command{
     
     @Override
     public String toString(){

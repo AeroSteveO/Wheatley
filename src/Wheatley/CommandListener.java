@@ -81,7 +81,10 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new ListChannels());
         listOfCommands.add(new UpdateFile());
         listOfCommands.add(new IpInfoCMD());
-        listOfCommands.add(new FixCmd());
+        listOfCommands.add(new FixCMD());
+        listOfCommands.add(new IgniteCMD());
+        listOfCommands.add(new LaserCMD());
+        listOfCommands.add(new SlanderCMD());
         return(listOfCommands);
     }
 }
