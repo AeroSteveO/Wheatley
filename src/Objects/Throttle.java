@@ -6,6 +6,7 @@
 
 package Objects;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -44,16 +45,14 @@ import java.util.TreeMap;
  *      verifyExistance  -
  *
  * Note: Only commands marked with a * are available for use outside the object
- * 
+ *
  * Version: 0.5
- * 
+ *
  */
 public class Throttle extends Settings{
     
     private int maxLog = 5;
     private long maxTime = 100*1000;
-    
-    private String filename = "doNotSave";
     
     Map <String, Map<String, LinkedList<Long>>> timeLog = Collections.synchronizedMap(new TreeMap<String, Map<String, LinkedList<Long>>>(  ));
 //String.CASE_INSENSITIVE_ORDER
@@ -62,7 +61,26 @@ public class Throttle extends Settings{
     public Throttle (){
 //        this.this = settings;
     }
-    
+        public Throttle(String filename){
+        this.file = new File(filename);
+        try{
+            this.loadFile();
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        
+    }
+    public Throttle(File file){
+        this.file = file;
+        try{
+            this.loadFile();
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
     public void setMaxLog(String type, int maxCalls, String channel){
         this.set(type+"log", String.valueOf(maxCalls), channel);
     }
@@ -80,26 +98,18 @@ public class Throttle extends Settings{
         Set<String> allSet = new HashSet<>();
         
         allSet.addAll(logKeys);
-        
-//        System.out.println(allSet.size());
-        
         allSet.addAll(setKeys);
-        
-//        System.out.println(allSet.size());
         
         Iterator<String> keyIterator = allSet.iterator();
         
         while (keyIterator.hasNext()){
             
             String key = keyIterator.next();
-//            System.out.println(key);
             if (key.toLowerCase().endsWith("log")){
                 
-//                System.out.println(key);
                 key = key.split("log")[0];
                 
                 if (!types.contains(key)){
-//                    System.out.println(key);
                     types.add(key);
                 }
             }
@@ -160,19 +170,6 @@ public class Throttle extends Settings{
         return(false);
     }
     
-//    private boolean startSettings() {
-//        try{
-//            this.setFileName(filename);
-//            this.loadFile();
-//        }
-//        catch (Exception ex){
-//            System.out.println("SETTINGS FAILED TO LOAD");
-//            ex.printStackTrace();
-//            return false;
-//        }
-//        return true;
-//    }
-    
     private void createMaxTime(String type, String maxTime, String channel) {
         this.create(type+"time", maxTime, channel);
 //        System.out.println("YAY TIMES");
@@ -181,7 +178,7 @@ public class Throttle extends Settings{
     private void addChannelToLog(String channel){
         LinkedList<Long> logList = new LinkedList<>();
         Map<String,LinkedList<Long>> log = new TreeMap<>();
-
+        
         log.put(new String(),logList);
         if (!timeLog.containsKey(channel.toLowerCase()))
             timeLog.put(channel.toLowerCase(), log);
@@ -190,24 +187,9 @@ public class Throttle extends Settings{
     private void createMaxLog(String type, String maxLog, String channel) {
         if (!this.contains(type+"log",channel))
             this.create(type+"log", maxLog, channel);
-        
-//        ArrayList<String> channels = this.getChannelList();
-//
-//        for (int i=0;i<channels.size();i++){
-//            LinkedList<Long> logList = new LinkedList<>();
-//            Map<String,LinkedList<Long>> log = new TreeMap<>();
-//
-//            log.put(type+"log",logList);
-//            timeLog.put(channels.get(i), log);
-//            System.out.println("YAY LOGS");
-//        }
     }
     
     private void addTypeToLog(String channel, String type) {
-//                LinkedList<Long> logList = new LinkedList<>();
-//        Map<String,LinkedList<Long>> log = new TreeMap<>();
-//        String thing = new String();
-//        log.put(type,logList);
         
         LinkedList<Long> log = new LinkedList<>();
         

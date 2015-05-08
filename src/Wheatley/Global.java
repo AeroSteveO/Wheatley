@@ -9,13 +9,8 @@ package Wheatley;
 import Objects.ChannelStore.ChannelArray;
 import Objects.Settings;
 import Objects.Throttle;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.TimeZone;
 import org.pircbotx.PircBotX;
-import org.pircbotx.hooks.Event;
 
 /**
  *
@@ -54,38 +49,39 @@ public class Global {
 //    public static final Reflections wheatleyReflection = new Reflections("org.pircbotx");
     //public static List<Command> commandList = new ArrayList<>();
     
-    private static String filename = "settings.json";
-    public static Settings settings = startSettings();
+//    private static String filename = "settings.json";
+    public static Settings settings = new Settings("settings.json");
 //    boolean start = startSettings();
-    private static String throttleName = "throttle.json";
-    public static Throttle throttle = startThrottle();
+//    private static String throttleName = "throttle.json";
+    public static Throttle throttle = new Throttle("throttle.json");
     
     
-    private static Settings startSettings() {
-        Settings setting = new Settings();
-        try{
-            setting.setFileName(filename);
-            setting.loadFile();
-        }
-        catch (Exception ex){
-            System.out.println("SETTINGS FAILED TO LOAD");
-            ex.printStackTrace();
-        }
-        return setting;
-    } 
     
-    private static Throttle startThrottle() {
-        Throttle throttle = new Throttle();
-        try{
-            throttle.setFileName(throttleName);
-            throttle.loadFile();
-        }
-        catch (Exception ex){
-            System.out.println("SETTINGS FAILED TO LOAD");
-            ex.printStackTrace();
-        }
-        return throttle;
-    }
+//    private static Settings startSettings() {
+//        Settings setting = new Settings();
+//        try{
+//            setting.setFileName(filename);
+//            setting.loadFile();
+//        }
+//        catch (Exception ex){
+//            System.out.println("SETTINGS FAILED TO LOAD");
+//            ex.printStackTrace();
+//        }
+//        return setting;
+//    } 
+//    
+//    private static Throttle startThrottle() {
+//        Throttle throttle = new Throttle();
+//        try{
+//            throttle.setFileName(throttleName);
+//            throttle.loadFile();
+//        }
+//        catch (Exception ex){
+//            System.out.println("SETTINGS FAILED TO LOAD");
+//            ex.printStackTrace();
+//        }
+//        return throttle;
+//    }
     
 //    public static String getTimestamp(Event event){
 //        TimeZone tz = TimeZone.getDefault();

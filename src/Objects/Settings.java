@@ -46,17 +46,17 @@ import org.json.JSONTokener;
  *   and ability to handle throttling
  *
  * Methods:
- *      contains  - Returns true if the input key or channel/key pair exists in the map
- *      create    - Creates the input key/value or key/channel/value pair
- *      get       - Gets the value for the input key or key/channel
- *      getChannelList - Returns an ArrayList of channels that exist in the settings file
- *      loadFile       - Parses the file string into a map
+ *     *contains  - Returns true if the input key or channel/key pair exists in the map
+ *     *create    - Creates the input key/value or key/channel/value pair
+ *     *get       - Gets the value for the input key or key/channel
+ *     *getChannelList - Returns an ArrayList of channels that exist in the settings file
+ *     *loadFile       - Parses the file string into a map
  *      loadText       - Loads an input file to string
- *      save           - Saves the settings to file
- *      setFileName    - Sets the file name to be used for saving the settings
- *     *toList         - Converts JSON list to list
- *     *toMap          - Converts JSONObject to map
- *     *jsonToMap      - Recursively uses toList and toMap to convert JSON objects
+ *     *save           - Saves the settings to file
+ *     *setFileName    - Sets the file name to be used for saving the settings
+ *      toList         - Converts JSON list to list
+ *      toMap          - Converts JSONObject to map
+ *      jsonToMap      - Recursively uses toList and toMap to convert JSON objects
  *                       to maps/lists
  *
  * Note: Only commands marked with a * are available for use outside the object
@@ -64,14 +64,41 @@ import org.json.JSONTokener;
  * Useful Resources
  * - http://developer.android.com/reference/org/json/package-summary.html
  * - http://developer.android.com/reference/java/util/Map.html
+ *
+ * Version: 0.6.0
+ *
  */
 public class Settings {
 //    Map<String, String> stuff = new TreeMap<String, String>();
-    String filename = "doNotSave";
-    Map <String, String> generalSettings = Collections.synchronizedMap(new TreeMap<String, String>( ));
+//    String filename = "doNotSave";
+    File file = new File("doNotSave");
+    Map <String, Object> generalSettings = Collections.synchronizedMap(new TreeMap<String, Object>( ));
 //String.CASE_INSENSITIVE_ORDER
-    Map <String, Map<String, String>> channelSettings = Collections.synchronizedMap(new TreeMap<String, Map<String, String>>( ));
+    Map <String, Object> channelSettings = Collections.synchronizedMap(new TreeMap<String, Object>( ));
 //String.CASE_INSENSITIVE_ORDER
+    
+    public Settings(String filename){
+        this.file = new File(filename);
+        try{
+            this.loadFile();
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        
+    }
+    public Settings(File file){
+        this.file = file;
+        try{
+            this.loadFile();
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    public Settings(){
+        
+    }
     
     public void create(String key, String value){
         key=key.toLowerCase();
@@ -83,20 +110,17 @@ public class Settings {
         Set<String> genSet = generalSettings.keySet();
         Set<String> chanSet = channelSettings.keySet();
         Set<String> allSet = new HashSet<>();
-//        System.out.println("general settings size: "+genSet.size());
-//        System.out.println("channel settings size: "+chanSet.size());
         
         Iterator<String> keyIterator = chanSet.iterator();
         
         while (keyIterator.hasNext()){
             String key = keyIterator.next();
-            allSet.addAll(channelSettings.get(key).keySet());
+            allSet.addAll(((Map)channelSettings.get(key)).keySet());
             
         }
         
         allSet.addAll(genSet);
-//        allSet.addAll(chanSet);
-        System.out.println("combined size: "+allSet.size());
+//        System.out.println("combined size: "+allSet.size());
         return allSet;
     }
     
@@ -110,22 +134,103 @@ public class Settings {
         channel = channel.toLowerCase();
         if (!channelSettings.containsKey(channel))
             create("NA","NA",channel);
-        return(channelSettings.get(channel).containsKey(key));
+        return(((Map)channelSettings.get(channel)).containsKey(key));
+    }
+    
+    public String get(List<String> tree){
+//        System.out.println(tree + " is the contains tree");
+        if (this.contains(tree)){
+            if (tree.size()==0){
+                throw new UnsupportedOperationException("Input tree cannot be of ZERO size");
+            }
+            else if (tree.size()==1){
+                if(tree.get(0).startsWith("#"))
+                    throw new UnsupportedOperationException("Channels cannot contain any values, only more maps");
+                else
+                    return (generalSettings.get(tree.get(0)).toString());
+            }
+            else{
+                Map<String,Object> tempMap = new TreeMap<String,Object>();
+                boolean continueSearch = true;
+                
+                if (tree.get(0).startsWith("#")){
+                    // We gotta check channel settings, not general
+                    if (channelSettings.containsKey(tree.get(0))){
+                        
+                        Iterator treeIterator = tree.iterator();
+                        tempMap.putAll(channelSettings);
+                        String key = new String();
+                        while (treeIterator.hasNext() && continueSearch){
+                            
+                            key = ((String) treeIterator.next()).toLowerCase();
+                            
+                            if (tempMap.containsKey(key)){
+                                if (tempMap.get(key) instanceof Map){
+                                    tempMap = (Map) tempMap.get(key);
+                                }
+//                                else
+//                                    System.out.println(tempMap.get(key) + " WTF?");
+                            }
+                            else{
+                                continueSearch = false;
+                                System.out.println(key);
+                            }
+                        }
+                        return tempMap.get(key).toString();
+                    }
+                    else
+                        return null;
+                }
+                else{
+                    if (generalSettings.containsKey(tree.get(0))){
+                        Iterator treeIterator = tree.iterator();
+                        tempMap.putAll(generalSettings);
+                        String key = new String();
+                        while (treeIterator.hasNext() && continueSearch){
+                            
+                            key = ((String) treeIterator.next()).toLowerCase();
+                            
+                            if (tempMap.containsKey(key)){
+                                if (tempMap.get(key) instanceof Map){
+                                    tempMap = (Map) tempMap.get(key);
+                                }
+                                else
+                                    System.out.println(tempMap.get(key) + " WTF?");
+                                
+                            }
+                            else{
+                                continueSearch = false;
+                                System.out.println(key);
+                            }
+                            
+                        }
+                        return tempMap.get(key).toString();
+                        
+                    }
+                    else
+                        return null;
+                }
+            }
+        }
+        else{
+            return null;
+        }
     }
     
     public boolean contains(List<String> tree){
-        
+//        System.out.println(tree + " is the contains tree");
         if (tree.size()==0){
             throw new UnsupportedOperationException("Input tree cannot be of ZERO size");
         }
         else if (tree.size()==1){
             if(tree.get(0).startsWith("#"))
                 return (channelSettings.containsKey(tree.get(0)));
-            return (generalSettings.containsKey(tree.get(0)));
+            else
+                return (generalSettings.containsKey(tree.get(0)));
         }
         else{
             Map<String,Object> tempMap = new TreeMap<String,Object>();
-            boolean found = true;
+            boolean continueSearch = true;
             
             if (tree.get(0).startsWith("#")){
                 // We gotta check channel settings, not general
@@ -134,7 +239,7 @@ public class Settings {
                     Iterator treeIterator = tree.iterator();
                     tempMap.putAll(channelSettings);
                     
-                    while (treeIterator.hasNext() && found){
+                    while (treeIterator.hasNext() && continueSearch){
                         
                         String key = ((String) treeIterator.next()).toLowerCase();
                         
@@ -142,11 +247,15 @@ public class Settings {
                             if (tempMap.get(key) instanceof Map){
                                 tempMap = (Map) tempMap.get(key);
                             }
+                            else
+                                System.out.println(tempMap.get(key) + " WTF?");
                         }
-                        else
-                            found = false;
+                        else{
+                            continueSearch = false;
+                            System.out.println(key);
+                        }
                     }
-                    return found;
+                    return continueSearch;
                 }
                 else
                     return false;
@@ -156,7 +265,7 @@ public class Settings {
                     Iterator treeIterator = tree.iterator();
                     tempMap.putAll(generalSettings);
                     
-                    while (treeIterator.hasNext() && found){
+                    while (treeIterator.hasNext() && continueSearch){
                         
                         String key = ((String) treeIterator.next()).toLowerCase();
                         
@@ -164,11 +273,17 @@ public class Settings {
                             if (tempMap.get(key) instanceof Map){
                                 tempMap = (Map) tempMap.get(key);
                             }
+                            else
+                                System.out.println(tempMap.get(key) + " WTF?");
+                            
                         }
-                        else
-                            found = false;
+                        else{
+                            continueSearch = false;
+                            System.out.println(key);
+                        }
+                        
                     }
-                    return found;
+                    return continueSearch;
                     
                 }
                 else
@@ -177,44 +292,45 @@ public class Settings {
         }
     }
     
-    
-    
-    
-//    public void create(List<String> tree){
-//        if (!contains(tree.subList(0, tree.size()-2))){
-//            
-//            
-//            if (tree.size()==1){
-//                throw new UnsupportedOperationException("TREE MUST CONTAIN AT LEAST 2 VALUES, A KEY AND A VALUE");
-//            }
-//            else if (tree.size()==2){
-//                if (tree.get(0).startsWith("#"))
-//                    throw new UnsupportedOperationException("CHANNELS CANNOT HAVE VALUES ASSOCIATED WITH THEM, ONLY KEY/VALUE PAIRS");
-//                generalSettings.put(tree.get(0), tree.get(1));
-//            }
-//            else{
-//                Iterator treeIterator = tree.iterator();
-//                
-//                if (tree.get(0).startsWith("#")){
-//                    
-//                    while (treeIterator.hasNext()){
-//                        String key =(String) treeIterator.next();
-//                        
-//                        
-//                        
-//                    }
-//                }
-//                else{
-//                    while (treeIterator.hasNext()){
-//                        String key =(String) treeIterator.next();
-//                        
-//                        
-//                        
-//                    }
-//                }
-//            }
-//        }
-//    }
+    public void create(List<String> tree){
+        System.out.println(tree.subList(0, tree.size()-1));
+        if (!contains(tree.subList(0, tree.size()-1))){
+            
+            
+            if (tree.size()==1){
+                throw new UnsupportedOperationException("TREE MUST CONTAIN AT LEAST 2 VALUES, A KEY AND A VALUE");
+            }
+            else if (tree.size()==2){
+                if (tree.get(0).startsWith("#")){
+                    throw new UnsupportedOperationException("CHANNELS CANNOT HAVE VALUES ASSOCIATED WITH THEM, ONLY KEY/VALUE PAIRS");
+                }
+                else{
+                    generalSettings.put(tree.get(0).toLowerCase(), tree.get(1));
+                }
+            }
+            else{
+                Map<String, Object> tmpMap = new TreeMap<String, Object>();
+                Map<String, Object> newMap = new TreeMap<String, Object>();
+                
+                tmpMap.put(tree.get(tree.size()-2).toLowerCase(), tree.get(tree.size()-1));
+                
+                for (int i=tree.size()-3;i>=0;i--){
+                    newMap.put(tree.get(i).toLowerCase(), tmpMap);
+                    
+                    tmpMap = new TreeMap<String, Object>();
+                    
+                    tmpMap.putAll(newMap);
+                }
+                if (tree.get(0).startsWith("#")){
+                    this.channelSettings.putAll((Map) newMap);
+                }
+                else{
+                    this.generalSettings.putAll((Map) newMap);
+                }
+            }
+            save();
+        }
+    }
     
     
     public void create (String key, String value, String channel) {
@@ -237,8 +353,8 @@ public class Settings {
         else if (channel.equalsIgnoreCase("ALL")){
             ArrayList<String> channels = getChannelList();
             for (int i=0;i<channels.size();i++){
-                if(!channelSettings.get(channels.get(i)).containsKey(key)){
-                    channelSettings.get(channels.get(i)).put(key, value);
+                if(!((Map)channelSettings.get(channels.get(i))).containsKey(key)){
+                    ((Map)channelSettings.get(channels.get(i))).put(key, value);
 //                    System.out.println("SETTING "+key+" WAS ADDED TO "+channels.get(i));
                 }
 //                System.out.println(channelSettings.get(channels.get(i)).get(key));
@@ -247,8 +363,8 @@ public class Settings {
         }
         else if (channel.startsWith("#")&&channel.split(" ").length==1){
             if (channelSettings.containsKey(channel)){
-                if(!channelSettings.get(channel).containsKey(key))
-                    channelSettings.get(channel).put(key, value);
+                if(!((Map)channelSettings.get(channel)).containsKey(key))
+                    ((Map)channelSettings.get(channel)).put(key, value);
             }
             else{
                 Map<String, String> newSetting = new TreeMap<String,String>();
@@ -266,8 +382,8 @@ public class Settings {
         if (channel.equalsIgnoreCase("ALL")){
             ArrayList<String> channels = getChannelList();
             for (int i=0;i<channels.size();i++){
-                if (channelSettings.get(channels.get(i)).containsKey(key)){
-                    channelSettings.get(channels.get(i)).put(key, value);
+                if (((Map)channelSettings.get(channels.get(i))).containsKey(key)){
+                    ((Map)channelSettings.get(channels.get(i))).put(key, value);
 //                    System.out.println(channelSettings.get(channels.get(i)).get(key));
                 }
             }
@@ -277,8 +393,8 @@ public class Settings {
         else if (channel.startsWith("#")&&channel.split(" ").length==1){
             
             if (channelSettings.containsKey(channel)){
-                if (channelSettings.get(channel).containsKey(key)){
-                    channelSettings.get(channel).put(key, value);
+                if (((Map)channelSettings.get(channel)).containsKey(key)){
+                    ((Map)channelSettings.get(channel)).put(key, value);
 //                    System.out.println(channelSettings.get(channel).get(key));
                     save();
                     return true;
@@ -315,8 +431,8 @@ public class Settings {
         key=key.toLowerCase();
         channel = channel.toLowerCase();
         if (channelSettings.containsKey(channel)){
-            if(channelSettings.get(channel).containsKey(key))
-                return channelSettings.get(channel).get(key).toString();
+            if(((Map)channelSettings.get(channel)).containsKey(key))
+                return ((Map)channelSettings.get(channel)).get(key).toString();
             else
                 throw new UnsupportedOperationException("KEY MISSING");
         }
@@ -328,7 +444,7 @@ public class Settings {
         
         ArrayList<String> channels = new ArrayList<>();
         Collection chanSet = channelSettings.values();
-        Iterator<Map.Entry<String, Map<String, String>>> chanIterator = channelSettings.entrySet().iterator();
+        Iterator<Map.Entry<String, Object>> chanIterator = channelSettings.entrySet().iterator();
         
         while(chanIterator.hasNext()){
             Map.Entry channelEntry = chanIterator.next();
@@ -339,21 +455,21 @@ public class Settings {
     
     public void save() {
         try{
-            if (!this.filename.equalsIgnoreCase("doNotSave")){
+            if (!this.file.getName().equalsIgnoreCase("doNotSave")){
                 JSONObject writeJSON = new JSONObject();
                 JSONObject genJSON = new JSONObject(generalSettings);
                 JSONObject chanJSON = new JSONObject();
                 
                 writeJSON.put("generalSettings", genJSON);
                 
-                Collection chanSet = channelSettings.values();
-                Iterator<Map.Entry<String, Map<String, String>>> chanIterator = channelSettings.entrySet().iterator();
+//                Collection chanSet = channelSettings.values();
+                Iterator<Map.Entry<String, Object>> chanIterator = channelSettings.entrySet().iterator();
                 
                 while(chanIterator.hasNext()){
                     Map.Entry channelEntry = chanIterator.next();
                     
                     JSONObject channelSettingJSON = new JSONObject();
-                    Iterator<Map.Entry<String, String>> settingIterator = channelSettings.get(channelEntry.getKey().toString()).entrySet().iterator();
+                    Iterator<Map.Entry<String, String>> settingIterator = ((Map)channelSettings.get(channelEntry.getKey().toString())).entrySet().iterator();
                     
                     while(settingIterator.hasNext()){
                         Map.Entry settingEntry = settingIterator.next();
@@ -370,12 +486,9 @@ public class Settings {
 //                    ....channelJson.addValue(channelName, settings);
                 String json = writeJSON.toString(2);
                 try{
-                    File file =new File(filename);
+//                    File file =new File(filename);
                     
-                    //if file doesnt exists, then create it
-//                if(!file.exists()){
                     file.createNewFile(); // We're just replacing the old file, not modifying it
-//                }
                     
                     //true = append file
                     FileWriter fileWritter = new FileWriter(file.getName());
@@ -384,7 +497,7 @@ public class Settings {
                     bufferWritter.close();
                     System.out.println("FILE SAVED");
                 }catch(IOException e){
-                    System.out.println(filename+" HAS NOT BEEN SAVED");
+                    System.out.println(file.getName()+" HAS NOT BEEN SAVED");
                     e.printStackTrace();
                 }
             }
@@ -413,10 +526,10 @@ public class Settings {
                 
             }
             else{
-                System.out.println(filename+" IS EMPTY");
+                System.out.println(file.getName()+" IS EMPTY");
             }
         }catch(Exception e){
-            System.out.println(filename+" HAS NOT BEEN LOADED");
+            System.out.println(file.getName()+" HAS NOT BEEN LOADED");
             System.out.println(e.getMessage());
             e.printStackTrace();
             return false;
@@ -426,11 +539,23 @@ public class Settings {
     
     
     public void setFileName(String filename){
-        this.filename=filename;
+//        this.filename=filename;
+        this.file = new File(filename);
+        try{
+            if(!this.file.exists()){
+                this.file.createNewFile(); // We're just replacing the old file, not modifying it
+            }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    public void setFile(File file){
+        this.file = file;
     }
     
     private String loadText() throws FileNotFoundException, IOException{
-        File file =new File(filename);
+//        File file =new File(filename);
         //if file doesnt exists, then create it
         if(!file.exists()){
             file.createNewFile();
@@ -438,10 +563,10 @@ public class Settings {
         }
         
         try{
-            Scanner wordfile = new Scanner(new File(filename));
+            Scanner wordfile = new Scanner(file);
             String wordls = "";
             while (wordfile.hasNext()){
-                wordls= wordls+(wordfile.next());
+                wordls= wordls+(wordfile.nextLine());
             }
             wordfile.close();
             return (wordls);
