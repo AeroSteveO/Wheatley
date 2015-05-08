@@ -26,6 +26,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - Custom Objects
  *    Command
  *    Throttle
+ *    CommandMetaData
  * - Utilities
  *    N/A
  * - Linked Classes

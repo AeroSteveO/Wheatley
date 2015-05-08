@@ -12,27 +12,27 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
 /**
- * 
+ *
  * @author Steve-O
  * Original Bot = Matrapter
  * matlab based IRC bot written by Steve-O
- * 
+ *
  * Source:  http://www.tastefullyoffensive.com/2011/10/shakespeare-insult-kit.html
  *          http://imgur.com/gallery/q4UXODX
  *          http://www.pangloss.com/seidel/shake_rule.html
  *          http://m.imgur.com/gallery/gUnGqDI
  *          http://i.imgur.com//reyuFY3.jpg
- * 
+ *
  * Activate Commands With
- *      !shakespeare [it] 
+ *      !shakespeare [it]
  *          insults the provided object, if no object is give, it insults 'thou'
  *      !insult [it]
  *      !slander [it]
- *          insults the given object or 'you' if no object is given, using a 
+ *          insults the given object or 'you' if no object is given, using a
  *          random insult generated from one of the built in methods
  */
 public class Insult extends ListenerAdapter {
-
+    
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());

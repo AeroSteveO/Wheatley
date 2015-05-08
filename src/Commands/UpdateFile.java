@@ -22,6 +22,7 @@ import org.pircbotx.hooks.Event;
  *    N/A
  * - Custom Objects
  *    Command
+ *    CommandMetaData
  * - Utilities
  *    TextUtils
  * - Linked Classes

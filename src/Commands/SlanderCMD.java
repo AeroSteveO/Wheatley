@@ -17,6 +17,17 @@ import org.pircbotx.hooks.Event;
  * Original Bot = Matrapter
  * matlab based IRC bot written by Steve-O
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Command
+ *    CommandMetaData
+ * - Utilities
+ *    N/A
+ * - Linked Classes
+ *    Global
+ * 
  * Source:  http://www.tastefullyoffensive.com/2011/10/shakespeare-insult-kit.html
  *          http://imgur.com/gallery/q4UXODX
  *          http://www.pangloss.com/seidel/shake_rule.html

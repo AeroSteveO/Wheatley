@@ -27,6 +27,7 @@ import org.pircbotx.hooks.Event;
  *    JSON-Droid
  * - Custom Objects
  *    Command
+ *    CommandMetaData
  * - Utilities
  *    N/A
  * - Linked Classes

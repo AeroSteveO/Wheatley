@@ -27,6 +27,7 @@ import org.w3c.dom.Element;
  *    N/A
  * - Custom Objects
  *    Command
+ *    CommandMetaData
  * - Utilities
  *    N/A
  * - Linked Classes
