@@ -103,6 +103,7 @@ public class TextUtils {
                 buffer.append(chars, 0, read);
             return buffer.toString();
         }catch(IOException ex){
+            ex.printStackTrace();
             return(null);
         }finally {
             if (reader != null)
