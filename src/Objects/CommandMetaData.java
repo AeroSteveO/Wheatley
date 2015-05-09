@@ -132,12 +132,7 @@ public class CommandMetaData {
                 isChanOwner = mEvent.getChannel().isOwner(mEvent.getUser());
             }
             
-            getCommands(); // REPLACES THE FOLLOWING IF STATEMENT
-//            if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}!{1,}[ ]{0,}){1,}")){
-//
-//                command = message.split(Global.commandPrefix)[1];
-//                cmdSplit = command.split(" ");
-//            }
+            getCommands(); 
         }// END MESSAGE EVENT SPECIFIC PARSING
         
         else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
@@ -199,8 +194,6 @@ public class CommandMetaData {
     }
     public String getCommandChannel(){
         
-//        if (channel==null && refChan == null)
-//            return (null);
         if (channel == null && refChan != null)
             return (refChan);
         
@@ -232,54 +225,4 @@ public class CommandMetaData {
         else
             return getEventChannel();
     }
-    //ORIGINAL CONSTRUCTOR THAT WAS NEVER USED
-//    public CommandMetaData(Event event){
-//        this.event = event;
-//
-//        if (event instanceof MessageEvent){ // MESSAGE EVENT SPECIFIC PARSING
-//            eventType = "ChannelMessage";
-//            MessageEvent mEvent = (MessageEvent) event;
-//            caller = mEvent.getUser().getNick();
-//            message = Colors.removeFormattingAndColors(mEvent.getMessage());
-//
-//            if (message.contains("#")){
-//                refChan ="#" + message.split("#")[0].split(" ")[0];
-//                isVerified  = mEvent.getUser().isVerified();
-//                isBotOwner  = caller.equalsIgnoreCase(Global.botOwner);
-//                isChanOwner = mEvent.getUser().getChannelsOwnerIn().contains(mEvent.getBot().getUserChannelDao().getChannel(refChan));
-//            }
-//            else{
-//                channel = mEvent.getChannel().getName();
-//                isVerified  = mEvent.getUser().isVerified();
-//                isBotOwner  = caller.equalsIgnoreCase(Global.botOwner);
-//                isChanOwner = mEvent.getChannel().isOwner(mEvent.getUser());
-//            }
-//
-//            getCommands(); // REPLACES THE FOLLOWING IF STATEMENT
-////            if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}!{1,}[ ]{0,}){1,}")){
-////
-////                command = message.split(Global.commandPrefix)[1];
-////                cmdSplit = command.split(" ");
-////            }
-//        }// END MESSAGE EVENT SPECIFIC PARSING
-//
-//        else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
-//            eventType = "PrivateMessage";
-//            PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
-//            message = Colors.removeFormattingAndColors(pmEvent.getMessage());
-//            caller = pmEvent.getUser().getNick();
-//
-//            if (message.contains("#")){
-//                refChan = "#" + message.split("#")[0].split(" ")[0];
-//                isVerified  = pmEvent.getUser().isVerified();
-//                isBotOwner  = caller.equalsIgnoreCase(Global.botOwner);
-//                isChanOwner = pmEvent.getUser().getChannelsOwnerIn().contains(pmEvent.getBot().getUserChannelDao().getChannel(refChan));
-//            }
-//            else{
-//                isVerified = pmEvent.getUser().isVerified();
-//                isBotOwner = caller.equalsIgnoreCase(Global.botOwner);
-//            }
-//            getCommands();
-//        }// END PRIVATE MESSAGE EVENT SPECIFIC PARSING
-//    }
 }

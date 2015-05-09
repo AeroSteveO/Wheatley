@@ -111,14 +111,6 @@ public class Score implements Comparable<Score> {
     public int getScore(){
         return this.score;
     }
-//    public JSONObject getJSON(){
-//        JSONObject score = new JSONObject();
-//        score.put(user,score);
-////        score.put("score",score);
-//        String jsonText = JSONValue.toJSONString(score);
-//        System.out.print(jsonText);
-//        return(score);
-//    }
     @Override
     public String toString(){
         return(this.user+": "+this.score);
@@ -262,18 +254,6 @@ public class Score implements Comparable<Score> {
             }
         }
         
-//        public int getScoreIdx(String nick){
-//            synchronized(scores){
-//                for(int i = 0; i < this.size(); i++) {
-//                    if (scores.get(i).user.equalsIgnoreCase(nick)) {
-//                        return (i);
-//                    }
-//                }
-//                scores.add(new Score(nick,baseScore));
-//                return (this.getScoreIdx(nick));
-//            }
-//        }
-        
         public int getScore(String nick){
             synchronized(scores){
                 for(int i = 0; i < scores.size(); i++) {
@@ -339,27 +319,17 @@ public class Score implements Comparable<Score> {
         public boolean saveToJSON(){
             if (!this.filename.equalsIgnoreCase("doNotSave")){
                 try{
-                JSONObject scoreList = new JSONObject();
-//            JSONArray score = new JSONArray();
-                synchronized(scores){
-                    for (int i=0;i<scores.size();i++){
-                        scoreList.put(scores.get(i).user,scores.get(i).score);
+                    JSONObject scoreList = new JSONObject();
+                    synchronized(scores){
+                        for (int i=0;i<scores.size();i++){
+                            scoreList.put(scores.get(i).user,scores.get(i).score);
+                        }
                     }
-                }
-                String addition = scoreList.toString(2);
-//                }
-//                catch (Exception ex){
-//                    ex.printStackTrace();
-//                }
-//                try{
+                    String addition = scoreList.toString(2);
                     File file =new File(filename);
                     
-                    //if file doesnt exists, then create it
-//                if(!file.exists()){
                     file.createNewFile();
-//                }
                     
-                    //true = append file
                     FileWriter fileWritter = new FileWriter(file.getName());
                     BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                     bufferWritter.write(addition);
@@ -380,7 +350,7 @@ public class Score implements Comparable<Score> {
                 String jsonText = loadText(); // Should only have one line of text
                 
                 if (jsonText!=null&&!jsonText.equals("")){
-//                    JSONParser parser = new JSONParser();
+
                     JSONObject scores = (JSONObject) new JSONTokener(jsonText).nextValue();
                     Set users = scores.keySet();
                     Iterator<String> iterator = users.iterator();
@@ -388,11 +358,6 @@ public class Score implements Comparable<Score> {
                         String element = iterator.next();
                         this.add(new Score(element, (int) scores.get(element)));
                     }
-//                String user = users.toArray();
-//                    for (int i=0;i<users.length;i++){
-//                        this.add(new Score(users[i],(int) scores.get(users[i])));
-//                        System.out.println(this.get(i).toString());
-//                    }
                 }
                 else{
                     System.out.println(filename+" IS EMPTY");

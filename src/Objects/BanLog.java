@@ -49,9 +49,6 @@ public class BanLog {
         return("Hostmask: "+this.hostmask+" Channel: "+this.channel + " From: "+this.time);
     }
     public static class BanList extends Vector<BanLog>{
-//        public String getFormattedResponse(String hostmask){
-//            return (this.getBan(hostmask, channel).getFormattedResponse());
-//        }
         
         public BanLog getBan(String hostmask,String channel){
             return (this.get(this.getBanIdx(hostmask, channel)));
