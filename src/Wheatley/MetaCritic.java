@@ -52,7 +52,7 @@ public class MetaCritic extends ListenerAdapter {
             
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
-            System.out.println(command);
+//            System.out.println(command);
             
             if (cmdSplit[0].equalsIgnoreCase("mc")){
                 String[] gameSearch = command.split(" ",3);
@@ -71,15 +71,15 @@ public class MetaCritic extends ListenerAdapter {
                     }
                     else{
                         try{
-                            System.out.println(gameSearch[2]);
-                            System.out.println(platform);
+//                            System.out.println(gameSearch[2]);
+//                            System.out.println(platform);
                             
                             String url = findGameUrl(gameSearch[2],platform);
                             String response = sendGet(url);
                             JSONObject defObject = (JSONObject) new JSONTokener(response).nextValue();
                             
                             if (defObject.get("result").toString().equalsIgnoreCase("false")){
-                                System.out.println("TRUE");
+//                                System.out.println("TRUE");
                                 
                                 url = searchGameUrl(gameSearch[2],platform);
                                 response = sendGet(url);
@@ -228,12 +228,12 @@ public class MetaCritic extends ListenerAdapter {
     
     private String findGameUrl(String game, String platform){
         game = game.replaceAll("\\s", "\\+");
-        System.out.println(game);
+//        System.out.println(game);
         return("https://metacritic-2.p.mashape.com/find/game?platform="+platform+"&title="+game);
     }
     private String searchGameUrl(String game, String platform){
         game = game.replaceAll("\\s", "\\+");
-        System.out.println(game);
+//        System.out.println(game);
         return("https://metacritic-2.p.mashape.com/search/game?platform="+platform+"&title="+game);
     }
     
@@ -256,8 +256,8 @@ public class MetaCritic extends ListenerAdapter {
         con.setRequestProperty("X-Mashape-Key", key);
         
         int responseCode = con.getResponseCode();
-        System.out.println("\nSending 'GET' request to URL : " + url);
-        System.out.println("Response Code : " + responseCode);
+//        System.out.println("\nSending 'GET' request to URL : " + url);
+//        System.out.println("Response Code : " + responseCode);
         
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
@@ -270,7 +270,7 @@ public class MetaCritic extends ListenerAdapter {
         in.close();
         
         //print result
-        System.out.println(response.toString());
+//        System.out.println(response.toString());
         return response.toString();
     }
     
