@@ -36,7 +36,6 @@ public class ChannelStore {
     private List<String> msgLog = new ArrayList<>();                       // for use in s/find/replace commands
     private ArrayList<String> gameChanBlocks = getBlockedGameChannels();   // List of channels that games are blocked from
     private boolean gamesBlocked;                                          // Are games currently blocked in this channel
-//    private ThrottleArray throttle = new ThrottleArray();
     
     public ChannelStore(String aName) {
         this.name = aName;
@@ -55,7 +54,6 @@ public class ChannelStore {
     public void addMessageToLog(String msg){
         this.msgLog.add(msg);
         if (msgLog.size()>100){
-            //this.msgLog.remove(this.msgLog.size()-1);
             this.msgLog.remove(0);
         }
     }
@@ -123,15 +121,8 @@ public class ChannelStore {
             return(false);
         }
     }
-//    public void addThrottleSetting(String type){
-//        this.throttle.add(new Throttle(type));
-//    }
     public static class ChannelArray extends Vector<ChannelStore>{
-//        public void addThrottleToAll(String throttleType){
-//            for(int i = 0; i < this.size(); i++) {
-//                this.get(i).addThrottleSetting(throttleType);
-//            }
-//        }
+        
         public int getChanIdx(String toCheck){
             int idx = -1;
             for(int i = 0; i < this.size(); i++) {
