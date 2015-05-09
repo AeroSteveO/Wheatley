@@ -7,9 +7,7 @@
 package Objects;
 
 import Wheatley.Global;
-import java.io.IOException;
 import org.pircbotx.PircBotX;
-import org.pircbotx.exception.IrcException;
 
 /**
  *
