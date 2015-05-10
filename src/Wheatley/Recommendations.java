@@ -15,6 +15,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -57,10 +58,8 @@ public class Recommendations extends ListenerAdapter{
                 if (cmdSplit.length>=2){
                     String search = command.split(" ",2)[1];
                     String url = getTasteKidURL(search);
-                    System.out.println(url);
                     try{
                         String json = sendGet(url);
-                        System.out.println(json);
                         JSONObject similar = (JSONObject) new JSONTokener(json).nextValue();
                         JSONObject results = similar.getJSONObject("Similar");
                         JSONArray info = results.getJSONArray("Results");
@@ -68,12 +67,22 @@ public class Recommendations extends ListenerAdapter{
                             event.respond("No recommendations found");
                         }
                         else{
-                            String recommendations = "";
-                            for (int i=0;i<info.length()-1;i++){
-                                recommendations+=info.getJSONObject(i).getString("Name")+", ";
+                            String type = info.getJSONObject(0).getString("Type");
+                            if (!type.equalsIgnoreCase("music")){
+                                type+="s";
                             }
-                            recommendations+=info.getJSONObject(info.length()-1).getString("Name");
-                            event.respond(recommendations);
+                            String recommendations = Colors.RED+"("+WordUtils.capitalize(type)+") "+Colors.NORMAL;
+                            for (int i=0;i<info.length()-1;i++){
+                                if((recommendations.length()+info.getJSONObject(i).getString("Name").length()+info.getJSONObject(info.length()-1).getString("Name").length()+19) < 425){
+                                    recommendations+=info.getJSONObject(i).getString("Name")+", ";
+                                }
+                            }
+                            if(recommendations.length()+info.getJSONObject(info.length()-1).getString("Name").length() + 12 < 425){
+                                recommendations+=info.getJSONObject(info.length()-1).getString("Name");
+                            }else{
+                                recommendations = recommendations.substring(0,recommendations.length()-2);
+                            }
+                            event.getBot().sendIRC().message(event.getChannel().getName(),recommendations);
                         }
                     }
                     catch (Exception ex){
@@ -90,7 +99,6 @@ public class Recommendations extends ListenerAdapter{
     private String getTasteKidURL(String search){
         
         try {
-            System.out.println(URLEncoder.encode(search, "UTF-8"));
             return ("http://www.tastekid.com/api/similar?q="+URLEncoder.encode(search, "UTF-8")+"&k="+key+"&callback");
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
