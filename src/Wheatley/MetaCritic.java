@@ -85,29 +85,34 @@ public class MetaCritic extends ListenerAdapter {
                                 response = sendGet(url);
                                 defObject = (JSONObject) new JSONTokener(response).nextValue();
                                 
-                                JSONArray gameHits = defObject.getJSONArray("results");
-                                JSONObject finalChoice = gameHits.getJSONObject(0);
-                                String name = finalChoice.getString("name");
-                                
-                                url = findGameUrl(name,platform);
-                                response = sendGet(url);
-                                
-                                defObject = (JSONObject) new JSONTokener(response).nextValue();
-                                JSONObject results = defObject.getJSONObject("result");
-                                String score = results.getString("score");
-                                String userScore = results.getString("userscore");
-                                String rating = results.getString("rating");
-                                String rlsdate = results.getString("rlsdate");
-                                String mcurl = results.getString("url");
-                                
-                                if (score.isEmpty())
-                                    score = "N/A";
-                                
-                                String fancified = Colors.BOLD+name+Colors.NORMAL+" ("+rlsdate.split("-")[0]+", "+rating+") "+Colors.BOLD+
-                                        "MC Critic Rating: "+Colors.NORMAL+score+"/100"+Colors.BOLD+" User Rating: "+Colors.NORMAL+userScore+"/10"+Colors.BOLD+" URL: "+Colors.NORMAL+mcurl;
-                                
-                                event.getBot().sendIRC().message(event.getChannel().getName(),fancified);
-                                
+                                if(defObject.has("results")&&defObject.getInt("count")!=0){
+                                    
+                                    JSONArray gameHits = defObject.getJSONArray("results");
+                                    JSONObject finalChoice = gameHits.getJSONObject(0);
+                                    String name = finalChoice.getString("name");
+                                    
+                                    url = findGameUrl(name,platform);
+                                    response = sendGet(url);
+                                    
+                                    defObject = (JSONObject) new JSONTokener(response).nextValue();
+                                    JSONObject results = defObject.getJSONObject("result");
+                                    String score = results.getString("score");
+                                    String userScore = results.getString("userscore");
+                                    String rating = results.getString("rating");
+                                    String rlsdate = results.getString("rlsdate");
+                                    String mcurl = results.getString("url");
+                                    
+                                    if (score.isEmpty())
+                                        score = "N/A";
+                                    
+                                    String fancified = Colors.BOLD+name+Colors.NORMAL+" ("+rlsdate.split("-")[0]+", "+rating+") "+Colors.BOLD+
+                                            "MC Critic Rating: "+Colors.NORMAL+score+"/100"+Colors.BOLD+" User Rating: "+Colors.NORMAL+userScore+"/10"+Colors.BOLD+" URL: "+Colors.NORMAL+mcurl;
+                                    
+                                    event.getBot().sendIRC().message(event.getChannel().getName(),fancified);
+                                }
+                                else{
+                                    event.getBot().sendIRC().message(event.getChannel().getName(),"MetaCritic: No Game Found");
+                                }
                             }
                             else{
                                 JSONObject results = defObject.getJSONObject("result");
@@ -140,6 +145,15 @@ public class MetaCritic extends ListenerAdapter {
                 }
             }
             else if (cmdSplit[0].equalsIgnoreCase("games")){
+                if (cmdSplit.length < 3) {
+                    String platformlist = new String();
+                    for (int i=0;i<gamePlatforms.size()-1;i++)
+                        platformlist += gamePlatforms.get(i).get(0) + ", ";
+                    platformlist += gamePlatforms.get(gamePlatforms.size()-1).get(0);
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Input Invalid: !Games [platform] [list-type], where list types include 'coming-soon' and 'new-releases', available gameplatforms include: "+platformlist);
+                    return;
+
+                }
                 String platform = getPlatform(cmdSplit[1]);
                 
                 
@@ -201,7 +215,7 @@ public class MetaCritic extends ListenerAdapter {
                                     games+=score+"/100";                        event.getBot().sendIRC().message(event.getChannel().getName(),games);
                         }
                         catch (Exception ex){
-                            System.out.println("ERROR STUPID ERROR");
+//                            System.out.println("ERROR STUPID ERROR");
                             ex.printStackTrace();
                         }
                     }
