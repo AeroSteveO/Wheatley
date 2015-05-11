@@ -78,7 +78,31 @@ public class Blarghlebot extends ListenerAdapter {
                 addToLog(channel, reply);
             }
         }
-        
+        if ((message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")&&message.endsWith("?"))){
+            //Messages from : http://en.wikipedia.org/wiki/Magic_8-Ball
+            List<String> magic = new ArrayList<>();
+            magic.add( "It is certain" );
+            magic.add( "It is decidedly so" );
+            magic.add( "Without a doubt");
+            magic.add( "Yes definitely");
+            magic.add( "You may rely on it" );
+            magic.add( "As I see it, yes" );
+            magic.add( "Most likely");
+            magic.add( "Outlook good");
+            magic.add( "Yes" );
+            magic.add( "Signs point to yes" );
+            magic.add( "Reply hazy try again");
+            magic.add( "Ask again later");
+            magic.add( "Better not tell you now" );
+            magic.add( "Cannot predict now" );
+            magic.add( "Concentrate and ask again");
+            magic.add( "Don't count on it");
+            magic.add( "My reply is no" );
+            magic.add( "My sources say no" );
+            magic.add( "Outlook not so good");
+            magic.add( "Very doubtful");
+            event.respond(magic.get((int) (Math.random()*magic.size()-1)));
+        }
         
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
                         
@@ -132,31 +156,6 @@ public class Blarghlebot extends ListenerAdapter {
                 }
             }
             //OTHER Functions
-            if ((message.toLowerCase().startsWith("blarghlebot, ")&&message.endsWith("?"))||(message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")&&message.endsWith("?"))){
-                //Messages from : http://en.wikipedia.org/wiki/Magic_8-Ball
-                List<String> magic = new ArrayList<>();
-                magic.add( "It is certain" );
-                magic.add( "It is decidedly so" );
-                magic.add( "Without a doubt");
-                magic.add( "Yes definitely");
-                magic.add( "You may rely on it" );
-                magic.add( "As I see it, yes" );
-                magic.add( "Most likely");
-                magic.add( "Outlook good");
-                magic.add( "Yes" );
-                magic.add( "Signs point to yes" );
-                magic.add( "Reply hazy try again");
-                magic.add( "Ask again later");
-                magic.add( "Better not tell you now" );
-                magic.add( "Cannot predict now" );
-                magic.add( "Concentrate and ask again");
-                magic.add( "Don't count on it");
-                magic.add( "My reply is no" );
-                magic.add( "My sources say no" );
-                magic.add( "Outlook not so good");
-                magic.add( "Very doubtful");
-                event.respond(magic.get((int) (Math.random()*magic.size()-1)));
-            }
             
             if (message.equalsIgnoreCase("i put on my robe and wizard hat"))
                 event.getChannel().send().kick(event.getUser(), "LIGHTNING BOLT");
