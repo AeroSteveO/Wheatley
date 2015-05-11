@@ -6,15 +6,12 @@
 
 package Wheatley;
 
-import Utils.TextUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,14 +33,17 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    N/A
  * - Linked Classes
  *    N/A
+ * 
+ * 
+ * 
+ * Source:
+ *   https://www.tastekid.com/read/api
  *
  */
 public class Recommendations extends ListenerAdapter{
     private String key = "***REMOVED***";
     private final String USER_AGENT = "Mozilla/5.0";
     
-    //https://www.tastekid.com/read/api
-    //https://duckduckgo.com/api
     @Override
     public void onMessage(final MessageEvent event) {
         String message = Colors.removeFormattingAndColors(event.getMessage());
