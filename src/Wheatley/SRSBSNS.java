@@ -6,10 +6,18 @@
 
 package Wheatley;
 
+import Utils.TextUtils;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.jsoup.Jsoup;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -41,10 +49,20 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Sends the given statement to the user via PM
  *      !srsbsns
  *          wat
+ *      !lasturl
+ *          Responds with the last URL mentioned in the channel
+ *      !secondlasturl
+ *          Responds with the second last URL mentioned in the channel
+ *      !quack [query]
+ *          Responds with information about the input query from Duck Duck Go
+ * 
+ * Source:
+ *    Duck Duck Go
+ *    https://duckduckgo.com/api
  *
  */
 public class SRSBSNS extends ListenerAdapter {
-    boolean rossa = true;
+    private final String USER_AGENT = "Mozilla/5.0";
 //    !metacritic (metacritic.com rating),
     
     @Override
@@ -53,16 +71,6 @@ public class SRSBSNS extends ListenerAdapter {
 //        String[] messageArray = message.split(" ");
         String currentChan = event.getChannel().getName();
         
-//        if (message.equalsIgnoreCase("tell |Rossa about slots")){
-//            if(rossa)
-//            event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+"++");
-//        }
-//        else if (message.equalsIgnoreCase("!rossa off")&&(event.getUser().getNick().equalsIgnoreCase("Steve-O")||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
-//            rossa=false;
-//        }
-//        else if (message.equalsIgnoreCase("!rossa on")&&(event.getUser().getNick().equalsIgnoreCase("Steve-O")||event.getUser().getNick().equalsIgnoreCase("theDoctor"))){
-//            rossa=true;
-//        }
         
 //        if (messageArray[0].equalsIgnoreCase("!bankick")) {
 ////            String[] kill = messageArray;
@@ -118,8 +126,8 @@ public class SRSBSNS extends ListenerAdapter {
                         title= "No Title Found";
                     } else {
                         title = finaldoc.title();
-                    }                    
-                event.getBot().sendIRC().message(currentChan,Colors.BOLD+"Last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
+                    }
+                    event.getBot().sendIRC().message(currentChan,Colors.BOLD+"Last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
                 }
                 else
                     event.getBot().sendIRC().message(currentChan,"No previous URL found");
@@ -176,6 +184,54 @@ public class SRSBSNS extends ListenerAdapter {
                     }
                 }
             }
+            
+            if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
+                
+                String command = message.split(Global.commandPrefix,2)[1];
+                String[] cmdSplit = command.split(" ");
+                if (cmdSplit[0].equalsIgnoreCase("quack")){
+                    if (cmdSplit.length==1){
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "Usage: !quack [search query] returns information about your query");
+                    }
+                    else{
+                        String search = command.split(" ",2)[1];
+                        search = search.replaceAll("!", "");
+                        String url = duckDuckUrl(search);
+                        System.out.println(url+"&pretty=1");
+                        String json = readUrlUsingGet(url);
+                        JSONObject similar = (JSONObject) new JSONTokener(json).nextValue();
+                        String topic = similar.getString("Heading");
+                        String info = similar.getString("Abstract");
+                        String hitUrl = similar.getString("AbstractURL");
+                        
+                        if (info.isEmpty()&&similar.getJSONArray("RelatedTopics").length()==0){
+                            event.getBot().sendIRC().message(event.getChannel().getName(),"No results available for "+search);
+                            return;
+                        }
+                        else if (info.isEmpty()){
+                            JSONObject firstHit = similar.getJSONArray("RelatedTopics").getJSONObject(0);
+                            if (firstHit.has("Text")){
+                                info = firstHit.getString("Text");
+                                hitUrl = firstHit.getString("FirstURL");
+                            }
+                            else if (firstHit.has("Topics")){
+                                firstHit = firstHit.getJSONArray("Topics").getJSONObject(0);
+                                info = firstHit.getString("Text");
+                                hitUrl = firstHit.getString("FirstURL");
+                            }
+                            else{
+                                event.getBot().sendIRC().message(event.getChannel().getName(),"No results available for "+search);
+                                return;
+                            }
+                        }
+//                        if (info.length()+topic.length()+hitUrl.length()>396){
+//                            info = info.substring(0,396-topic.length()-hitUrl.length())+"...";
+//                        }
+                        //Colors.BOLD+topic+Colors.NORMAL+info.split(topic,2)[1]
+                        event.getBot().sendIRC().message(event.getChannel().getName(),info+" ("+hitUrl+")");
+                    }
+                }
+            }
         }
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("Hermes")).contains(event.getChannel())) {
             if(message.toLowerCase().startsWith("!tell")&&message.split(" ").length>2) {
@@ -201,8 +257,46 @@ public class SRSBSNS extends ListenerAdapter {
                 event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!summon "+Colors.NORMAL+"user not in channel");
             }
         }
-//        if (message.equalsIgnoreCase("!pickaport")){
-//            event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*65534-1025+1)));
-//        }
+    }
+    
+    private String duckDuckUrl(String search){
+        try{
+            return "http://api.duckduckgo.com/?q="+URLEncoder.encode(search, "UTF-8")+"&format=json";
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    private String readUrlUsingGet(String url) throws Exception {
+        
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        
+        con.setRequestMethod("GET");
+        
+        //add request header
+        con.setRequestProperty("User-Agent", USER_AGENT);
+        con.setRequestProperty("format", "json");
+        
+//        con.setRequestProperty("X-Mashape-Key", key);
+        
+        int responseCode = con.getResponseCode();
+//        System.out.println("\nSending 'GET' request to URL : " + url);
+//        System.out.println("Response Code : " + responseCode);
+        
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        
+//        System.out.println(response.toString());
+        return response.toString();
     }
 }
