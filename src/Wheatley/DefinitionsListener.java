@@ -76,13 +76,15 @@ public class DefinitionsListener extends ListenerAdapter {
         if (message.equalsIgnoreCase("!list defs")){
             
             ArrayList<String> sortedWords = new ArrayList<>();
-            sortedWords.addAll(words);
-            Collections.sort(sortedWords, String.CASE_INSENSITIVE_ORDER);
+            sortedWords.addAll(words); // Add all words from the words array, so we don't affect the order of the words array
+            Collections.sort(sortedWords, String.CASE_INSENSITIVE_ORDER); // Case insensitive order, cause we don't care 'bout no case
             
+            //Create a pretty list of words
             String wordList = "";
             for (int i=0;i<sortedWords.size();i++){
                 wordList = wordList + sortedWords.get(i)+", ";
-            }
+            }// END create pretty list of words
+            
             event.getBot().sendIRC().message(event.getUser().getNick(),wordList);
         }
         
@@ -91,10 +93,10 @@ public class DefinitionsListener extends ListenerAdapter {
             if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(user))) {
                 
                 //If the user is in the same channel as the summon
-                String defWord = message.split("about")[1].trim();//.split(" ",2)[2];
+                String defWord = message.split("about")[1].trim();// Split the def you want to send from the user you want to send it to
                 if (containsIgnoreCase(words,defWord)){
-                    String def = definitions.get(indexOfIgnoreCase(words,defWord)).split("@")[1].trim();
-                    event.getBot().sendIRC().notice(event.getUser().getNick(),user+" has been PMed");
+                    String def = definitions.get(indexOfIgnoreCase(words,defWord)).split("@")[1].trim(); // Split the definition off the full "word @ def" string
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),user+" has been PMed"); // Inform the sender of the successful command
                     event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(user).getNick(),event.getUser().getNick()+" wants me to tell you about: "+Colors.BOLD+defWord+Colors.NORMAL+ ": "+Colors.NORMAL+def);
                 }
                 else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
@@ -125,26 +127,26 @@ public class DefinitionsListener extends ListenerAdapter {
                 
                 else {
                     
-                    String addition = message.split(" ",2)[1];
+                    String addition = message.split(" ",2)[1]; // remove the command words from the definition addition
                     
                     try{
                         File file =new File(definitionsFileName);
                         //if file doesnt exists, then create it
-                        if(!file.exists()){
+                        if(!file.exists()){ 
                             file.createNewFile();
                         }
-                        //true = append file
+                        
                         FileWriter fileWritter = new FileWriter(file.getName(),true);
                         BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                        bufferWritter.write("\n"+addition);
+                        bufferWritter.write("\n"+addition); // Append our new definition text on the end of the file
                         bufferWritter.close();
                         event.getBot().sendIRC().notice(event.getUser().getNick(),"Success: "+addition+" was added to "+ definitionsFileName);
                     }catch(IOException e){
                         e.printStackTrace();
                         event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: FILE NOT UPDATED");
                     }
-                    definitions = getDefinitions();
-                    words = getWordsFromDefs(definitions);
+                    definitions = getDefinitions(); // Add our new definition to the defs list
+                    words = getWordsFromDefs(definitions); // Add our new to the words list
                 }
             }
             else
@@ -152,30 +154,34 @@ public class DefinitionsListener extends ListenerAdapter {
         }
         
         // REMOVING DEFINITIONS
-        if(msgSplit[0].equalsIgnoreCase("!rmdef")){//||msgSplit[0].equalsIgnoreCase("!deletedef")
+        if(msgSplit[0].equalsIgnoreCase("!rmdef")){
             
             if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 
-                if (!containsIgnoreCase(words, message.split(" ",2)[1])){
+                if (!containsIgnoreCase(words, message.split(" ",2)[1])){ // Can't remove a non-existant def
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Definition not found");
                 }
                 else{
                     int index = indexOfIgnoreCase(words, message.split(" ",2)[1]);
                     try{
+                        // Add all removed definitions to a definition log file, just in case
                         File log = new File(definitionLogName);
-                        if(!log.exists()){
+                        if(!log.exists()){// Create a new log file if we don't have one already
                             log.createNewFile();
                         }
                         FileWriter fileWritter = new FileWriter(log.getName(),true);
                         BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                        bufferWritter.write("\n"+definitions.get(index));
+                        bufferWritter.write("\n"+definitions.get(index)); // Append file with our new log entry
                         bufferWritter.close();
                     }catch (Exception e){
                         event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: LOG NOT UPDATED");
                     }
                     
-                    definitions.remove(index);
-                    words.remove(index);
+                    // Now remove the unwanted definition from the defs file
+                    definitions.remove(index); // Remove from def list
+                    words.remove(index);       // Remove from word list
+                    
+                    // Overwrite the old file, with a brand new file
                     File fnew=new File(definitionsFileName);
                     try{
                         FileWriter f2 = new FileWriter(fnew, false);
@@ -197,7 +203,7 @@ public class DefinitionsListener extends ListenerAdapter {
         
         // Updating definitions already in the db
         
-        if(msgSplit[0].equalsIgnoreCase("!overdef")) {//||msgSplit[0].equalsIgnoreCase("!updef")
+        if(msgSplit[0].equalsIgnoreCase("!overdef")) {
                         
             if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
                 
@@ -213,21 +219,24 @@ public class DefinitionsListener extends ListenerAdapter {
                     
                     int index = indexOfIgnoreCase(words, message.split(" ",2)[1].split("@")[0].trim());
                     try{
+                        // Add all removed definitions to a definition log file, just in case
                         File log = new File(definitionLogName);
-                        if(!log.exists()){
+                        if(!log.exists()){ // Create a new log file if we don't have one already
                             log.createNewFile();
                         }
                         FileWriter fileWritter = new FileWriter(log.getName(),true);
                         BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                        bufferWritter.write("\n"+definitions.get(index));
+                        bufferWritter.write("\n"+definitions.get(index)); // Append file with our new log entry
                         bufferWritter.close();
                     }catch (Exception e){
                         event.getBot().sendIRC().notice(event.getUser().getNick(),"SOMETHING BROKE: LOG NOT UPDATED");
                     }
-                    definitions.remove(index);
-                    words.remove(index);
-                    definitions.add(message.split(" ",2)[1].trim());
-                    words = getWordsFromDefs(definitions);
+                    definitions.remove(index); // Remove from def list
+                    words.remove(index);       // Remove from word list
+                    definitions.add(message.split(" ",2)[1].trim()); // Add new definition to def list
+                    words = getWordsFromDefs(definitions);           // Get new wordlist
+                    
+                    // Overwrite the old def file, write a new one with the updated def
                     File fnew=new File(definitionsFileName);
                     try {
                         FileWriter f2 = new FileWriter(fnew, false);
@@ -248,6 +257,7 @@ public class DefinitionsListener extends ListenerAdapter {
         }
     }
     
+    // Load definitions from file
     private ArrayList<String> getDefinitions() {
         try{
             Scanner wordfile = new Scanner(new File("definitions.txt"));
@@ -263,6 +273,7 @@ public class DefinitionsListener extends ListenerAdapter {
         }
     }
     
+    // Split the def words off of the definitions from the "word @ def" string
     private ArrayList<String> getWordsFromDefs(ArrayList<String> definitions){
         ArrayList<String> words = new ArrayList<>();
         for (int i=0;i<definitions.size();i++){
@@ -271,6 +282,7 @@ public class DefinitionsListener extends ListenerAdapter {
         return words;
     }
     
+    // Check if the arraylist contains a string, ignoring case
     private boolean containsIgnoreCase(ArrayList<String> o,String thing) {
         for (String s : o) {
             if (thing.equalsIgnoreCase(s)) return true;
@@ -278,6 +290,7 @@ public class DefinitionsListener extends ListenerAdapter {
         return false;
     }
     
+    // Get the index of a string from an array, ignoring case
     private int indexOfIgnoreCase(ArrayList<String> o,String thing) {
         for (int i=0;i<o.size();i++) {
             if (thing.equalsIgnoreCase(o.get(i))) return i;
