@@ -43,7 +43,7 @@ public class Why implements Command{
     
     @Override
     public String toString(){
-        return("WHY");
+        return("Why implements the easter egg from MATLAB for fun in IRC");
     }
     
     @Override

@@ -38,6 +38,8 @@ import java.util.Scanner;
  *     *readUrl          - Loads the url and returns a string of the contents
  *     *addToDoc         - Adds the input text as a new line at the bottom of the input text file
  *     *addToDocIfUnique - Adds a line to the end of the input text file if that line is unique in that file
+ *     *readUrlUsingGet  - Reads the input URL using a GET and the class user agent and returns a String
+ *                         (Sometimes this will work when readUrl does not)
  *
  * Note: Only commands marked with a * are available for use outside the object
  *
