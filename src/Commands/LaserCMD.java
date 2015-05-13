@@ -18,9 +18,20 @@ import org.pircbotx.hooks.Event;
  * original bot = Matrapter
  * MATLAB based IRC bot written by Steve-O
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Command
+ *    CommandMetaData
+ * - Utilities
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
  * Activate Commands With
- *      !laser [it]
- *          puts lasers on the input object in a randomly generated way, if nothing is input,
+ *      !Laser [it]
+ *          Puts lasers on the input object in a randomly generated way, if nothing is input,
  *          the object becomes "it"
  *
  */
@@ -109,7 +120,6 @@ public class LaserCMD implements Command {
         a1.add("engineer");
         a2.add("to");
         a2.add("on");
-        //      a2.add("on to");
         a2.add("in to");
         int n = (int) (Math.random()*a1.size()+3);
         if (n<=a1.size())

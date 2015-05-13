@@ -28,6 +28,11 @@ import org.pircbotx.hooks.Event;
  * - Linked Classes
  *    N/A
  * 
+ * Activate commands with:
+ *      !update [filename] [singleWordItem]
+ *          Update a text file by adding a new line to the end of it
+ *          EXAMPLE: !update badwords defenetely
+ * 
  */
 public class UpdateFile implements Command{
     

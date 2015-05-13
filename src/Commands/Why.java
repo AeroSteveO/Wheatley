@@ -19,6 +19,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 /**
  *
  * @author Stephen
+ * Ported from an easter egg in MATLAB
  * 
  * Requirements:
  * - APIs
@@ -29,6 +30,11 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *    N/A
  * - Linked Classes
  *    Global
+ * 
+ * Activate Command with:
+ *      !Why
+ *      [BotName], Why [any question]
+ *          Responds with a randomly generated reason as to why
  * 
  */
 @CMD

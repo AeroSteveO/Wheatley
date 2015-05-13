@@ -29,6 +29,10 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  * - Linked Classes
  *    N/A
  * 
+ * Activate Command with:
+ *      !PickAPort
+ *          Responds with a valid port number for use in a program
+ * 
  */
 @CMD
 @GenCMD
@@ -61,6 +65,5 @@ public class PickAPort implements Command{
             PrivateMessageEvent mEvent = (PrivateMessageEvent) event;
             mEvent.getBot().sendIRC().message(mEvent.getUser().getNick(),Colors.BOLD+"Port Number: "+Colors.NORMAL+(int) (1025+(Math.random()*(65534-1025+1))));
         }
-//        System.out.println("Port Number: "+(int) (1025+(Math.random()*65534-1025+1)));
     }
 }

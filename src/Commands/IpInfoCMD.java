@@ -32,6 +32,12 @@ import org.pircbotx.hooks.Event;
  *    N/A
  * - Linked Classes
  *    N/A
+ * 
+ * Activate Command with:
+ *      !IP
+ *      !IP [ip/url]
+ *          Responds with information on the input IP, or with the current IP of
+ *          the bot (if the command is sent without input by the bot owner)
  *
  */
 public class IpInfoCMD implements Command{
@@ -58,7 +64,7 @@ public class IpInfoCMD implements Command{
         
         CommandMetaData data = new CommandMetaData(event,false);
         
-        if (data.getMessage().equalsIgnoreCase(Global.commandPrefix+"ip"))
+        if (data.getMessage().equalsIgnoreCase(Global.commandPrefix+"ip")||data.getMessage().equalsIgnoreCase(Global.mainNick+", whats your ip"))
               data = new CommandMetaData(event,true);
         
         String caller = data.getCaller();
@@ -112,8 +118,6 @@ public class IpInfoCMD implements Command{
         else if(cmdSplit.length==1 && isVerified){
             try{
                 String ipInfo = TextUtils.readUrl("http://ipinfo.io/json");
-//            JSONParser parser = new JSONParser();
-                
                 
                 JSONObject ipJSON = (JSONObject) new JSONTokener(ipInfo).nextValue();
                 String ipAddress = (String) ipJSON.get("ip");

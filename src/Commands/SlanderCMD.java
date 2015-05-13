@@ -15,7 +15,7 @@ import org.pircbotx.hooks.Event;
  *
  * @author Stephen
  * Original Bot = Matrapter
- * matlab based IRC bot written by Steve-O
+ * A Matlab based IRC bot written by Steve-O
  *
  * Requirements:
  * - APIs
@@ -26,20 +26,20 @@ import org.pircbotx.hooks.Event;
  * - Utilities
  *    N/A
  * - Linked Classes
- *    Global
+ *    N/A
  * 
- * Source:  http://www.tastefullyoffensive.com/2011/10/shakespeare-insult-kit.html
+ * Sources: http://www.tastefullyoffensive.com/2011/10/shakespeare-insult-kit.html
  *          http://imgur.com/gallery/q4UXODX
  *          http://www.pangloss.com/seidel/shake_rule.html
  *          http://m.imgur.com/gallery/gUnGqDI
  *          http://i.imgur.com//reyuFY3.jpg
  *
  * Activate Commands With
- *      !shakespeare [it]
- *          insults the provided object, if no object is give, it insults 'thou'
- *      !insult [it]
- *      !slander [it]
- *          insults the given object or 'you' if no object is given, using a
+ *      !Shakespeare [it]
+ *          Insults the provided object, if no object is give, it insults 'thou'
+ *      !Insult [it]
+ *      !Slander [it]
+ *          Insults the given object or 'you' if no object is given, using a
  *          random insult generated from one of the built in methods
  */
 
@@ -106,8 +106,6 @@ public class SlanderCMD implements Command {
                     break;
             }
         }
-        
-        
     }
     
     private String shakespeareInsult(String insult){

@@ -29,6 +29,10 @@ import org.pircbotx.hooks.Event;
  *    N/A
  * - Linked Classes
  *    N/A
+ * 
+ * Activate Command with:
+ *      !Channels
+ *          Responds with a list of channels the bot is currently in
  *
  */
 public class ListChannels implements Command {
@@ -52,7 +56,6 @@ public class ListChannels implements Command {
     public void processCommand(Event event){
         
         CommandMetaData data = new CommandMetaData(event,true);
-        String message = data.getMessage();
         String caller = data.getCaller();
         String channel = data.getEventChannel();
         String respondTo = new String();
@@ -63,29 +66,7 @@ public class ListChannels implements Command {
             respondTo = channel;
         
         boolean isVerified = data.isVerifiedBotOwner();
-        
-        // START EVENT SPECIFIC PARSING
-//        if (event instanceof MessageEvent){ // MESSAGE EVENT SPECIFIC PARSING
-//            MessageEvent mEvent = (MessageEvent) event;
-//            message = Colors.removeFormattingAndColors(mEvent.getMessage());
-//            caller = mEvent.getUser().getNick();
-//            channel = mEvent.getChannel().getName();
-//            respondTo = channel;
-        
-//            isVerified=(caller.equalsIgnoreCase(Global.botOwner)&&mEvent.getUser().isVerified());
-//        }// END MESSAGE EVENT SPECIFIC PARSING
-//        else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
-//            PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
-//            message = Colors.removeFormattingAndColors(pmEvent.getMessage());
-//            caller = pmEvent.getUser().getNick();
-//            respondTo = caller;
-//            isVerified=(caller.equalsIgnoreCase(Global.botOwner)&&pmEvent.getUser().isVerified());
-//        }// END PRIVATE MESSAGE EVENT SPECIFIC PARSING
-//        else{
-//            return;
-//        }
-        // END EVENT SPECIFIC PARSING
-        
+                
         if(!isVerified){
             event.getBot().sendIRC().notice(caller, Colors.BOLD+"Channels: "+Colors.NORMAL+"You don't have access to this command");
         }
@@ -94,7 +75,6 @@ public class ListChannels implements Command {
             ArrayList<String> channelList = new ArrayList<>();
             ImmutableSortedSet users = event.getBot().getUserBot().getChannels();
             Iterator<Channel> iterator = users.iterator();
-            boolean modified = false;
             String response = new String();
             
             while(iterator.hasNext()) {

@@ -28,6 +28,8 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    N/A
  * - Custom Objects
  *    Definitions
+ * - Utilities
+ *    IRCUtils
  * - Linked Classes
  *    Global
  *

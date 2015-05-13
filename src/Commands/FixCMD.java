@@ -33,6 +33,10 @@ import org.w3c.dom.Element;
  * - Linked Classes
  *    Global
  * 
+ * Activate Command with:
+ *      Wheatley, fix yourself
+ *          Ghosts/Recovers nick, rejoins channels it was disconnected from
+ * 
  */
 public class FixCMD implements Command{
     
@@ -59,8 +63,6 @@ public class FixCMD implements Command{
         CommandMetaData data = new CommandMetaData(event,true);
         
         String caller = data.getCaller();
-//        String channel = data.getEventChannel();
-//        String responseChan = data.getEventChannel();
         boolean isVerified = data.isVerifiedBotOwner();
         String[] cmdSplit = data.getCommandSplit();
         
@@ -103,7 +105,7 @@ public class FixCMD implements Command{
             
         }
         catch (Exception ex){
-            
+            ex.printStackTrace();
         }
     }
 }

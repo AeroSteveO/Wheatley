@@ -18,6 +18,17 @@ import org.pircbotx.hooks.Event;
  * original bot = Matrapter
  * matlab based IRC bot written by Steve-O
  *
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Command
+ *    CommandMetaData
+ * - Utilities
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
  * Activate Commands With
  *      !ignite [it]
  *          lights input object on fire in a randomly generated way, if nothing is input,

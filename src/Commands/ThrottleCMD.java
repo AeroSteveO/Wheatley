@@ -31,17 +31,17 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    N/A
  * - Linked Classes
  *    Global
+ * 
+ * Activate Commands With
+ *      !Throttle [type] [time|call] [int]
+ *      !Throttle [type] [time|call] [int] [channel]
+ *          Sets the throttle settings for the input channel, or the channel the command
+ *          was sent from, if in a PM with no input channel, then will error
+ *      !Throttle [type]
+ *      !Throttle [type] [channel]
+ *          Responds with the current throttle settings for the channel
  *
  */
-//!throttle [type] [time|call] [int]
-//!throttle [type] [time|call] [int] [channel]
-//Use !set for a more general command
-//**Parse the int out of the call string, allow inputs in any order
-//**channel begins with #
-//If no strong begins with #, error
-//If string doesn't begin with # and is neither "time" nor "call" then the string is the type
-
-//**Get channel by checking for #, splitting by it if it exists, splitting by space, and grabbing the middle section
 
 @CMD
 @GenCMD
