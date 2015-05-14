@@ -19,13 +19,13 @@ import org.w3c.dom.Element;
 
 /**
  *
- * @author Stphen    -- Added XML scraping to check groups of IP's by the owner
+ * @author Stephen    -- Added XML scraping to check groups of IP's by the owner
  * @author theDoctor -- Made the original ping function using Socket
  * @author jnick     -- Came up with the idea for the ping function
  *
  * Requirements:
  * - APIs
- *    Jaxen-1.1.6
+ *    N/A
  * - Custom Objects
  *    N/A
  * - Linked Classes
@@ -39,6 +39,7 @@ import org.w3c.dom.Element;
  *      !ping mc.myminecraft.com 25565
  *      !ping check [XML group]
  *      !ping check LAN
+ * 
  */
 public class Ping extends ListenerAdapter {
     
