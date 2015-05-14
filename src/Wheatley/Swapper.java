@@ -21,6 +21,31 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Linked Classes
+ *    Global
+ *
+ * Activate Commands with:
+ *      s/replaceThis/replaceWithThis
+ *          Replaces the text replaceThis with the text replaceWithThis, using 
+ *          a log of previous messages
+ *      !bf
+ *      !bf [nick]
+ *          Reverses the word order in the previous line said, or the previous line
+ *          said by the input nickname
+ *      !bff
+ *      !bff [nick]
+ *          Reverses all the letters in the previous line said, or the previous
+ *          line said by the input nickname
+ *      !bfff
+ *      !bfff [nick]
+ *          Reverses all the words, and all the letters in all the words, of the    
+ *          previous line said, or the previous line said by the input nickname
  */
 public class Swapper extends ListenerAdapter {
     Map<String,ArrayList<ArrayList<String>>> log = Collections.synchronizedMap(new TreeMap<String,ArrayList<ArrayList<String>>>());
@@ -59,7 +84,7 @@ public class Swapper extends ListenerAdapter {
             String[] cmdSplit = command.split(" ");
             
             
-            if (cmdSplit[0].equalsIgnoreCase("bf")){
+            if (cmdSplit[0].toLowerCase().matches("b[f]{1,}")){
                 if (cmdSplit.length==2){
                     String nick = cmdSplit[1];
                     
@@ -73,7 +98,6 @@ public class Swapper extends ListenerAdapter {
                                 found = true;
                                 nick = log.get(event.getChannel().getName()).get(i).get(0);
                                 line = log.get(event.getChannel().getName()).get(i).get(1);
-//                            System.out.println(nick + " " + line);
                             }
                             i--;
                         }
@@ -82,14 +106,18 @@ public class Swapper extends ListenerAdapter {
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "!BF nick not found in log");
                     }
                     else{
-                        String[] words = line.split(" ");
-                        String newLine = "";
-                        for (int c=words.length-1;c>=0;c--){
-                            newLine+=words[c]+" ";
+                        if (cmdSplit[0].equalsIgnoreCase("bf")){
+                            addToLog(channel, new ArrayList(Arrays.asList(nick,reverseWords(line))));
+                            event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseWords(line));
                         }
-                        
-                        addToLog(channel, new ArrayList(Arrays.asList(nick,newLine)));
-                        event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+newLine);
+                        else if (cmdSplit[0].equalsIgnoreCase("bff")){
+                            addToLog(channel, new ArrayList(Arrays.asList(nick,reverseAllLetters(line))));
+                            event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseAllLetters(line));
+                        }
+                        else {
+                            addToLog(channel, new ArrayList(Arrays.asList(nick,reverseLettersAndWords(line))));
+                            event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseLettersAndWords(line));
+                        }
                     }
                 }
                 else if (cmdSplit.length>2){
@@ -98,17 +126,57 @@ public class Swapper extends ListenerAdapter {
                 else{
                     String nick = log.get(event.getChannel().getName()).get(log.get(event.getChannel().getName()).size()-2).get(0);
                     String line = log.get(event.getChannel().getName()).get(log.get(event.getChannel().getName()).size()-2).get(1);
-                    String[] words = line.split(" ");
-                    String newLine = "";
-                    for (int i=words.length-1;i>=0;i--){
-                        newLine+=words[i]+" ";
-                    }
-                    event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+newLine);
+                    
+                    if (cmdSplit[0].equalsIgnoreCase("bf")){
+                            addToLog(channel, new ArrayList(Arrays.asList(nick,reverseWords(line))));
+                            event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseWords(line));
+                        }
+                        else if (cmdSplit[0].equalsIgnoreCase("bff")){
+                            addToLog(channel, new ArrayList(Arrays.asList(nick,reverseAllLetters(line))));
+                            event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseAllLetters(line));
+                        }
+                        else {
+                            addToLog(channel, new ArrayList(Arrays.asList(nick,reverseLettersAndWords(line))));
+                            event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseLettersAndWords(line));
+                        }
                 }
             }
         }
     }
     
+    private String reverseWords(String line){
+        String[] words = line.split(" ");
+        String newLine = "";
+        for (int c=words.length-1;c>=0;c--){
+            newLine+=words[c]+" ";
+        }
+        return newLine;
+    }
+    
+    private String reverseAllLetters(String line){
+        String reverse = "";
+        int length = line.length();
+ 
+      for ( int i = length - 1 ; i >= 0 ; i-- )
+         reverse = reverse + line.charAt(i);
+      
+      return reverse;
+    }
+    
+    private String reverseLettersAndWords(String line){
+        String reversedLine = reverseWords(line);
+        String[] words = reversedLine.split(" ");
+        String newLine = "";
+        
+        for (int i = 0; i<words.length; i++){
+            words[i]=reverseAllLetters(words[i]);
+        }
+        
+        for (int c=words.length-1;c>=0;c--){
+            newLine+=words[c]+" ";
+        }
+        return newLine;
+    }
     
     private ArrayList<String> findReplace(int i, String[] findNreplace, String channel){
         ArrayList<String> reply = new ArrayList<>();
