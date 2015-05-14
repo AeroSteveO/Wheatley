@@ -85,6 +85,7 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new IgniteCMD());
         listOfCommands.add(new LaserCMD());
         listOfCommands.add(new SlanderCMD());
+        listOfCommands.add(new PingCMD());
         return(listOfCommands);
     }
 }
