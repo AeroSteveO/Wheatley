@@ -1,5 +1,3 @@
-build/classes/PlayingCard$Comparator.class
-nbproject/private/profiler/configurations.xml
 # Package Files #
 *.war
 *.ear
@@ -11,6 +9,8 @@ build/
 build/*
 dist/
 dist/*
+music/
+music/*
 definitionLog.txt
 definitions.txt
 SettingPing.xml
