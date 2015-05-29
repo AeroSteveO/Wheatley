@@ -148,16 +148,16 @@ public class Urban extends ListenerAdapter {
             String example = chosenDefinition.getString("example");
 
             if (definition.length()>150){
-                definition = definition.replaceAll("[\t\r\n]", "");
+                definition = definition.replaceAll("[\t\r\n]+", " ");
                 slimmedDef = definition.substring(0,Math.min(definition.length(),150))+"...";
             }else
-                slimmedDef = definition.replaceAll("[\t\r\n]", "");
+                slimmedDef = definition.replaceAll("[\t\r\n]+", " ");
             
             if (example.length()>150){
-                example=example.replaceAll("[\t\r\n]", "");
+                example=example.replaceAll("[\t\r\n]+", " ");
                 slimmedExample = example.substring(0,Math.min(example.length(),150))+"... ";
             }else
-                slimmedExample = example.replaceAll("[\t\r\n]", "")+" ";
+                slimmedExample = example.replaceAll("[\t\r\n]+", " ")+" ";
             
             return(Colors.BOLD+word+Colors.NORMAL+" : "+slimmedDef+" "+Colors.BOLD+"Example : "+Colors.NORMAL+slimmedExample + directLink);
         }catch (Exception e){
