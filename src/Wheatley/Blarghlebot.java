@@ -127,7 +127,10 @@ public class Blarghlebot extends ListenerAdapter {
 //            }
 //        }
         
-        if ((message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")&&message.endsWith("?"))){
+        if ((message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why")
+                &&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think of")
+                &&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", what do you think about")
+                &&message.endsWith("?"))){
             //Messages from : http://en.wikipedia.org/wiki/Magic_8-Ball
             List<String> magic = new ArrayList<>();
             magic.add( "It is certain" );
