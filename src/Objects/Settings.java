@@ -104,6 +104,7 @@ public class Settings {
         key=key.toLowerCase();
         if (!generalSettings.containsKey(key))
             generalSettings.put(key,value);
+        save();
     }
     
     public Set<String> keySet(){
@@ -415,6 +416,15 @@ public class Settings {
 //
 //            return false;
 //        }
+        return false;
+    }
+    
+    public boolean set(String key, String value) {
+        if (generalSettings.containsKey(key)){
+            generalSettings.put(key,value);
+            save();
+            return true;
+        }
         return false;
     }
     
