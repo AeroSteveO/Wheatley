@@ -71,7 +71,7 @@ public class GameControl extends ListenerAdapter {
     int lottoNumber = (int) (0+(Math.random()*100-0+1));
     
     int lottoBaseWin = 100;
-    int lottoWinnings = lottoBaseWin;
+//    int lottoWinnings = lottoBaseWin;
     int lottoCost = 5;
     private final List<Integer> guessList = Collections.synchronizedList( new  ArrayList<Integer>());
     
@@ -269,8 +269,12 @@ public class GameControl extends ListenerAdapter {
                 }
             }
             else if (cmdSplit[0].equalsIgnoreCase("lotto")){
+                if (!Global.settings.contains("lottowinnings")){
+                    Global.settings.create("lottowinnings",String.valueOf(lottoBaseWin));
+                }
+                
                 if (cmdSplit.length==1){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),"Current lottery winnings are at $"+lottoWinnings);
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"Current lottery winnings are at $"+Global.settings.get("lottowinnings"));
                 }
 //                else if(lottoCost>GameControl.scores.getScoreObj(event.getUser().getNick()).getScore()){
 //                    event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to buy a lotto ticket");
@@ -311,20 +315,20 @@ public class GameControl extends ListenerAdapter {
                                     event.getBot().sendIRC().notice(event.getUser().getNick(),Colors.BOLD+ "Lotto: "+Colors.NORMAL+"Input must be an integer value between 0 and 100");
                                 }
                                 else if (guess==lottoNumber){
-                                    int WheatleyGain = (int) (lottoWinnings * .4);
-                                    lottoWinnings = (int) (lottoWinnings *.6);
+                                    int WheatleyGain = (int) (Integer.parseInt(Global.settings.get("lottowinnings")) * .4);
+                                    int lottoWinnings = (int) (Integer.parseInt(Global.settings.get("lottowinnings")) *.6);
                                     event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Congratulations "+Colors.NORMAL+event.getUser().getNick()+", you won $"+lottoWinnings);
                                     GameControl.scores.addScore(event.getUser().getNick(), lottoWinnings);
                                     GameControl.scores.addScore(event.getBot().getNick(), WheatleyGain);
                                     GameControl.scores.subtractScore(event.getBot().getNick(), lottoBaseWin);
                                     lottoNumber = (int) (0+(Math.random()*100-0+1));
-                                    lottoWinnings = lottoBaseWin;
+                                    Global.settings.set("lottowinnings", String.valueOf(lottoBaseWin));
                                     guessList.clear();
                                 }
                                 else{
                                     event.getBot().sendIRC().message(event.getChannel().getName(),"Sorry "+event.getUser().getNick()+", but you lost $"+lottoCost);
                                     GameControl.scores.subtractScore(event.getUser().getNick(), lottoCost);
-                                    lottoWinnings += lottoCost;
+                                    Global.settings.set("lottowinnings", String.valueOf(Integer.parseInt(Global.settings.get("lottowinnings"))+lottoCost));
                                     guessList.add(guess);
                                 }
                             }
@@ -358,14 +362,14 @@ public class GameControl extends ListenerAdapter {
                                 while(current<=max&&!win){
                                     
                                     if (current==lottoNumber){
-                                        int WheatleyGain = (int) (lottoWinnings * .4);
-                                        lottoWinnings = (int) (lottoWinnings *.6);
+                                        int WheatleyGain = (int) (Integer.parseInt(Global.settings.get("lottowinnings")) * .4);
+                                        int lottoWinnings = (int) (Integer.parseInt(Global.settings.get("lottowinnings")) *.6);
                                         event.getBot().sendIRC().message(event.getChannel().getName(),Colors.BOLD+"Congratulations "+Colors.NORMAL+event.getUser().getNick()+", you won $"+lottoWinnings);
                                         GameControl.scores.addScore(event.getUser().getNick(), lottoWinnings);
                                         GameControl.scores.addScore(event.getBot().getNick(), WheatleyGain);
                                         GameControl.scores.subtractScore(event.getBot().getNick(), lottoBaseWin);
                                         lottoNumber = (int) (0+(Math.random()*100-0+1));
-                                        lottoWinnings = lottoBaseWin;
+                                        Global.settings.get("lottowinnings", String.valueOf(lottoBaseWin));
                                         guessList.clear();
                                         win=true;
                                     }
@@ -378,7 +382,7 @@ public class GameControl extends ListenerAdapter {
                                             else{
                                                 event.getBot().sendIRC().message(event.getChannel().getName(),"Sorry "+event.getUser().getNick()+", but "+current+" is incorrect, you lost $"+lottoCost);
                                                 GameControl.scores.subtractScore(event.getUser().getNick(), lottoCost);
-                                                lottoWinnings += lottoCost;
+                                                Global.settings.set("lottowinnings",String.valueOf(Integer.parseInt(Global.settings.get("lottowinnings"))+lottoCost));
                                                 guessList.add(current);
                                             }
                                         }
