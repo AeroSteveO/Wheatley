@@ -99,11 +99,26 @@ public class IpInfoCMD implements Command{
                     
                     String ipAddress = ipJSON.getString("ip");
                     String city = ipJSON.getString("city");
-                    String region = ipJSON.getString("region");
+                    String region = new String();
+                    
+                    if (ipJSON.has("region"))
+                    region = ipJSON.getString("region");
+                    
                     String country = ipJSON.getString("country");
                     String org = ipJSON.getString("org");
                     
-                    event.getBot().sendIRC().message(respondTo, Colors.BOLD+"IP: "+Colors.NORMAL+ipAddress+Colors.BOLD+" Location: "+Colors.NORMAL+city+", "+region+", "+country+Colors.BOLD+" Organization: "+Colors.NORMAL+org);
+                    String response = Colors.BOLD+"IP: "+Colors.NORMAL+ipAddress+Colors.BOLD+" Location: "+Colors.NORMAL;
+                    
+                    if (!city.equalsIgnoreCase("null")){
+                        response+=city+", ";
+                    }
+                    if (!region.isEmpty()){
+                        response+=region + ", " + country+Colors.BOLD+" Organization: "+Colors.NORMAL+org;
+                    }
+                    else{
+                        response+=country+Colors.BOLD+" Organization: "+Colors.NORMAL+org;
+                    }
+                    event.getBot().sendIRC().message(respondTo,response);
                 }
                 catch (Exception ex){
                     System.out.println(ex.getMessage());
