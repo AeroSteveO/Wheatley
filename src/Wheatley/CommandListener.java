@@ -30,7 +30,7 @@ public class CommandListener extends ListenerAdapter{
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
         if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
-            String command = message.split(Global.commandPrefix)[1];
+            String command = message.toLowerCase().split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             for (int i=0;i<commandList.size();i++){
                 if (commandList.get(i).commandTerms().contains(cmdSplit[0])){
