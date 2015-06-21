@@ -106,11 +106,12 @@ public class GameHighLow extends ListenerAdapter {
                                 
                                 if (nextCard.getValue()==currentCard.getValue()){
                                     if (correctGuesses>0){
-                                        GameControl.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
-                                        event.getBot().sendIRC().message(gameChan,"Game over! The value is the same as the previous card. You lose on ties. Sorry! "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
+                                        GameControl.scores.addScore(currentEvent.getUser().getNick(), 1+basePrize+correctGuesses*correctGuesses);
+                                        event.getBot().sendIRC().message(gameChan,"Game over! The value is the same as the previous card. You lose on ties, but I'll throw in a pity dollar. "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(1+basePrize+correctGuesses*correctGuesses)); // mod here
                                     }
                                     else{
-                                        event.getBot().sendIRC().message(gameChan,"Game over! The value is the same as the previous card. You lose on ties. Sorry! "+prevPlayer+", you made "+correctGuesses+" correct predictions. Sorry, but you haven't won anything.");
+                                        GameControl.scores.addScore(currentEvent.getUser().getNick(), 1);
+                                        event.getBot().sendIRC().message(gameChan,"Game over! The value is the same as the previous card. You lose on ties, but I'll throw in a pity dollar.  "+prevPlayer+", you made "+correctGuesses+" correct predictions. Sorry, but you've only won $1."); // mod here
                                     }
                                     
                                     queue.close();
