@@ -1,4 +1,4 @@
-package main.java.uno2;
+package uno2;
 
 import Wheatley.Global;
 import java.io.File;

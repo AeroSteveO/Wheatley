@@ -1,4 +1,4 @@
-package main.java.uno2;
+package uno2;
 
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
