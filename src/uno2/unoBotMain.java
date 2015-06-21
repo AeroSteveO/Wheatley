@@ -37,8 +37,7 @@ public class unoBotMain {
         String nick = p.getProperty("Nick", "unoBot").trim();
         String[] botOps = p.getProperty("BotOps", null).trim().split(",");
         String sbFileName = p.getProperty("ScoreBoardFileName", "ScoreBoard.dat").trim();
-        String updateScript = p.getProperty("UpdateScript", null);
-        String verbose = p.getProperty("Verbose", "false").trim();
+//        String updateScript = p.getProperty("UpdateScript", null);
         boolean sslEnabled = Boolean.parseBoolean(p.getProperty("SSL", "false").trim());
         String token = p.getProperty("Token", "!").trim();
         
@@ -68,7 +67,7 @@ public class unoBotMain {
                         
             UnoBot unobot = new UnoBot(sslEnabled, channel);
             unobot.setBotOps(botOps);
-            unobot.setUpdateScript(updateScript);
+//            unobot.setUpdateScript(updateScript);
             unobot.setScoreBoardFileName(sbFileName);
             unobot.setToken(token);
             

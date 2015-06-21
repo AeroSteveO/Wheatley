@@ -38,8 +38,9 @@ import org.pircbotx.hooks.events.UserListEvent;
 public class UnoBot extends ListenerAdapter {
     
     private String[] botOps;
-    private String gameStarter, updateScript, currChannel = null;
-    private final String gameChannel;
+    private String gameStarter = null;
+    private String currChannel = null;
+    private final String gameChannel = "#casino";
     private String token = "!";
     private boolean gameUp = false;
     private boolean delt = false;
@@ -68,7 +69,7 @@ public class UnoBot extends ListenerAdapter {
     }*/
     
     public UnoBot(boolean usingSSL, String gameChannel) {
-        this.gameChannel = gameChannel;
+//        this.gameChannel = gameChannel;
 //        this.bot = bot;
         
         
@@ -145,9 +146,9 @@ public class UnoBot extends ListenerAdapter {
         this.botOps = botOps;
     }
     
-    public void setUpdateScript(String updateScript) {
-        this.updateScript = updateScript;
-    }
+//    public void setUpdateScript(String updateScript) {
+//        this.updateScript = updateScript;
+//    }
     
     public boolean isExtreme() {
         return this.extreme;
@@ -418,15 +419,15 @@ public class UnoBot extends ListenerAdapter {
         else if (tokens[0].equalsIgnoreCase(this.token + "joinc") && isBotOp(sender)) {
             bot.sendIRC().joinChannel(tokens[1]);
         } //UPDATE
-        else if (tokens[0].equalsIgnoreCase(this.token + "update") && this.isBotOp(sender) && this.updateScript != null) {
-            
-            try {
-                Runtime.getRuntime().exec(updateScript);
-            } catch (IOException ex) {
-                Logger.getLogger(UnoBot.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        } //PART
+//        else if (tokens[0].equalsIgnoreCase(this.token + "update") && this.isBotOp(sender) && this.updateScript != null) {
+//            
+//            try {
+//                Runtime.getRuntime().exec(updateScript);
+//            } catch (IOException ex) {
+//                Logger.getLogger(UnoBot.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            
+//        } //PART
         else if (tokens[0].equalsIgnoreCase(this.token + "part") && isBotOp(sender)) {
             Channel chan = bot.getUserChannelDao().getChannel(tokens[1]);
             chan.send().part();
