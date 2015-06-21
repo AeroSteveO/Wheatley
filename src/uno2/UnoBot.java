@@ -59,7 +59,7 @@ public class UnoBot extends ListenerAdapter {
     private ScoreBoard2 sb;
     private String ScoreBoardFileName;
     private PircBotX bot2;
-    private unoAIBot bot2ai = new unoAIBot(bot2);
+    private UnoAIBot bot2ai = new UnoAIBot(bot2);
     public Timer timer;
     public Timer unotimer;
     PircBotX bot = Global.bot;
@@ -553,7 +553,7 @@ public class UnoBot extends ListenerAdapter {
                 try {
                     this.bot2 = new PircBotX(configuration2);
                     
-                    bot2ai = new unoAIBot(bot2);
+                    bot2ai = new UnoAIBot(bot2);
                     bot2.getConfiguration().getListenerManager().addListener(bot2ai);
                     bot2ai.setBotOps(botOps);
                     botAI = true;

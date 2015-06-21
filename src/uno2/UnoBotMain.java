@@ -19,7 +19,7 @@ import org.pircbotx.UtilSSLSocketFactory;
  *
  * @author roofis0
  */
-public class unoBotMain {
+public class UnoBotMain {
     
     public static void main(String[] args) throws Exception {
         
