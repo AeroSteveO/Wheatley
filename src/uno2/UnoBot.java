@@ -359,10 +359,9 @@ public class UnoBot extends ListenerAdapter {
         String channel = event.getChannel().getName();
         
         //NICK
-        if (tokens[0].equalsIgnoreCase(this.token + "nick") && isBotOp(sender)) {
-            bot.sendIRC().changeNick(tokens[1]);
-//            bot.setName(tokens[1]);
-        }
+//        if (tokens[0].equalsIgnoreCase(this.token + "nick") && isBotOp(sender)) {
+//            bot.sendIRC().changeNick(tokens[1]);
+//        }
         //INFO
         if (tokens[0].equalsIgnoreCase(this.token + "info")) {
             bot.sendIRC().message(channel, "LOGIN: " + bot.getUserBot().getLogin());
@@ -416,9 +415,9 @@ public class UnoBot extends ListenerAdapter {
             }
             
         } //JOINC
-        else if (tokens[0].equalsIgnoreCase(this.token + "joinc") && isBotOp(sender)) {
-            bot.sendIRC().joinChannel(tokens[1]);
-        } //UPDATE
+//        else if (tokens[0].equalsIgnoreCase(this.token + "joinc") && isBotOp(sender)) {
+//            bot.sendIRC().joinChannel(tokens[1]);
+//        } //UPDATE
 //        else if (tokens[0].equalsIgnoreCase(this.token + "update") && this.isBotOp(sender) && this.updateScript != null) {
 //            
 //            try {
@@ -428,14 +427,14 @@ public class UnoBot extends ListenerAdapter {
 //            }
 //            
 //        } //PART
-        else if (tokens[0].equalsIgnoreCase(this.token + "part") && isBotOp(sender)) {
-            Channel chan = bot.getUserChannelDao().getChannel(tokens[1]);
-            chan.send().part();
-        } //QUIT
-        else if (tokens[0].equalsIgnoreCase(this.token + "quit") && isBotOp(sender)) {
-            bot.sendIRC().quitServer();
-            System.exit(0);
-        } //RESET_SB
+//        else if (tokens[0].equalsIgnoreCase(this.token + "part") && isBotOp(sender)) {
+//            Channel chan = bot.getUserChannelDao().getChannel(tokens[1]);
+//            chan.send().part();
+//        } //QUIT
+//        else if (tokens[0].equalsIgnoreCase(this.token + "quit") && isBotOp(sender)) {
+//            bot.sendIRC().quitServer();
+//            System.exit(0);
+//        } //RESET_SB
         else if (tokens[0].equalsIgnoreCase(this.token + "resetsb") && isBotOp(sender)) {
             try {
                 resetScoreBoard();
