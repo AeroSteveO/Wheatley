@@ -57,7 +57,7 @@ public class UnoBot extends ListenerAdapter {
     private PlayerList players = new PlayerList();
     private Messenger msg;
     private ScoreBoard2 sb;
-    private String ScoreBoardFileName;
+    private String ScoreBoardFileName = "ScoreBoard.dat";
     private PircBotX bot2;
     private UnoAIBot bot2ai = new UnoAIBot(bot2);
     public Timer timer;
@@ -87,7 +87,7 @@ public class UnoBot extends ListenerAdapter {
     
     public UnoBot(boolean usingSSL, String gameChannel, String token) {
         this(usingSSL, gameChannel);
-        this.setToken(token);
+//        this.setToken(token);
     }
     
     public void startTimer(int seconds) {
@@ -158,17 +158,17 @@ public class UnoBot extends ListenerAdapter {
         return this.attack;
     }
     
-    public String getToken() {
-        return this.token;
-    }
-    
-    public void setToken(String token) {
-        if(token == null || token.length() < 1) {
-            this.token = "!";
-        } else {
-            this.token = token;
-        }
-    }
+//    public String getToken() {
+//        return this.token;
+//    }
+//    
+//    public void setToken(String token) {
+//        if(token == null || token.length() < 1) {
+//            this.token = "!";
+//        } else {
+//            this.token = token;
+//        }
+//    }
     
     public void setMessagesEnabled(boolean messagesEnabled) {
         this.messagesEnabled = messagesEnabled;
@@ -359,66 +359,66 @@ public class UnoBot extends ListenerAdapter {
         String channel = event.getChannel().getName();
         
         //NICK
-//        if (tokens[0].equalsIgnoreCase(this.token + "nick") && isBotOp(sender)) {
+//        if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "nick") && isBotOp(sender)) {
 //            bot.sendIRC().changeNick(tokens[1]);
 //        }
         //INFO
-        if (tokens[0].equalsIgnoreCase(this.token + "info")) {
+        if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "info")) {
             bot.sendIRC().message(channel, "LOGIN: " + bot.getUserBot().getLogin());
             bot.sendIRC().message(channel, "NAME: " + bot.getUserBot().getRealName());
             bot.sendIRC().message(channel, "NICK: " + bot.getUserBot().getNick());
         } //HELP
-        else if (tokens[0].equalsIgnoreCase(this.token + "unohelp")) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "unohelp")) {
             
-            bot.sendIRC().notice(sender, this.token + "uno ------ Starts an new UNO game.");
-            bot.sendIRC().notice(sender, this.token + "uno +a---- Attack mode: When you draw there is a 20% chance");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "uno ------ Starts an new UNO game.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "uno +a---- Attack mode: When you draw there is a 20% chance");
             bot.sendIRC().notice(sender, "            that you will be UNO attacked and will have to draw");
             bot.sendIRC().notice(sender, "            anywhere from 0 - 7 cards!");
-            bot.sendIRC().notice(sender, this.token + "uno +e --- Extreme mode: This inserts twice as many special cards");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "uno +e --- Extreme mode: This inserts twice as many special cards");
             bot.sendIRC().notice(sender, "            into the deck! Special cards include:");
             bot.sendIRC().notice(sender, "            R, S, D2, W, and WD4");
-            bot.sendIRC().notice(sender, this.token + "uno +e +a  Enables both Extreme and Attack mode!");
-            bot.sendIRC().notice(sender, this.token + "join ----- Joins an existing UNO game.");
-            bot.sendIRC().notice(sender, this.token + "deal ----- Deals out the cards to start an UNO game.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "uno +e +a  Enables both Extreme and Attack mode!");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "join ----- Joins an existing UNO game.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "deal ----- Deals out the cards to start an UNO game.");
             bot.sendIRC().notice(sender, "            but only the person that started the game can deal");
-            bot.sendIRC().notice(sender, this.token + "wait ----- Stops your turn timer.");
-            bot.sendIRC().notice(sender, this.token + "play ----- Plays a card (!play <color> <face>) or (!p <color> <face>)");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "wait ----- Stops your turn timer.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "play ----- Plays a card (!play <color> <face>) or (!p <color> <face>)");
             bot.sendIRC().notice(sender, "            to play a RED FIVE !play r 5");
-            bot.sendIRC().notice(sender, this.token + "showcards  Shows you your hand. (!hand)");
-            bot.sendIRC().notice(sender, this.token + "draw ----- Draws a card when you don't have a playable card.");
-            bot.sendIRC().notice(sender, this.token + "pass ----- If you don't have a playable card after you draw");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "showcards  Shows you your hand. (!hand)");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "draw ----- Draws a card when you don't have a playable card.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "pass ----- If you don't have a playable card after you draw");
             bot.sendIRC().notice(sender, "            then you pass.");
-            bot.sendIRC().notice(sender, this.token + "unocount - Show how many cards each player has.");
-            bot.sendIRC().notice(sender, this.token + "leave ---- If you want to leave the game early.");
-            bot.sendIRC().notice(sender, this.token + "what ----- If you were not paying attention this will tell");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "unocount - Show how many cards each player has.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "leave ---- If you want to leave the game early.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "what ----- If you were not paying attention this will tell");
             bot.sendIRC().notice(sender, "            you the top card and whos turn it is.");
-            bot.sendIRC().notice(sender, this.token + "players -- Displays the player list.");
-            bot.sendIRC().notice(sender, this.token + "score ---- Prints out the score board.");
-            bot.sendIRC().notice(sender, this.token + "ai ------- Turns the bot ai on or off.");
-            bot.sendIRC().notice(sender, this.token + "endgame -- Ends the game, only the person who started the");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "players -- Displays the player list.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "score ---- Prints out the score board.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "ai ------- Turns the bot ai on or off.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "endgame -- Ends the game, only the person who started the");
             bot.sendIRC().notice(sender, "            game may end it.");
             
             if (messagesEnabled) {
-                bot.sendIRC().notice(sender, this.token + "tell ----- Tell an ofline user a message once they join the channel.");
-                bot.sendIRC().notice(sender, this.token + "messages - List all of the people that have messages.");
+                bot.sendIRC().notice(sender, Global.commandPrefix + "tell ----- Tell an ofline user a message once they join the channel.");
+                bot.sendIRC().notice(sender, Global.commandPrefix + "messages - List all of the people that have messages.");
             }
             
-            bot.sendIRC().notice(sender, this.token + "unohelp -- This shit.");
-            bot.sendIRC().notice(sender, this.token + "rank ----- Shows all users win:lose ratio");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "unohelp -- This shit.");
+            bot.sendIRC().notice(sender, Global.commandPrefix + "rank ----- Shows all users win:lose ratio");
             if (isBotOp(sender)) {
                 bot.sendIRC().notice(sender, "----------- OP only" + "-----------");
-                bot.sendIRC().notice(sender, this.token + "nick ----- Tells the bot to change his nick.");
-                bot.sendIRC().notice(sender, this.token + "joinc ---- Tells the bot to join a channel.");
-                bot.sendIRC().notice(sender, this.token + "part ----- Tells the bot to part from a channel.");
-                bot.sendIRC().notice(sender, this.token + "quit ----- Tells the bot to dissconnect from the entire server.");
-                bot.sendIRC().notice(sender, this.token + "resetSB -- Resets the Score Board.");
+                bot.sendIRC().notice(sender, Global.commandPrefix + "nick ----- Tells the bot to change his nick.");
+                bot.sendIRC().notice(sender, Global.commandPrefix + "joinc ---- Tells the bot to join a channel.");
+                bot.sendIRC().notice(sender, Global.commandPrefix + "part ----- Tells the bot to part from a channel.");
+                bot.sendIRC().notice(sender, Global.commandPrefix + "quit ----- Tells the bot to dissconnect from the entire server.");
+                bot.sendIRC().notice(sender, Global.commandPrefix + "resetSB -- Resets the Score Board.");
             }
             
         } //JOINC
-//        else if (tokens[0].equalsIgnoreCase(this.token + "joinc") && isBotOp(sender)) {
+//        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "joinc") && isBotOp(sender)) {
 //            bot.sendIRC().joinChannel(tokens[1]);
 //        } //UPDATE
-//        else if (tokens[0].equalsIgnoreCase(this.token + "update") && this.isBotOp(sender) && this.updateScript != null) {
+//        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "update") && this.isBotOp(sender) && this.updateScript != null) {
 //            
 //            try {
 //                Runtime.getRuntime().exec(updateScript);
@@ -427,15 +427,15 @@ public class UnoBot extends ListenerAdapter {
 //            }
 //            
 //        } //PART
-//        else if (tokens[0].equalsIgnoreCase(this.token + "part") && isBotOp(sender)) {
+//        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "part") && isBotOp(sender)) {
 //            Channel chan = bot.getUserChannelDao().getChannel(tokens[1]);
 //            chan.send().part();
 //        } //QUIT
-//        else if (tokens[0].equalsIgnoreCase(this.token + "quit") && isBotOp(sender)) {
+//        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "quit") && isBotOp(sender)) {
 //            bot.sendIRC().quitServer();
 //            System.exit(0);
 //        } //RESET_SB
-        else if (tokens[0].equalsIgnoreCase(this.token + "resetsb") && isBotOp(sender)) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "resetsb") && isBotOp(sender)) {
             try {
                 resetScoreBoard();
                 bot.sendIRC().message(channel, "the Score Board is now empty.");
@@ -455,11 +455,11 @@ public class UnoBot extends ListenerAdapter {
         
         
         //JOIN
-        if (tokens[0].equalsIgnoreCase(this.token + "join") && gameUp) {
+        if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "join") && gameUp) {
             join(channel, sender);
             bot.sendIRC().message(channel, "There are now " + players.size() + " people in the players list");
         } //TELL
-        else if (tokens[0].equalsIgnoreCase(this.token + "tell") && messagesEnabled == true) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "tell") && messagesEnabled == true) {
             String[] msgSplit = event.getMessage().split(" ", 3);
             this.msg.setMessage(sender, tokens[1], msgSplit[2]);
             bot.sendIRC().message(channel, "ok i will tell them.");
@@ -473,10 +473,10 @@ public class UnoBot extends ListenerAdapter {
                         + "data to a file");
             }
         } //MESSAGES
-        else if (tokens[0].equalsIgnoreCase(this.token + "messages") && messagesEnabled == true) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "messages") && messagesEnabled == true) {
             bot.sendIRC().message(channel, msg.forUserToString());
         } //ENDGAME
-        else if ((tokens[0].equalsIgnoreCase(this.token + "endgame") && gameUp) && (isBotOp(sender) || sender.equals(gameStarter))) {
+        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "endgame") && gameUp) && (isBotOp(sender) || sender.equals(gameStarter))) {
             if(delt){
                 stopTimer();
                 deck.clear();
@@ -497,7 +497,7 @@ public class UnoBot extends ListenerAdapter {
                 botAI = false;
             }
         } //LEAVE
-        else if (tokens[0].equalsIgnoreCase(this.token + "leave")) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "leave")) {
             leave(channel, sender);
             if (gameUp){
                 stopTimer();
@@ -510,7 +510,7 @@ public class UnoBot extends ListenerAdapter {
                 }
             }
         } //SCORE
-        else if (tokens[0].equalsIgnoreCase(this.token + "score")) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "score")) {
             if (!this.sb.isEmpty()) {
                 try {
                     printScore(channel);
@@ -521,13 +521,13 @@ public class UnoBot extends ListenerAdapter {
                 this.bot.sendIRC().message(channel, "The Score Board is empty");
             }
         } //COUNT
-        else if (tokens[0].equalsIgnoreCase(this.token + "unocount") && delt) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "unocount") && delt) {
             bot.sendIRC().message(channel, players.countCards());
         } //PLAYERS
-        else if (tokens[0].equalsIgnoreCase(this.token + "players") && gameUp) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "players") && gameUp) {
             printPlayers(channel);
         } //AI
-        else if (tokens[0].equalsIgnoreCase(this.token + "ai") && !gameUp) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "ai") && !gameUp) {
             
             if (!botAI) {
                 Configuration configuration2;
@@ -569,7 +569,7 @@ public class UnoBot extends ListenerAdapter {
             }
             
         } //UNO
-        else if (tokens[0].equalsIgnoreCase(this.token + "uno")) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "uno")) {
             if (gameUp) {
                 bot.sendIRC().message(channel, "Sorry a game is already started in " + gameChannel);
             } else {
@@ -592,7 +592,7 @@ public class UnoBot extends ListenerAdapter {
                 startUnoTimer(300);
             }
         } //DEAL
-        else if ((tokens[0].equalsIgnoreCase(this.token + "deal")) && !delt && gameUp && ((sender.equals(gameStarter)) || (isBotOp(sender)))) {
+        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "deal")) && !delt && gameUp && ((sender.equals(gameStarter)) || (isBotOp(sender)))) {
             deck.createDeck(this.extreme);
             stopUnoTimer();
             players.deal(deck);
@@ -610,17 +610,17 @@ public class UnoBot extends ListenerAdapter {
                 bot2ai.playAI(channel, players.at(), deck);
             }
         } //WHAT
-        else if ((tokens[0].equalsIgnoreCase(this.token + "what")) && (delt)) {
+        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "what")) && (delt)) {
             bot.sendIRC().message(channel, "Top Card: " + deck.topCard().toIRCString());
             bot.sendIRC().message(channel, players.at().getName() + " it is your turn.");
             //sendIRC().notice(players.at().getName(), showCards(players.at()));
         } //WAIT
-        else if ((tokens[0].equalsIgnoreCase(this.token + "wait")) && delt && (sender.equals(players.at().getName()))) {
+        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "wait")) && delt && (sender.equals(players.at().getName()))) {
             stopTimer();
             bot.sendIRC().message(channel, players.at().getName() + " stopped their turn timer.");
             //sendIRC().notice(players.at().getName(), showCards(players.at()));
         } //DRAW
-        else if ((tokens[0].equalsIgnoreCase(this.token + "draw")) && delt && (sender.equals(players.at().getName()))) {
+        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "draw")) && delt && (sender.equals(players.at().getName()))) {
             //sendIRC().notice(sender,"you drew a " + players.at().draw(deck).toIRCString());
             if (!drew) {
                 if (attack) {
@@ -669,7 +669,7 @@ public class UnoBot extends ListenerAdapter {
                         + "pass by typing !pass");
             }
         } //PASS
-        else if ((tokens[0].equalsIgnoreCase(this.token + "pass")) && delt && (sender.equals(players.at().getName()))) {
+        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "pass")) && delt && (sender.equals(players.at().getName()))) {
             if (drew) {
                 stopTimer();
                 bot.sendIRC().message(channel, players.at().getName() + " passed.");
@@ -686,15 +686,15 @@ public class UnoBot extends ListenerAdapter {
                 bot.sendIRC().message(channel, "You must draw first.");
             }
         } //SHOWCARDS
-        else if ((tokens[0].equalsIgnoreCase(this.token + "showcards") || tokens[0].equalsIgnoreCase(this.token + "hand")) && delt) {
+        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "showcards") || tokens[0].equalsIgnoreCase(Global.commandPrefix + "hand")) && delt) {
             bot.sendIRC().notice(sender, showCards(players.get(sender)));
         } //RANK
-        else if (tokens[0].equalsIgnoreCase(this.token + "rank")) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "rank")) {
             for (int i = 0; i < this.sb.size(); i++) {
                 this.bot.sendIRC().message(channel, sb.playerRankToString(i));
             }
         } //PLAY
-        else if ((tokens[0].equalsIgnoreCase(this.token + "play") || tokens[0].equalsIgnoreCase(this.token + "p")) && delt && gameUp && (sender.equals(players.at().getName()))) {
+        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "play") || tokens[0].equalsIgnoreCase(Global.commandPrefix + "p")) && delt && gameUp && (sender.equals(players.at().getName()))) {
             Card card = null;
             try {
                 card = Rules.parse(tokens[1] + " " + tokens[2]);

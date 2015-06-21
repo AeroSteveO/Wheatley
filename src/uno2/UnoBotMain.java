@@ -69,7 +69,7 @@ public class UnoBotMain {
             unobot.setBotOps(botOps);
 //            unobot.setUpdateScript(updateScript);
             unobot.setScoreBoardFileName(sbFileName);
-            unobot.setToken(token);
+//            unobot.setToken(token);
             
             bot.getConfiguration().getListenerManager().addListener(unobot);
             

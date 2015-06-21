@@ -1,5 +1,6 @@
 package uno2;
 
+import Wheatley.Global;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.KickEvent;
@@ -55,10 +56,10 @@ public class UnoAIBot extends ListenerAdapter {
         }
         
         if (!justDrew && card.color.equals(Card.Color.WILD)) {
-            bot.sendIRC().message(channel, "!play " + card.face.toString() + " " + UnoAI.colorMostOf(me, deck).toString());
+            bot.sendIRC().message(channel, Global.commandPrefix + "play " + card.face.toString() + " " + UnoAI.colorMostOf(me, deck).toString());
             System.out.println("SHOULD HAVE SENT MESSAGE");
         } else if (!justDrew) {
-            bot.sendIRC().message(channel, "!play " + card.color.toString() + " " + card.face.toString());
+            bot.sendIRC().message(channel, Global.commandPrefix + "play " + card.color.toString() + " " + card.face.toString());
             System.out.println("SHOULD HAVE SENT MESSAGE");
         }
         
@@ -72,19 +73,19 @@ public class UnoAIBot extends ListenerAdapter {
         String[] Tokens = event.getMessage().split(" ");
         
         //NICK
-        if (Tokens[0].equalsIgnoreCase("!nickai") && this.isBotOp(sender)) {
+        if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "nickai") && this.isBotOp(sender)) {
             bot.sendIRC().changeNick(Tokens[1]);
         } //HELP
         //JOINC
-        else if (Tokens[0].equalsIgnoreCase("!joincai") && this.isBotOp(sender)) {
+        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "joincai") && this.isBotOp(sender)) {
             bot.sendIRC().joinChannel(Tokens[1]);
         } //QUIT
-        else if (Tokens[0].equalsIgnoreCase("!quit") && this.isBotOp(sender)) {
+        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "quit") && this.isBotOp(sender)) {
             bot.sendIRC().quitServer();
             System.exit(0);
         } //UNO
-        else if (Tokens[0].equalsIgnoreCase("!uno")) {
-            bot.sendIRC().message(channel, "!join");
+        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "uno")) {
+            bot.sendIRC().message(channel, Global.commandPrefix + "join");
         }
     }
     
@@ -109,15 +110,12 @@ public class UnoAIBot extends ListenerAdapter {
             
             if (savedMe.isCardPlayable(drawnCard, savedDeck)) {
                 if (drawnCard.color.equals(Card.Color.WILD)) {
-                    bot.sendIRC().message(savedChannel, "!play " + drawnCard.face.toString() + " " + UnoAI.colorMostOf(savedMe, savedDeck).toString());
-                    System.out.println("SHOULD HAVE SENT MESSAGE");
+                    bot.sendIRC().message(savedChannel, Global.commandPrefix + "play " + drawnCard.face.toString() + " " + UnoAI.colorMostOf(savedMe, savedDeck).toString());
                 } else {
-                    bot.sendIRC().message(savedChannel, "!play " + drawnCard.color.toString() + " " + drawnCard.face.toString());
-                    System.out.println("SHOULD HAVE SENT MESSAGE");
+                    bot.sendIRC().message(savedChannel, Global.commandPrefix + "play " + drawnCard.color.toString() + " " + drawnCard.face.toString());
                 }
             } else {
-                bot.sendIRC().message(savedChannel, "!pass");
-                System.out.println("SHOULD HAVE SENT MESSAGE");
+                bot.sendIRC().message(savedChannel, Global.commandPrefix + "pass");
             }
             
         }
@@ -128,12 +126,12 @@ public class UnoAIBot extends ListenerAdapter {
             if (UnoAI.hasPlayable(savedMe, savedDeck)) {
                 card = UnoAI.getPlayable(savedMe, savedDeck);
             } else {
-                bot.sendIRC().message(savedChannel, "!pass");
+                bot.sendIRC().message(savedChannel, Global.commandPrefix + "pass");
             }
             if (!justDrew && card.color.equals(Card.Color.WILD)) {
-                bot.sendIRC().message(savedChannel, "!play " + card.face.toString() + " " + UnoAI.colorMostOf(savedMe, savedDeck).toString());
+                bot.sendIRC().message(savedChannel, Global.commandPrefix + "play " + card.face.toString() + " " + UnoAI.colorMostOf(savedMe, savedDeck).toString());
             } else if (!justDrew) {
-                bot.sendIRC().message(savedChannel, "!play " + card.color.toString() + " " + card.face.toString());
+                bot.sendIRC().message(savedChannel, Global.commandPrefix + "play " + card.color.toString() + " " + card.face.toString());
             }
         }
     }
