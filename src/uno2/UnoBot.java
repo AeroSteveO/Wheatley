@@ -55,7 +55,7 @@ public class UnoBot extends ListenerAdapter {
     private boolean manageConnectivity = true;
     private Deck deck = new Deck();
     private PlayerList players = new PlayerList();
-    private Messenger msg;
+    private Messenger msg = setupMsg();
     private ScoreBoard2 sb;
     private String ScoreBoardFileName = "ScoreBoard.dat";
     private PircBotX bot2;
@@ -68,21 +68,36 @@ public class UnoBot extends ListenerAdapter {
     this("unoBot", usingSSL);
     }*/
     
+    private Messenger setupMsg(){
+        Messenger msg;
+        try {
+            if (new File("Messages.dat").exists()) {
+                msg = new Messenger("Messages.dat");
+            } else {
+                msg = new Messenger();
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(UnoBot.class.getName()).log(Level.SEVERE, null, ex);
+            msg = null;
+        }
+        return msg;
+    }
+    
     public UnoBot(boolean usingSSL, String gameChannel) {
 //        this.gameChannel = gameChannel;
 //        this.bot = bot;
         
         
         this.usingSSL = usingSSL;
-        try {
-            if (new File("Messages.dat").exists()) {
-                this.msg = new Messenger("Messages.dat");
-            } else {
-                this.msg = new Messenger();
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(UnoBot.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            if (new File("Messages.dat").exists()) {
+//                this.msg = new Messenger("Messages.dat");
+//            } else {
+//                this.msg = new Messenger();
+//            }
+//        } catch (IOException | ClassNotFoundException ex) {
+//            Logger.getLogger(UnoBot.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
     
     public UnoBot(boolean usingSSL, String gameChannel, String token) {
