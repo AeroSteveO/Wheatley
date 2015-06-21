@@ -41,13 +41,14 @@ public class ExampleCMD implements Command{
     
     @Override
     public boolean isCommand(String toCheck){
-        return toCheck.equalsIgnoreCase(Global.mainNick+", phrase command check");
+        return toCheck.equalsIgnoreCase(Global.mainNick+", phrase command check"); // Phrase that when spoken will activate the command
     }
     
     @Override
     public ArrayList<String> commandTerms(){
         ArrayList<String> a = new ArrayList<>();
-        a.add(null);
+        a.add("command"); // Terms that when prefixed by the command prefix, will activate the command
+// NOTE: these should be all lowercase
         return a;
     }
     
@@ -56,8 +57,8 @@ public class ExampleCMD implements Command{
         
         CommandMetaData data = new CommandMetaData(event,true);
         
-        String caller = data.getCaller();
-        boolean isVerified = data.isVerifiedBotOwner();
+        String caller = data.getCaller(); // Nick of the user who called the command
+        boolean isVerified = data.isVerifiedBotOwner(); // True if the user who called the command is the bot owner
         String[] cmdSplit = data.getCommandSplit();
         
         
