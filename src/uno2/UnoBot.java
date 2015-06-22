@@ -14,7 +14,6 @@ import com.google.common.collect.ImmutableSortedSet;
 import javax.net.ssl.SSLSocketFactory;
 
 
-import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -83,12 +82,12 @@ public class UnoBot extends ListenerAdapter {
         return msg;
     }
     
-    public UnoBot(boolean usingSSL, String gameChannel) {
+//    public UnoBot(boolean usingSSL, String gameChannel) {
 //        this.gameChannel = gameChannel;
 //        this.bot = bot;
         
         
-        this.usingSSL = usingSSL;
+//        this.usingSSL = usingSSL;
 //        try {
 //            if (new File("Messages.dat").exists()) {
 //                this.msg = new Messenger("Messages.dat");
@@ -98,12 +97,12 @@ public class UnoBot extends ListenerAdapter {
 //        } catch (IOException | ClassNotFoundException ex) {
 //            Logger.getLogger(UnoBot.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-    }
+//    }
     
-    public UnoBot(boolean usingSSL, String gameChannel, String token) {
-        this(usingSSL, gameChannel);
+//    public UnoBot(boolean usingSSL, String gameChannel, String token) {
+//        this(usingSSL, gameChannel);
 //        this.setToken(token);
-    }
+//    }
     
     public void startTimer(int seconds) {
         timer = new Timer();

@@ -65,13 +65,13 @@ public class UnoBotMain {
         try {
             bot = new PircBotX(configuration2);
                         
-            UnoBot unobot = new UnoBot(sslEnabled, channel);
-            unobot.setBotOps(botOps);
+//            UnoBot unobot = new UnoBot(sslEnabled, channel);
+//            unobot.setBotOps(botOps);
 //            unobot.setUpdateScript(updateScript);
-            unobot.setScoreBoardFileName(sbFileName);
+//            unobot.setScoreBoardFileName(sbFileName);
 //            unobot.setToken(token);
             
-            bot.getConfiguration().getListenerManager().addListener(unobot);
+            bot.getConfiguration().getListenerManager().addListener(new UnoBot());
             
             bot.startBot();
         }
