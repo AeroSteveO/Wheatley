@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Arrays;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.managers.BackgroundListenerManager;
+import uno2.UnoBot;
 
 /**
  *
@@ -54,6 +55,7 @@ import org.pircbotx.hooks.managers.BackgroundListenerManager;
  */
 public class WheatleyMain extends ListenerAdapter {
     
+    
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
 // in case something should be done here
@@ -69,6 +71,14 @@ public class WheatleyMain extends ListenerAdapter {
             event.getBot().sendIRC().joinChannel(event.getChannel().getName());
         }
     }
+        @Override
+    // Wheatley channel relay
+        public void onMessage(MessageEvent event) throws Exception {
+            if (event.getChannel().getName().equalsIgnoreCase(Global.mainChan)&&Global.relay){
+                Global.whatPreBot.sendIRC().message(Global.mainChan,"<"+event.getUser().getNick()+"> "+event.getMessage());
+            }
+        }
+    
     @Override
     // Set mode +B for Bots
     public void onConnect(ConnectEvent event) throws Exception {
@@ -121,7 +131,10 @@ public class WheatleyMain extends ListenerAdapter {
             Global.mainNick = baseElement.getElementsByTagName("nick").item(0).getTextContent();
             Global.nickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
             Global.botOwner = baseElement.getElementsByTagName("botowner").item(0).getTextContent();
+            Global.serverPort = eElement.getElementsByTagName("port").item(0).getTextContent();
             Global.phrasePrefix = Global.mainNick+", ";
+            Global.mainServer = eElement.getElementsByTagName("address").item(0).getTextContent();
+            
             BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
             
             //   Configuration configuration;
@@ -144,6 +157,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameMasterMind())     //mastermind game listener
                     .addListener(new GameGuessTheNumber()) //guess the number game listener
                     .addListener(new GameControl())
+                    .addListener(new UnoBot())
 //                    .addListener(new GameListener())
 //                    .addListener(new GameLuckyLotto())
                     .addListener(new GameHighLow())
@@ -174,7 +188,8 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
                     .addListener(new RandChan())             // generates random 4chan image links
-                    .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent());
+                    .setServerHostname(Global.mainServer)
+                    .setServerPort(Integer.parseInt(Global.serverPort));
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
             
@@ -186,10 +201,42 @@ public class WheatleyMain extends ListenerAdapter {
             }
             Configuration config = configuration.buildConfiguration();
             
+            baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
+            eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(2);
+            String musicBotNick = "***REMOVED***|bot";
+            String musicBotNickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
+            
+            
+            Configuration configuration2;
+            configuration2 = new Configuration.Builder()
+                    .setName(musicBotNick)
+                    .setLogin(musicBotNick)
+                    .setNickservPassword(musicBotNickPass)
+                    .setRealName("Wheatley")
+                    .setAutoReconnect(true)
+                    .setAutoNickChange(true)
+                    .setCapEnabled(true)
+                    .addListener(new WhatPre())
+                    .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent())
+                    .addAutoJoinChannel("#rapterverse")
+                    .setSocketTimeout(130 * 1000) // Reduce socket timeouts from 5 minutes to 130 seconds
+                    .setMessageDelay(600) // Reduce message delays from 1 second to 600 milliseconds (need to experiment to get the lowest value without dropping messages)
+                    .setVersion("mIRC v7.32 Khaled Mardam-Bey") // Set to something funny
+                    .buildConfiguration();
             
             try {
                 Global.bot = new PircBotX(config);
                 Runner parallel = new Runner(Global.bot);
+                Thread t = new Thread(parallel);
+                parallel.giveT(t);
+                t.start();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("Failed to start bot");
+            }
+            try {
+                Global.whatPreBot = new PircBotX(configuration2);
+                Runner parallel = new Runner(Global.whatPreBot);
                 Thread t = new Thread(parallel);
                 parallel.giveT(t);
                 t.start();

@@ -41,7 +41,17 @@ public class Global {
     public static String mainNick = new String(); //Updated in the Main .java file from Setings.XML
     public static String nickPass = new String(); //Updated in the Main .java file from Setings.XML
     public static boolean reconnect = true;
+    
+    public static String mainServer = new String();
+    public static String serverPort = new String();
+    
     public static PircBotX bot;
+    public static PircBotX whatPreBot;
+    
+    public static boolean relay = false;
+    
+    public static String mainChan = "#rapterverse";
+    
     public static ChannelArray channels = new ChannelArray();
     public static String commandPrefix = "!";              // Not implemented in all functions
     public static String phrasePrefix = new String();      //mainNick+", ";
@@ -49,58 +59,14 @@ public class Global {
 //    public static final Reflections wheatleyReflection = new Reflections("org.pircbotx");
     //public static List<Command> commandList = new ArrayList<>();
     
-//    private static String filename = "settings.json";
     public static Settings settings = new Settings("settings.json");
-//    boolean start = startSettings();
-//    private static String throttleName = "throttle.json";
     public static Throttle throttle = new Throttle("throttle.json");
     
-    
-    
-//    private static Settings startSettings() {
-//        Settings setting = new Settings();
-//        try{
-//            setting.setFileName(filename);
-//            setting.loadFile();
-//        }
-//        catch (Exception ex){
-//            System.out.println("SETTINGS FAILED TO LOAD");
-//            ex.printStackTrace();
-//        }
-//        return setting;
-//    } 
-//    
-//    private static Throttle startThrottle() {
-//        Throttle throttle = new Throttle();
-//        try{
-//            throttle.setFileName(throttleName);
-//            throttle.loadFile();
-//        }
-//        catch (Exception ex){
-//            System.out.println("SETTINGS FAILED TO LOAD");
-//            ex.printStackTrace();
-//        }
-//        return throttle;
-//    }
-    
-//    public static String getTimestamp(Event event){
-//        TimeZone tz = TimeZone.getDefault();
-//        Date timestamp = new Date(Long.parseLong(String.valueOf(event.getTimestamp())));
-//        DateFormat timeFormat = new SimpleDateFormat("M/d/yy h:mm aa");
-//        String tzShortString = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
-//        String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
-//        return outputTime;
-//    }
-//    
-//    public static String getTimestamp(String date) {
-//        TimeZone tz = TimeZone.getDefault();
-//        Date timestamp = new Date(Long.parseLong(date));
-//        DateFormat timeFormat = new SimpleDateFormat("M/d/yy h:mm aa");
-//        String tzShortString = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
-//        String outputTime = timeFormat.format(timestamp) + " " + tzShortString;
-//        return outputTime;
-//    }
-    
+    public static String[] getBotOps(){
+        String[] admins = {"Steve-O","burg","theDoctor"};
+        return admins;
+    }
+            
     private static ArrayList<String> getBotAdmins() {
         ArrayList<String> admins = new ArrayList<>();
         admins.add(botOwner);
