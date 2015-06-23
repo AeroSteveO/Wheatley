@@ -566,7 +566,7 @@ public class UnoBot extends ListenerAdapter {
                         .setName("unoAI")
                         .setLogin("unoAI")
 // Nickserv password will be the same as provided when the following line is uncommented
-//                    .setNickservPassword(event.getBot().getConfiguration().getNickservPassword()) // In case you want a nickserv password for your unobot
+                        .setNickservPassword(event.getBot().getConfiguration().getNickservPassword()) // In case you want a nickserv password for your unobot
                         .setRealName(event.getBot().getNick())
                         .setAutoReconnect(true)
                         .setAutoNickChange(true)
