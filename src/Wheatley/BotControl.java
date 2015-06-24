@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Random;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,7 +19,6 @@ import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Element;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 /**
  *
