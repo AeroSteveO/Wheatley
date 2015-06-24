@@ -1,6 +1,7 @@
 package uno2;
 
 import Wheatley.Global;
+import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.KickEvent;
@@ -44,7 +45,6 @@ public class UnoAIBot extends ListenerAdapter {
     }
     public void playAI(String channel, Player me, Deck deck) {
         Card card = null;
-        System.out.println("PLAYING AS AI");
         if (UnoAI.hasPlayable(me, deck)) {
             card = UnoAI.getPlayable(me, deck);
         } else {
@@ -70,7 +70,7 @@ public class UnoAIBot extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         String sender = event.getUser().getNick();
         String channel = event.getChannel().getName();
-        String[] Tokens = event.getMessage().split(" ");
+        String[] Tokens = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
         
         //NICK
         if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "nickai") && this.isBotOp(sender)) {
@@ -82,10 +82,15 @@ public class UnoAIBot extends ListenerAdapter {
         } //QUIT
         else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "quit") && this.isBotOp(sender)) {
             event.getBot().sendIRC().quitServer();
-            System.exit(0);
         } //UNO
         else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "uno")) {
             event.getBot().sendIRC().message(channel, Global.commandPrefix + "join");
+        }
+        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "unoAIhelp")){
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "nickai ----- Tells the bot to change his nick.");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "joincai ---- Tells the bot to join a channel.");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "uno ----- Tells the bot send " + Global.commandPrefix + "join to join the uno game.");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "quit ----- Tells the bot to dissconnect from the entire server.");
         }
     }
     
