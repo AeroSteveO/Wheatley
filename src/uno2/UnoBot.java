@@ -954,20 +954,20 @@ public class UnoBot extends ListenerAdapter {
         System.out.println(this.currChannel);
     }
     
-    @Override
-    public void onDisconnect(DisconnectEvent event) throws Exception {
-        if (manageConnectivity == true) {
-            System.out.println("dissconnected!!");
-            while (!event.getBot().isConnected()) {
-                try {
-                    event.getBot().startBot();
-                    event.getBot().sendIRC().joinChannel(this.currChannel);
-                } catch (Exception ex) {
-                    System.out.println("ERROR on disconnect");
-                }
-            }
-        }
-    }
+//    @Override
+//    public void onDisconnect(DisconnectEvent event) throws Exception {
+//        if (manageConnectivity == true) {
+//            System.out.println("dissconnected!!");
+//            while (!event.getBot().isConnected()) {
+//                try {
+//                    event.getBot().startBot();
+//                    event.getBot().sendIRC().joinChannel(this.currChannel);
+//                } catch (Exception ex) {
+//                    System.out.println("ERROR on disconnect");
+//                }
+//            }
+//        }
+//    }
     @Override
     public void onConnect(ConnectEvent event) throws Exception {
         this.bot = event.getBot();
