@@ -378,8 +378,5 @@ public class UnoEngine {
            card = new Card(Card.Color.valueOf(split[0]),Card.Face.valueOf(split[1])); 
         } 
         return card;
-    
     }
-    
-    
 }
