@@ -560,7 +560,7 @@ public class UnoBot extends ListenerAdapter {
                 
                 try {
                     this.bot2 = new PircBotX(configuration2);
-                    
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"Turning AI "+Colors.GREEN+"ON");
                     bot2ai = new UnoAIBot(bot2);
                     bot2.getConfiguration().getListenerManager().addListener(bot2ai);
                     bot2ai.setBotOps(botOps);
@@ -568,6 +568,7 @@ public class UnoBot extends ListenerAdapter {
                     this.bot2.startBot();
                 }
                 catch (Exception ex){
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"AI Activation/Deactivation " + Colors.RED + Colors.BOLD + Colors.UNDERLINE + "FAILURE");
                     Logger.getLogger(UnoBot.class.getName()).log(Level.SEVERE, null, ex);
                     if(bot2.isConnected()) // If somehow the bot connected on exception, KILL IT
                         bot2.sendIRC().quitServer(); // Get off any server
@@ -575,6 +576,7 @@ public class UnoBot extends ListenerAdapter {
                     botAI = false; // STRIP THE FLESH
                 }
             } else {
+                event.getBot().sendIRC().message(event.getChannel().getName(),"Turning AI "+Colors.RED+"OFF");
                 botAI = false;
                 bot2.stopBotReconnect();
                 bot2.sendIRC().quitServer();
