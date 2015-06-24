@@ -38,12 +38,12 @@ import org.pircbotx.hooks.events.UserListEvent;
 public class UnoBot extends ListenerAdapter {
     
     private String[] botOps = Global.getBotOps();
-    private String gameStarter = null;
+    private String gameStarter = null; // User who started the UNO game
     private String currChannel = null;
     private final String gameChannel = "#casino";
-    private String token = "!";
-    private boolean gameUp = false;
-    private boolean delt = false;
+//    private String token = "!";
+    private boolean gameUp = false; // Is an UNO game running
+    private boolean delt = false;   // Has an UNO game been dealt yet
     private boolean drew = false;
     private boolean cheating = false;
     private boolean botAI = false;
@@ -60,8 +60,8 @@ public class UnoBot extends ListenerAdapter {
     private ScoreBoard2 sb = startScoreBoard();
     private PircBotX bot2;
     private UnoAIBot bot2ai = new UnoAIBot(bot2);
-    public Timer timer;
-    public Timer unotimer;
+    public Timer timer;  // Timer for each hand of uno, to keep the game moving
+    public Timer unotimer; // Timer from start of joins to start of game, if not started within this limit, the game is not started
     PircBotX bot = Global.bot;
     
     /*public UnoBot(boolean usingSSL){
@@ -117,6 +117,7 @@ public class UnoBot extends ListenerAdapter {
     
     public class turnTask extends TimerTask {
         
+        @Override
         public void run() {
             stopTimer();
             Card card = players.at().draw(deck);
@@ -151,10 +152,12 @@ public class UnoBot extends ListenerAdapter {
     
     public void stopTimer() {
         timer.cancel();
+        timer.purge();
     }
     
     public void stopUnoTimer(){
         unotimer.cancel();
+        unotimer.purge();
     }
     
     public void setBotOps(String[] botOps) {
@@ -292,7 +295,7 @@ public class UnoBot extends ListenerAdapter {
             delt = false;
             players.clear();
             deck.clear();
-            
+            System.out.println("SOMEONE HAS WON AND THE GAME SHOULD END WITHOUT ISSUE");
         }
         return win;
     }
@@ -506,27 +509,6 @@ public class UnoBot extends ListenerAdapter {
         } //MESSAGES
         else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "messages") && messagesEnabled == true) {
             event.getBot().sendIRC().message(channel, msg.forUserToString());
-        } //ENDGAME
-        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "endgame") && gameUp) && (isBotOp(sender) || sender.equals(gameStarter))) {
-            if(delt){
-                stopTimer();
-                deck.clear();
-                delt = false;
-            }else{
-                stopUnoTimer();
-            }
-            attack = false;
-            extreme = false;
-            gameUp = false;
-            delt = false;
-            players.clear();
-            event.getBot().sendIRC().message(channel, "The game was ended by " + sender);
-            if(botAI){
-                bot2.stopBotReconnect();
-                bot2.sendIRC().quitServer();
-                bot2 = null;
-                botAI = false;
-            }
         } //LEAVE
         else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "leave")) {
             leave(channel, sender);
@@ -574,7 +556,7 @@ public class UnoBot extends ListenerAdapter {
                         .setMessageDelay(4000)
                         .setServerHostname(event.getBot().getServerInfo().getServerName())
                         .setServerPort(event.getBot().getConfiguration().getServerPort())
-                        .addAutoJoinChannel(channel)
+                        .addAutoJoinChannel(event.getChannel().getName())
 //                        .setSocketFactory(usingSSL ? new UtilSSLSocketFactory().trustAllCertificates() : SSLSocketFactory.getDefault())
                         .setSocketTimeout(130 * 1000) // Reduce socket timeouts from 5 minutes to 130 seconds
                         .setVersion("mIRC v7.32 Khaled Mardam-Bey") // Set to something funny
@@ -591,6 +573,10 @@ public class UnoBot extends ListenerAdapter {
                 }
                 catch (Exception ex){
                     Logger.getLogger(UnoBot.class.getName()).log(Level.SEVERE, null, ex);
+                    if(bot2.isConnected()) // If somehow the bot connected on exception, KILL IT
+                        bot2.sendIRC().quitServer(); // Get off any server
+                    bot2 = null; // WIPE THE RAM
+                    botAI = false; // STRIP THE FLESH
                 }
             } else {
                 botAI = false;
@@ -599,6 +585,7 @@ public class UnoBot extends ListenerAdapter {
                 bot2 = null;
             }
             
+/**********************************************************UNO GAME START***********************************************/
         } //UNO
         else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "uno")) {
             if (gameUp) {
@@ -620,7 +607,28 @@ public class UnoBot extends ListenerAdapter {
                 gameStarter = sender;
                 join(channel, gameStarter);
                 event.getBot().sendIRC().message(channel, "type !join to join the game.");
-                startUnoTimer(300);
+                startUnoTimer(300); // Give players 300 seconds to join the uno game
+            }
+        } //ENDGAME
+        else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "endgame") && gameUp) && (isBotOp(sender) || sender.equals(gameStarter))) {
+            if(delt){
+                stopTimer();
+                deck.clear();
+                delt = false;
+            }else{
+                stopUnoTimer();
+            }
+            attack = false;
+            extreme = false;
+            gameUp = false;
+            delt = false;
+            players.clear();
+            event.getBot().sendIRC().message(channel, "The game was ended by " + sender);
+            if(botAI){
+                bot2.stopBotReconnect();
+                bot2.sendIRC().quitServer();
+                bot2 = null;
+                botAI = false;
             }
         } //DEAL
         else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "deal")) && !delt && gameUp && ((sender.equals(gameStarter)) || (isBotOp(sender)))) {
@@ -807,10 +815,13 @@ public class UnoBot extends ListenerAdapter {
                         players.next();
                     }
                     
-                    checkWin(channel, player);
+                   System.out.println(checkWin(channel, player));
+                    
+                    
                     
                     //TELL USER TO GO
                     if (gameUp) {
+                        System.out.println("GAME IS RUNNING STILL");
                         event.getBot().sendIRC().message(channel, "Top Card: " + deck.topCard().toIRCString());
                         event.getBot().sendIRC().message(channel, players.at().getName() + " it is your turn.");
                         event.getBot().sendIRC().notice(players.at().getName(), showCards(players.at()));
