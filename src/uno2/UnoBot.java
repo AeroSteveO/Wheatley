@@ -392,10 +392,7 @@ public class UnoBot extends ListenerAdapter {
         String sender = event.getUser().getNick();
         String channel = event.getChannel().getName();
         
-        //NICK
-//        if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "nick") && isBotOp(sender)) {
-//            bot.sendIRC().changeNick(tokens[1]);
-//        }
+        
         //INFO
         if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "info")) {
             event.getBot().sendIRC().message(channel, "LOGIN: " + event.getBot().getUserBot().getLogin());
@@ -403,7 +400,7 @@ public class UnoBot extends ListenerAdapter {
             event.getBot().sendIRC().message(channel, "NICK: " + event.getBot().getUserBot().getNick());
         } //HELP
         else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "unohelp")) {
-            
+            event.getBot().sendIRC().notice(sender, "----------- UNO Game Commands -----------");
             event.getBot().sendIRC().notice(sender, Global.commandPrefix + "uno ------ Starts an new UNO game.");
             event.getBot().sendIRC().notice(sender, Global.commandPrefix + "uno +a---- Attack mode: When you draw there is a 20% chance");
             event.getBot().sendIRC().notice(sender, "            that you will be UNO attacked and will have to draw");
@@ -427,25 +424,30 @@ public class UnoBot extends ListenerAdapter {
             event.getBot().sendIRC().notice(sender, Global.commandPrefix + "what ----- If you were not paying attention this will tell");
             event.getBot().sendIRC().notice(sender, "            you the top card and whos turn it is.");
             event.getBot().sendIRC().notice(sender, Global.commandPrefix + "players -- Displays the player list.");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "score ---- Prints out the score board.");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "ai ------- Turns the bot ai on or off.");
             event.getBot().sendIRC().notice(sender, Global.commandPrefix + "endgame -- Ends the game, only the person who started the");
             event.getBot().sendIRC().notice(sender, "            game may end it.");
-            
+
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "----------- General Commands -----------");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "score ---- Prints out the score board.");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "ai ------- Turns the bot ai on or off.");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "rank ----- Shows all users win:lose ratio");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "unohelp -- This shit.");
+
             if (messagesEnabled) {
+                event.getBot().sendIRC().notice(sender, "----------- Message Commands -----------");
                 event.getBot().sendIRC().notice(sender, Global.commandPrefix + "tell ----- Tell an offline user a message once they join the channel.");
                 event.getBot().sendIRC().notice(sender, Global.commandPrefix + "messages - List all of the people that have messages.");
             }
             
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "unohelp -- This shit.");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "rank ----- Shows all users win:lose ratio");
+            
             if (isBotOp(sender)) {
-                event.getBot().sendIRC().notice(sender, "----------- OP only" + "-----------");
+                event.getBot().sendIRC().notice(sender, "----------- OP only -----------");
 //                event.getBot().sendIRC().notice(sender, Global.commandPrefix + "nick ----- Tells the bot to change his nick.");
 //                event.getBot().sendIRC().notice(sender, Global.commandPrefix + "joinc ---- Tells the bot to join a channel.");
 //                event.getBot().sendIRC().notice(sender, Global.commandPrefix + "part ----- Tells the bot to part from a channel.");
 //                event.getBot().sendIRC().notice(sender, Global.commandPrefix + "quit ----- Tells the bot to dissconnect from the entire server.");
                 event.getBot().sendIRC().notice(sender, Global.commandPrefix + "resetSB -- Resets the Score Board.");
+                event.getBot().sendIRC().notice(sender, Global.commandPrefix + "endgame -- Ends the current game no matter who started it.");
             }
             
         } //JOINC
@@ -468,7 +470,10 @@ public class UnoBot extends ListenerAdapter {
 //        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "quit") && isBotOp(sender)) {
 //            event.getBot().sendIRC().quitServer();
 //            System.exit(0);
-//        } //RESET_SB
+//        } //NICK
+//        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "nick") && isBotOp(sender)) {
+//            bot.sendIRC().changeNick(tokens[1]);
+//        }//RESET_SB
         else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "resetsb") && isBotOp(sender)) {
             try {
                 resetScoreBoard();
@@ -488,11 +493,7 @@ public class UnoBot extends ListenerAdapter {
         }
         
         
-        //JOIN
-        if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "join") && gameUp) {
-            join(channel, sender);
-            event.getBot().sendIRC().message(channel, "There are now " + players.size() + " people in the players list");
-        } //TELL
+        //TELL
         else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "tell") && messagesEnabled == true) {
             String[] msgSplit = event.getMessage().split(" ", 3);
             this.msg.setMessage(sender, tokens[1], msgSplit[2]);
@@ -533,13 +534,7 @@ public class UnoBot extends ListenerAdapter {
             } else {
                 event.getBot().sendIRC().message(channel, "The Score Board is empty");
             }
-        } //COUNT
-        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "unocount") && delt) {
-            event.getBot().sendIRC().message(channel, players.countCards());
-        } //PLAYERS
-        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "players") && gameUp) {
-            printPlayers(channel);
-        } //AI
+        }  //AI
         else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "ai") && !gameUp) {
             
             if (!botAI) {
@@ -609,6 +604,16 @@ public class UnoBot extends ListenerAdapter {
                 event.getBot().sendIRC().message(channel, "type !join to join the game.");
                 startUnoTimer(300); // Give players 300 seconds to join the uno game
             }
+        } //COUNT
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "unocount") && delt) {
+            event.getBot().sendIRC().message(channel, players.countCards());
+        } //PLAYERS
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "players") && gameUp) {
+            printPlayers(channel);
+        }//JOIN
+        if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "join") && gameUp) {
+            join(channel, sender);
+            event.getBot().sendIRC().message(channel, "There are now " + players.size() + " people in the players list");
         } //ENDGAME
         else if ((tokens[0].equalsIgnoreCase(Global.commandPrefix + "endgame") && gameUp) && (isBotOp(sender) || sender.equals(gameStarter))) {
             if(delt){
@@ -815,13 +820,12 @@ public class UnoBot extends ListenerAdapter {
                         players.next();
                     }
                     
-                   System.out.println(checkWin(channel, player));
+                   checkWin(channel, player);
                     
                     
                     
                     //TELL USER TO GO
                     if (gameUp) {
-                        System.out.println("GAME IS RUNNING STILL");
                         event.getBot().sendIRC().message(channel, "Top Card: " + deck.topCard().toIRCString());
                         event.getBot().sendIRC().message(channel, players.at().getName() + " it is your turn.");
                         event.getBot().sendIRC().notice(players.at().getName(), showCards(players.at()));
@@ -836,7 +840,7 @@ public class UnoBot extends ListenerAdapter {
             } else {
                 event.getBot().sendIRC().message(channel, "Sorry " + sender + " you dont have that card");
             }
-        }
+        }// **********************************END OF GAMEPLAY CODE **********************************************************
     }
     
     @Override
