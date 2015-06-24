@@ -75,22 +75,27 @@ public class UnoAIBot extends ListenerAdapter {
         //NICK
         if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "nickai") && this.isBotOp(sender)) {
             event.getBot().sendIRC().changeNick(Tokens[1]);
-        } //HELP
-        //JOINC
+        } //JOINC
         else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "joincai") && this.isBotOp(sender)) {
             event.getBot().sendIRC().joinChannel(Tokens[1]);
+        } //JOIN GAME
+        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "joingame") && this.isBotOp(sender)) {
+            event.getBot().sendIRC().message(channel, Global.commandPrefix + "join");
         } //QUIT
         else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "quit") && this.isBotOp(sender)) {
             event.getBot().sendIRC().quitServer();
         } //UNO
         else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "uno")) {
+            Thread.sleep(5*1000); // Wait 5 seconds plox, thnx
             event.getBot().sendIRC().message(channel, Global.commandPrefix + "join");
-        }
-        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "unoAIhelp")){
+        } // Help
+        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "unoAIhelp") && this.isBotOp(sender)){
+            event.getBot().sendIRC().notice(sender, "----------- OP Only AI Commands -----------");
             event.getBot().sendIRC().notice(sender, Global.commandPrefix + "nickai ----- Tells the bot to change his nick.");
             event.getBot().sendIRC().notice(sender, Global.commandPrefix + "joincai ---- Tells the bot to join a channel.");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "uno ----- Tells the bot send " + Global.commandPrefix + "join to join the uno game.");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "quit ----- Tells the bot to dissconnect from the entire server.");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "joingame --- Tells the bot to send the '" + Global.commandPrefix + "join' command.");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "uno -------- Tells the bot send " + Global.commandPrefix + "join to join the uno game.");
+            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "quit ------- Tells the bot to dissconnect from the entire server.");
         }
     }
     
