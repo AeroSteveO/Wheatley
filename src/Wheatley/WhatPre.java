@@ -19,11 +19,12 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Stephen
  */
 public class WhatPre extends ListenerAdapter {
-    String preChan = "#***REMOVED***-announce";
-    String preBot = "Drone";
-    String musicFolderLocation = "/media/backup/Music - Stephen/";
+    String preChan = "#***REMOVED***-announce"; // Music pre channel
+    String preBot = "Drone"; // Music pre bot name
+    String musicFolderLocation = "/media/backup/Music - Stephen/"; // Music folder location
 //    String musicFolderLocation = "music/";
-    ArrayList<String> bands = loadBandNamesFromFolders();
+    ArrayList<String> bands = loadBandNamesFromFolders(); // List of bands from folder names in the music folder
+    ArrayList<String> announcedPres = new ArrayList<>();  // Pre's that have been announced to the channel
     
     @Override
     public void onConnect(ConnectEvent event){
@@ -45,25 +46,26 @@ public class WhatPre extends ListenerAdapter {
         
         if (event.getChannel().getName().equalsIgnoreCase(preChan)&&event.getUser().getNick().equalsIgnoreCase(preBot)){
             
-            String artist = message.split("\\s-\\s")[0];
-            String album = message.split("\\s-\\s",2)[1].split("\\[")[0];
+            String artist = message.split("\\s-\\s")[0].trim();
+            String album = message.split("\\s-\\s",2)[1].split("\\[")[0].trim();
             
-            String year = new String();
+            int year = 0;
             String type = new String();
             String info = message.split("-")[message.split("-").length-1];
             
             for (int i=0;i<msgSplit.length;i++){
                 if (msgSplit[i].matches("\\[[0-9]+\\]")){
-                    year = msgSplit[i].replaceAll("\\[|\\]","");
+                    year = Integer.parseInt(msgSplit[i].replaceAll("\\[|\\]","").trim());
                 }
                 else if (msgSplit[i].matches("\\[[a-zA-Z]+\\]")){
                     type = msgSplit[i].replaceAll("\\[|\\]","");
                 }
             }
             
-            if (bands.contains(artist.toLowerCase()))
+            if (bands.contains(artist.toLowerCase()) && (year >= 2013) && !announcedPres.contains(artist.toLowerCase() + " - " + album.toLowerCase())){
                 Global.bot.sendIRC().message(Global.mainChan,Colors.BOLD+"ARTIST: "+Colors.NORMAL+artist+Colors.BOLD+" ALBUM: "+Colors.NORMAL+album+Colors.BOLD+" Year: "+Colors.NORMAL+year+Colors.BOLD+" Type: "+Colors.NORMAL+type);
-            
+                announcedPres.add(artist.toLowerCase() + " - " + album.toLowerCase());
+            }
         }
         if (event.getChannel().getName().equalsIgnoreCase(Global.mainChan)){
             
