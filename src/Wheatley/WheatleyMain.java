@@ -140,6 +140,7 @@ public class WheatleyMain extends ListenerAdapter {
             //   Configuration configuration;
             Configuration.Builder configuration = new Configuration.Builder()
                     .setName(Global.mainNick)
+                    .setRealName(Global.mainNick)
                     .setLogin(baseElement.getElementsByTagName("login").item(0).getTextContent()) //login part of hostmask, eg name:login@host
                     .setNickservPassword(Global.nickPass)
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use
@@ -221,7 +222,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addAutoJoinChannel("#rapterverse")
                     .setSocketTimeout(130 * 1000) // Reduce socket timeouts from 5 minutes to 130 seconds
                     .setMessageDelay(600) // Reduce message delays from 1 second to 600 milliseconds (need to experiment to get the lowest value without dropping messages)
-                    .setVersion("mIRC v7.32 Khaled Mardam-Bey") // Set to something funny
+                    .setVersion("HexMIRC 2.0.1 Turbo Skynet") // Set to something funny
                     .buildConfiguration();
             
             try {
