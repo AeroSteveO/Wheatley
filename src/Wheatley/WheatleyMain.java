@@ -45,6 +45,8 @@ import uno2.UnoBot;
  *      LilWayne    -- by
  *      Hermes      -- by aaahhh
  *      Poopsock    -- by khwain
+ *      meatpod     -- by 
+ *      unoBot      -- by https://github.com/mjsalerno/UnoBot
  *
  *
  * @author Stephen
