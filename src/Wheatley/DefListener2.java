@@ -124,14 +124,14 @@ public class DefListener2 extends ListenerAdapter {
         
         
         
-        if(msgSplit[0].equalsIgnoreCase("!load")){//||msgSplit[0].equalsIgnoreCase("!addef")
-            
-            if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
-                
-                addDefsFromFile("definitions.txt", String.valueOf(event.getTimestamp()/1000));
-                addDefLogFromFile("definitionLog.txt", String.valueOf(event.getTimestamp()/1000));
-            }
-        }
+//        if(msgSplit[0].equalsIgnoreCase("!load")){
+//            
+//            if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
+//                
+//                addDefsFromFile("definitions.txt", String.valueOf(event.getTimestamp()/1000));
+//                addDefLogFromFile("definitionLog.txt", String.valueOf(event.getTimestamp()/1000));
+//            }
+//        }
         
         
         
