@@ -201,15 +201,15 @@ public class TvSchedule extends ListenerAdapter{
         
         Element dayElement = (Element) baseElement.getElementsByTagName("DAY").item(dayLocation);
         
-        for(int i=0;i<dayElement.getElementsByTagName("time").getLength();i++){
-            for(int o=0;o<nightTimes.size();o++){
+        for(int i=0;i<dayElement.getElementsByTagName("time").getLength();i++) { // LOOP THROUGH ALL THE TIMES
+            for(int o=0;o<nightTimes.size();o++){ // CHECK TO SEE IF THE FOUND TIME IS ONE OF THE NIGHT TIME ALLOWED HOURS
                 if (dayElement.getElementsByTagName("time").item(i).getAttributes().getNamedItem("attr").getNodeValue().matches(nightTimes.get(o))){
                     
                     Element showElement = (Element) dayElement.getElementsByTagName("time").item(i);
                     String showTime = dayElement.getElementsByTagName("time").item(i).getAttributes().getNamedItem("attr").getNodeValue();
                     
                     
-                    for (int c=0;c < showElement.getElementsByTagName("show").getLength(); c++) {
+                    for (int c=0;c < showElement.getElementsByTagName("show").getLength(); c++) { // LOOP THROUGH ALL THE SHOWS IN THE FOUND HOUR
                         
                         Element show = (Element) showElement.getElementsByTagName("show").item(c);
                         
