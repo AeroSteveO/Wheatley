@@ -6,6 +6,9 @@
 
 package Wheatley;
 
+import Objects.SimpleSettings;
+import Utils.TextUtils;
+import static Utils.TextUtils.loadTextAsList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -56,6 +59,7 @@ public class MarkovInterface extends ListenerAdapter{
     int newLines = 0;
     int newLinesBeforeUpdate = 10;
     
+    String botListFileName = "botList.txt";
     String markovFileName = "ImportedMarkov";
     File markovFile = new File(markovFileName);
     JBorg borg = new JBorg(1,15);
@@ -105,6 +109,16 @@ public class MarkovInterface extends ListenerAdapter{
                 }
                 else
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance must be an integer value greater than 0");
+            }
+            else if (cmdSplit[0].equalsIgnoreCase("ignore") && event.getUser().getNick().equalsIgnoreCase(Global.botOwner) && event.getUser().isVerified()){
+                if (cmdSplit.length > 2){
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"!Ignore: This command accepts a single input");
+                }
+                else{
+                    botList.add(cmdSplit[1]);
+                    TextUtils.addToDocIfUnique(botListFileName, cmdSplit[1]);
+                    event.getBot().sendIRC().notice(event.getUser().getNick(),"Success! " + cmdSplit[1] + " was added to the Markov ignore list");
+                }
             }
         }
         
@@ -167,7 +181,7 @@ public class MarkovInterface extends ListenerAdapter{
         }
         
         //Command Wheatley to speak a line
-        if (message.equalsIgnoreCase("!line")){
+        else if (message.equalsIgnoreCase("!line")){
             ArrayList<String> reply = new ArrayList<>();
             String response = " ";
             for (int i=0;i<3;i++){
@@ -184,15 +198,19 @@ public class MarkovInterface extends ListenerAdapter{
     
     public ArrayList<String> getBotList() throws FileNotFoundException{
         try{
-            ArrayList<String> bots = new ArrayList<String>();
-            File fXmlFile = new File("SettingMarkov.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("ignorebots").item(0);
-            for (int i=0;i<eElement.getElementsByTagName("bot").getLength();i++)
-            {
-                bots.add(eElement.getElementsByTagName("bot").item(i).getTextContent());
-            }
+            ArrayList<String> bots = loadTextAsList(botListFileName);
+            
+//            File fXmlFile = new File("SettingMarkov.xml");
+//            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+//            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("ignorebots").item(0);
+//            for (int i=0;i<eElement.getElementsByTagName("bot").getLength();i++)
+//            {
+//                bots.add(eElement.getElementsByTagName("bot").item(i).getTextContent());
+//            }
+            if (bots == null)
+                return (new ArrayList<String>());
+            
             return (bots);
         }
         catch (Exception ex) {
