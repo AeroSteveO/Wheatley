@@ -74,21 +74,27 @@ public class TextUtils {
             return null;
         }
     }
-    public static ArrayList<String> loadTextAsList(String filename) throws FileNotFoundException{
+    public static ArrayList<String> loadTextAsList(String filename) {
         return loadTextAsList(new File(filename));
     }
     
-    public static ArrayList<String> loadTextAsList(File file) throws FileNotFoundException{
+    public static ArrayList<String> loadTextAsList(File file) {
         try{
+            
+            if(!file.exists()){
+                file.createNewFile();
+                return null;
+            }
+            
             Scanner wordfile = new Scanner(file);
 //new File("wordlist.txt")
             ArrayList<String> wordls = new ArrayList<String>();
             while (wordfile.hasNext()){
-                wordls.add(wordfile.nextLine());
+                wordls.add(wordfile.nextLine().trim());
             }
             wordfile.close();
             return (wordls);
-        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
             return null;
         }
