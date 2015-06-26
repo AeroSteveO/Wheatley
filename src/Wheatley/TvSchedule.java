@@ -22,15 +22,15 @@ import org.w3c.dom.NodeList;
 /**
  *
  * @author Stephen
- *
+ * 
  * Requirements:
  * - APIs
- *    jaxen-1.1.6 XML Parser
+ *    JodaTime
  * - Custom Objects
  *    N/A
  * - Linked Classes
  *    N/A
- *
+ * 
  * Activate commands with:
  *      !schedule [YYYY-MM-DD]
  *          Looks up the TV rage schedule for the given day (only shows after 8PM)
@@ -44,16 +44,37 @@ import org.w3c.dom.NodeList;
  *          Looks up the TV rage schedule for tomorrow night (shows after 8PM)
  *      !Yesterday
  *          Looks up the TV rage schedule for last night (shows after 8PM)
- *
- *
+ * 
+ * 
  * http://jaxen.org/apidocs/index.html
- *
- *
+ * 
+ * 
  */
 public class TvSchedule extends ListenerAdapter{
     ArrayList<String> nightTimes = getNightTvTimes();
     Element cache = initializeCache();
     DateTime cacheExpiration = new DateTime().plusDays(1);
+    String key = "***REMOVED***";
+    ArrayList<String> whiteList = getWhiteList();
+    // <Matthias> CW, ABC, CBS, NBC, and FOX for the main networks
+    //<Matthias> TBS, TNT, SYFY, AMC, showtime, hbo
+    
+    private ArrayList<String> getWhiteList(){
+        ArrayList<String> whiteList = new ArrayList<>();
+        whiteList.add("cw");
+        whiteList.add("abc");
+        whiteList.add("cbs");
+        whiteList.add("nbc");
+        whiteList.add("fox");
+        whiteList.add("tbs");
+        whiteList.add("tnt");
+        whiteList.add("syfy");
+        whiteList.add("amc");
+        whiteList.add("showtime");
+        whiteList.add("hbo");
+
+        return whiteList;
+    }
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -141,7 +162,7 @@ public class TvSchedule extends ListenerAdapter{
     // Provides the earliest date available in the TV rage api (in YYYY-MM-DD format)
     private String earliestDate(){
         Element baseElement = getTvRageData();
-//        ArrayList<String> schedule = new ArrayList<>();
+        ArrayList<String> schedule = new ArrayList<>();
         NodeList day = baseElement.getElementsByTagName("DAY");
         
         String minimumDate = day.item(0).getAttributes().getNamedItem("attr").getNodeValue();
@@ -151,7 +172,7 @@ public class TvSchedule extends ListenerAdapter{
     //Provides the last date available in the TV rage api (in YYYY-MM-DD format)
     private String lastDate(){
         Element baseElement = getTvRageData();
-//        ArrayList<String> schedule = new ArrayList<>();
+        ArrayList<String> schedule = new ArrayList<>();
         NodeList day = baseElement.getElementsByTagName("DAY");
         
         String minimumDate = day.item(day.getLength()-1).getAttributes().getNamedItem("attr").getNodeValue();
@@ -172,40 +193,44 @@ public class TvSchedule extends ListenerAdapter{
                 found = day.item(i).getAttributes().getNamedItem("attr").getNodeValue().equalsIgnoreCase(today);
                 if (found){
                     dayLocation=i;
-//                    System.out.println("FOUND "+i);
                 }
                 else
                     i++;
             }
-//            System.out.println(dayLocation);
         }
         
         Element dayElement = (Element) baseElement.getElementsByTagName("DAY").item(dayLocation);
-//                event.getBot().sendIRC().message(event.getChannel().getName(), "Shows for "+today);
         
         for(int i=0;i<dayElement.getElementsByTagName("time").getLength();i++){
             for(int o=0;o<nightTimes.size();o++){
-//                        System.out.println(dayElement.getElementsByTagName("time").item(i).getNodeName());
-//                        System.out.println(dayElement.getElementsByTagName("time").item(i).getAttributes().getNamedItem("attr").getNodeValue());
                 if (dayElement.getElementsByTagName("time").item(i).getAttributes().getNamedItem("attr").getNodeValue().matches(nightTimes.get(o))){
+                    
                     Element showElement = (Element) dayElement.getElementsByTagName("time").item(i);
-                    Element show = (Element) showElement.getElementsByTagName("show").item(0);
-                    
-                    String network = showElement.getElementsByTagName("network").item(0).getTextContent();
-                    String showName = show.getAttributes().getNamedItem("name").getNodeValue();
                     String showTime = dayElement.getElementsByTagName("time").item(i).getAttributes().getNamedItem("attr").getNodeValue();
-                    String showEpisode = showElement.getElementsByTagName("ep").item(0).getTextContent();
                     
-                    if (showEpisode.matches("[0-9]+x[0-9]+"))
-                        showEpisode = "S" + showEpisode.replaceAll("x", "E");
                     
-                    showTime = prettifyShowTime(today,showTime);
-                    
-                    if (showTime==(null)){
-                        return null;
+                    for (int c=0;c < showElement.getElementsByTagName("show").getLength(); c++) {
+                        
+                        Element show = (Element) showElement.getElementsByTagName("show").item(c);
+                        
+                        String network = showElement.getElementsByTagName("network").item(c).getTextContent();
+                        String showName = show.getAttributes().getNamedItem("name").getNodeValue();
+                        
+                        String showEpisode = show.getElementsByTagName("ep").item(0).getTextContent();
+                        
+                        if (showEpisode.matches("[0-9]+x[0-9]+"))
+                            showEpisode = "S" + showEpisode.replaceAll("x", "E");
+                        
+                        showTime = prettifyShowTime(today,showTime);
+                        
+                        if (showTime==(null)){
+                            return null;
+                        }
+                        else if (whiteList.contains(network.toLowerCase())){
+                            String showTitle = showElement.getElementsByTagName("title").item(c).getTextContent();
+                            schedule.add("["+showTime+"] "+Colors.RED+" ("+network+") "+Colors.NORMAL+Colors.BOLD+showName + ": "+Colors.NORMAL+showTitle + Colors.GREEN + " ("+showEpisode+")" + Colors.NORMAL);
+                        }
                     }
-                    String showTitle = showElement.getElementsByTagName("title").item(0).getTextContent();
-                    schedule.add("["+showTime+"] "+Colors.RED+" ("+network+") "+Colors.NORMAL+Colors.BOLD+showName + ": "+Colors.NORMAL+showTitle + Colors.GREEN + " ("+showEpisode+")" + Colors.NORMAL);
                 }
             }
         }
@@ -233,7 +258,7 @@ public class TvSchedule extends ListenerAdapter{
             try{
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                Element baseElement = (Element) dBuilder.parse("http://services.tvrage.com/feeds/fullschedule.php?country=US").getElementsByTagName("schedule").item(0);
+                Element baseElement = (Element) dBuilder.parse("http://services.tvrage.com/feeds/fullschedule.php" + "?key="+key).getElementsByTagName("schedule").item(0);
                 return baseElement;
             } catch(Exception ex){
                 return null;
@@ -256,7 +281,7 @@ public class TvSchedule extends ListenerAdapter{
         try{
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Element baseElement = (Element) dBuilder.parse("http://services.tvrage.com/feeds/fullschedule.php?country=US").getElementsByTagName("schedule").item(0);
+            Element baseElement = (Element) dBuilder.parse("http://services.tvrage.com/feeds/fullschedule.php" + "?key="+key).getElementsByTagName("schedule").item(0);
             return baseElement;
         } catch(Exception ex){
             return null;
