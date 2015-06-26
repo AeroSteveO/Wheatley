@@ -8,6 +8,7 @@ package Wheatley;
 
 import java.io.File;
 import java.util.ArrayList;
+import org.joda.time.DateTime;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ConnectEvent;
@@ -62,14 +63,14 @@ public class WhatPre extends ListenerAdapter {
                 }
             }
             
-            if (bands.contains(artist.toLowerCase()) && (year >= 2013) && !announcedPres.contains(artist.toLowerCase() + " - " + album.toLowerCase())){
+            if (bands.contains(artist.toLowerCase()) && (year >= (DateTime.now().getYear() - 2)) && !announcedPres.contains(artist.toLowerCase() + " - " + album.toLowerCase())){
                 Global.bot.sendIRC().message(Global.mainChan,Colors.BOLD+"ARTIST: "+Colors.NORMAL+artist+Colors.BOLD+" ALBUM: "+Colors.NORMAL+album+Colors.BOLD+" Year: "+Colors.NORMAL+year+Colors.BOLD+" Type: "+Colors.NORMAL+type);
                 announcedPres.add(artist.toLowerCase() + " - " + album.toLowerCase());
             }
         }
         if (event.getChannel().getName().equalsIgnoreCase(Global.mainChan)){
             
-            if(message.equalsIgnoreCase(Global.commandPrefix+"load")&&event.getUser().getNick().equalsIgnoreCase("***REMOVED***")){
+            if(message.equalsIgnoreCase(Global.commandPrefix+"loadmusic")&&event.getUser().getNick().equalsIgnoreCase("***REMOVED***")){
                 bands = loadBandNamesFromFolders();
                 event.respond("Band folder names reloaded");
             }
