@@ -77,11 +77,7 @@ public class LaserCMD implements Command {
                 parts = setup1();
                 a = parts[0] + " " + it + " " + parts[1] + " lasers";
                 break;
-            case 2:
-                parts = setup2();
-                a = parts[0] + " lasers " + parts[1] + " " + it;
-                break;
-            case 3:
+            case 2: case 3:
                 parts = setup2();
                 a = parts[0] + " lasers " + parts[1] + " " + it;
                 break;

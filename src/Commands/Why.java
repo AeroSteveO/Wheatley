@@ -68,33 +68,11 @@ public class Why implements Command{
             case 1:
                 a=special_case();
                 break;
-            case 2:
+            case 2: case 3: case 4:
                 a=phrase();
                 break;
-            case 3:
-                a=phrase();
-                break;
-            case 4:
-                a=phrase();
-                break;
-            case 5:
+            default:
                 a=sentence();
-                break;
-            case 6:
-                a=sentence();
-                break;
-            case 7:
-                a=sentence();
-                break;
-            case 8:
-                a=sentence();
-                break;
-            case 9:
-                a=sentence();
-                break;
-            case 10:
-                a=sentence();
-                break;
         }
 //                System.out.println(a);
         if (event instanceof MessageEvent){
@@ -198,19 +176,10 @@ public class Why implements Command{
     private static String adjective_phrase() {
         String a = new String();
         switch((int) (Math.random()*6+1)) {
-            case 1:
+            case 1: case 2: case 3:
                 a = adjective();
                 break;
-            case 2:
-                a = adjective();
-                break;
-            case 3:
-                a = adjective();
-                break;
-            case 4:
-                a = adjective_phrase() + " and " + adjective_phrase();
-                break;
-            case 5:
+            case 4: case 5:
                 a = adjective_phrase() + " and " + adjective_phrase();
                 break;
             case 6:
@@ -225,10 +194,7 @@ public class Why implements Command{
             case 1:
                 a = transitive_verb() + " " + oobject();
                 break;
-            case 2:
-                a = intrasitive_verb();
-                break;
-            case 3:
+            case 2: case 3:
                 a = intrasitive_verb();
                 break;
         }
@@ -240,31 +206,7 @@ public class Why implements Command{
             case 1:
                 a = accusative_pronoun();
                 break;
-            case 2:
-                a = article() + " " + noun_phrase();
-                break;
-            case 3:
-                a = article() + " " + noun_phrase();
-                break;
-            case 4:
-                a = article() + " " + noun_phrase();
-                break;
-            case 5:
-                a = article() + " " + noun_phrase();
-                break;
-            case 6:
-                a = article() + " " + noun_phrase();
-                break;
-            case 7:
-                a = article() + " " + noun_phrase();
-                break;
-            case 8:
-                a = article() + " " + noun_phrase();
-                break;
-            case 9:
-                a = article() + " " + noun_phrase();
-                break;
-            case 10:
+            default:
                 a = article() + " " + noun_phrase();
                 break;
         }
