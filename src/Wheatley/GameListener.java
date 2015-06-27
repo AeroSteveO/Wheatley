@@ -6,7 +6,8 @@
 
 package Wheatley;
 
-import GameCommands.Money;
+import GameCommands.MoneyCMD;
+import GameCommands.PurchaseTimeBomb;
 import Objects.Command;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +28,15 @@ public class GameListener extends ListenerAdapter{
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.startsWith(Global.commandPrefix)){
-            String command = message.split(Global.commandPrefix)[1];
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
+            String command = message.toLowerCase().split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
-            
             for (int i=0;i<commandList.size();i++){
                 if (commandList.get(i).commandTerms().contains(cmdSplit[0])){
                     commandList.get(i).processCommand(event);
                 }
             }
         }
-        
         else if (message.startsWith(Global.mainNick+", ")){
 //            String command = message.split(Global.commandPrefix)[1];
 //            String[] cmdSplit = command.split(" ");
@@ -54,10 +53,9 @@ public class GameListener extends ListenerAdapter{
     public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
-        if (message.startsWith(Global.commandPrefix)){
+        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
-            
             for (int i=0;i<commandList.size();i++){
                 if (commandList.get(i).commandTerms().contains(cmdSplit[0])){
                     commandList.get(i).processCommand(event);
@@ -75,8 +73,8 @@ public class GameListener extends ListenerAdapter{
     
     private List<Command> getCommandList() {
         List<Command> listOfCommands = new ArrayList<>();
-        listOfCommands.add(new Money());
-//        listOfCommands.add(new Commands.Why());
+//        listOfCommands.add(new MoneyCMD());
+//        listOfCommands.add(new PurchaseTimeBomb());
         
         return(listOfCommands);
     }

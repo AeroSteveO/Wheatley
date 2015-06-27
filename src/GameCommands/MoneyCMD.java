@@ -19,7 +19,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *
  * @author Stephen
  */
-public class Money implements Command{
+public class MoneyCMD implements Command{
     
     @Override
     public void processCommand(Event event){
