@@ -6,7 +6,8 @@
 
 package GameCommands;
 
-import Objects.Command;
+import Objects.CommandGame;
+import Objects.CommandMetaData;
 import static Wheatley.GameControl.scores;
 import Wheatley.Global;
 import java.util.ArrayList;
@@ -19,27 +20,20 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *
  * @author Stephen
  */
-public class MoneyCMD implements Command{
+public class MoneyCMD implements CommandGame {
+    @Override
+    public boolean isGame() {
+        return false;
+    }
+    
     
     @Override
-    public void processCommand(Event event){
-        String message = new String();
-        String caller = new String();
-        if (event instanceof MessageEvent){
-            MessageEvent mEvent = (MessageEvent) event;
-            message = Colors.removeFormattingAndColors(mEvent.getMessage());
-            caller = mEvent.getUser().getNick();
-        }
-        else if (event instanceof PrivateMessageEvent){
-            PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
-            message = Colors.removeFormattingAndColors(pmEvent.getMessage());
-            caller = pmEvent.getUser().getNick();
-        }
-        else{
-            return;
-        }
-        String command = message.split(Global.commandPrefix)[1];
-        String[] cmdSplit = command.split(" ");
+    public void processCommand(MessageEvent event){
+        
+        CommandMetaData commandData = new CommandMetaData(event, true);
+        String caller = commandData.getCaller();
+        String command = commandData.getCommand();
+        String[] cmdSplit = commandData.getCommandSplit();
         
         if (cmdSplit.length==1){ // Get your current score
             int userScore = scores.getScore(caller);
@@ -61,20 +55,8 @@ public class MoneyCMD implements Command{
         }
         
         else if (cmdSplit.length==3&&caller.equalsIgnoreCase(Global.botOwner)){
-            boolean isVerified = false;
-            String responseLocation = "";
-            
-            if (event instanceof PrivateMessageEvent){
-                PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
-                isVerified = pmEvent.getUser().isVerified();
-                responseLocation = pmEvent.getUser().getNick();
-            }
-            
-            else if (event instanceof MessageEvent){
-                MessageEvent mEvent = (MessageEvent) event;
-                isVerified = mEvent.getUser().isVerified();
-                responseLocation = mEvent.getChannel().getName();
-            }
+            boolean isVerified = commandData.isVerifiedBotOwner();
+            String responseLocation = commandData.respondToCallerOrMessageChan();
             
             if(isVerified) {
                 
