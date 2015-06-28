@@ -47,7 +47,7 @@ public class GameBomb extends ListenerAdapter {
     int loss = 50;
     
     @Override
-    public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
+    public void onMessage(MessageEvent event) throws InterruptedException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         
         if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
@@ -137,7 +137,7 @@ public class GameBomb extends ListenerAdapter {
             }
         }
     }
-    public ArrayList<String> getColorList() throws FileNotFoundException{
+    public ArrayList<String> getColorList() {
         try{
             Scanner wordfile = new Scanner(new File("colorlist.txt"));
             ArrayList<String> colorls = new ArrayList<String>();
