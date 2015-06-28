@@ -69,7 +69,6 @@ public class IgniteCMD implements Command {
         }
         String chat = simpleFront()+ " " + it + " " + simpleEnd();
         event.getBot().sendIRC().message(respondTo, chat.toUpperCase());
-        
     }
     
     public static String simpleFront() {
@@ -126,5 +125,4 @@ public class IgniteCMD implements Command {
         a.add("with a carebearstare");
         return (a.get((int) (Math.random()*a.size()-1)));
     }
-    
 }
