@@ -38,7 +38,7 @@ public class CommandListener extends ListenerAdapter{
                 }
             }
         }
-        else if (message.startsWith(Global.mainNick+", ")){
+        else if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")){
 //            String command = message.split(Global.commandPrefix)[1];
 //            String[] cmdSplit = command.split(" ");
             
