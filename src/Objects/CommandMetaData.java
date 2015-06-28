@@ -68,12 +68,13 @@ public class CommandMetaData {
     private String eventType;
     private String channel = null; // This channel is only changed if the event is a message event
     private String refChan = null; // This channel is only changed if one is in the input string
-    private boolean isVerified = false;
-    private boolean isBotOwner = false;
-    private boolean isChanOwner = false;
-    private String message;
-    private String command;
-    private String[] cmdSplit;
+    private boolean isVerified = false; // True if the User is Registered and Identified
+    private boolean isBotOwner = false; // True if the User is using the Bot Owners Nick
+    private boolean isChanOwner = false; // True if the User is the channel owner (+qo)
+    private String message; // The message of the event
+    private String command; // If the message starts with !, it is the word concantonated to the !
+    private String[] cmdSplit; // Message split by spaces
+    boolean isSupportedEventType = true;
     
     public CommandMetaData(Event event, boolean verify){
         this.event = event;
@@ -95,7 +96,7 @@ public class CommandMetaData {
                 refChan ="#" + message.split("#")[0].split(" ")[0];
             }
             
-            getCommands(); // REPLACES THE FOLLOWING IF STATEMENT
+            getCommands();
         }// END MESSAGE EVENT SPECIFIC PARSING
         
         else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
@@ -109,6 +110,10 @@ public class CommandMetaData {
             }
             getCommands();
         }// END PRIVATE MESSAGE EVENT SPECIFIC PARSING
+        
+        else {
+            isSupportedEventType = false;
+        }
     }
     
     private void processFullEvent(){
@@ -153,6 +158,9 @@ public class CommandMetaData {
             }
             getCommands();
         }// END PRIVATE MESSAGE EVENT SPECIFIC PARSING
+        else {
+            isSupportedEventType = false;
+        }
     }
     
     private void getCommands(){
@@ -163,6 +171,10 @@ public class CommandMetaData {
             command = message.split(Global.commandPrefix)[1];
             cmdSplit = command.split(" ");
         }
+    }
+    
+    public boolean isSupportedEventType() {
+        return isSupportedEventType;
     }
     
     public boolean isVerifiedBotOwner(){
