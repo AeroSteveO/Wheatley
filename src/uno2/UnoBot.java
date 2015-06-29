@@ -135,11 +135,7 @@ public class UnoBot extends ListenerAdapter {
     public void setBotOps(String[] botOps) {
         this.botOps = botOps;
     }
-    
-//    public void setUpdateScript(String updateScript) {
-//        this.updateScript = updateScript;
-//    }
-    
+        
     public boolean isExtreme() {
         return this.extreme;
     }
@@ -454,7 +450,7 @@ public class UnoBot extends ListenerAdapter {
         
         
         //TELL
-        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "tell") && messagesEnabled == true) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "tell") && messagesEnabled) {
             String[] msgSplit = event.getMessage().split(" ", 3);
             this.msg.setMessage(sender, tokens[1], msgSplit[2]);
             event.getBot().sendIRC().message(channel, "ok i will tell them.");
@@ -468,7 +464,7 @@ public class UnoBot extends ListenerAdapter {
                         + "data to a file");
             }
         } //MESSAGES
-        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "messages") && messagesEnabled == true) {
+        else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "messages") && messagesEnabled) {
             event.getBot().sendIRC().message(channel, msg.forUserToString());
         } //SCORE
         else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "score")) {
@@ -873,7 +869,7 @@ public class UnoBot extends ListenerAdapter {
             this.currChannel = channel;
         }
         
-        if (messagesEnabled == true) {
+        if (messagesEnabled) {
             if (this.msg.containsForUser(sender)) {
                 while (msg.containsForUser(sender)) {
                     event.getBot().sendIRC().message(channel, msg.getMessage(sender));
@@ -895,7 +891,7 @@ public class UnoBot extends ListenerAdapter {
     public void onUserList(UserListEvent event) throws Exception {
         String channel = event.getChannel().getName();
         
-        if (messagesEnabled == true) {
+        if (messagesEnabled) {
             ImmutableSortedSet users = event.getUsers();
             Iterator<User> iterator = users.iterator();
             
@@ -962,7 +958,7 @@ public class UnoBot extends ListenerAdapter {
     
 //    @Override
 //    public void onDisconnect(DisconnectEvent event) throws Exception {
-//        if (manageConnectivity == true) {
+//        if (manageConnectivity) {
 //            System.out.println("dissconnected!!");
 //            while (!event.getBot().isConnected()) {
 //                try {
