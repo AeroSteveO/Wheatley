@@ -42,18 +42,7 @@ public class WeatherCache {
             return(cache.get(idx));
         }
     }
-    
-    public ArrayList<String>getAllAlertTypes(String locationString, String type){
-        ArrayList<String> alertTypes = new ArrayList<>();
-        List<WeatherCacheInterface> alerts = getCacheArray(locationString, type);
         
-        for (int i=0;i<alerts.size();i++){
-//            alertTypes.add(alerts.get(i).getAlertType());
-        }
-        
-        return(alertTypes);
-    }
-    
     public ArrayList<String> getFormattedAlertArray(String locationString, String type){
         ArrayList<String> formattedAlerts = new ArrayList<>();
         List<WeatherCacheInterface> alerts = getCacheArray(locationString, "alert");
