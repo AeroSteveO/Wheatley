@@ -14,9 +14,9 @@ import org.joda.time.DateTime;
  * @author Stephen
  */
 public abstract class WeatherBasic {
-    public String zip = new String();       // ALL Cache Types
-    public DateTime expiration;                   // ALL Cache Types
-    public String cityState = new String(); // ALL Cache Types
+    public String zip = new String();       // Zip code of the city
+    public DateTime expiration;             // Expiration time of the cache entry
+    public String cityState = new String(); // City, State (two letter state)
 
     public String getZip(){
         return(zip);
@@ -26,6 +26,7 @@ public abstract class WeatherBasic {
         return cityState;
     }
 
+    // Creates an array containing the city, state, and zip all as separate entries
     public ArrayList<String> getLocationData(){
         ArrayList<String> locationData = new ArrayList<>();
         
@@ -36,6 +37,7 @@ public abstract class WeatherBasic {
         return locationData;
     }
     
+    // Returns if the cache entry is after its expiration time
     public boolean isAfterExpiration(){
         if (new DateTime().isAfter(expiration)){
             return(true);
@@ -47,6 +49,7 @@ public abstract class WeatherBasic {
         return (locationStrings.get(2).equalsIgnoreCase(zip)||(locationStrings.get(0).equalsIgnoreCase(cityState.split(",")[0].trim())&&locationStrings.get(1).equalsIgnoreCase(cityState.split(",")[1].trim())));
     }
     
+    // Returns true if either part of the city state string contains an error
     public boolean containsError(){
         return (cityState.toLowerCase().contains("error")||zip.toLowerCase().contains("error"));
     }

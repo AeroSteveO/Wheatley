@@ -15,13 +15,13 @@ import org.pircbotx.Colors;
  * @author Stephen
  */
 public class WeatherForecast extends WeatherBasic implements WeatherCacheInterface{
-    private String observationTime; // FORECAST AND WEATHER
-    private ArrayList<String> weekDay; // FORECAST
-    private ArrayList<String> highF;   // FORECAST
-    private ArrayList<String> highC;   // FORECAST
-    private ArrayList<String> lowF;    // FORECAST
-    private ArrayList<String> lowC;    // FORECAST
-    private ArrayList<String> forecastConditions; // FORECAST
+    private String observationTime;    // Time the weather was last updated
+    private ArrayList<String> weekDay; // Day of the week
+    private ArrayList<String> highF;   // array containing all the high temps (F) for the week
+    private ArrayList<String> highC;   // array containing all the high temps (C) for the week
+    private ArrayList<String> lowF;    // array containing all the low temps (F) for the week
+    private ArrayList<String> lowC;    // array containing all the low temps (C) for the week
+    private ArrayList<String> forecastConditions; // Array contiaining the forecast conditions for each day of the week
     
     public WeatherForecast(String inputLocation, String inputZip, ArrayList<String> highTempF, ArrayList<String> lowTempF, ArrayList<String> highTempC, ArrayList<String> lowTempC, ArrayList<String> weather, ArrayList<String> day, String pretty){
         this.cityState = inputLocation;
@@ -46,8 +46,8 @@ public class WeatherForecast extends WeatherBasic implements WeatherCacheInterfa
         String response = "";
         // FORECAST CACHE FORMATTED RESPONSE
         response =(Colors.BOLD+this.cityState+" Forecast "+Colors.NORMAL+"(High/Low); "+Colors.BOLD+"Updated: "+Colors.NORMAL+this.observationTime.split("on")[0].trim()+"; ");
-        //weekDay.size()
-        for (int i=0;i<7;i++){
+        
+        for (int i=0;i<7;i++){ // Add 7 days to the response (can change for more or less)
             response = response+(Colors.BOLD+this.weekDay.get(i)+": "+Colors.NORMAL+this.forecastConditions.get(i)+", "+this.highF.get(i)+"/"+this.lowF.get(i)+"°F ("+this.highC.get(i)+"/"+this.lowC.get(i)+"°C); ");
         }
         return response;

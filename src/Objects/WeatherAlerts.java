@@ -15,9 +15,9 @@ import org.pircbotx.Colors;
  * @author Stephen
  */
 public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface{
-    private String alertType;     // ALERT
-    private String alertExpires;  // ALERT
-    private String alertText;     // ALERT
+    private String alertType;     // Type of the alert (simple type)
+    private String alertExpires;  // Expiration of the alert (string from wunderground)
+    private String alertText;     // The full text of the alert
     
     public WeatherAlerts(String inputLocation, String inputZip, String alertDescription, String alertExpiration, String alertText){
         this.cityState = inputLocation;
@@ -48,21 +48,17 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
         ArrayList<String> respond = new ArrayList<>();
         
         if (!this.alertType.equalsIgnoreCase("Error Parsing Alerts")&&!this.alertType.equalsIgnoreCase("No Current Weather Alerts")){
-//                for (int i=0;i<alertText.size();i++){
-//                response = response + "Alert Full Text: "+Colors.NORMAL+response+alertText+ " !";
-            String[] alertLines = alertText.split("\\u000A");
+        // ^No need to try and get an extended response for a dud alert
             
+            String[] alertLines = alertText.split("\\u000A"); // split by new lines in the alert
             respond.add(Colors.BOLD+Colors.RED+"Alert Full Text: "+Colors.NORMAL + alertLines[0]);
             
             for (int i=1;i<alertLines.length;i++){
                 respond.add(alertLines[i]);
             }
         }
-//        else if (this.alertType.equalsIgnoreCase("No Current Weather Alerts")){
-//            respond.add("No Current Weather Alerts");
-//        }
         else{
-            respond.add(alertType);
+            respond.add(alertType); // Return that theres no alert extended response if there is none
         }
         return (respond);
         
@@ -77,7 +73,7 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
     
     public void updateExpiration(String expiration){
         this.alertExpires = expiration;
-        this.expiration = new DateTime().plusMinutes(30);
+        this.expiration = new DateTime().plusMinutes(30); // updates the expiration of the alert cache entry if its still valid
     }
 
     @Override
