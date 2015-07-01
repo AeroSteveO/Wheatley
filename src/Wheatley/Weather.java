@@ -178,14 +178,14 @@ public class Weather extends ListenerAdapter{
                     
                     String search = getSearchStringForCacheSearch(location);
                     
-                    if(localCache.size()>0&&localCache.containsEntry(search,"weather")){
+                    if(!localCache.isEmpty() && localCache.containsEntry(search,"weather")){
                         event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"weather").getFormattedResponse());
                     }
                     else{
                         event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentWeather(location));
                     }
                     
-                    if(localCache.size()>0&&localCache.containsEntry(search,"alert")){
+                    if(!localCache.isEmpty() && localCache.containsEntry(search,"alert")){
                         ArrayList<String> alertResponses = localCache.getFormattedAlertArray(search,"alert");
                         if (!alertResponses.get(0).equalsIgnoreCase("No Current Weather Alerts"))
                             for (int i=0;i<alertResponses.size();i++){
@@ -213,7 +213,7 @@ public class Weather extends ListenerAdapter{
                     
                     String search = getSearchStringForCacheSearch(location);
                     
-                    if(localCache.size()>0&&localCache.containsEntry(search,"forecast")){
+                    if(!localCache.isEmpty() && localCache.containsEntry(search,"forecast")){
                         event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"forecast").getFormattedResponse());
                     }
                     else{
@@ -226,7 +226,7 @@ public class Weather extends ListenerAdapter{
                     String search;
                     search = getSearchStringForCacheSearch(location);
                     
-                    if(localCache.size()>0&&localCache.containsEntry(search,"alert")){ // START ALERT CACHE PROCESSING
+                    if(!localCache.isEmpty() && localCache.containsEntry(search,"alert")){ // START ALERT CACHE PROCESSING
                         if (!message.matches("(?i).*full.*")){ // IF COMMAND IS NOT FOR THE FULL ALERT TEXT
                             ArrayList<String> alertResponses = localCache.getFormattedAlertArray(search,"alert");
                             
@@ -449,17 +449,17 @@ public class Weather extends ListenerAdapter{
                     else{
                         for (int j=0;j<newAlerts.size();j++){
                             if (newAlerts.get(j) instanceof WeatherAlerts){
-                                boolean isAlertNew = true;
-                                for (int i=0;i<localCache.size();i++){
-                                    
-                                    if (((WeatherAlerts) localCache.get(i)).getAlertType().equalsIgnoreCase(((WeatherAlerts) newAlerts.get(j)).getAlertType())){
-                                        ((WeatherAlerts) localCache.get(i)).updateExpiration(((WeatherAlerts) newAlerts.get(j)).getExpiration());
-                                        isAlertNew=false;
-                                    }
-                                }
-                                if (isAlertNew){
+//                                boolean isAlertNew = true;
+//                                for (int i=0;i<localCache.size();i++){
+//                                    
+//                                    if (((WeatherAlerts) localCache.get(i)).getAlertType().equalsIgnoreCase(((WeatherAlerts) newAlerts.get(j)).getAlertType())){
+//                                        ((WeatherAlerts) localCache.get(i)).updateExpiration(((WeatherAlerts) newAlerts.get(j)).getExpiration());
+//                                        isAlertNew=false;
+//                                    }
+//                                }
+                                if (localCache.addNewAlert((WeatherAlerts) newAlerts.get(j))){
 //                                WeatherAlerts newAlert = new WeatherAlerts(cityState, zip,alertType.get(j), alertExpiration.get(j), alertText.get(j));
-                                    localCache.add(newAlerts.get(j));
+//                                    localCache.add(newAlerts.get(j));
                                     Global.bot.sendIRC().message(channel,Colors.RED+Colors.BOLD+"WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+alertType.get(j)+Colors.BOLD+" Ending: "+Colors.NORMAL+alertExpiration.get(j)+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alerts full [zip]' for the full alert text");
                                 }
                             }

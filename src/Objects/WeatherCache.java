@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.joda.time.DateTime;
 import org.pircbotx.Colors;
 
 /**
@@ -25,8 +26,11 @@ public class WeatherCache {
     public void clear(){
         this.cache.clear();
     }
-    public int size(){
-        return (this.cache.size());
+//    public int size(){
+//        return (this.cache.size());
+//    }
+    public boolean isEmpty() {
+        return (this.cache.isEmpty());
     }
     public WeatherCacheInterface getCacheEntry(String locationString, String type){
         purge();
@@ -39,7 +43,28 @@ public class WeatherCache {
                     return(cache.get(idx));
                 }
             }
-            return(cache.get(idx));
+            if (idx != -1)
+                return(cache.get(idx));
+            else
+                return null;
+        }
+    }
+    public WeatherCacheInterface getCacheEntry(WeatherCacheInterface cacheEntry, String type) {
+        purge();
+        int idx = -1;
+        
+        synchronized(cache){
+            for(int i = 0; i < cache.size(); i++) {
+                if ((cache.get(i).getZip().equalsIgnoreCase(cacheEntry.getZip()) || cache.get(i).getCityState().equalsIgnoreCase(cacheEntry.getCityState()))
+                        && cache.get(i).getType().equalsIgnoreCase(type)) {
+                    idx = i;
+                    return(cache.get(idx));
+                }
+            }
+            if (idx != -1)
+                return(cache.get(idx));
+            else
+                return null;
         }
     }
         
@@ -58,10 +83,12 @@ public class WeatherCache {
         
         return(formattedAlerts);
     }
-    
-    public WeatherCacheInterface get(int i){
-        return cache.get(i);
-    }
+
+// This is a bad method and it should feel bad, looping through the cache and grabbing from outside
+// the object is a no-no, since it won't be synchronized
+//    public WeatherCacheInterface get(int i){
+//        return cache.get(i);
+//    }
     
     public ArrayList<String> getAllAlertsLongResponse(String locationString){
         ArrayList<String> formattedAlerts = new ArrayList<>();
@@ -72,6 +99,22 @@ public class WeatherCache {
             
         }
         return(formattedAlerts);
+    }
+    
+    public boolean addNewAlert(WeatherAlerts newAlert) {
+        List<WeatherCacheInterface> currentAlerts = getCacheArray(newAlert.getCityState(), "alert");
+        //(ArrayList<WeatherAlerts>)
+        for (int i=0; i < currentAlerts.size(); i++) {
+            if (((WeatherAlerts) currentAlerts.get(i)).getAlertType().equalsIgnoreCase(newAlert.getAlertType()) && currentAlerts.get(i).getZip().equals(newAlert.getZip())) {
+                ((WeatherAlerts) currentAlerts.get(i)).updateExpiration(newAlert.getExpiration());
+                return false;
+            }
+            else {
+                cache.add(newAlert);
+                return true;
+            }
+        }
+        return false;
     }
     
     public List<WeatherCacheInterface> getCacheArray(String locationString, String type){
