@@ -7,7 +7,6 @@
 package GameCommands;
 
 import Objects.Command;
-import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.hooks.Event;
 

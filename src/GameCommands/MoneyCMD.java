@@ -11,10 +11,7 @@ import Objects.CommandMetaData;
 import static Wheatley.GameControl.scores;
 import Wheatley.Global;
 import java.util.ArrayList;
-import org.pircbotx.Colors;
-import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 /**
  *
