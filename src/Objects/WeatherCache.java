@@ -108,11 +108,12 @@ public class WeatherCache {
             return(false);
         }
     }
+    
+    // Removes all cache entries that are past their expiration
     private void purge(){
         synchronized(cache){
             for (int i=0;i<cache.size();i++){
                 if(cache.get(i).isAfterExpiration()){
-//                    System.out.println("REMOVED: "+cache.get(i).getType()+" "+cache.get(i).getZip());
                     cache.remove(i);
                     i--;
                 }
