@@ -6,11 +6,11 @@
 
 package Wheatley;
 
-import Objects.WeatherAlerts;
-import Objects.WeatherCache;
-import Objects.WeatherCacheInterface;
-import Objects.WeatherConditions;
-import Objects.WeatherForecast;
+import Objects.Weather.WeatherAlerts;
+import Objects.Weather.WeatherCache;
+import Objects.Weather.WeatherCacheInterface;
+import Objects.Weather.WeatherConditions;
+import Objects.Weather.WeatherForecast;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
