@@ -953,7 +953,6 @@ public class UnoBot extends ListenerAdapter {
             this.cheating = !this.cheating;
             event.getBot().sendIRC().message(sender, "Cheat now: " + this.cheating);
         }
-        System.out.println(this.currChannel);
     }
     
 //    @Override
