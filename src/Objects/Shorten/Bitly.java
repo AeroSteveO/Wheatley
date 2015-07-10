@@ -11,6 +11,7 @@ import java.net.URLEncoder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.pircbotx.Colors;
 
 /**
  *
@@ -44,7 +45,9 @@ public class Bitly implements ShortenerInterface {
     public boolean isShortIdentifier(String id) {
         return id.equalsIgnoreCase("b");
     }
-    public String getShortID() {
-        return "b";
+    
+    @Override
+    public String getInfo() {
+        return (Colors.BOLD + "ID: " + Colors.NORMAL + "b " + Colors.BOLD + " Shortener: " + Colors.NORMAL + "Bit.ly");
     }
 }

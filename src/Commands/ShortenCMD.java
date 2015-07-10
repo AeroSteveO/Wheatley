@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 
 package Commands;
 
@@ -11,7 +11,6 @@ import Objects.CommandMetaData;
 import Objects.Shorten.Bitly;
 import Objects.Shorten.IsGd;
 import Objects.Shorten.ShortenerInterface;
-import Utils.BotUtils;
 import java.util.ArrayList;
 import org.pircbotx.hooks.Event;
 
@@ -35,7 +34,7 @@ public class ShortenCMD implements Command {
     @Override
     public ArrayList<String> commandTerms(){
         ArrayList<String> a = new ArrayList<>();
-        a.add("shorten"); 
+        a.add("shorten");
         return a;
     }
     
@@ -51,7 +50,7 @@ public class ShortenCMD implements Command {
             try {
                 String shortenedURL = null;
                 int c = 0;
-                        
+                
                 while (shortenedURL == null && shorteners.size() > c) {
                     shortenedURL = shorteners.get(c).shorten(cmdSplit[1]);
                     c++;
@@ -74,23 +73,22 @@ public class ShortenCMD implements Command {
                 }
             }
             if(!found) {
-                String id = "";
+                event.getBot().sendIRC().notice(caller, "Shorten: Link shortener ID not found | Command should be of form \"!shorten [id] [link]\"");
                 for (int i = 0; i < shorteners.size(); i++) {
-                    id += shorteners.get(i).getShortID();
+                    event.getBot().sendIRC().notice(caller, shorteners.get(i).getInfo());
                 }
-                event.respond("Shorten: Link shortener ID not found: available ID's include: ");
+                
             }
         }
         else {
-            event.getBot().sendIRC().notice(caller, "Shorten: This function takes one URL as input, and outputs a shortened version using is.gd");
+            event.getBot().sendIRC().notice(caller, "Shorten: Command should take form of \"!shorten [id] [link]\" where the ID is an optional identifier for which link shortening tool to use");
         }
     }
-
+    
     private ArrayList<ShortenerInterface> getShorteners() {
         ArrayList<ShortenerInterface> shorteners = new ArrayList<ShortenerInterface>();
         shorteners.add(new Bitly());
         shorteners.add(new IsGd());
-        
         return shorteners;
     }
 }

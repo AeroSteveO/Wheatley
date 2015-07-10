@@ -1,13 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 
 package Objects.Shorten;
 
 import Utils.BotUtils;
 import java.io.IOException;
+import org.pircbotx.Colors;
 
 /**
  *
@@ -18,7 +19,7 @@ public class IsGd implements ShortenerInterface {
     @Override
     public String shorten(String url) {
         try {
-        return BotUtils.shortenURL(url);
+            return BotUtils.shortenURL(url);
         }
         catch (IOException ex) {
             return null;
@@ -29,7 +30,7 @@ public class IsGd implements ShortenerInterface {
     public boolean isShortIdentifier(String id) {
         return id.equalsIgnoreCase("i");
     }
-    public String getShortID() {
-        return "i";
+    public String getInfo() {
+        return (Colors.BOLD + "ID: " + Colors.NORMAL + "i " + Colors.BOLD + " Shortener: " + Colors.NORMAL + "is.gd");
     }
 }
