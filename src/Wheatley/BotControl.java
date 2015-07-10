@@ -100,36 +100,36 @@ public class BotControl extends ListenerAdapter{
 //            }
 //        }
         
-        if (message.equalsIgnoreCase("!ram")){
-            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
-                int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
-                event.getBot().sendIRC().message(event.getChannel().getName(), "I am currently using "+usedRam+"MB ram, with "+freeRam+"MB ram free");
-            }
-            else{
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
-            }
-        }
-        
-        if (message.equalsIgnoreCase("!threads")){
-            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                event.getBot().sendIRC().message(event.getChannel().getName(), "I am currently using "+Thread.activeCount()+" threads");
-            }
-            else{
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
-            }
-        }
-        
-        if (message.equalsIgnoreCase("!sysinfo")){
-            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
-                int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
-                int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
-                event.getBot().sendIRC().message(event.getChannel().getName(), Colors.BOLD+"Ram used: "+Colors.NORMAL+usedRam+"MB"+Colors.BOLD+" Ram free: "+Colors.NORMAL+freeRam+"MB"+Colors.BOLD+" Threads: "+Colors.NORMAL+Thread.activeCount());
-            }
-            else{
-                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
-            }
-        }
+//        if (message.equalsIgnoreCase("!ram")){
+//            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+//                int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
+//                int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
+//                event.getBot().sendIRC().message(event.getChannel().getName(), "I am currently using "+usedRam+"MB ram, with "+freeRam+"MB ram free");
+//            }
+//            else{
+//                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
+//            }
+//        }
+//        
+//        if (message.equalsIgnoreCase("!threads")){
+//            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+//                event.getBot().sendIRC().message(event.getChannel().getName(), "I am currently using "+Thread.activeCount()+" threads");
+//            }
+//            else{
+//                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
+//            }
+//        }
+//        
+//        if (message.equalsIgnoreCase("!sysinfo")){
+//            if(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
+//                int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
+//                int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
+//                event.getBot().sendIRC().message(event.getChannel().getName(), Colors.BOLD+"Ram used: "+Colors.NORMAL+usedRam+"MB"+Colors.BOLD+" Ram free: "+Colors.NORMAL+freeRam+"MB"+Colors.BOLD+" Threads: "+Colors.NORMAL+Thread.activeCount());
+//            }
+//            else{
+//                event.getBot().sendIRC().notice(event.getUser().getNick(), "You do not have access to this command");
+//            }
+//        }
         
 //        if (message.equalsIgnoreCase(Global.mainNick+", fix yourself")
 //                &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)
@@ -256,43 +256,43 @@ public class BotControl extends ListenerAdapter{
 //        }
     }
     //converts URL to string, primarily used to string-ify json text
-    private static String readUrl(String urlString) throws Exception {
-        BufferedReader reader = null;
-        try {
-            URL url = new URL(urlString);
-            reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            StringBuffer buffer = new StringBuffer();
-            int read;
-            char[] chars = new char[1024];
-            while ((read = reader.read(chars)) != -1)
-                buffer.append(chars, 0, read);
-            return buffer.toString();
-        } finally {
-            if (reader != null)
-                reader.close();
-        }
-    }
-    private void updateChannelsFromXML(){
-        
-        try{
-            File fXmlFile = new File("Settings.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
-            int test = Integer.parseInt(baseElement.getElementsByTagName("test").item(0).getTextContent());
-            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(test);
-            
-            
-            
-            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++){ //Add channels from XML and load into channels Object
-                
-                Global.channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
-                
-            }
-            
-        }
-        catch (Exception ex){
-            
-        }
-    }
+//    private static String readUrl(String urlString) throws Exception {
+//        BufferedReader reader = null;
+//        try {
+//            URL url = new URL(urlString);
+//            reader = new BufferedReader(new InputStreamReader(url.openStream()));
+//            StringBuffer buffer = new StringBuffer();
+//            int read;
+//            char[] chars = new char[1024];
+//            while ((read = reader.read(chars)) != -1)
+//                buffer.append(chars, 0, read);
+//            return buffer.toString();
+//        } finally {
+//            if (reader != null)
+//                reader.close();
+//        }
+//    }
+//    private void updateChannelsFromXML(){
+//        
+//        try{
+//            File fXmlFile = new File("Settings.xml");
+//            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+//            Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
+//            int test = Integer.parseInt(baseElement.getElementsByTagName("test").item(0).getTextContent());
+//            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(test);
+//            
+//            
+//            
+//            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++){ //Add channels from XML and load into channels Object
+//                
+//                Global.channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
+//                
+//            }
+//            
+//        }
+//        catch (Exception ex){
+//            
+//        }
+//    }
 }
