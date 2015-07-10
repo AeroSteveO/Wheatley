@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-//import Objects.KeyFinder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -87,7 +86,7 @@ public class Urban extends ListenerAdapter {
 //            }
 //            if (message.equalsIgnoreCase("!set ucall")||message.equalsIgnoreCase("!set utime")){
 //                long sec = maxTime/1000;
-//                
+//
 //                event.getBot().sendIRC().notice(event.getUser().getNick(), maxLog+" calls can now be made per every "+sec+"s");
 //            }
             
@@ -146,7 +145,7 @@ public class Urban extends ListenerAdapter {
             String word = chosenDefinition.getString("word");
             String definition = chosenDefinition.getString("definition");
             String example = chosenDefinition.getString("example");
-
+            
             if (definition.length()>150){
                 definition = definition.replaceAll("[\t\r\n]+", " ");
                 slimmedDef = definition.substring(0,Math.min(definition.length(),150))+"...";
@@ -185,13 +184,13 @@ public class Urban extends ListenerAdapter {
     
 //    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
 //        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();
-//        
+//
 //        Iterator<Channel> iterator = channels.iterator();
 //        while(iterator.hasNext()) {
 //            Channel element = iterator.next();
-//            
+//
 //            Global.throttle.create("NA", "NA", element.getName());
-//            
+//
 //        }
 //        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
 //        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
@@ -201,6 +200,6 @@ public class Urban extends ListenerAdapter {
 //        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
 //        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
 //        return(true);
-//        
+//
 //    }
 }
