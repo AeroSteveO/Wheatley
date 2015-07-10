@@ -4,7 +4,7 @@
 * and open the template in the editor.
 */
 
-package Objects;
+package Objects.Weather;
 
 import java.util.ArrayList;
 
