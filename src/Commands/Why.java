@@ -62,8 +62,7 @@ public class Why implements Command{
     @Override
     public void processCommand(Event event){
         String a = new String();
-//            String message = Colors.removeFormattingAndColors(event.getMessage());
-//            if (message.equalsIgnoreCase("!Why")||(message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why"))){//||message.equalsIgnoreCase("why?")||(message.toLowerCase().startsWith("why")&&message.endsWith("?"))&&message.endsWith("?")
+        
         switch((int) (Math.random()*10+1)) {
             case 1:
                 a=special_case();
@@ -74,7 +73,7 @@ public class Why implements Command{
             default:
                 a=sentence();
         }
-//                System.out.println(a);
+        
         if (event instanceof MessageEvent){
             MessageEvent mEvent = (MessageEvent) event;
             mEvent.getBot().sendIRC().message(mEvent.getChannel().getName(), a);
