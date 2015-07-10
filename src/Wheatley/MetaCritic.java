@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Utils.BotUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -136,7 +137,7 @@ public class MetaCritic extends ListenerAdapter {
                                 event.getBot().sendIRC().message(event.getChannel().getName(),fancified);
                             }
                         }catch(Exception ex){
-                            
+
                             ex.printStackTrace();
                             event.getBot().sendIRC().notice(event.getUser().getNick(),"ERROR: Something went terribly wrong");
                         }
@@ -293,7 +294,7 @@ public class MetaCritic extends ListenerAdapter {
         platformAliases.add(new ArrayList(Arrays.asList("ps4","playstation-4")));
         platformAliases.add(new ArrayList(Arrays.asList("xboxone","xbox1","xbone","xbox-one","x1")));
         platformAliases.add(new ArrayList(Arrays.asList("ps3","playstation-3")));
-        platformAliases.add(new ArrayList(Arrays.asList("xbox360","xbox-360","x360","x360")));
+        platformAliases.add(new ArrayList(Arrays.asList("xbox360","xbox-360","x360","360")));
         platformAliases.add(new ArrayList(Arrays.asList("pc")));
         platformAliases.add(new ArrayList(Arrays.asList("wii-u","wiiu")));
         platformAliases.add(new ArrayList(Arrays.asList("3ds")));
