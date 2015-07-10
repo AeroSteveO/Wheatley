@@ -29,7 +29,7 @@ import org.pircbotx.hooks.Event;
  *    N/A
  * - Linked Classes
  *    N/A
- * 
+ *
  * Activate Command with:
  *      !Channels
  *          Responds with a list of channels the bot is currently in
@@ -66,7 +66,7 @@ public class ListChannels implements Command {
             respondTo = channel;
         
         boolean isVerified = data.isVerifiedBotOwner();
-                
+        
         if(!isVerified){
             event.getBot().sendIRC().notice(caller, Colors.BOLD+"Channels: "+Colors.NORMAL+"You don't have access to this command");
         }
@@ -85,9 +85,13 @@ public class ListChannels implements Command {
             for (int i=0;i<channelList.size()-1;i++){
                 response+=channelList.get(i)+", ";
             }
-            
-            response+=channelList.get(channelList.size()-1);
-            event.getBot().sendIRC().message(respondTo, Colors.BOLD+"Channels: "+Colors.NORMAL+response);
+            if (!channelList.isEmpty()) {
+                response+=channelList.get(channelList.size()-1);
+                event.getBot().sendIRC().message(respondTo, Colors.BOLD+"Channels: "+Colors.NORMAL+response);
+            }
+            else {
+                event.getBot().sendIRC().message(respondTo, Colors.BOLD+"Channels: "+Colors.NORMAL+"NO CURRENTLY CONNECTED CHANNELS");
+            }
         }
     }
 }
