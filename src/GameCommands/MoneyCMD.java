@@ -23,7 +23,9 @@ public class MoneyCMD implements CommandGame {
         return false;
     }
     
-    
+    public boolean isShortGame() {
+        return true;
+    }
     @Override
     public void processCommand(MessageEvent event){
         
