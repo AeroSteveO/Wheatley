@@ -6,6 +6,9 @@
 
 package Wheatley;
 
+import Objects.MapArray;
+import Objects.Shorten.Bitly;
+import Objects.Shorten.ShortenerInterface;
 import Utils.TextUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,6 +16,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.json.JSONArray;
@@ -55,7 +60,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Responds with the second last URL mentioned in the channel
  *      !quack [query]
  *          Responds with information about the input query from Duck Duck Go
- * 
+ *
  * Source:
  *    Duck Duck Go
  *    https://duckduckgo.com/api
@@ -65,45 +70,14 @@ public class SRSBSNS extends ListenerAdapter {
     private final String USER_AGENT = "Mozilla/5.0";
 //    !metacritic (metacritic.com rating),
     
+    private static MapArray logger = new MapArray(50);
+    
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
+        String[]msgSplit = message.split(" ");
 //        String[] messageArray = message.split(" ");
-        String currentChan = event.getChannel().getName();
-        
-        
-//        if (messageArray[0].equalsIgnoreCase("!bankick")) {
-////            String[] kill = messageArray;
-//            if (messageArray.length < 3) {
-//                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " 1m " + event.getBot().getUserChannelDao().getUser(messageArray[1]).getNick() + "!*@*");
-////                output.kick(event.getBot().getUserChannelDao().getUser(kill[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
-//                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(messageArray[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
-//            }
-//            else if (messageArray.length>4){
-//                String time;
-//                String[] kill;
-//                String reason;
-//                if (messageArray[2].matches("[0-9]+[s|d|m|h]")){
-//                    kill = Colors.removeFormattingAndColors(event.getMessage()).split(" ",4);
-//                    time = messageArray[2];
-//                    reason = kill[3];
-//                }
-//                else {
-//                    kill = Colors.removeFormattingAndColors(event.getMessage()).split(" ",3);
-//                    time = "1m";
-//                    reason = kill[2];
-//                }
-//
-//                String user = event.getBot().getUserChannelDao().getUser(kill[1]).getNick();
-//                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " " + time + " " + event.getBot().getUserChannelDao().getUser(user).getNick() + "!*@*");
-//                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(user), "<"+event.getUser().getNick()+"> "+reason);
-//            }
-//            else {
-//                event.getBot().sendRaw().rawLineNow("tban " + event.getChannel().getName() + " " + messageArray[2] + " " + event.getBot().getUserChannelDao().getUser(messageArray[1]).getNick() + "!*@*");
-////                output.kick(event.getBot().getUserChannelDao().getUser(kill[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
-//                event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(messageArray[1]), "theDoctor has sent you to an alternate universe. #AlternateUniverse");
-//            }
-//        }
+        String channel = event.getChannel().getName();
         
         if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
             // separete input by spaces ( URLs don't have spaces )
@@ -112,39 +86,65 @@ public class SRSBSNS extends ListenerAdapter {
             for( String item : parts ) try {
                 URL url = new URL(item);  // If this fails, the string is not a URL
                 // If possible then replace with anchor...
-                Global.channels.getChan(currentChan).setSecondLastUrl(Global.channels.getChan(currentChan).getLastUrl());
-                Global.channels.getChan(currentChan).setLastUrl(item);
+                logger.addToLog(channel, item);
             } catch (MalformedURLException e) { // If exception happens, then its not a URL
             }
             
             if (message.equalsIgnoreCase("!lasturl")){
-                if (!Global.channels.getChan(currentChan).getLastUrl().equals("")){
+                
+                ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
+                if (!logCopy.isEmpty()){
+                    
+                    String url = logCopy.get(logCopy.size()-1).get(0);
                     String title;
                     
-                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(Global.channels.getChan(currentChan).getLastUrl()).get();
+                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(url).get();
                     if (finaldoc == null) {
                         title= "No Title Found";
                     } else {
                         title = finaldoc.title();
                     }
-                    event.getBot().sendIRC().message(currentChan,Colors.BOLD+"Last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
+                    ShortenerInterface shortener = new Bitly();
+                    String shortURL = shortener.shorten(url);
+                    event.getBot().sendIRC().message(channel, Colors.BOLD + "Last URL: " + Colors.NORMAL + ((shortURL == null) ? url : shortURL) + Colors.BOLD + " Title: " + Colors.NORMAL + title);
                 }
                 else
-                    event.getBot().sendIRC().message(currentChan,"No previous URL found");
+                    event.getBot().sendIRC().message(channel, "No previous URL found");
             }
             
             if (message.equalsIgnoreCase("!secondlasturl")){
-                if (!Global.channels.getChan(currentChan).getSecondLastUrl().equals("")){
-                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(Global.channels.getChan(currentChan).getSecondLastUrl()).get();
+                ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
+                if (logCopy.size() > 1){
+                    String url = logCopy.get(logCopy.size()-2).get(0);
+                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(url).get();
                     String title = finaldoc.title();
-                    event.getBot().sendIRC().message(currentChan,Colors.BOLD+"Second to last URL: "+Colors.NORMAL+Global.channels.getChan(currentChan).getSecondLastUrl()+Colors.BOLD+" Title: "+Colors.NORMAL+title);
+                    
+                    ShortenerInterface shortener = new Bitly();
+                    String shortURL = shortener.shorten(url);
+                    event.getBot().sendIRC().message(channel, Colors.BOLD + "Second to last URL: " + Colors.NORMAL + ((shortURL == null) ? url : shortURL) + Colors.BOLD + " Title: " + Colors.NORMAL + title);
                 }
                 else
-                    event.getBot().sendIRC().message(currentChan,"Currently less than 2 URLs found");
+                    event.getBot().sendIRC().message(channel,"Currently less than 2 URLs found");
+            }
+            
+            if (msgSplit[0].equalsIgnoreCase("!lasturl") && msgSplit.length == 2 && msgSplit[1].matches("[0-9]+")) {
+                int num = Integer.parseInt(msgSplit[1]);
+                ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
+                if (logCopy.size() >= num - 1){
+                    String url = logCopy.get(logCopy.size() - num).get(0);
+                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(url).get();
+                    String title = finaldoc.title();
+                    
+                    ShortenerInterface shortener = new Bitly();
+                    String shortURL = shortener.shorten(url);
+                    event.getBot().sendIRC().message(channel, Colors.BOLD + "Second to last URL: " + Colors.NORMAL + ((shortURL == null) ? url : shortURL) + Colors.BOLD + " Title: " + Colors.NORMAL + title);
+                }
+                else
+                    event.getBot().sendIRC().message(channel,"Currently less than " + num + " URLs found");
             }
             
             if (message.equalsIgnoreCase("!srsbsns"))
-                event.getBot().sendIRC().action(currentChan,"wat");
+                event.getBot().sendIRC().action(channel,"wat");
             
             if(message.equalsIgnoreCase("!christmas")) {
                 GregorianCalendar now = new GregorianCalendar();
@@ -194,41 +194,47 @@ public class SRSBSNS extends ListenerAdapter {
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "Usage: !quack [search query] returns information about your query");
                     }
                     else{
-                        String search = command.split(" ",2)[1];
-                        search = search.replaceAll("!", "");
-                        String url = duckDuckUrl(search);
-                        System.out.println(url+"&pretty=1");
-                        String json = readUrlUsingGet(url);
-                        JSONObject similar = (JSONObject) new JSONTokener(json).nextValue();
-                        String topic = similar.getString("Heading");
-                        String info = similar.getString("Abstract");
-                        String hitUrl = similar.getString("AbstractURL");
-                        
-                        if (info.isEmpty()&&similar.getJSONArray("RelatedTopics").length()==0){
-                            event.getBot().sendIRC().message(event.getChannel().getName(),"No results available for "+search);
-                            return;
-                        }
-                        else if (info.isEmpty()){
-                            JSONObject firstHit = similar.getJSONArray("RelatedTopics").getJSONObject(0);
-                            if (firstHit.has("Text")){
-                                info = firstHit.getString("Text");
-                                hitUrl = firstHit.getString("FirstURL");
-                            }
-                            else if (firstHit.has("Topics")){
-                                firstHit = firstHit.getJSONArray("Topics").getJSONObject(0);
-                                info = firstHit.getString("Text");
-                                hitUrl = firstHit.getString("FirstURL");
-                            }
-                            else{
+                        try {
+                            String search = command.split(" ",2)[1];
+                            search = search.replaceAll("!", "");
+                            String url = duckDuckUrl(search);
+//                            System.out.println(url+"&pretty=1");
+                            String json = readUrlUsingGet(url);
+                            json = json.replaceAll("(?i)<a([^>]+)>(.+?)</a>", "");
+                            JSONObject similar = (JSONObject) new JSONTokener(json).nextValue();
+                            String topic = similar.getString("Heading");
+                            String info = similar.getString("Abstract");
+                            String hitUrl = similar.getString("AbstractURL");
+                            if (info.isEmpty() && similar.getJSONArray("RelatedTopics").length()==0){
                                 event.getBot().sendIRC().message(event.getChannel().getName(),"No results available for "+search);
                                 return;
                             }
-                        }
+                            else if (info.isEmpty()){
+                                JSONObject firstHit = similar.getJSONArray("RelatedTopics").getJSONObject(0);
+                                if (firstHit.has("Result")){
+                                    info = firstHit.getString("Result");
+                                    hitUrl = firstHit.getString("FirstURL");
+                                }
+                                else if (firstHit.has("Topics")){
+                                    firstHit = firstHit.getJSONArray("Topics").getJSONObject(0);
+                                    info = firstHit.getString("Result");
+                                    hitUrl = firstHit.getString("FirstURL");
+                                }
+                                else{
+                                    event.getBot().sendIRC().message(event.getChannel().getName(),"No results available for "+search);
+                                    return;
+                                }
+                            }
 //                        if (info.length()+topic.length()+hitUrl.length()>396){
 //                            info = info.substring(0,396-topic.length()-hitUrl.length())+"...";
 //                        }
-                        //Colors.BOLD+topic+Colors.NORMAL+info.split(topic,2)[1]
-                        event.getBot().sendIRC().message(event.getChannel().getName(),info+" ("+hitUrl+")");
+                            //Colors.BOLD+topic+Colors.NORMAL+info.split(topic,2)[1]
+                            event.getBot().sendIRC().message(event.getChannel().getName(),info+" ("+hitUrl+")");
+                        }
+                        catch (Exception ex){
+                            ex.printStackTrace();
+                            event.getBot().sendIRC().message(event.getChannel().getName(),"ERROR: SOMETHING BROKE IN QUACK");
+                        }
                     }
                 }
             }

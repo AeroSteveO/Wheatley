@@ -6,6 +6,7 @@
 
 package Wheatley;
 
+import Objects.MapArray;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +22,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  *
  * @author Stephen
- * 
+ *
  * Requirements:
  * - APIs
  *    N/A
@@ -32,7 +33,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * Activate Commands with:
  *      s/replaceThis/replaceWithThis
- *          Replaces the text replaceThis with the text replaceWithThis, using 
+ *          Replaces the text replaceThis with the text replaceWithThis, using
  *          a log of previous messages
  *      !bf
  *      !bf [nick]
@@ -44,11 +45,12 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          line said by the input nickname
  *      !bfff
  *      !bfff [nick]
- *          Reverses all the words, and all the letters in all the words, of the    
+ *          Reverses all the words, and all the letters in all the words, of the
  *          previous line said, or the previous line said by the input nickname
  */
 public class Swapper extends ListenerAdapter {
-    Map<String,ArrayList<ArrayList<String>>> log = Collections.synchronizedMap(new TreeMap<String,ArrayList<ArrayList<String>>>());
+//    Map<String,ArrayList<ArrayList<String>>> log = Collections.synchronizedMap(new TreeMap<String,ArrayList<ArrayList<String>>>());
+    private static MapArray logger = new MapArray(100);
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -63,18 +65,16 @@ public class Swapper extends ListenerAdapter {
             if (message.endsWith("/"))
                 message+="poop";
             
-            
+            ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
             String[] findNreplace = Colors.removeFormattingAndColors(message).split("/");
             
-            int i=log.get(channel).size()-2;
+            int i = logCopy.size()-2;
             
-            synchronized(log){
-                ArrayList<String> reply = findReplace(i, findNreplace, channel);
-                
-                if (reply.size()==2&&!reply.get(1).equalsIgnoreCase("")){
-                    event.getBot().sendIRC().message(event.getChannel().getName(),reply.get(0)+" "+reply.get(1).substring(0,Math.min(reply.get(1).length(),400)));
-                    addToLog(channel, reply);
-                }
+            ArrayList<String> reply = findReplace(i, findNreplace, logCopy);
+            
+            if (reply.size()==2&&!reply.get(1).equalsIgnoreCase("")){
+                event.getBot().sendIRC().message(event.getChannel().getName(),reply.get(0)+" "+reply.get(1).substring(0,Math.min(reply.get(1).length(),400)));
+                addToLog(channel, reply);
             }
         }
         
@@ -88,19 +88,19 @@ public class Swapper extends ListenerAdapter {
                 if (cmdSplit.length==2){
                     String nick = cmdSplit[1];
                     
-                    int i=log.get(channel).size()-2;
+                    ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
+                    
+                    int i=logCopy.size()-2;
                     boolean found = false;
                     String line = new String();
                     
-                    synchronized(log){
-                        while (!found&&i>=0){
-                            if(log.get(event.getChannel().getName()).get(i).get(0).replaceAll("(<|>)", "").equalsIgnoreCase(nick)){
-                                found = true;
-                                nick = log.get(event.getChannel().getName()).get(i).get(0);
-                                line = log.get(event.getChannel().getName()).get(i).get(1);
-                            }
-                            i--;
+                    while (!found && i >= 0){
+                        if(logCopy.get(i).get(0).replaceAll("(<|>)", "").equalsIgnoreCase(nick)){
+                            found = true;
+                            nick = logCopy.get(i).get(0);
+                            line = logCopy.get(i).get(1);
                         }
+                        i--;
                     }
                     if (!found){
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "!BF nick not found in log");
@@ -120,25 +120,26 @@ public class Swapper extends ListenerAdapter {
                         }
                     }
                 }
-                else if (cmdSplit.length>2){
+                else if (cmdSplit.length > 2){
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "!BF may take a nickname as input, or no input at all");
                 }
                 else{
-                    String nick = log.get(event.getChannel().getName()).get(log.get(event.getChannel().getName()).size()-2).get(0);
-                    String line = log.get(event.getChannel().getName()).get(log.get(event.getChannel().getName()).size()-2).get(1);
+                    ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
+                    String nick = logCopy.get(logCopy.size()-2).get(0);
+                    String line = logCopy.get(logCopy.size()-2).get(1);
                     
                     if (cmdSplit[0].equalsIgnoreCase("bf")){
-                            addToLog(channel, new ArrayList(Arrays.asList(nick,reverseWords(line))));
-                            event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseWords(line));
-                        }
-                        else if (cmdSplit[0].equalsIgnoreCase("bff")){
-                            addToLog(channel, new ArrayList(Arrays.asList(nick,reverseAllLetters(line))));
-                            event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseAllLetters(line));
-                        }
-                        else {
-                            addToLog(channel, new ArrayList(Arrays.asList(nick,reverseLettersAndWords(line))));
-                            event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseLettersAndWords(line));
-                        }
+                        addToLog(channel, new ArrayList(Arrays.asList(nick,reverseWords(line))));
+                        event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseWords(line));
+                    }
+                    else if (cmdSplit[0].equalsIgnoreCase("bff")){
+                        addToLog(channel, new ArrayList(Arrays.asList(nick,reverseAllLetters(line))));
+                        event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseAllLetters(line));
+                    }
+                    else {
+                        addToLog(channel, new ArrayList(Arrays.asList(nick,reverseLettersAndWords(line))));
+                        event.getBot().sendIRC().message(event.getChannel().getName(), nick+" "+reverseLettersAndWords(line));
+                    }
                 }
             }
         }
@@ -156,11 +157,11 @@ public class Swapper extends ListenerAdapter {
     private String reverseAllLetters(String line){
         String reverse = "";
         int length = line.length();
- 
-      for ( int i = length - 1 ; i >= 0 ; i-- )
-         reverse = reverse + line.charAt(i);
-      
-      return reverse;
+        
+        for ( int i = length - 1 ; i >= 0 ; i-- )
+            reverse = reverse + line.charAt(i);
+        
+        return reverse;
     }
     
     private String reverseLettersAndWords(String line){
@@ -178,24 +179,24 @@ public class Swapper extends ListenerAdapter {
         return newLine;
     }
     
-    private ArrayList<String> findReplace(int i, String[] findNreplace, String channel){
+    private ArrayList<String> findReplace(int i, String[] findNreplace, ArrayList<ArrayList<String>> logCopy){
         ArrayList<String> reply = new ArrayList<>();
         Boolean found = false;
         Pattern findThis = Pattern.compile(findNreplace[1]);
         
-        while (i>=0&&!found){
+        while (i >= 0 && !found){
             try{
-//                System.out.println(log.get(channel).get(i).get(1));
-                if (findThis.matcher(log.get(channel).get(i).get(1)).find()){
+//                System.out.println(logCopy.get(i).get(1));
+                if (findThis.matcher(logCopy.get(i).get(1)).find()){
                     
-                    reply = new ArrayList(Arrays.asList(log.get(channel).get(i).get(0),log.get(channel).get(i).get(1).replaceAll(findNreplace[1],findNreplace[2])));
+                    reply = new ArrayList(Arrays.asList(logCopy.get(i).get(0),logCopy.get(i).get(1).replaceAll(findNreplace[1],findNreplace[2])));
                     
                     if(reply.get(1).startsWith("sw/")||reply.get(1).startsWith("s/")||reply.get(1).startsWith("sed/")){
                         i--;
                         if (reply.get(1).endsWith("/"))
                             reply.set(1, reply.get(1)+"poop");
                         findNreplace = reply.get(1).split("/");
-                        reply = findReplace(i, findNreplace, channel);
+                        reply = findReplace(i, findNreplace, logCopy);
                     }
                     
                     found = true;
@@ -226,18 +227,6 @@ public class Swapper extends ListenerAdapter {
     
     
     private void addToLog(String channel, ArrayList<String> message) {
-        if (!log.containsKey(channel)){
-//            ArrayList<String> message = new ArrayList<>();
-            ArrayList<ArrayList<String>> channelLog = new ArrayList<>();
-            channelLog.add(message);
-            log.put(channel, channelLog);
-        }
-        else{
-            log.get(channel).add(message);
-            
-            if (log.get(channel).size()>100){
-                log.get(channel).remove(0);
-            }
-        }
+        logger.addToLog(channel, message);
     }
 }
