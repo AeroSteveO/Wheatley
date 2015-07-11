@@ -13,5 +13,5 @@ package Objects.Shorten;
 public interface ShortenerInterface {
     public String shorten(String url);
     public boolean isShortIdentifier(String id);
-    public String getShortID();
+    public String getInfo();
 }

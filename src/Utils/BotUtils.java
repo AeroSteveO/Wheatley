@@ -1,47 +1,22 @@
 package Utils;
 
 import Wheatley.Global;
-//import com.fasterxml.jackson.databind.JsonNode;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.pircbotx.User;
-//import org.royaldev.royalbot.auth.Auth;
-//import org.royaldev.royalbot.auth.AuthResponse;
-//import org.royaldev.royalbot.commands.ChannelCommand;
-//import org.royaldev.royalbot.commands.IRCCommand;
-//import org.royaldev.royalbot.configuration.ConfigurationSection;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.apache.commons.lang3.Validate.notNull;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import org.jpaste.pastebin.Pastebin;
 
 /**
  * Utility class for commonly-used methods to be used in the bot. All of the methods in this class throw a
  * {@link java.lang.NullPointerException} if any argument is null.
  */
 public class BotUtils {
-    
-//    private final static ObjectMapper om = new ObjectMapper();
-    
-    private BotUtils() {} // this is a thing that should never be done
     
     /**
      * Gets the appropriate string to send to a user if an exception is encountered.
@@ -72,64 +47,32 @@ public class BotUtils {
     }
     
     /**
-     * Pastes something to Hastebin.
+     * Pastes something to Pastebin.
      *
      * @param paste String to paste
-     * @return Hastebin URL or null if error encountered
+     * @return Pastebin URL or null if error encountered
      * @throws java.lang.NullPointerException If any argument is null
      */
+    static String pasteBinKey = "45c22303a7f1c7da1e9ec812f559c65b";
     public static String pastebin(String paste) {
-        System.out.println("Start trying to pastebin");
-        
-        notNull(paste, "paste was null");
-        System.out.println("not null");
-        
-        CloseableHttpClient hc = HttpClients.createDefault();
-        HttpPost hp = new HttpPost("http://hastebin.com/documents");
-        
-        System.out.println("http made");
         
         try {
-            System.out.println("http set entity");
-            hp.setEntity(new StringEntity(paste, "UTF-8"));
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-            return null;
+            return Pastebin.pastePaste(pasteBinKey, paste, Global.mainNick + " EXCEPTION").toString();
         }
-        HttpResponse hr;
-        try {
-            System.out.println("http execute");
-            hr = hc.execute(hp);
-        } catch (IOException ex) {
+        catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
-        HttpEntity he = hr.getEntity();
-        System.out.println("http got entity");
-        if (he == null) return null;
-        String json;
+    }
+    
+    public static String formatPastebinPost(Throwable t) {
         
-        try {
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(he.getContent()))) {
-                json = br.readLine();
-                System.out.println(json);
-            } finally {
-                hc.close();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        JSONObject jn;
-        try {
-            jn = (JSONObject) new JSONTokener(json).nextValue();
-            json = jn.getString("key");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
+        String stackURL = linkToStackTrace(t);
+        String response = formatException(t);
+        if (stackURL != null)
+                response += (" (" + stackURL + ")");
         
-        return json.isEmpty() ? "faioledasdf" : "http://hastebin.com/" + json;
+        return response;
     }
     
     /**
@@ -145,17 +88,14 @@ public class BotUtils {
      */
     public static String linkToStackTrace(Throwable t) {
         //noinspection ThrowableResultOfMethodCallIgnored
-        System.out.println("entering pastebin link maker");
         notNull(t, "");
         String pastebin = BotUtils.pastebin(BotUtils.getStackTrace(t));
-        System.out.println("Should have pastebin link");
         if (pastebin != null) {
-            System.out.println("performing pastebin link shortener");
-            pastebin += ".txt";
             String url = null;
             try {
                 url = BotUtils.shortenURL(pastebin);
             } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
             if (url != null) return url;
         }
@@ -195,232 +135,4 @@ public class BotUtils {
         System.out.println(getContent(shorten.toString()));
         return getContent(shorten.toString());
     }
-    
-    /**
-     * Gets a string to send a user if help is requested for a command.
-     *
-     * @param ic Command to get help for
-     * @return String to send user
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-//    public static String getHelpString(IRCCommand ic) {
-//        notNull(ic, "ic was null");
-//        return ic.getName() + " / Description: " + ic.getDescription() + " / Usage: " + ic.getUsage().replaceAll("(?i)<command>", ic.getName()) + " / Aliases: " + Arrays.toString(ic.getAliases()) + " / Type: " + ic.getCommandType().getDescription();
-//    }
-    
-    /**
-     * Creates a channel-specific command based on JSON.
-     *
-     * @param commandJson JSON of command
-     * @param channel     Channel for command
-     * @return ChannelCommand
-     * @throws RuntimeException               If there is any error
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-    public static void createChannelCommand(String commandJson, final String channel) throws RuntimeException {
-        notNull(commandJson, "commandJson was null");
-        notNull(channel, "channel was null");
-        final JSONObject jn;
-        try {
-            jn = (JSONObject) new JSONTokener(commandJson).nextValue();
-        } catch (Exception ex) {
-            String paste = BotUtils.linkToStackTrace(ex);
-            throw new RuntimeException("An error occurred reading that!" + ((paste != null) ? " (" + paste + ")" : ""));
-        }
-        String name = "";
-        String desc = "";
-        String usage = "";
-        String auth = "";
-        String script = "";
-        List<String> aliases = new ArrayList<>();
-        
-        try {
-            name = jn.getString("name").trim();
-            desc = jn.getString("description").trim();
-            usage = jn.getString("usage").trim();
-            auth = jn.getString("auth").trim();
-            script = jn.getString("script").trim();
-            aliases = new ArrayList<>();
-            for (String alias : jn.getString("aliases").trim().split(",")) {
-                alias = alias.trim();
-                if (alias.isEmpty()) continue;
-                aliases.add(alias + ":" + channel);
-            }
-            
-        } catch (Exception ex) {
-            
-        }
-        if (name.isEmpty() || desc.isEmpty() || usage.isEmpty() || auth.isEmpty() || script.isEmpty()) {
-            throw new RuntimeException("Invalid JSON.");
-        }
-//        final IRCCommand.AuthLevel al;
-        try {
-//            al = IRCCommand.AuthLevel.valueOf(auth.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Invalid auth level.");
-        }
-//        return new ChannelCommand() {
-//            @Override
-//            public String getBaseName() {
-//                return name;
-//            }
-//
-//            @Override
-//            public String getChannel() {
-//                return channel;
-//            }
-//
-//            @Override
-//            public String getJavaScript() {
-//                return script;
-//            }
-//
-//            @Override
-//            public String getUsage() {
-//                return usage;
-//            }
-//
-//            @Override
-//            public String getDescription() {
-//                return desc;
-//            }
-//
-//            @Override
-//            public String[] getAliases() {
-//                return aliases.toArray(new String[aliases.size()]);
-//            }
-//
-//            @Override
-//            public AuthLevel getAuthLevel() {
-//                return al;
-//            }
-//        };
-    }
-    
-    /**
-     * Checks if a hostmask matches a pattern. This replaces "*" with ".+" prior to checking, and it does use regex, as
-     * one would assume.
-     *
-     * @param hostmask     Hostmask of a user (regex, * = .+)
-     * @param checkAgainst Hostmask pattern to check against
-     * @return true if hostmask matches checkAgainst, false if otherwise
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-    public static boolean doesHostmaskMatch(String hostmask, String checkAgainst) {
-        notNull(hostmask, "hostmask was null");
-        notNull(checkAgainst, "checkAgainst was null");
-        checkAgainst = checkAgainst.replace("*", ".+");
-        return hostmask.matches(checkAgainst);
-    }
-    
-    /**
-     * Checks to see if a hostmask is ignored by the bot.
-     *
-     * @param hostmask Hostmask to check
-     * @param ignores  List of hostmasks to check against
-     * @return true if hostmask is ignored, false if not
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-//    public static boolean isIgnored(String hostmask, List<String> ignores) {
-//        notNull(hostmask, "hostmask was null");
-//        notNull(ignores, "ignores was null");
-//        for (String ignore : ignores) {
-//            if (ignore.equals(hostmask)) return true;
-//            if (doesHostmaskMatch(hostmask, ignore)) return true;
-//        }
-//        return false;
-//    }
-    
-    /**
-     * Checks to see if a hostmask is ignored by the bot.
-     *
-     * @param hostmask Hostmask to check
-     * @return true if hostmask is ignored, false if not
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-//    public static boolean isIgnored(String hostmask) {
-//        notNull(hostmask, "hostmask was null");
-//        return isIgnored(hostmask, RoyalBot.getInstance().getConfig().getIgnores());
-//    }
-    
-    /**
-     * Temporary workaround for PircBotX not returning the right value for {@link org.pircbotx.User#getHostmask()}.
-     *
-     * @param user User to get hostmask of
-     * @return Real hostmask
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-    public static String generateHostmask(User user) {
-        notNull(user, "user was null");
-        return user.getNick() + "!" + user.getLogin() + "@" + user.getHostmask();
-    }
-    
-    /**
-     * Checks to see if a User is authorized in a channel or is a superadmin.
-     *
-     * @param u    User to check
-     * @param chan Channel of user
-     * @return true if authorized or superadmin, false if not
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-    public static boolean isAuthorized(User u, String chan) {
-        notNull(u, "u was null");
-        notNull(chan, "chan was null");
-//        AuthResponse ar = Auth.checkAuth(u);
-        boolean loggedIn = u.isVerified();
-        boolean isChanOp = u.getChannelsOpIn().contains(u.getBot().getUserChannelDao().getChannel(chan));
-        boolean isSuperAdmin = Global.botOwner.equalsIgnoreCase(u.getNick());
-        return (loggedIn && isChanOp) || isSuperAdmin;
-    }
-    
-    /**
-     * Flips a string upside-down in accordance to the table from the configuration.
-     *
-     * @param toFlip String to flip
-     * @return Flipped string
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-//    public static String flip(String toFlip) {
-//        notNull(toFlip, "toFlip was null");
-//        final ConfigurationSection flips = RoyalBot.getInstance().getConfig().getFlipTable();
-//        final StringBuilder sb = new StringBuilder();
-//        for (char c : toFlip.toCharArray()) {
-//            final String ch = String.valueOf(c);
-//            sb.append(flips.getString(ch, ch));
-//        }
-//        return sb.toString();
-//    }
-    
-    /**
-     * Gets an array of all indices of a string.
-     *
-     * @param string Search string
-     * @param of     Delimiter
-     * @return Array of ints
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-    public static int[] indicesOf(String string, String of) {
-        notNull(string, "string was null");
-        notNull(of, "of was null");
-        List<Integer> indices = new ArrayList<>();
-        for (int i = string.indexOf(of); i >= 0; i = string.indexOf(of, i + 1)) indices.add(i);
-        return ArrayUtils.toPrimitive(indices.toArray(new Integer[indices.size()]));
-    }
-    
-    /**
-     * Returns a string of less than or equal to the maximum length provided. If the provided string is more than the
-     * maximum length, the rest of the contents will be removed.
-     *
-     * @param text      Text to truncate
-     * @param maxLength Maximum length to allow; must be 0+
-     * @return Truncated string
-     * @throws java.lang.IllegalArgumentException If maxLength is less than zero
-     * @throws java.lang.NullPointerException     If any argument is null
-     */
-    public static String truncate(String text, int maxLength) {
-        notNull(text, "text was null");
-        if (maxLength < 0) throw new IllegalArgumentException("maxLength was less than zero");
-        return text.length() < maxLength ? text : text.substring(0, maxLength);
-    }
-    
 }
