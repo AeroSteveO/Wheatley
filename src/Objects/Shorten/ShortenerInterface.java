@@ -14,4 +14,5 @@ public interface ShortenerInterface {
     public String shorten(String url);
     public boolean isShortIdentifier(String id);
     public String getInfo();
+    public String getName();
 }

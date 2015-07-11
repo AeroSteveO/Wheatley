@@ -30,6 +30,13 @@ public class IsGd implements ShortenerInterface {
     public boolean isShortIdentifier(String id) {
         return id.equalsIgnoreCase("i");
     }
+    
+    @Override
+    public String getName() {
+        return "is.gd";
+    }
+    
+    @Override
     public String getInfo() {
         return (Colors.BOLD + "ID: " + Colors.NORMAL + "i " + Colors.BOLD + " Shortener: " + Colors.NORMAL + "is.gd");
     }

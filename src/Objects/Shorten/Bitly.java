@@ -22,23 +22,34 @@ public class Bitly implements ShortenerInterface {
     
     @Override
     public String shorten (String url) {
-        String shortenedURL = new String();
+        String json = null;
         try {
             String link = ("https://api-ssl.bitly.com/v3/link/lookup?url=" + URLEncoder.encode(url, "UTF-8") + "&access_token=" + bitlyKey);
-            String json = TextUtils.readUrl(link);
-            
+            json = TextUtils.readUrl(link);
             JSONObject defObject = (JSONObject) new JSONTokener(json).nextValue();
-            JSONObject data = defObject.getJSONObject("data");
-            JSONArray link_lookup = data.getJSONArray("link_lookup");
             
-            shortenedURL = link_lookup.getJSONObject(0).getString("aggregate_link");
-            
+            if (!defObject.isNull("data")) {
+                JSONObject data = defObject.getJSONObject("data");
+                JSONArray link_lookup = data.getJSONArray("link_lookup");
+                
+                if (link_lookup.getJSONObject(0).has("error")) {
+                    return null;
+                }
+                else
+                    return link_lookup.getJSONObject(0).getString("aggregate_link");
+            }
+            else {
+                return null;
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
-        
-        return shortenedURL;
+    }
+    
+    @Override
+    public String getName() {
+        return "Bit.ly";
     }
     
     @Override

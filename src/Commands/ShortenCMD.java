@@ -68,6 +68,9 @@ public class ShortenCMD implements Command {
             for (int i = 0; i < shorteners.size(); i++) {
                 if (shorteners.get(i).isShortIdentifier(cmdSplit[1])) {
                     String shortenedURL = shorteners.get(i).shorten(cmdSplit[2]);
+                    if (shortenedURL == null) {
+                        event.respond("Shorten: " + shorteners.get(i).getName() + " failed to shorten the input URL");
+                    }
                     event.respond(shortenedURL);
                     found = true;
                 }
