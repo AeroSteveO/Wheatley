@@ -29,8 +29,8 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
     }
     
     @Override
-    public String getType(){
-        return "alert";
+    public WeatherType getType(){
+        return WeatherType.ALERT;
     }
     
     @Override

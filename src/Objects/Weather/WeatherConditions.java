@@ -41,8 +41,8 @@ public class WeatherConditions extends WeatherBasic implements WeatherCacheInter
     }
 
     @Override
-    public String getType(){
-        return "weather";
+    public WeatherType getType(){
+        return WeatherType.WEATHER;
     }
     
     @Override

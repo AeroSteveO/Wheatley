@@ -22,6 +22,6 @@ public interface WeatherCacheInterface {
     public boolean containsError();
     public String getZip();
     public String getCityState();
-    public String getType();
+    public WeatherType getType();
     public ArrayList<String> getLocationData();
 }

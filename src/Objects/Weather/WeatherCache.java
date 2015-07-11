@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.joda.time.DateTime;
 import org.pircbotx.Colors;
 
 /**
@@ -23,22 +22,21 @@ public class WeatherCache {
     public void add(WeatherCacheInterface log){
         this.cache.add(log);
     }
+    
     public void clear(){
         this.cache.clear();
     }
-//    public int size(){
-//        return (this.cache.size());
-//    }
+
     public boolean isEmpty() {
         return (this.cache.isEmpty());
     }
-    public WeatherCacheInterface getCacheEntry(String locationString, String type){
+    public WeatherCacheInterface getCacheEntry(String locationString, WeatherType type){
         purge();
         int idx = -1;
         
         synchronized(cache){
             for(int i = 0; i < cache.size(); i++) {
-                if ((cache.get(i).getZip().equalsIgnoreCase(locationString)||cache.get(i).getCityState().equalsIgnoreCase(locationString))&&cache.get(i).getType().equalsIgnoreCase(type)) {
+                if ((cache.get(i).getZip().equalsIgnoreCase(locationString)||cache.get(i).getCityState().equalsIgnoreCase(locationString))&&cache.get(i).getType() == (type)) {
                     idx = i;
                     return(cache.get(idx));
                 }
@@ -49,14 +47,14 @@ public class WeatherCache {
                 return null;
         }
     }
-    public WeatherCacheInterface getCacheEntry(WeatherCacheInterface cacheEntry, String type) {
+    public WeatherCacheInterface getCacheEntry(WeatherCacheInterface cacheEntry, WeatherType type) {
         purge();
         int idx = -1;
         
         synchronized(cache){
             for(int i = 0; i < cache.size(); i++) {
                 if ((cache.get(i).getZip().equalsIgnoreCase(cacheEntry.getZip()) || cache.get(i).getCityState().equalsIgnoreCase(cacheEntry.getCityState()))
-                        && cache.get(i).getType().equalsIgnoreCase(type)) {
+                        && cache.get(i).getType() == (type)) {
                     idx = i;
                     return(cache.get(idx));
                 }
@@ -68,9 +66,9 @@ public class WeatherCache {
         }
     }
         
-    public ArrayList<String> getFormattedAlertArray(String locationString, String type){
+    public ArrayList<String> getFormattedAlertArray(String locationString){
         ArrayList<String> formattedAlerts = new ArrayList<>();
-        List<WeatherCacheInterface> alerts = getCacheArray(locationString, "alert");
+        List<WeatherCacheInterface> alerts = getCacheArray(locationString, WeatherType.ALERT);
         if (alerts.size()>0){
             for (int i=0;i<alerts.size()-1;i++){
                 formattedAlerts.add(alerts.get(i).getFormattedResponse());
@@ -83,16 +81,10 @@ public class WeatherCache {
         
         return(formattedAlerts);
     }
-
-// This is a bad method and it should feel bad, looping through the cache and grabbing from outside
-// the object is a no-no, since it won't be synchronized
-//    public WeatherCacheInterface get(int i){
-//        return cache.get(i);
-//    }
     
     public ArrayList<String> getAllAlertsLongResponse(String locationString){
         ArrayList<String> formattedAlerts = new ArrayList<>();
-        List<WeatherCacheInterface> alerts = getCacheArray(locationString, "alert");
+        List<WeatherCacheInterface> alerts = getCacheArray(locationString, WeatherType.ALERT);
         
         for (int i=0;i<alerts.size();i++){
             formattedAlerts.addAll(alerts.get(i).getExtendedResponseArray());
@@ -102,7 +94,7 @@ public class WeatherCache {
     }
     
     public boolean addNewAlert(WeatherAlerts newAlert) {
-        List<WeatherCacheInterface> currentAlerts = getCacheArray(newAlert.getCityState(), "alert");
+        List<WeatherCacheInterface> currentAlerts = getCacheArray(newAlert.getCityState(), WeatherType.ALERT);
         //(ArrayList<WeatherAlerts>)
         for (int i=0; i < currentAlerts.size(); i++) {
             if (((WeatherAlerts) currentAlerts.get(i)).getAlertType().equalsIgnoreCase(newAlert.getAlertType()) && currentAlerts.get(i).getZip().equals(newAlert.getZip())) {
@@ -117,14 +109,14 @@ public class WeatherCache {
         return false;
     }
     
-    public List<WeatherCacheInterface> getCacheArray(String locationString, String type){
+    public List<WeatherCacheInterface> getCacheArray(String locationString, WeatherType type){
         purge();
         int idx = -1;
         List<WeatherCacheInterface> cacheReturn = new ArrayList<>();
         
         synchronized(cache){
             for(int i = 0; i < cache.size(); i++) {
-                if ((cache.get(i).getZip().equalsIgnoreCase(locationString)||cache.get(i).getCityState().equalsIgnoreCase(locationString))&&cache.get(i).getType().equalsIgnoreCase(type)) {
+                if ((cache.get(i).getZip().equalsIgnoreCase(locationString)||cache.get(i).getCityState().equalsIgnoreCase(locationString))&&cache.get(i).getType() == (type)) {
                     idx = i;
                     cacheReturn.add(cache.get(idx));
                 }
@@ -133,7 +125,7 @@ public class WeatherCache {
         }
     }
     
-    public boolean containsEntry(String locationString,String type){
+    public boolean containsEntry(String locationString, WeatherType type) {
         purge();
 //            System.out.println(locationString);
         
@@ -143,7 +135,7 @@ public class WeatherCache {
 //                    System.out.println(cache.get(i).cityState);
 //                    System.out.println(cache.get(i).zip);
 //                    System.out.println(cache.get(i).cacheType);
-                if ((cache.get(i).getZip().equalsIgnoreCase(locationString)||cache.get(i).getCityState().equalsIgnoreCase(locationString))&&cache.get(i).getType().equalsIgnoreCase(type)) {
+                if ((cache.get(i).getZip().equalsIgnoreCase(locationString)||cache.get(i).getCityState().equalsIgnoreCase(locationString))&&cache.get(i).getType() == (type)) {
 //                        System.out.println("Found Cached Entry " + cache.get(i).cacheType);
                     return(true);
                 }

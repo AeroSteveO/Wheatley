@@ -11,6 +11,7 @@ import Objects.Weather.WeatherCache;
 import Objects.Weather.WeatherCacheInterface;
 import Objects.Weather.WeatherConditions;
 import Objects.Weather.WeatherForecast;
+import Objects.Weather.WeatherType;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -111,9 +112,9 @@ public class Weather extends ListenerAdapter{
                 localCache.clear();
                 event.respond("Local Cache Nuked");
             }
-            if ((msgSplit[0].equalsIgnoreCase("!w")||msgSplit[0].equalsIgnoreCase("!weather")
-                    ||msgSplit[0].equalsIgnoreCase("!f")||msgSplit[0].equalsIgnoreCase("!forecast")
-                    ||msgSplit[0].equalsIgnoreCase("!a")||msgSplit[0].equalsIgnoreCase("!alerts")||msgSplit[0].equalsIgnoreCase("!alert"))){
+            if ((msgSplit[0].equals("!w")||msgSplit[0].equals("!weather")
+                    ||msgSplit[0].equals("!f")||msgSplit[0].equals("!forecast")
+                    ||msgSplit[0].equals("!a")||msgSplit[0].equals("!alerts")||msgSplit[0].equals("!alert"))){
                 
                 
                 location = parseLocationFromMessage(message);
@@ -127,66 +128,25 @@ public class Weather extends ListenerAdapter{
                     }
                     locationData = getLocationData(msgSplit[1].trim().replaceAll(" ", "_"));
                     if (locationData == null) { // When geo lookup and location parsing fail, location has not been determined
-                        //event.getBot().sendIRC().message(event.getChannel().getName(),"Error Retrieving Location Data");
                         event.respond("Location not found: Parser and GeoLookup failed to decypher what you input");
                     }
                     locationDataRetrieved = true;
                     location = (locationData.get(1).trim()+"/"+locationData.get(0).trim().replaceAll(" ", "_"));
                 }
-//                if (msgSplit.length==1||(message.split(" ").length==2&&msgSplit[1].equalsIgnoreCase("full"))){
-//                    location = stockZip;
-//                }
-//
-//                // Now this is a nice location to parse
-//                // If the location is formatted as "city, st" where st is the state 2 letter string
-//                // Or of course just a straight zip, we love zips
-//                else if (msgSplit[1].matches("([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2})")){
-//                    location = parseLocationFromMessage(message);
-//                }
-//
-//                // Remove "full" from the front of the location string
-//                else if (message.matches("(!alerts\\sfull|!alert\\sfull|!a\\sfull)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")){
-//                    location = parseLocationFromMessage(message.split(" ",2)[1]);
-//                }
-//
-//                // Remove "full" from the end of the location string
-//                else if (message.matches("(!alerts|!alert|!a)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))(\\sfull)")){
-//                    location = parseLocationFromMessage(message.split("full")[0].trim());
-//                }
-//
-//                // The ugliest of parsing parts
-//                else {
-//                    if (msgSplit[1].startsWith("full")){
-//                        msgSplit[1]=msgSplit[1].replace("full","");
-//                    }
-//                    else if (msgSplit[1].endsWith("full")){
-//                        msgSplit[1]=msgSplit[1].replace("full","");
-//                    }
-//
-//                    locationData = getLocationData(msgSplit[1].trim().replaceAll(" ", "_"));
-//                    if (locationData == null) { // If location data is null, location has not been determined
-//                        event.getBot().sendIRC().message(event.getChannel().getName(),"Error Retrieving Location Data");
-//                        return;
-//                    }
-//
-//
-//                    location = locationData.get(1).trim()+"/"+locationData.get(0).trim().replaceAll(" ", "_");
-//                    locationDataRetrieved = true;
-//                }
                 
                 if(message.startsWith("!w")){
                     
                     String search = getSearchStringForCacheSearch(location);
                     
-                    if(!localCache.isEmpty() && localCache.containsEntry(search,"weather")){
-                        event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"weather").getFormattedResponse());
+                    if(!localCache.isEmpty() && localCache.containsEntry(search, WeatherType.WEATHER)){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search, WeatherType.WEATHER).getFormattedResponse());
                     }
                     else{
                         event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentWeather(location));
                     }
                     
-                    if(!localCache.isEmpty() && localCache.containsEntry(search,"alert")){
-                        ArrayList<String> alertResponses = localCache.getFormattedAlertArray(search,"alert");
+                    if(!localCache.isEmpty() && localCache.containsEntry(search, WeatherType.WEATHER)){
+                        ArrayList<String> alertResponses = localCache.getFormattedAlertArray(search);
                         if (!alertResponses.get(0).equalsIgnoreCase("No Current Weather Alerts"))
                             for (int i=0;i<alertResponses.size();i++){
                                 event.getBot().sendIRC().message(event.getChannel().getName(),alertResponses.get(i));
@@ -195,7 +155,7 @@ public class Weather extends ListenerAdapter{
                     
                     else{
                         if (!locationDataRetrieved){
-                            locationData = localCache.getCacheEntry(search,"weather").getLocationData();
+                            locationData = localCache.getCacheEntry(search, WeatherType.WEATHER).getLocationData();
                         }
                         
                         ArrayList<String> alertResponse = getCurrentAlerts(location,locationData);
@@ -213,8 +173,8 @@ public class Weather extends ListenerAdapter{
                     
                     String search = getSearchStringForCacheSearch(location);
                     
-                    if(!localCache.isEmpty() && localCache.containsEntry(search,"forecast")){
-                        event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search,"forecast").getFormattedResponse());
+                    if(!localCache.isEmpty() && localCache.containsEntry(search, WeatherType.FORECAST)){
+                        event.getBot().sendIRC().message(event.getChannel().getName(),localCache.getCacheEntry(search, WeatherType.FORECAST).getFormattedResponse());
                     }
                     else{
                         event.getBot().sendIRC().message(event.getChannel().getName(),getCurrentForecast(location));
@@ -226,9 +186,9 @@ public class Weather extends ListenerAdapter{
                     String search;
                     search = getSearchStringForCacheSearch(location);
                     
-                    if(!localCache.isEmpty() && localCache.containsEntry(search,"alert")){ // START ALERT CACHE PROCESSING
+                    if(!localCache.isEmpty() && localCache.containsEntry(search, WeatherType.ALERT)){ // START ALERT CACHE PROCESSING
                         if (!message.matches("(?i).*full.*")){ // IF COMMAND IS NOT FOR THE FULL ALERT TEXT
-                            ArrayList<String> alertResponses = localCache.getFormattedAlertArray(search,"alert");
+                            ArrayList<String> alertResponses = localCache.getFormattedAlertArray(search);
                             
                             for (int i=0;i<alertResponses.size();i++){
                                 event.getBot().sendIRC().message(event.getChannel().getName(),alertResponses.get(i));
@@ -313,17 +273,9 @@ public class Weather extends ListenerAdapter{
         else if (msgSplit[1].matches("([a-z\\s]+\\,\\s[a-z]{2})")) {
             location = (msgSplit[1]);
         }
-        
-        // Remove "full" from the front of the location string
-//        else if (message.matches("(!alerts\\sfull|!alert\\sfull|!a\\sfull)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))")){
-////            location = (message.split(" ",2)[1]);
-//            location = (message.replaceAll("(!alerts|!alerts|!a)\\sfull", "").trim());
-//        }
-        
         // Remove "full" from the location string
         else if (message.matches("(!alerts|!alert|!a)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))(\\sfull)") ||
                 message.matches("(!alerts\\sfull|!alert\\sfull|!a\\sfull)\\s(([0-9]{5})|([a-z\\s]+\\,\\s[a-z]{2}))") ){
-//            location = (message.split("full")[0].trim());
             location = (message.replace("full", "").replaceAll("(!alerts|!alerts|!a)", "").trim());
         }
         
@@ -344,24 +296,6 @@ public class Weather extends ListenerAdapter{
         }
         return (response);
     }
-    
-//    private String parseLocationFromMessage(String message){
-//        String[] msgSplit = message.split(" ",2);
-//        String command;
-//        String response="";
-//        if (msgSplit.length>1)
-//            command = msgSplit[1];
-//        else
-//            command="";
-//        if(command.matches("[a-zA-Z\\s]+\\,\\s[a-zA-Z]{2}")){
-//            String[] cityState = command.split(",");
-//            response = cityState[1].trim()+"/"+cityState[0].trim().replaceAll(" ", "_");
-//        }
-//        else if(command.matches("[0-9]{5}")){
-//            response = command;
-//        }
-//        return (response);
-//    }
     
     private boolean startAlertTime(Thread alertThread){
         try{
@@ -401,13 +335,12 @@ public class Weather extends ListenerAdapter{
             while(updateAlerts){
                 try {
                     Thread.sleep(time*1000);
-                    boolean updated = updateCurrentAlerts(stockZip);
+                    updateCurrentAlerts(stockZip);
                 } catch (Exception ex) {
                 }
             }
         }
         private boolean updateCurrentAlerts(String location) throws Exception {
-//            JSONParser parser = new JSONParser();
             String jsonData = readUrl(alertUrl(location));
             ArrayList<String> alertType = new ArrayList<>();
             ArrayList<String> alertExpiration = new ArrayList<>();
@@ -433,22 +366,22 @@ public class Weather extends ListenerAdapter{
                         newAlerts.add(new WeatherAlerts(cityState, zip,alertType.get(i), alertExpiration.get(i), alertText.get(i)));
                     }
                     
-                    if (!localCache.containsEntry( zip,"alert")){
+                    if (!localCache.containsEntry( zip, WeatherType.ALERT)){
                         
                         for (int i=0;i<alertType.size();i++){
                             WeatherAlerts alert = new WeatherAlerts( cityState, zip,alertType.get(i), alertExpiration.get(i), alertText.get(i));
                             localCache.add(alert);
                         }
                         
-                        ArrayList<String> alertResponses = localCache.getFormattedAlertArray(locationData.get(2),"alert");
+                        ArrayList<String> alertResponses = localCache.getFormattedAlertArray(locationData.get(2));
                         
                         for (int i=0;i<alertResponses.size();i++){
                             Global.bot.sendIRC().message(channel,alertResponses.get(i));
                         }
                     }
                     else{
-                        for (int j=0;j<newAlerts.size();j++){
-                            if (newAlerts.get(j) instanceof WeatherAlerts){
+                        for (int j=0; j < newAlerts.size(); j++){
+                            if (newAlerts.get(j) instanceof WeatherAlerts) {
 //                                boolean isAlertNew = true;
 //                                for (int i=0;i<localCache.size();i++){
 //                                    
@@ -502,7 +435,7 @@ public class Weather extends ListenerAdapter{
                     WeatherAlerts alert = new WeatherAlerts( cityState,  locationData.get(2),alertType.get(i),alertExpiration.get(i), alertText.get(i));
                     localCache.add(alert);
                 }
-                return(localCache.getFormattedAlertArray(cityState, locationData.get(2)));
+                return(localCache.getFormattedAlertArray(cityState));
             }
             else
                 return new ArrayList<String>(Arrays.asList("No Current Weather Alerts"));
@@ -536,10 +469,6 @@ public class Weather extends ListenerAdapter{
             day = day.getJSONObject("date");
             date = day.getString("pretty");
             
-            
-            //weekDay = JSONKeyFinder(forecastDay.toString(),"weekday"); //all thats needed for the weekday array
-//            weekDay.add("stuff");weekDay.add("stuff");weekDay.add("stuff");weekDay.add("stuff");
-//            weekDay.add("stuff");weekDay.add("stuff");weekDay.add("stuff");
             
             for (int i=0;i<forecastDay.length();i++){
                 JSONObject period = forecastDay.getJSONObject(i);

@@ -37,8 +37,8 @@ public class WeatherForecast extends WeatherBasic implements WeatherCacheInterfa
     }
     
     @Override
-    public String getType(){
-        return "forecast";
+    public WeatherType getType(){
+        return WeatherType.FORECAST;
     }
     
     @Override
