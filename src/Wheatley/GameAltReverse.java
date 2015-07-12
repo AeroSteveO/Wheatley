@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Objects.Game;
+import Objects.GameMod;
 import Objects.TimedWaitForQueue;
 import Utils.GameUtils;
 import java.io.FileNotFoundException;
@@ -52,7 +53,7 @@ public class GameAltReverse extends ListenerAdapter {
             
             if (!GameControl.activeGame.isGameActive(gameChan, "altreverse")){
                 
-                Game currentGame = new Game("reverse");
+                Game currentGame = new Game(GameMod.REVERSE);
                 //get and shuffle the word
 //                int currentIndex = Global.activeGame.getGameIdx(gameChan,"altreverse");
                 String chosenword = currentGame.getChosenWord();

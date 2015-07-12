@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Objects.Game;
+import Objects.GameMod;
 import Objects.TimedWaitForQueue;
 import Utils.GameUtils;
 import java.io.FileNotFoundException;
@@ -49,7 +50,7 @@ public class GameReverse extends ListenerAdapter {
             
             if (!GameControl.activeGame.isGameActive(gameChan, "reverse")){
                 
-                Game currentGame = new Game("reverse");
+                Game currentGame = new Game(GameMod.REVERSE);
                 
                 // Get the game object index and grab the necessary variables from it
 //                int currentIndex = Global.activeGame.getGameIdx(gameChan,"reverse");

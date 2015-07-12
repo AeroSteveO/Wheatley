@@ -6,6 +6,7 @@
 
 package Wheatley;
 import Objects.Game;
+import Objects.GameMod;
 import Objects.TimedWaitForQueue;
 import Utils.GameUtils;
 import java.io.FileNotFoundException;
@@ -50,7 +51,7 @@ public class GameOmgword extends ListenerAdapter {
             
             if (!GameControl.activeGame.isGameActive(gameChan, "omgword")){
 //                GameControl.activeGame.add(gameChan, "omgword", "short");
-                Game currentGame = new Game("shuffle");
+                Game currentGame = new Game(GameMod.SHUFFLE);
                 //get and shuffle the word
                 boolean running = true;
                 String chosenword = currentGame.getChosenWord();

@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Objects.Game;
+import Objects.GameMod;
 import Objects.TimedWaitForQueue;
 import Utils.GameUtils;
 import java.io.FileNotFoundException;
@@ -88,7 +89,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                 int lives =(int) 10+length/100;
                 int time = 30+(length)/5;
                 
-                Game currentGame = new Game("int", length, 1);
+                Game currentGame = new Game(GameMod.INT, length, 1);
 //                currentIndex = Global.activeGame.getGameIdx(gameChan,"guessthenumber");
                 String solution = Integer.toString(currentGame.getInt());
                 

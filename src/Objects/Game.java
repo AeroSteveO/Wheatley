@@ -47,29 +47,29 @@ import org.joda.time.Period;
 public class Game {
     private List<String> wordList = TextUtils.loadTextAsList("wordlist.txt");//getWordList();
     private String chosenWord;
-    private String modifier;
+    private GameMod modifier;
     private String solution;
     private int chosenNum;
     private ArrayList<Integer> chosenNumArray;
     DateTime startTime;// = new DateTime();
     
     
-    public Game(String mod) throws FileNotFoundException{
+    public Game(GameMod mod) throws FileNotFoundException{
         this.modifier = mod;
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
         this.solution=modify(mod,this.chosenWord);
         this.startTime = new DateTime();
     }
     
-    public Game(String mod, int length, int charSize) throws FileNotFoundException{
+    public Game(GameMod mod, int length, int charSize) throws FileNotFoundException{
         this.modifier = mod;
         this.startTime = new DateTime();
         
-        if (mod.equalsIgnoreCase("int array")){
+        if (mod == GameMod.INT_ARRAY){
             this.chosenNumArray = createIntArray(length,charSize);
         }
         
-        else if (mod.equalsIgnoreCase("int")){
+        else if (mod == GameMod.INT){
             this.chosenNum = createInt(charSize,length); //when creating a general integer, charSize and length are used as lower and upper bounds
         }
     }
@@ -129,17 +129,17 @@ public class Game {
         return(this.solution);
     }
     
-    private static String modify(String mod, String word){
+    private static String modify(GameMod mod, String word){
         
         String modifiedWord ="";
         
-        if(mod.equalsIgnoreCase("blank"))   //Change the chosenword to all underscores
+        if(mod == GameMod.BLANK)   //Change the chosenword to all underscores
             modifiedWord=makeBlank(word);
-        else if(mod.equalsIgnoreCase("shuffle")) //Shuffle the characters in the chosen word
+        else if(mod == GameMod.SHUFFLE) //Shuffle the characters in the chosen word
             modifiedWord=shuffle(word);
-        else if(mod.equalsIgnoreCase("reverse")) //Reverse the chosenword
+        else if(mod == GameMod.REVERSE) //Reverse the chosenword
             modifiedWord=reverse(word);
-        else if(mod.equalsIgnoreCase("none"))    //User doesn't want the string modified
+        else if(mod == GameMod.NONE)    //User doesn't want the string modified
             modifiedWord=word;
         else
             throw new UnsupportedOperationException("Modifier not supported, use 'none' to leave the word unmodified");

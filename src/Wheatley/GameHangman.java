@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Objects.Game;
+import Objects.GameMod;
 import Objects.TimedWaitForQueue;
 import Utils.GameUtils;
 import java.io.FileNotFoundException;
@@ -49,7 +50,7 @@ public class GameHangman extends ListenerAdapter {
             
             if (!GameControl.activeGame.isGameActive(gameChan, "hangman", "long")){
                 
-                Game currentGame = new Game("blank");
+                Game currentGame = new Game(GameMod.BLANK);
                 
                 // Setup variables that will be needed through hangman
                 int changed = 0;

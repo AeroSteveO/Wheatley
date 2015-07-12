@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Objects.Game;
+import Objects.GameMod;
 import Objects.TimedWaitForQueue;
 import Utils.GameUtils;
 import java.io.FileNotFoundException;
@@ -124,7 +125,7 @@ public class GameMasterMind extends ListenerAdapter {
                 int time = 30+(charSize+length)*10;
                 int scorePositionValue = 0;
                 int scoreValue = 0;
-                Game currentGame = new Game("int array", length, charSize);
+                Game currentGame = new Game(GameMod.INT_ARRAY, length, charSize);
 //                currentIndex = Global.activeGame.getGameIdx(gameChan,"mastermind");
                 
                 ArrayList<Integer> solutionArray = currentGame.getIntArray();
