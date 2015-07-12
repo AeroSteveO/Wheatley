@@ -99,8 +99,8 @@ public class SysInfoCMD implements Command {
                 int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
                 int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
                 int cpuCores = Runtime.getRuntime().availableProcessors();
-                event.getBot().sendIRC().message(respondTo, Colors.BOLD+"Ram used: "+Colors.NORMAL+usedRam+"MB"+
-                        Colors.BOLD+" Ram free: "+Colors.NORMAL+freeRam+"MB"+
+                event.getBot().sendIRC().message(respondTo, Colors.BOLD+"RAM used: "+Colors.NORMAL+usedRam+"MB"+
+                        Colors.BOLD+" RAM free: "+Colors.NORMAL+freeRam+"MB"+
                         Colors.BOLD+" Threads: "+Colors.NORMAL+Thread.activeCount() + 
                         Colors.BOLD + " Cores Available: " + Colors.NORMAL + cpuCores);
             }
