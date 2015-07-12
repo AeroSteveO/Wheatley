@@ -48,7 +48,7 @@ public class BotUtils {
     
     /**
      * Pastes something to Pastebin.
-     *
+     * https://github.com/BrianBB/jPastebin
      * @param paste String to paste
      * @return Pastebin URL or null if error encountered
      * @throws java.lang.NullPointerException If any argument is null
