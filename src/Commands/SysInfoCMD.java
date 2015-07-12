@@ -25,7 +25,7 @@ public class SysInfoCMD implements Command {
         return("SYSINFO");
     }
     @Override
-    public ArrayList<String> commandTerms(){
+    public ArrayList<String> commandTerms() {
         ArrayList<String> a = new ArrayList<>();
         a.add("sysinfo");
         a.add("ram");
@@ -35,12 +35,12 @@ public class SysInfoCMD implements Command {
         return a;
     }
     @Override
-    public boolean isCommand(String toCheck){
+    public boolean isCommand(String toCheck) {
         return false;
     }
     
     @Override
-    public void processCommand(Event event){
+    public void processCommand(Event event) {
         
         CommandMetaData data = new CommandMetaData(event,true);
         String caller = data.getCaller();
@@ -60,40 +60,49 @@ public class SysInfoCMD implements Command {
         }
         else{
             
-            if (message.equalsIgnoreCase("!ram")){
-                long heapUsed = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed()/1024/1024;
-                long heapMax = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax()/1024/1024;
-                int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
-                int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
-                event.getBot().sendIRC().message(respondTo, Colors.BOLD + "RAM Used: " + Colors.NORMAL + usedRam+"MB" + Colors.BOLD + " RAM Free: " + Colors.NORMAL +freeRam+"MB" + Colors.BOLD + " Heap Used: " + Colors.NORMAL + heapUsed + "MB" + Colors.BOLD + " Max Heap: " + Colors.NORMAL + heapMax + "MB");
+            if (message.equalsIgnoreCase("!ram")) {
+                long heapUsed = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() / 1024 / 1024; // Make it MB
+                long heapMax = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / 1024 / 1024; // Make it MB
+                int usedRam = (int) (Runtime.getRuntime().totalMemory() / 1024 / 1024); //make it MB
+                int freeRam = (int) (Runtime.getRuntime().freeMemory() / 1024 / 1024);  //make it MB
+                
+                event.getBot().sendIRC().message(respondTo, Colors.BOLD + "RAM Used: " + Colors.NORMAL + usedRam+"MB" + 
+                        Colors.BOLD + " RAM Free: " + Colors.NORMAL +freeRam+"MB" + 
+                        Colors.BOLD + " Heap Used: " + Colors.NORMAL + heapUsed + "MB" + 
+                        Colors.BOLD + " Max Heap: " + Colors.NORMAL + heapMax + "MB");
             }
             
-            if (message.equalsIgnoreCase("!threads")){
+            if (message.equalsIgnoreCase("!threads")) {
                 int peakThreads = ManagementFactory.getThreadMXBean().getPeakThreadCount();
                 
                 long[] threadIDs = ManagementFactory.getThreadMXBean().getAllThreadIds();
                 long cpuTime = 0;
                 long userTime = 0;
-                for (int i = 0; i < threadIDs.length; i++) {
+                for (int i = 0; i < threadIDs.length; i++) { // Add up all the currently active threads cpu/user times
                     cpuTime += ManagementFactory.getThreadMXBean().getThreadCpuTime(threadIDs[i]);
                     userTime += ManagementFactory.getThreadMXBean().getThreadUserTime(threadIDs[i]);
                 }
                 
-                cpuTime = cpuTime / (long) 1E6;
-                userTime = userTime / (long) 1E6;
+                cpuTime = cpuTime / (long) 1E6; // Convert nano seconds to seconds
+                userTime = userTime / (long) 1E6; // Convert nano seconds to seconds
                 
                 long totalStartedThreadCount = ManagementFactory.getThreadMXBean().getTotalStartedThreadCount();
                 
-                event.getBot().sendIRC().message(respondTo, Colors.BOLD + "Active Threads: " + Colors.NORMAL +Thread.activeCount()+ Colors.BOLD + " Peak Thread Count: " + Colors.NORMAL + peakThreads + 
-                        Colors.BOLD + " Total Threads Started: " + Colors.NORMAL + totalStartedThreadCount + Colors.BOLD + " Active Thread CPU time: " + Colors.NORMAL + IRCUtils.millisToPrettyPrintTime(cpuTime) + 
+                event.getBot().sendIRC().message(respondTo, Colors.BOLD + "Active Threads: " + Colors.NORMAL +Thread.activeCount()+ 
+                        Colors.BOLD + " Peak Thread Count: " + Colors.NORMAL + peakThreads + 
+                        Colors.BOLD + " Total Threads Started: " + Colors.NORMAL + totalStartedThreadCount + 
+                        Colors.BOLD + " Active Thread CPU time: " + Colors.NORMAL + IRCUtils.millisToPrettyPrintTime(cpuTime) + 
                         Colors.BOLD + " Active Thread User time: " + Colors.NORMAL + IRCUtils.millisToPrettyPrintTime(userTime));
             }
             
-            if (message.equalsIgnoreCase("!sysinfo")){
+            if (message.equalsIgnoreCase("!sysinfo")) {
                 int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
                 int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
                 int cpuCores = Runtime.getRuntime().availableProcessors();
-                event.getBot().sendIRC().message(respondTo, Colors.BOLD+"Ram used: "+Colors.NORMAL+usedRam+"MB"+Colors.BOLD+" Ram free: "+Colors.NORMAL+freeRam+"MB"+Colors.BOLD+" Threads: "+Colors.NORMAL+Thread.activeCount() + Colors.BOLD + " Cores Available: " + Colors.NORMAL + cpuCores);
+                event.getBot().sendIRC().message(respondTo, Colors.BOLD+"Ram used: "+Colors.NORMAL+usedRam+"MB"+
+                        Colors.BOLD+" Ram free: "+Colors.NORMAL+freeRam+"MB"+
+                        Colors.BOLD+" Threads: "+Colors.NORMAL+Thread.activeCount() + 
+                        Colors.BOLD + " Cores Available: " + Colors.NORMAL + cpuCores);
             }
             
             if (message.equalsIgnoreCase("!uptime")) {
