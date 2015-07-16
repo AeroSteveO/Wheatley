@@ -7,9 +7,9 @@ package Wheatley;
 
 import Objects.Runner;
 import Objects.ChannelStore;
+import Utils.OSUtils;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
-import org.pircbotx.dcc.ReceiveChat;
 import org.pircbotx.Configuration.*;
 import org.pircbotx.hooks.*;
 import org.pircbotx.hooks.events.*;
@@ -45,7 +45,7 @@ import uno2.UnoBot;
  *      LilWayne    -- by
  *      Hermes      -- by aaahhh
  *      Poopsock    -- by khwain
- *      meatpod     -- by 
+ *      meatpod     -- by
  *      unoBot      -- by https://github.com/mjsalerno/UnoBot
  *
  *
@@ -73,19 +73,20 @@ public class WheatleyMain extends ListenerAdapter {
             event.getBot().sendIRC().joinChannel(event.getChannel().getName());
         }
     }
-        @Override
+    @Override
     // Wheatley channel relay
-        public void onMessage(MessageEvent event) throws Exception {
-            if (event.getChannel().getName().equalsIgnoreCase(Global.mainChan)&&Global.relay){
-                Global.whatPreBot.sendIRC().message(Global.mainChan,"<"+event.getUser().getNick()+"> "+event.getMessage());
-            }
+    public void onMessage(MessageEvent event) throws Exception {
+        if (event.getChannel().getName().equalsIgnoreCase(Global.mainChan)&&Global.relay){
+            Global.whatPreBot.sendIRC().message(Global.mainChan,"<"+event.getUser().getNick()+"> "+event.getMessage());
         }
+    }
     
     @Override
     // Set mode +B for Bots
     public void onConnect(ConnectEvent event) throws Exception {
         event.getBot().sendRaw().rawLine("mode " + event.getBot().getNick() + " +B");
     }
+    
     @Override
     // Joins channels it has been invited to
     public void onInvite(InviteEvent event) {
@@ -99,24 +100,12 @@ public class WheatleyMain extends ListenerAdapter {
             Global.channels.add(new ChannelStore(event.getChannel())); //think this will work
         }
     }
+    
     @Override
-    // Something from the example script that has continued to stay in my bots code
-    public void onIncomingChatRequest(IncomingChatRequestEvent event) throws Exception {
-        //Accept the incoming chat request. If it fails it will throw an exception
-        ReceiveChat chat = event.accept();
-        //Read lines from the server
-        String line;
-        while ((line = chat.readLine()) != null) {
-            if (line.equalsIgnoreCase("done")) {
-                //Shut down the chat
-                chat.close();
-                break;
-            } else {
-                //Fun example
-                int lineLength = line.length();
-                chat.sendLine("Line '" + line + "' contains " + lineLength + " characters");
-            }
-        }
+    public void onNickAlreadyInUse(NickAlreadyInUseEvent event) {
+        event.getBot().sendIRC().message("NickServ", "ghost " + Global.mainNick + " " + Global.nickPass);  //ghost is a depricated command, if it doesn't work, the next command should work
+        event.getBot().sendIRC().message("NickServ", "recover " + Global.mainNick + " " + Global.nickPass);//sends both commands, NS can yell about one and do the other
+        event.getBot().sendIRC().changeNick(Global.mainNick);
     }
     
     @SuppressWarnings("CallToThreadDumpStack")
@@ -156,12 +145,12 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameOmgword())        //omgword game listener
                     .addListener(new GameReverse())        //reverse the word game
                     .addListener(new GameHangman())        //omgword game listener
-                    .addListener(new GameBomb())           //bomb game listener
+//                    .addListener(new GameBomb())           //bomb game listener
                     .addListener(new GameMasterMind())     //mastermind game listener
                     .addListener(new GameGuessTheNumber()) //guess the number game listener
-                    .addListener(new GameControl())
+//                    .addListener(new GameControl())
                     .addListener(new UnoBot())
-//                    .addListener(new GameListener())
+                    .addListener(new GameListener())
 //                    .addListener(new GameLuckyLotto())
                     .addListener(new GameHighLow())
                     .addListener(new GameBlackjack())
@@ -179,7 +168,7 @@ public class WheatleyMain extends ListenerAdapter {
 //                    .addListener(new Ping())
                     .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
-//                    .addListener(new Weather())
+                    .addListener(new Weather())
 //                    .addListener(new TvSchedule())
 //                    .addListener(new MetaCritic())
 //                    .addListener(new Recommendations())
@@ -209,24 +198,6 @@ public class WheatleyMain extends ListenerAdapter {
             String musicBotNick = "***REMOVED***|bot";
             String musicBotNickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
             
-            
-            Configuration configuration2;
-            configuration2 = new Configuration.Builder()
-                    .setName(musicBotNick)
-                    .setLogin(musicBotNick)
-                    .setNickservPassword(musicBotNickPass)
-                    .setRealName("Wheatley")
-                    .setAutoReconnect(true)
-                    .setAutoNickChange(true)
-                    .setCapEnabled(true)
-                    .addListener(new WhatPre())
-                    .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent())
-                    .addAutoJoinChannel("#rapterverse")
-                    .setSocketTimeout(130 * 1000) // Reduce socket timeouts from 5 minutes to 130 seconds
-                    .setMessageDelay(600) // Reduce message delays from 1 second to 600 milliseconds (need to experiment to get the lowest value without dropping messages)
-                    .setVersion("HexMIRC 2.0.1 Turbo Skynet") // Set to something funny
-                    .buildConfiguration();
-            
             try {
                 Global.bot = new PircBotX(config);
                 Runner parallel = new Runner(Global.bot);
@@ -237,15 +208,35 @@ public class WheatleyMain extends ListenerAdapter {
                 ex.printStackTrace();
                 System.out.println("Failed to start bot");
             }
-            try {
-                Global.whatPreBot = new PircBotX(configuration2);
-                Runner parallel = new Runner(Global.whatPreBot);
-                Thread t = new Thread(parallel);
-                parallel.giveT(t);
-                t.start();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                System.out.println("Failed to start bot");
+            
+            if (!OSUtils.isWindows()) {
+                Configuration configuration2;
+                configuration2 = new Configuration.Builder()
+                        .setName(musicBotNick)
+                        .setLogin(musicBotNick)
+                        .setNickservPassword(musicBotNickPass)
+                        .setRealName("Wheatley")
+                        .setAutoReconnect(true)
+                        .setAutoNickChange(true)
+                        .setCapEnabled(true)
+                        .addListener(new WhatPre())
+                        .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent())
+                        .addAutoJoinChannel("#rapterverse")
+                        .setSocketTimeout(130 * 1000) // Reduce socket timeouts from 5 minutes to 130 seconds
+                        .setMessageDelay(600) // Reduce message delays from 1 second to 600 milliseconds (need to experiment to get the lowest value without dropping messages)
+                        .setVersion("HexMIRC 2.0.1 Turbo Skynet") // Set to something funny
+                        .buildConfiguration();
+                
+                try {
+                    Global.whatPreBot = new PircBotX(configuration2);
+                    Runner parallel = new Runner(Global.whatPreBot);
+                    Thread t = new Thread(parallel);
+                    parallel.giveT(t);
+                    t.start();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    System.out.println("Failed to start bot");
+                }
             }
         }
         catch (Exception ex) {
