@@ -73,20 +73,12 @@ public class Settings {
 //    String filename = "doNotSave";
     File file = new File("doNotSave");
     Map <String, Object> generalSettings = Collections.synchronizedMap(new TreeMap<String, Object>( ));
-//String.CASE_INSENSITIVE_ORDER
     Map <String, Object> channelSettings = Collections.synchronizedMap(new TreeMap<String, Object>( ));
-//String.CASE_INSENSITIVE_ORDER
     
     public Settings(String filename){
-        this.file = new File(filename);
-        try{
-            this.loadFile();
-        }
-        catch (Exception ex){
-            ex.printStackTrace();
-        }
-        
+        this(new File(filename));
     }
+    
     public Settings(File file){
         this.file = file;
         try{
@@ -96,6 +88,7 @@ public class Settings {
             ex.printStackTrace();
         }
     }
+    
     public Settings(){
         
     }

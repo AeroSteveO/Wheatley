@@ -59,26 +59,15 @@ public class Throttle extends Settings{
     //   CHAN        TYPE     TIMELOG
     
     public Throttle (){
-//        this.this = settings;
+        super();
     }
-        public Throttle(String filename){
-        this.file = new File(filename);
-        try{
-            this.loadFile();
-        }
-        catch (Exception ex){
-            ex.printStackTrace();
-        }
-        
+    
+    public Throttle(String filename){
+        super(filename);
     }
+    
     public Throttle(File file){
-        this.file = file;
-        try{
-            this.loadFile();
-        }
-        catch (Exception ex){
-            ex.printStackTrace();
-        }
+        super(file);
     }
 
     public void setMaxLog(String type, int maxCalls, String channel){
