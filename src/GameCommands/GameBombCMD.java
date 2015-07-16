@@ -6,22 +6,18 @@
 
 package GameCommands;
 
-import Objects.Command;
 import Objects.CommandGame;
 import Objects.CommandMetaData;
 import Objects.TimedWaitForQueue;
-import Wheatley.GameControl;
+import Utils.BotUtils;
+import static Wheatley.GameListener.scores;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.pircbotx.Colors;
-import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.MessageEvent;
-
 /**
  *
  * @author Steve-O
@@ -70,11 +66,10 @@ public class GameBombCMD implements CommandGame {
         
         
         
-        if (GameControl.scores.getScore(caller)<loss){
+        if (scores.getScore(caller)<loss){
             event.getBot().sendIRC().notice(caller,"You don't have enough money to afford the potential loss in this game");
         }
         else{
-            
             if (cmdSplit.length>1){
                 if(cmdSplit[1].equalsIgnoreCase("classic")){
                     colours.add("red");
@@ -121,33 +116,35 @@ public class GameBombCMD implements CommandGame {
             event.getBot().sendIRC().message(respondTo,"Wire colors include: " + colorlist);
             try {
                 TimedWaitForQueue queue = new TimedWaitForQueue(event, time, key);
-                while (true){
+                boolean running = true;
+                while (running){
                     
                     MessageEvent CurrentEvent = queue.waitFor(MessageEvent.class);
                     if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
                         event.getBot().sendIRC().message(respondTo,"the bomb explodes in front of " + caller + ". Seems like you did not even notice the big beeping suitcase. You lose $"+loss);
                         colours.clear();
-                        GameControl.scores.subtractScore(caller, loss);
-                        GameControl.scores.addScore(event.getBot().getNick(), loss);
-                        queue.close();
+                        scores.subtractScore(caller, loss);
+                        scores.addScore(event.getBot().getNick(), loss);
+                        running = false;
                     }
                     else if (CurrentEvent.getMessage().equalsIgnoreCase(solution)&&CurrentEvent.getUser().getNick().equalsIgnoreCase(caller)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(respondTo)){
                         event.getBot().sendIRC().message(respondTo, caller + " defused the bomb. Seems like he was wise enough to buy a defuse kit. You win $"+prize );
                         colours.clear();
-                        GameControl.scores.addScore(caller, prize);
-                        queue.close();
+                        scores.addScore(caller, prize);
+                        running = false;
                     }
                     else if (!CurrentEvent.getMessage().equalsIgnoreCase(solution)&&CurrentEvent.getUser().getNick().equalsIgnoreCase(caller)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(respondTo)){
                         int moneyLoss = 20;
                         event.getBot().sendIRC().message(respondTo,"The bomb explodes in " + caller + "'s hands. You lost your life and - even worse - $" + moneyLoss + ". The right color would have been "+Colors.BOLD+Colors.RED+solution);
                         colours.clear();
-                        GameControl.scores.subtractScore(caller, moneyLoss);
-                        GameControl.scores.addScore(event.getBot().getNick(), moneyLoss);
-                        queue.close();
+                        scores.subtractScore(caller, moneyLoss);
+                        scores.addScore(event.getBot().getNick(), moneyLoss);
+                        running = false;
                     }
                 }
+                queue.close();
             }catch (InterruptedException ex) {
-                Logger.getLogger(GameBombCMD.class.getName()).log(Level.SEVERE, null, ex);
+                event.getBot().sendIRC().message("#rapterverse", BotUtils.formatPastebinPost(ex));
             }
         }
     }

@@ -107,7 +107,7 @@ public class DefListener2 extends ListenerAdapter {
             if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(user))) {
                 
                 //If the user is in the same channel as the summon
-                String defWord = message.split("about")[1].trim();//.split(" ",2)[2];
+                String defWord = message.split("(?i)about(?-i)")[1].trim();//.split(" ",2)[2];
                 if (defs.containsDef(defWord)){
                     String def = defs.getDefOfWord(defWord);
                     event.getBot().sendIRC().notice(event.getUser().getNick(),user+" has been PMed");

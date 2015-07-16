@@ -8,7 +8,7 @@ package GameCommands;
 
 import Objects.CommandGame;
 import Objects.CommandMetaData;
-import static Wheatley.GameControl.scores;
+import static Wheatley.GameListener.scores;
 import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -23,6 +23,7 @@ public class MoneyCMD implements CommandGame {
         return false;
     }
     
+    @Override
     public boolean isShortGame() {
         return true;
     }
@@ -81,8 +82,6 @@ public class MoneyCMD implements CommandGame {
                 }
             }
         }
-
-        System.out.println("Cool Beans");
     }
         
     @Override

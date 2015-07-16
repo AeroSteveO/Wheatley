@@ -50,7 +50,7 @@ public class GameLuckyLotto extends ListenerAdapter {
                         System.out.println(solution);
                         int bet = baseBet;
                         
-                        if (GameControl.scores.getScore(event.getUser().getNick())<bet){
+                        if (GameListener.scores.getScore(event.getUser().getNick())<bet){
                             event.getBot().sendIRC().notice(event.getUser().getNick(),"You don't have enough money to play this game");
                         }
                         else{
@@ -91,7 +91,7 @@ public class GameLuckyLotto extends ListenerAdapter {
                                                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Your guess must be a single digit integer");
                                             }
                                             else{
-                                                if (GameControl.scores.getScore(CurrentEvent.getUser().getNick())<bet){
+                                                if (GameListener.scores.getScore(CurrentEvent.getUser().getNick())<bet){
                                                     event.getBot().sendIRC().notice(event.getUser().getNick(),"You don't have enough money to play this game");
                                                 }
                                                 else{
@@ -112,10 +112,10 @@ public class GameLuckyLotto extends ListenerAdapter {
                                 for (int i=0;i<player.size();i++){
                                     if(Integer.parseInt(guess.get(i))==solution){
                                         winners +=player.get(i)+", ";
-                                        GameControl.scores.addScore(player.get(i),earned);
+                                        GameListener.scores.addScore(player.get(i),earned);
                                     }
                                     else{
-                                        GameControl.scores.subtractScore(player.get(i),bet);
+                                        GameListener.scores.subtractScore(player.get(i),bet);
                                     }
                                 }
                                 if (!winners.equalsIgnoreCase("")){

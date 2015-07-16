@@ -29,7 +29,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    QueueTime
  * - Linked Classes
  *    Global
- *    GameControl
+ *    GameListener
  *
  * Activate Command with:
  *      !highlow
@@ -54,7 +54,7 @@ public class GameHighLow extends ListenerAdapter {
             
             if (cmdSplit[0].equalsIgnoreCase("highlow")&&!GameUtils.areGamesBlocked(event.getChannel().getName())){
                 
-                if (!GameControl.activeGame.isGameActive(event.getChannel().getName(), "highlow", "long")){
+                if (!GameListener.activeGame.isGameActive(event.getChannel().getName(), "highlow", "long")){
                     
                     int key=(int) (Math.random()*100000+1);
                     boolean running = true;
@@ -88,7 +88,7 @@ public class GameHighLow extends ListenerAdapter {
                         if (currentMessage.equalsIgnoreCase(Integer.toString(key))){
                             
                             if (correctGuesses>0){
-                                GameControl.scores.addScore(prevPlayer, basePrize+correctGuesses*correctGuesses);
+                                GameListener.scores.addScore(prevPlayer, basePrize+correctGuesses*correctGuesses);
                                 event.getBot().sendIRC().message(gameChan,"Game over! You've run out of time. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
                                 
                             }
@@ -106,11 +106,11 @@ public class GameHighLow extends ListenerAdapter {
                                 
                                 if (nextCard.getValue()==currentCard.getValue()){
                                     if (correctGuesses>0){
-                                        GameControl.scores.addScore(currentEvent.getUser().getNick(), 1+basePrize+correctGuesses*correctGuesses);
+                                        GameListener.scores.addScore(currentEvent.getUser().getNick(), 1+basePrize+correctGuesses*correctGuesses);
                                         event.getBot().sendIRC().message(gameChan,"Game over! The value is the same as the previous card. You lose on ties, but I'll throw in a pity dollar. "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(1+basePrize+correctGuesses*correctGuesses)); // mod here
                                     }
                                     else{
-                                        GameControl.scores.addScore(currentEvent.getUser().getNick(), 1);
+                                        GameListener.scores.addScore(currentEvent.getUser().getNick(), 1);
                                         event.getBot().sendIRC().message(gameChan,"Game over! The value is the same as the previous card. You lose on ties, but I'll throw in a pity dollar.  "+prevPlayer+", you made "+correctGuesses+" correct predictions. Sorry, but you've only won $1."); // mod here
                                     }
                                     
@@ -125,7 +125,7 @@ public class GameHighLow extends ListenerAdapter {
                                     }
                                     else{
                                         if (correctGuesses>0){
-                                            GameControl.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
+                                            GameListener.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
                                             event.getBot().sendIRC().message(gameChan,"Game over! Your prediction was incorrect. The card was "+nextCard.toColoredString()+". "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
                                         }
                                         else{
@@ -143,7 +143,7 @@ public class GameHighLow extends ListenerAdapter {
                                     }
                                     else{
                                         if (correctGuesses>0){
-                                            GameControl.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
+                                            GameListener.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
                                             event.getBot().sendIRC().message(gameChan,"Game over! Your prediction was incorrect. The card was "+nextCard.toColoredString()+". "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
                                         }
                                         else{
@@ -157,7 +157,7 @@ public class GameHighLow extends ListenerAdapter {
                                 }
                                 
                                 if(deck.cardsLeft()==0){
-                                    GameControl.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
+                                    GameListener.scores.addScore(currentEvent.getUser().getNick(), basePrize+correctGuesses*correctGuesses);
                                     event.getBot().sendIRC().message(gameChan,"Game over! You've completed the deck! "+prevPlayer+", you made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
                                     queue.close();
                                     break;
@@ -176,7 +176,7 @@ public class GameHighLow extends ListenerAdapter {
                             
                             else if (currentEvent.getMessage().equals("!fuckthis")||currentEvent.getMessage().equalsIgnoreCase("I give up")){
                                 if (correctGuesses>0){
-                                    GameControl.scores.addScore(prevPlayer, basePrize+correctGuesses*correctGuesses);
+                                    GameListener.scores.addScore(prevPlayer, basePrize+correctGuesses*correctGuesses);
                                     event.respond("You have given up. The card was "+nextCard.toColoredString()+" You made "+correctGuesses+" correct predictions and win $"+(basePrize+correctGuesses*correctGuesses));
                                     
                                 }
@@ -188,7 +188,7 @@ public class GameHighLow extends ListenerAdapter {
                             }
                         }
                     }
-                    GameControl.activeGame.remove(gameChan,"highlow"); //updated current index of the game
+                    GameListener.activeGame.remove(gameChan,"highlow"); //updated current index of the game
                 }
                 else
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

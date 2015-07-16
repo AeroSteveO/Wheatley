@@ -31,7 +31,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    MultiplayerArrayGetQueue
  * - Linked Classes
  *    Global
- *    GameControl
+ *    GameListener
  *
  * Activate Commands with:
  *      !blackjack [minimum bet]
@@ -70,7 +70,7 @@ public class GameBlackjack extends ListenerAdapter {
                 
                 String gameChan = event.getChannel().getName();
                 
-                if (!GameControl.activeGame.contains(new String[] {gameChan, "blackjack", "long"})){
+                if (!GameListener.activeGame.contains(new String[] {gameChan, "blackjack", "long"})){
                     
                     int minBet = 10;
                     String options = null;
@@ -104,12 +104,12 @@ public class GameBlackjack extends ListenerAdapter {
                     }// END OPTIONS PARSING
                     
                     
-                    if (GameControl.scores.getScore(event.getUser().getNick())<minBet){
+                    if (GameListener.scores.getScore(event.getUser().getNick())<minBet){
                         event.getBot().sendIRC().notice(event.getUser().getNick(),"You don't have enough money to play blackjack with a minimum bet of $"+minBet);
                     }
                     else{
                         
-                        GameControl.activeGame.add(gameChan, "blackjack", "long");//Lets add the game to the array well after the input checks
+                        GameListener.activeGame.add(gameChan, "blackjack", "long");//Lets add the game to the array well after the input checks
                         
                         int key=(int) (Math.random()*100000+1);
                         int counter = 1; // Current player number, as Wheatley (dealer) is 0, starts at 1
@@ -125,7 +125,7 @@ public class GameBlackjack extends ListenerAdapter {
                             if (options.equalsIgnoreCase("multi")){
                                 event.getBot().sendIRC().message(gameChan,event.getUser().getNick()+" wants to play blackjack, type !dealmein to join");
                                 MultiplayerArrayGetQueue getPlayers = new MultiplayerArrayGetQueue(event,"dealmein",25,maxUsers-2);
-                                getPlayers.setScoringRequirements(GameControl.scores,minBet);
+                                getPlayers.setScoringRequirements(GameListener.scores,minBet);
                                 users.addAll(getPlayers.getPlayers());
                             }
                         }
@@ -373,7 +373,7 @@ public class GameBlackjack extends ListenerAdapter {
                                 
                                 for (int i=0;i<winner.size();i++){
                                     event.getBot().sendIRC().message(gameChan,hands.get(winner.get(i)).getPlayer()+" has won! The winning hand was "+ hands.get(winner.get(i)).toColoredString()+"totaling "+hands.get(winner.get(i)).getBlackjackHandValue()+" and earning $"+earnings+", everyone else has lost $"+minBet);
-                                    GameControl.scores.addScore(hands.get(winner.get(i)).getPlayer(),earnings);
+                                    GameListener.scores.addScore(hands.get(winner.get(i)).getPlayer(),earnings);
                                 }
                                 
 //subtract bet from all players scores, winners included
@@ -384,14 +384,14 @@ public class GameBlackjack extends ListenerAdapter {
                                     if(!winner.contains(i)){
                                         
                                         if (i==0)
-                                            GameControl.scores.subtractScore(hands.get(i).getPlayer(),(int) (minBet*(1.5*winner.size())));
+                                            GameListener.scores.subtractScore(hands.get(i).getPlayer(),(int) (minBet*(1.5*winner.size())));
                                         else
-                                            GameControl.scores.subtractScore(hands.get(i).getPlayer(),minBet);
+                                            GameListener.scores.subtractScore(hands.get(i).getPlayer(),minBet);
                                     }
                                 }// END UPDATE ALL USERS SCORES BUT THE WINNER
                                 
                                 for (int i=0;i<users.size();i++){
-                                    if(GameControl.scores.getScore(users.get(i))<minBet){
+                                    if(GameListener.scores.getScore(users.get(i))<minBet){
                                         event.getBot().sendIRC().message(currentEvent.getChannel().getName(),users.get(i)+" does not have enough money to cover the current bet and will not be dealt in this round");
                                         users.remove(i);
                                         i--;
@@ -436,7 +436,7 @@ public class GameBlackjack extends ListenerAdapter {
                                 }
                             } // ENDS AFTER WHEATLEY'S MOVE
                         }
-                        GameControl.activeGame.remove(gameChan,"blackjack"); //updated current index of the game
+                        GameListener.activeGame.remove(gameChan,"blackjack"); //updated current index of the game
                     }
                 }
                 else

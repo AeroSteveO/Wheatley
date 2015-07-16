@@ -28,7 +28,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    TimedWaitForQueue
  * - Linked Classes
  *    Global
- *    GameControl
+ *    GameListener
  * 
  * Activate Command with:
  *      !GuessTheNumber [upperBound]
@@ -83,7 +83,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
             }
             
             
-            if (!GameControl.activeGame.isGameActive(gameChan, "guessthenumber", "long")){
+            if (!GameListener.activeGame.isGameActive(gameChan, "guessthenumber", "long")){
                 
                 
                 int lives =(int) 10+length/100;
@@ -121,7 +121,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                             else if (guess.equalsIgnoreCase(solution)){
                                 
                                 int timeSpent = currentGame.getTimeSpent();
-                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+Integer.toString(length).length()+lives,Integer.toString(length).length(), timeSpent, time);
+                                int prize = GameListener.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+Integer.toString(length).length()+lives,Integer.toString(length).length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the number in "+timeSpent+" seconds and wins $"+prize+". Number: " + Colors.BOLD+Colors.RED+solution);
                                 
 //                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the number: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
@@ -139,7 +139,7 @@ public class GameGuessTheNumber extends ListenerAdapter {
                         }
                     }
                 }
-                GameControl.activeGame.remove(gameChan,"guessthenumber"); //updated current index of the game
+                GameListener.activeGame.remove(gameChan,"guessthenumber"); //updated current index of the game
             }
             else
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

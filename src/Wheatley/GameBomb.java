@@ -30,7 +30,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    TimedWaitForQueue
  * - Linked Classes
  *    Global
- *    GameControl
+ *    GameListener
  *
  * Activate Command with:
  *      !bomb
@@ -59,7 +59,7 @@ public class GameBomb extends ListenerAdapter {
                 List<String> colours = new ArrayList<>();
                 String colorlist = "";
                 
-                if (GameControl.scores.getScore(event.getUser().getNick())<loss){
+                if (GameListener.scores.getScore(event.getUser().getNick())<loss){
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"You don't have enough money to afford the potential loss in this game");
                 }
                 else{
@@ -114,22 +114,22 @@ public class GameBomb extends ListenerAdapter {
                         if (CurrentEvent.getMessage().equalsIgnoreCase(Integer.toString(key))){
                             event.getBot().sendIRC().message(event.getChannel().getName(),"the bomb explodes in front of " + player + ". Seems like you did not even notice the big beeping suitcase. You lose $"+loss);
                             colours.clear();
-                            GameControl.scores.subtractScore(player, loss);
-                            GameControl.scores.addScore(event.getBot().getNick(), loss);
+                            GameListener.scores.subtractScore(player, loss);
+                            GameListener.scores.addScore(event.getBot().getNick(), loss);
                             queue.close();
                         }
                         else if (CurrentEvent.getMessage().equalsIgnoreCase(solution)&&CurrentEvent.getUser().getNick().equalsIgnoreCase(player)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
                             event.getBot().sendIRC().message(event.getChannel().getName(), player + " defused the bomb. Seems like he was wise enough to buy a defuse kit. You win $"+prize );
                             colours.clear();
-                            GameControl.scores.addScore(player,prize);
+                            GameListener.scores.addScore(player,prize);
                             queue.close();
                         }
                         else if (!CurrentEvent.getMessage().equalsIgnoreCase(solution)&&CurrentEvent.getUser().getNick().equalsIgnoreCase(player)&&CurrentEvent.getChannel().getName().equalsIgnoreCase(event.getChannel().getName())){
                             int moneyLoss = 20;
                             event.getBot().sendIRC().message(event.getChannel().getName(),"The bomb explodes in " + player + "'s hands. You lost your life and - even worse - $"+moneyLoss+". The right color would have been "+Colors.BOLD+Colors.RED+solution);
                             colours.clear();
-                            GameControl.scores.subtractScore(player, moneyLoss);
-                            GameControl.scores.addScore(event.getBot().getNick(), moneyLoss);
+                            GameListener.scores.subtractScore(player, moneyLoss);
+                            GameListener.scores.addScore(event.getBot().getNick(), moneyLoss);
                             queue.close();
                         }
                     }

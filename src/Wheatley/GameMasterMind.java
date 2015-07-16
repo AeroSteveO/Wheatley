@@ -31,7 +31,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    Game
  * - Linked Classes
  *    Global
- *    GameControl
+ *    GameListener
  *
  * Activate Command with:
  *      !Mastermind [length] [chars] [lives]
@@ -57,7 +57,7 @@ public class GameMasterMind extends ListenerAdapter {
         
         if (message.split(" ")[0].equalsIgnoreCase("!mastermind")&&!GameUtils.areGamesBlocked(gameChan)) {
             
-            if (!GameControl.activeGame.contains(new String[] {gameChan, "mastermind", "long"})){
+            if (!GameListener.activeGame.contains(new String[] {gameChan, "mastermind", "long"})){
                 
                 String[] options = message.split(" ");
                 int length = 5;
@@ -121,7 +121,7 @@ public class GameMasterMind extends ListenerAdapter {
                     lives = Integer.parseInt(options[3]);
                 }
                 
-                GameControl.activeGame.add(gameChan, "mastermind", "long");//Lets add the game to the array well after the input checks
+                GameListener.activeGame.add(gameChan, "mastermind", "long");//Lets add the game to the array well after the input checks
                 int time = 30+(charSize+length)*10;
                 int scorePositionValue = 0;
                 int scoreValue = 0;
@@ -174,7 +174,7 @@ public class GameMasterMind extends ListenerAdapter {
                             if (scorePositionValue == length){
                                 
                                 int timeSpent = currentGame.getTimeSpent();
-                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+length+charSize+lives,length, timeSpent, time);
+                                int prize = GameListener.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+length+charSize+lives,length, timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the code in "+timeSpent+" seconds and wins $"+prize+". Code: " + Colors.BOLD+Colors.RED+solution.toUpperCase());
                                 
 //                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the code: " + Colors.BOLD +Colors.RED+ solution + Colors.NORMAL);
@@ -198,7 +198,7 @@ public class GameMasterMind extends ListenerAdapter {
                         }
                     }
                 }
-                GameControl.activeGame.remove(gameChan,"mastermind"); //updated current index of the game
+                GameListener.activeGame.remove(gameChan,"mastermind"); //updated current index of the game
             }
             else
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

@@ -29,7 +29,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    TimedWaitForQueue
  * - Linked Classes
  *    Global
- *    GameControl
+ *    GameListener
  *
  * Activate Command with:
  *      !reverse
@@ -48,7 +48,7 @@ public class GameReverse extends ListenerAdapter {
         if (message.equalsIgnoreCase("!reverse")&&!GameUtils.areGamesBlocked(gameChan)) {
             // get the list of words only if theres nothing in the list alread
             
-            if (!GameControl.activeGame.isGameActive(gameChan, "reverse")){
+            if (!GameListener.activeGame.isGameActive(gameChan, "reverse")){
                 
                 Game currentGame = new Game(GameMod.REVERSE);
                 
@@ -76,7 +76,7 @@ public class GameReverse extends ListenerAdapter {
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
                                 
                                 int timeSpent = currentGame.getTimeSpent();
-                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+reversed.length(), reversed.length(), timeSpent, time);
+                                int prize = GameListener.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+reversed.length(), reversed.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                                 
 //                                event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
@@ -93,7 +93,7 @@ public class GameReverse extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
-                GameControl.activeGame.remove(gameChan,"reverse");
+                GameListener.activeGame.remove(gameChan,"reverse");
             }
             else
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

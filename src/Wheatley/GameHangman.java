@@ -29,7 +29,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    Game
  * - Linked Classes
  *    Global
- *    GameControl
+ *    GameListener
  *
  * Activate Command with:
  *      !hangman
@@ -48,7 +48,7 @@ public class GameHangman extends ListenerAdapter {
         
         if (message.equalsIgnoreCase("!hangman")&&!GameUtils.areGamesBlocked(gameChan)) {
             
-            if (!GameControl.activeGame.isGameActive(gameChan, "hangman", "long")){
+            if (!GameListener.activeGame.isGameActive(gameChan, "hangman", "long")){
                 
                 Game currentGame = new Game(GameMod.BLANK);
                 
@@ -77,7 +77,7 @@ public class GameHangman extends ListenerAdapter {
                         if (Pattern.matches("[a-zA-Z]{2,}",CurrentEvent.getMessage())){
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
                                 int timeSpent = currentGame.getTimeSpent();
-                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length()+lives+(chosenword.length()-changed),chosenword.length(), timeSpent, time);
+                                int prize = GameListener.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length()+lives+(chosenword.length()-changed),chosenword.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                                 
 //                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD+Colors.RED + chosenword.toUpperCase() + Colors.NORMAL);
@@ -117,7 +117,7 @@ public class GameHangman extends ListenerAdapter {
                             }
                             else if (correct == chosenword.length()){
                                 int timeSpent = currentGame.getTimeSpent();
-                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length()+lives, chosenword.length(), timeSpent, time);
+                                int prize = GameListener.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length()+lives, chosenword.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
 //                                event.getBot().sendIRC().message(gameChan,"Congratulations " + CurrentEvent.getUser().getNick() +  ", you've found the word: " + Colors.BOLD +Colors.RED+ chosenword.toUpperCase() + Colors.NORMAL);
                                 running = false;
@@ -131,7 +131,7 @@ public class GameHangman extends ListenerAdapter {
                         }
                     }
                 }
-                GameControl.activeGame.remove(gameChan,"hangman"); //updated current index of the game
+                GameListener.activeGame.remove(gameChan,"hangman"); //updated current index of the game
             }
             else
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

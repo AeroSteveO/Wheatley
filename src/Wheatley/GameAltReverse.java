@@ -30,7 +30,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *    TimedWaitForQueue
  * - Linked Classes
  *    Global
- *    GameControl
+ *    GameListener
  *
  *  Activate Command with:
  *      !altreverse
@@ -51,7 +51,7 @@ public class GameAltReverse extends ListenerAdapter {
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
         if ((message.equalsIgnoreCase("!altreverse"))&&!GameUtils.areGamesBlocked(gameChan)) {
             
-            if (!GameControl.activeGame.isGameActive(gameChan, "altreverse")){
+            if (!GameListener.activeGame.isGameActive(gameChan, "altreverse")){
                 
                 Game currentGame = new Game(GameMod.REVERSE);
                 //get and shuffle the word
@@ -78,7 +78,7 @@ public class GameAltReverse extends ListenerAdapter {
                             if (CurrentEvent.getMessage().equalsIgnoreCase(reversed)&&currentChan.equalsIgnoreCase(gameChan)){
                                 
                                 int timeSpent = currentGame.getTimeSpent();
-                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+reversed.length(),reversed.length(), timeSpent, time);
+                                int prize = GameListener.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+reversed.length(),reversed.length(), timeSpent, time);
                                 
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+reversed.toUpperCase());
                                 running = false;
@@ -95,7 +95,7 @@ public class GameAltReverse extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
-                GameControl.activeGame.remove(gameChan,"altreverse");
+                GameListener.activeGame.remove(gameChan,"altreverse");
             }
             else
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

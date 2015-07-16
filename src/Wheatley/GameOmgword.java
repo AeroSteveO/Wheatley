@@ -28,7 +28,7 @@ import org.pircbotx.hooks.events.*;
  *    GameList
  * - Linked Classes
  *    Global
- *    GameControl
+ *    GameListener
  *
  * Activate command with:
  *      !omgword
@@ -49,8 +49,8 @@ public class GameOmgword extends ListenerAdapter {
         // keep the spammy spammy out of main, could move to XML/Global.java at some point
         if (message.equalsIgnoreCase("!omgword")&&!GameUtils.areGamesBlocked(gameChan)) {
             
-            if (!GameControl.activeGame.isGameActive(gameChan, "omgword")){
-//                GameControl.activeGame.add(gameChan, "omgword", "short");
+            if (!GameListener.activeGame.isGameActive(gameChan, "omgword")){
+//                GameListener.activeGame.add(gameChan, "omgword", "short");
                 Game currentGame = new Game(GameMod.SHUFFLE);
                 //get and shuffle the word
                 boolean running = true;
@@ -74,7 +74,7 @@ public class GameOmgword extends ListenerAdapter {
                             if (CurrentEvent.getMessage().equalsIgnoreCase(chosenword)){
                                 
                                 int timeSpent = currentGame.getTimeSpent();
-                                int prize = GameControl.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length(), chosenword.length(), timeSpent, time);
+                                int prize = GameListener.scores.addScore(CurrentEvent.getUser().getNick(), basePrize+chosenword.length(), chosenword.length(), timeSpent, time);
                                 event.getBot().sendIRC().message(gameChan, CurrentEvent.getUser().getNick() + " entered the solution in "+timeSpent+" seconds and wins $"+prize+". Solution: " + Colors.BOLD+Colors.RED+chosenword.toUpperCase());
                                 
 //                                event.getBot().sendIRC().message(event.getChannel().getName(), CurrentEvent.getUser().getNick() + ": You have entered the solution! Correct answer was " +Colors.BOLD+Colors.RED+ chosenword.toUpperCase());
@@ -92,7 +92,7 @@ public class GameOmgword extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
-                GameControl.activeGame.remove(gameChan,"omgword");
+                GameListener.activeGame.remove(gameChan,"omgword");
             }
             else 
                 event.getBot().sendIRC().notice(event.getUser().getNick(),"Game Currently running in this channel");

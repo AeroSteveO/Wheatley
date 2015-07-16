@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import static Wheatley.GameListener.scores;
+
 
 /**
  *
@@ -69,7 +71,7 @@ public class GameSlots extends ListenerAdapter {
                     }
                 }
                 
-                if (bet>GameControl.scores.getScoreObj(event.getUser().getNick()).getScore()){
+                if (bet>scores.getScoreObj(event.getUser().getNick()).getScore()){
                     event.getBot().sendIRC().message(event.getChannel().getName(),event.getUser().getNick()+": You do not have enough money to bet that much");
                     return;
                 }
@@ -85,23 +87,23 @@ public class GameSlots extends ListenerAdapter {
                 
                 if (slots.get(0).equalsIgnoreCase(leet)&&slots.get(1).equalsIgnoreCase(leet)&&slots.get(2).equalsIgnoreCase(leet)){
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString+ "| C0nGr47ul47!0nz "+event.getUser().getNick()+", u won $"+prizes.get(3)+" - go pwn som n00bs :>");
-                    GameControl.scores.addScore(event.getUser().getNick(), prizes.get(3));
+                    scores.addScore(event.getUser().getNick(), prizes.get(3));
                 }
                 
                 else if (slots.get(0).equalsIgnoreCase(slots.get(1))&&slots.get(1).equalsIgnoreCase(slots.get(2))){
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Congratulations "+event.getUser().getNick()+", you won $"+prizes.get(2));
-                    GameControl.scores.addScore(event.getUser().getNick(), prizes.get(2));
+                    scores.addScore(event.getUser().getNick(), prizes.get(2));
                 }
                 
                 else if (slots.get(0).equalsIgnoreCase(slots.get(1))||slots.get(1).equalsIgnoreCase(slots.get(2))){
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Congratulations "+event.getUser().getNick()+", you won $"+prizes.get(1));
-                    GameControl.scores.addScore(event.getUser().getNick(), prizes.get(1));
+                    scores.addScore(event.getUser().getNick(), prizes.get(1));
                 }
                 
                 else if (!slots.get(0).equalsIgnoreCase(slots.get(1))&&!slots.get(1).equalsIgnoreCase(slots.get(2))){//&&!slots.get(0).equalsIgnoreCase(slots.get(2))
                     event.getBot().sendIRC().message(event.getChannel().getName(),slotString + "| Sorry "+event.getUser().getNick()+", but you lost $"+prizes.get(0));
-                    GameControl.scores.subtractScore(event.getUser().getNick(), prizes.get(0));
-                    GameControl.scores.addScore(event.getBot().getNick(), prizes.get(0)); //Give wheatley the money
+                    scores.subtractScore(event.getUser().getNick(), prizes.get(0));
+                    scores.addScore(event.getBot().getNick(), prizes.get(0)); //Give wheatley the money
                 }
                 
                 else{
