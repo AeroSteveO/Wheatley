@@ -63,7 +63,7 @@ public class CommandListener extends ListenerAdapter{
                 }
             }
         }
-        else if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase())){
+        else if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase() + ", ")){
             for (int i=0;i<commandList.size();i++){
                 if (commandList.get(i).isCommand(message)){
                     commandList.get(i).processCommand(event);
