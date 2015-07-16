@@ -14,10 +14,16 @@ import org.joda.time.DateTime;
  * @author Stephen
  */
 public abstract class WeatherBasic {
-    public String zip = new String();       // Zip code of the city
+    private final String zip;       // Zip code of the city
     public DateTime expiration;             // Expiration time of the cache entry
-    public String cityState = new String(); // City, State (two letter state)
+    private final String cityState; // City, State (two letter state)
 
+    
+    public WeatherBasic(String zip, String cityState) {
+        this.zip = zip;
+        this.cityState = cityState;
+    }
+    
     public String getZip(){
         return(zip);
     }

@@ -24,8 +24,7 @@ public class WeatherForecast extends WeatherBasic implements WeatherCacheInterfa
     private ArrayList<String> forecastConditions; // Array contiaining the forecast conditions for each day of the week
     
     public WeatherForecast(String inputLocation, String inputZip, ArrayList<String> highTempF, ArrayList<String> lowTempF, ArrayList<String> highTempC, ArrayList<String> lowTempC, ArrayList<String> weather, ArrayList<String> day, String pretty){
-        this.cityState = inputLocation;
-        this.zip = inputZip;
+        super(inputZip, inputLocation);
         this.weekDay = day;
         this.highF = highTempF;
         this.lowF = lowTempF;
@@ -45,7 +44,7 @@ public class WeatherForecast extends WeatherBasic implements WeatherCacheInterfa
     public String getFormattedResponse(){
         String response = "";
         // FORECAST CACHE FORMATTED RESPONSE
-        response =(Colors.BOLD+this.cityState+" Forecast "+Colors.NORMAL+"(High/Low); "+Colors.BOLD+"Updated: "+Colors.NORMAL+this.observationTime.split("on")[0].trim()+"; ");
+        response =(Colors.BOLD+this.getCityState()+" Forecast "+Colors.NORMAL+"(High/Low); "+Colors.BOLD+"Updated: "+Colors.NORMAL+this.observationTime.split("on")[0].trim()+"; ");
         
         for (int i=0;i<7;i++){ // Add 7 days to the response (can change for more or less)
             response = response+(Colors.BOLD+this.weekDay.get(i)+": "+Colors.NORMAL+this.forecastConditions.get(i)+", "+this.highF.get(i)+"/"+this.lowF.get(i)+"°F ("+this.highC.get(i)+"/"+this.lowC.get(i)+"°C); ");

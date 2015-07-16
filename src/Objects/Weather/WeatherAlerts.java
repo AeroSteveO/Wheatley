@@ -20,8 +20,7 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
     private String alertText;     // The full text of the alert
     
     public WeatherAlerts(String inputLocation, String inputZip, String alertDescription, String alertExpiration, String alertText){
-        this.cityState = inputLocation;
-        this.zip = inputZip;
+        super(inputZip, inputLocation);
         this.alertType = alertDescription;
         this.alertExpires = alertExpiration;
         this.expiration = new DateTime().plusMinutes(30);
@@ -37,7 +36,7 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
     public String getFormattedResponse(){
         String response = "";
         if (!this.containsError())
-            response = Colors.RED + Colors.BOLD + "WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+this.cityState+ Colors.BOLD+" Description: "+Colors.NORMAL+this.alertType+Colors.BOLD+" Ending: "+Colors.NORMAL+this.alertExpires;
+            response = Colors.RED + Colors.BOLD + "WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+this.getCityState()+ Colors.BOLD+" Description: "+Colors.NORMAL+this.alertType+Colors.BOLD+" Ending: "+Colors.NORMAL+this.alertExpires;
         else
             response = alertType;
         return response;
