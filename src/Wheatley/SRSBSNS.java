@@ -95,12 +95,17 @@ public class SRSBSNS extends ListenerAdapter {
                     String url = logCopy.get(logCopy.size()-1).get(0);
                     String title;
                     
-                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(url).get();
-                    if (finaldoc == null) {
-                        title= "No Title Found";
-                    } else {
-                        title = finaldoc.title();
+                    try {
+                        org.jsoup.nodes.Document finaldoc = Jsoup.connect(url).get();
+                        if (finaldoc == null) {
+                            title= "No Title Found";
+                        } else {
+                            title = finaldoc.title();
+                        }
+                    } catch (Exception e) {
+                        title = "No Title Found";
                     }
+                    
                     ShortenerInterface shortener = new Bitly();
                     String shortURL = shortener.shorten(url);
                     event.getBot().sendIRC().message(channel, Colors.BOLD + "Last URL: " + Colors.NORMAL + ((shortURL == null) ? url : shortURL) + Colors.BOLD + " Title: " + Colors.NORMAL + title);
