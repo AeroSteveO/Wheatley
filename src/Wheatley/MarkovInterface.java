@@ -154,8 +154,10 @@ public class MarkovInterface extends ListenerAdapter{
             
             //Automatically Save lines every 10 new messages added
             if (newLines>=newLinesBeforeUpdate){
-                newLines = 0;
-                borg.saveWords(markovFile);
+                synchronized(borg) {
+                    newLines = 0;
+                    borg.saveWords(markovFile);
+                }
             }
             
             //Automatically speak with a 1/chance probability

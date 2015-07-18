@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 
 package Objects;
 
@@ -24,34 +24,40 @@ public class MapArray {
     }
     
     public ArrayList<ArrayList<String>> getArray(String channel) {
-        if (log.containsKey(channel)) {
-            ArrayList<ArrayList<String>> newArray = new ArrayList<ArrayList<String>>();
-            newArray.addAll(log.get(channel));
-            return newArray;
-        }
-        else {
-            return null;
+        synchronized(log) {
+            if (log.containsKey(channel)) {
+                ArrayList<ArrayList<String>> newArray = new ArrayList<ArrayList<String>>();
+                newArray.addAll(log.get(channel));
+                return newArray;
+            }
+            else {
+                return null;
+            }
         }
     }
     
     public void addToLog(String channel, String message) {
-        ArrayList<String> array = new ArrayList<String>();
-        array.add(message);
-        addToLog(channel, array);
+        synchronized(log) {
+            ArrayList<String> array = new ArrayList<String>();
+            array.add(message);
+            addToLog(channel, array);
+        }
     }
     
     public void addToLog(String channel, ArrayList<String> message) {
-        channel = channel.toLowerCase();
-        if (!log.containsKey(channel)){
-            ArrayList<ArrayList<String>> channelLog = new ArrayList<>();
-            channelLog.add(message);
-            log.put(channel, channelLog);
-        }
-        else{
-            log.get(channel).add(message);
-            
-            if (log.get(channel).size() > size){
-                log.get(channel).remove(0);
+        synchronized(log) {
+            channel = channel.toLowerCase();
+            if (!log.containsKey(channel)){
+                ArrayList<ArrayList<String>> channelLog = new ArrayList<>();
+                channelLog.add(message);
+                log.put(channel, channelLog);
+            }
+            else{
+                log.get(channel).add(message);
+                
+                if (log.get(channel).size() > size){
+                    log.get(channel).remove(0);
+                }
             }
         }
     }
