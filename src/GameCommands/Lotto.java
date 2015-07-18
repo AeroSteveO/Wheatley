@@ -148,7 +148,7 @@ public class Lotto implements CommandGame {
                                 scores.addScore(event.getBot().getNick(), WheatleyGain);
                                 scores.subtractScore(event.getBot().getNick(), lottoBaseWin);
                                 lottoNumber = (int) (0+(Math.random()*100-0+1));
-                                Global.settings.get("lottowinnings", String.valueOf(lottoBaseWin));
+                                Global.settings.set("lottowinnings", String.valueOf(lottoBaseWin));
                                 guessList.clear();
                                 win=true;
                             }
