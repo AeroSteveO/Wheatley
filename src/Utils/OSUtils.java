@@ -16,12 +16,21 @@ public class OSUtils {
     
     private static String OS = null;
     
-    public static String getOsName() {
+    public static String getOSName() {
         if(OS == null) { OS = System.getProperty("os.name"); }
         return OS;
     }
+    
     public static boolean isWindows() {
-        return getOsName().startsWith("Windows");
+        return getOSName().startsWith("Windows");
+    }
+    
+    public static String getOSArchitecture() {
+        return System.getProperty("os.arch");
+    }
+    
+    public static String getOSVersion() {
+        return System.getProperty("os.version");
     }
     
     public enum OSType {
