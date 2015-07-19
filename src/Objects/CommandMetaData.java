@@ -67,7 +67,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 public class CommandMetaData {
     private final Event event;
     private String caller;
-    private String eventType;
+    private EventType eventType;
     private String channel = null; // This channel is only changed if the event is a message event
     private String refChan = null; // This channel is only changed if one is in the input string
     private boolean isVerified = false; // True if the User is Registered and Identified
@@ -86,9 +86,13 @@ public class CommandMetaData {
             processEventWithoutVerification();
     }
     
+    public enum EventType {
+        MessageEvent, PrivateMessageEvent
+    }
+    
     private void processEventWithoutVerification(){
         if (event instanceof MessageEvent){ // MESSAGE EVENT SPECIFIC PARSING
-            eventType = "ChannelMessage";
+            eventType = EventType.MessageEvent;
             MessageEvent mEvent = (MessageEvent) event;
             caller = mEvent.getUser().getNick();
             message = Colors.removeFormattingAndColors(mEvent.getMessage());
@@ -102,7 +106,7 @@ public class CommandMetaData {
         }// END MESSAGE EVENT SPECIFIC PARSING
         
         else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
-            eventType = "PrivateMessage";
+            eventType = EventType.PrivateMessageEvent;
             PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
             message = Colors.removeFormattingAndColors(pmEvent.getMessage());
             caller = pmEvent.getUser().getNick();
@@ -120,7 +124,7 @@ public class CommandMetaData {
     
     private void processFullEvent(){
         if (event instanceof MessageEvent){ // MESSAGE EVENT SPECIFIC PARSING
-            eventType = "ChannelMessage";
+            eventType = EventType.MessageEvent;
             MessageEvent mEvent = (MessageEvent) event;
             caller = mEvent.getUser().getNick();
             message = Colors.removeFormattingAndColors(mEvent.getMessage());
@@ -139,11 +143,11 @@ public class CommandMetaData {
                 isChanOwner = mEvent.getChannel().isOwner(mEvent.getUser());
             }
             
-            getCommands(); 
+            getCommands();
         }// END MESSAGE EVENT SPECIFIC PARSING
         
         else if (event instanceof PrivateMessageEvent){ // PRIVATE MESSAGE EVENT SPECIFIC PARSING
-            eventType = "PrivateMessage";
+            eventType = EventType.PrivateMessageEvent;
             PrivateMessageEvent pmEvent = (PrivateMessageEvent) event;
             message = Colors.removeFormattingAndColors(pmEvent.getMessage());
             caller = pmEvent.getUser().getNick();
@@ -203,7 +207,7 @@ public class CommandMetaData {
     public String getCommand(){
         return (command);
     }
-    public String getEventType(){
+    public EventType getEventType(){
         return (eventType);
     }
     public String getEventChannel(){
@@ -229,17 +233,35 @@ public class CommandMetaData {
             return (null);
     }
     public String respondToCallerOrMessageChan(){
-        if (eventType.equalsIgnoreCase("PrivateMessage")&&refChan==null){
+        if (eventType == EventType.PrivateMessageEvent && refChan == null){
             return caller;
         }
         else
             return getCommandChannel();
     }
     public String respondToIgnoreMessage(){
-        if (eventType.equalsIgnoreCase("PrivateMessage")){
+        if (eventType == EventType.PrivateMessageEvent){
             return caller;
         }
         else
             return getEventChannel();
+    }
+    
+    public boolean isUserInChannel(String user) {
+        if (eventType != EventType.MessageEvent || user == null || channel == null) {
+            return false;
+        }
+        return isUserInChannel(user, channel);
+    }
+    
+    public boolean isUserInChannel(String user, String channel) {
+        if (eventType != EventType.MessageEvent || user == null || channel == null) {
+            return false;
+        }
+        MessageEvent mEvent = (MessageEvent) event;
+        if (mEvent.getBot().getUserChannelDao().containsChannel(channel) && mEvent.getBot().getUserChannelDao().containsUser(user)) {
+            return (mEvent.getBot().getUserChannelDao().getChannels(mEvent.getBot().getUserChannelDao().getUser(user)).contains(mEvent.getBot().getUserChannelDao().getChannel(channel)));
+        }
+        return false;
     }
 }
