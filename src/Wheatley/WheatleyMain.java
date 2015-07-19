@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.util.Arrays;
 import org.pircbotx.Colors;
+import java.util.ArrayList;
 import org.pircbotx.hooks.managers.BackgroundListenerManager;
 import uno2.UnoBot;
 
@@ -128,6 +129,9 @@ public class WheatleyMain extends ListenerAdapter {
             
             BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
             
+            ArrayList<ServerEntry> servers = new ArrayList<>();
+            ServerEntry entry = new ServerEntry(Global.mainServer, Integer.parseInt(Global.serverPort));
+            
             //   Configuration configuration;
             Configuration.Builder configuration = new Configuration.Builder()
                     .setName(Global.mainNick)
@@ -174,14 +178,14 @@ public class WheatleyMain extends ListenerAdapter {
 //                    .addListener(new Recommendations())
 //                    .addListener(new Urban())
                     .addListener(new CommandListener())
+                    .addListener(new IdleRPG())
 //                    .addListener(new MovieRatings())
                     .addListener(new BadWords())
                     .addListener(new MarkovInterface())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
                     .addListener(new RandChan())             // generates random 4chan image links
-                    .setServerHostname(Global.mainServer)
-                    .setServerPort(Integer.parseInt(Global.serverPort));
+                    .addServer(entry);
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
             
@@ -210,6 +214,11 @@ public class WheatleyMain extends ListenerAdapter {
             }
             
             if (!OSUtils.isWindows()) {
+                String host = eElement.getElementsByTagName("address").item(0).getTextContent();
+                ServerEntry server = new ServerEntry(host, 6667);
+                servers = new ArrayList<>();
+                servers.add(server);
+                
                 Configuration configuration2;
                 configuration2 = new Configuration.Builder()
                         .setName(musicBotNick)
@@ -220,7 +229,7 @@ public class WheatleyMain extends ListenerAdapter {
                         .setAutoNickChange(true)
                         .setCapEnabled(true)
                         .addListener(new WhatPre())
-                        .setServerHostname(eElement.getElementsByTagName("address").item(0).getTextContent())
+                        .addServer(server)
                         .addAutoJoinChannel("#rapterverse")
                         .setSocketTimeout(130 * 1000) // Reduce socket timeouts from 5 minutes to 130 seconds
                         .setMessageDelay(600) // Reduce message delays from 1 second to 600 milliseconds (need to experiment to get the lowest value without dropping messages)

@@ -11,10 +11,12 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import com.google.common.collect.ImmutableSortedSet;
+import java.util.ArrayList;
 
 
 import org.pircbotx.Colors;
 import org.pircbotx.Configuration;
+import org.pircbotx.Configuration.ServerEntry;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -481,6 +483,9 @@ public class UnoBot extends ListenerAdapter {
         else if (tokens[0].equalsIgnoreCase(Global.commandPrefix + "ai") && !gameUp) {
             
             if (!botAI) {
+                ArrayList<ServerEntry> servers = new ArrayList<>();
+                servers.add(new ServerEntry(event.getBot().getServerHostname(), event.getBot().getServerPort()));
+                
                 Configuration configuration2;
                 configuration2 = new Configuration.Builder()
                         .setName("unoAI")
@@ -492,8 +497,7 @@ public class UnoBot extends ListenerAdapter {
                         .setAutoNickChange(true)
                         .setCapEnabled(true)
                         .setMessageDelay(1000)
-                        .setServerHostname(event.getBot().getServerInfo().getServerName())
-                        .setServerPort(event.getBot().getConfiguration().getServerPort())
+                        .addServer(new ServerEntry(event.getBot().getServerHostname(), event.getBot().getServerPort()))
                         .addAutoJoinChannel(event.getChannel().getName())
 //                        .setSocketFactory(usingSSL ? new UtilSSLSocketFactory().trustAllCertificates() : SSLSocketFactory.getDefault())
                         .setSocketTimeout(130 * 1000) // Reduce socket timeouts from 5 minutes to 130 seconds
