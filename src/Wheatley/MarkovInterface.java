@@ -6,18 +6,15 @@
 
 package Wheatley;
 
-import Objects.SimpleSettings;
+import Objects.MapArray;
 import Utils.TextUtils;
 import static Utils.TextUtils.loadTextAsList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-import org.w3c.dom.Element;
 import org.jborg.*;
 import org.pircbotx.Colors;
 
@@ -40,24 +37,26 @@ import org.pircbotx.Colors;
  *         To turn on and off the random response markov generator
  *     !set chance [num]
  *         To set the chance of the markov generator to respond (1/[num] chance)
- *     !save lines
+ *     !save
  *         To save the current lines used in markov chain generation
  *     !line
+ *     [botnick], go on
+ *     [botnick], continue
  *         To command the bot to respond with a line
+ *     !words
+ *         Responds with some stats about the markov database
  *     [botnick], what do you think of [item]
+ *     [botnick], what do you think about [item]
  *         To force a seed word into the generator and command a reply
  *
  * ToDo:
- *      Wheatley, go on
- *          Makes Wheatley continue his current markov chain of thought, not sure
- *          if it should continue using the current word, or use a word from the
- *          previous message at random
  *
  */
 public class MarkovInterface extends ListenerAdapter{
     ArrayList<String> botList = null;
     int newLines = 0;
     int newLinesBeforeUpdate = 10;
+    MapArray previousLine = new MapArray(2);
     
     String botListFileName = "botList.txt";
     String markovFileName = "ImportedMarkov";
@@ -68,17 +67,16 @@ public class MarkovInterface extends ListenerAdapter{
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        String currentChan = event.getChannel().getName();
-        int channelIndex = Global.channels.getChanIdx(currentChan);
+        String channel = event.getChannel().getName();
         
         //Toggle off Markov Chain Talking
-        if (Pattern.matches(Global.mainNick + ", (shutup|shut\\s+up)",message)||message.equalsIgnoreCase("!mute")||Pattern.matches("(shutup|shut\\s+up)\\s+"+Global.mainNick,message)){
+        if (Pattern.matches(Global.mainNick + ", (shutup|shut\\s+up)",message)||message.equalsIgnoreCase("!mute")||Pattern.matches("(shutup|shut\\s+up)\\s+"+Global.mainNick,message)) {
             setMarkovSpeech("false", event.getChannel().getName());
             event.getBot().sendIRC().notice(event.getUser().getNick(), "Markov chain system muted");
         }
         
         //Toggle on Markov Chain Talking
-        if (message.equalsIgnoreCase(Global.mainNick + ", speak up")||message.equalsIgnoreCase("!speak")){
+        if (message.equalsIgnoreCase(Global.mainNick + ", speak up")||message.equalsIgnoreCase("!speak")) {
             setMarkovSpeech("true", event.getChannel().getName());
             event.getBot().sendIRC().notice(event.getUser().getNick(), "Markov chain system un-muted");
         }
@@ -86,20 +84,20 @@ public class MarkovInterface extends ListenerAdapter{
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             
-            if (cmdSplit[0].equalsIgnoreCase("words")){
-                event.getBot().sendIRC().message(currentChan, "I know "+borg.words.size()+" words ("+borg.numContexts+" contexts, "+String.valueOf(borg.numContexts/borg.words.size())+" per word), "+borg.lines.size()+" lines.");
+            if (cmdSplit[0].equalsIgnoreCase("words")) {
+                event.getBot().sendIRC().message(channel, "I know "+borg.words.size()+" words ("+borg.numContexts+" contexts, "+String.valueOf(borg.numContexts/borg.words.size())+" per word), "+borg.lines.size()+" lines.");
             }
             if (message.toLowerCase().startsWith("!set chance ")
-                    &&((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))
-                    &&event.getUser().isVerified())){
+                    && ((event.getUser().getNick().equalsIgnoreCase(Global.botOwner) || event.getChannel().isOwner(event.getUser()))
+                    && event.getUser().isVerified())) {
                 
                 String[] chanceSplit = message.split(" ");
                 String chance = chanceSplit[chanceSplit.length-1];
                 
-                if(chance.matches("[0-9]+")){
+                if(chance.matches("[0-9]+")) {
                     int inputChance = Integer.parseInt(chanceSplit[chanceSplit.length-1]);
                     
-                    if (inputChance>0){
+                    if (inputChance > 0) {
                         setMarkovChance(String.valueOf(inputChance), event.getChannel().getName());
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance set to: 1/"+inputChance);
                     }
@@ -133,8 +131,8 @@ public class MarkovInterface extends ListenerAdapter{
                     response = borg.generateReply(keyWord[keyWord.length-1]);
                     count++;
                 }
-                event.getBot().sendIRC().message(currentChan, response);
-                Global.channels.get(channelIndex).setPreviousMessage(response);
+                event.getBot().sendIRC().message(channel, response);
+                previousLine.addToLog(channel, message);
             }
             catch(Exception ex){
                 event.getBot().sendIRC().notice(event.getUser().getNick(), "Word "+Colors.BOLD+keyWord[keyWord.length-1].trim()+Colors.NORMAL+" not found in the Markov system");
@@ -153,7 +151,7 @@ public class MarkovInterface extends ListenerAdapter{
             newLines++;
             
             //Automatically Save lines every 10 new messages added
-            if (newLines>=newLinesBeforeUpdate){
+            if (newLines >= newLinesBeforeUpdate) {
                 synchronized(borg) {
                     newLines = 0;
                     borg.saveWords(markovFile);
@@ -161,40 +159,44 @@ public class MarkovInterface extends ListenerAdapter{
             }
             
             //Automatically speak with a 1/chance probability
-            if (getMarkovChance(event.getChannel().getName())==((int) (Math.random()*getMarkovChance(event.getChannel().getName()))+1)&&getMarkovSpeech(event.getChannel().getName())){
+            if (getMarkovChance(event.getChannel().getName()) == ((int) (Math.random()*getMarkovChance(event.getChannel().getName()))+1) && getMarkovSpeech(event.getChannel().getName())) {
                 String reply;
                 try{
                     reply = borg.generateReply(message);
-                    event.getBot().sendIRC().message(currentChan, reply);
+                    event.getBot().sendIRC().message(channel, reply);
                 }
                 catch (Exception ex){
                     
                 }
             }
-            Global.channels.get(channelIndex).setPreviousMessage(message);
+            previousLine.addToLog(channel, message);
         }
         
         //Command Wheatley to save his lines
         if (message.equalsIgnoreCase("!save")
-                &&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified())){
+                && (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)
+                && event.getUser().isVerified())) {
             
             newLines = 0;
             borg.saveWords(markovFile);
         }
         
         //Command Wheatley to speak a line
-        else if (message.equalsIgnoreCase("!line")){
+        else if (message.equalsIgnoreCase("!line") 
+                || message.equalsIgnoreCase(Global.mainNick + ", go on") 
+                || message.equalsIgnoreCase(Global.mainNick + ", continue")) {
+            
             ArrayList<String> reply = new ArrayList<>();
             String response = " ";
             for (int i=0;i<3;i++){
-                reply.add(borg.generateReply(Global.channels.get(channelIndex).getPreviousMessage()));
+                reply.add(borg.generateReply(previousLine.getArray(channel).get(0).get(0)));
             }
             for (int i=0;i<3;i++){
                 if (response.length()<reply.get(i).length())
                     response = reply.get(i);
             }
-            event.getBot().sendIRC().message(currentChan, response);
-            Global.channels.get(channelIndex).setPreviousMessage(response);
+            event.getBot().sendIRC().message(channel, response);
+            previousLine.addToLog(channel, response);
         }
     }
     
