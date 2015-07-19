@@ -118,9 +118,18 @@ public class SRSBSNS extends ListenerAdapter {
                 ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
                 if (logCopy.size() > 1){
                     String url = logCopy.get(logCopy.size()-2).get(0);
-                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(url).get();
-                    String title = finaldoc.title();
+                    String title;
                     
+                    try {
+                        org.jsoup.nodes.Document finaldoc = Jsoup.connect(url).get();
+                        if (finaldoc == null) {
+                            title= "No Title Found";
+                        } else {
+                            title = finaldoc.title();
+                        }
+                    } catch (Exception e) {
+                        title = "No Title Found";
+                    }
                     ShortenerInterface shortener = new Bitly();
                     String shortURL = shortener.shorten(url);
                     event.getBot().sendIRC().message(channel, Colors.BOLD + "Second to last URL: " + Colors.NORMAL + ((shortURL == null) ? url : shortURL) + Colors.BOLD + " Title: " + Colors.NORMAL + title);
@@ -134,9 +143,18 @@ public class SRSBSNS extends ListenerAdapter {
                 ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
                 if (logCopy.size() >= num - 1){
                     String url = logCopy.get(logCopy.size() - num).get(0);
-                    org.jsoup.nodes.Document finaldoc = Jsoup.connect(url).get();
-                    String title = finaldoc.title();
+                    String title;
                     
+                    try {
+                        org.jsoup.nodes.Document finaldoc = Jsoup.connect(url).get();
+                        if (finaldoc == null) {
+                            title= "No Title Found";
+                        } else {
+                            title = finaldoc.title();
+                        }
+                    } catch (Exception e) {
+                        title = "No Title Found";
+                    }
                     ShortenerInterface shortener = new Bitly();
                     String shortURL = shortener.shorten(url);
                     event.getBot().sendIRC().message(channel, Colors.BOLD + "Second to last URL: " + Colors.NORMAL + ((shortURL == null) ? url : shortURL) + Colors.BOLD + " Title: " + Colors.NORMAL + title);
