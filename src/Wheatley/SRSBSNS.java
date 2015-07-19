@@ -76,7 +76,7 @@ public class SRSBSNS extends ListenerAdapter {
 //        String[] messageArray = message.split(" ");
         String channel = event.getChannel().getName();
         
-        if (event.getBot().getUserChannelDao().containsUser("theTardis") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
+        if ((event.getBot().getUserChannelDao().containsUser("theTardis") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("theTardis")) {
             // separete input by spaces ( URLs don't have spaces )
             String [] parts = message.split("\\s");
             // Attempt to convert each item into an URL.
@@ -173,7 +173,7 @@ public class SRSBSNS extends ListenerAdapter {
                 event.respond(String.format("There are %d days, %d hours, %d minutes, and %d seconds until Christmas", days, hours, minutes, seconds));
             }
             //String message = event.getMessage().trim();
-            if(!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())){
+        if ((event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("BlarghleBot")) {
                 if(message.matches("!summon\\s+[^\\s]+")) {
                     String target = message.split("\\s+")[1];
                     if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(target))) {

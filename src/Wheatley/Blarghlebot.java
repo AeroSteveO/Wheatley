@@ -156,7 +156,7 @@ public class Blarghlebot extends ListenerAdapter {
             event.respond(magic.get((int) (Math.random()*magic.size()-1)));
         }
         
-        if (event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
+        if ((event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("BlarghleBot")) {
             
             if (message.equalsIgnoreCase("!users")||message.equalsIgnoreCase("!dtellausers")){
                 int totalUsers = 0;

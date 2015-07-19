@@ -9,9 +9,6 @@ package Wheatley;
 import Objects.MapArray;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.regex.Pattern;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -53,14 +50,14 @@ public class Swapper extends ListenerAdapter {
     private static MapArray logger = new MapArray(100);
     
     @Override
-    public void onMessage(MessageEvent event) throws Exception {
+    public void onMessage(MessageEvent event) {
         
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String channel = event.getChannel().getName();
         
         addToLog(channel, new ArrayList(Arrays.asList("<"+event.getUser().getNick()+">",event.getMessage())));
         
-        if (message.toLowerCase().startsWith("sw/")||((message.toLowerCase().startsWith("s/")||message.toLowerCase().startsWith("sed/"))&&!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel()))){
+        if (message.toLowerCase().startsWith("sw/") || ((message.toLowerCase().startsWith("s/") || message.toLowerCase().startsWith("sed/")) && ((event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("BlarghleBot")))){
             
             if (message.endsWith("/"))
                 message+="poop";
@@ -72,12 +69,30 @@ public class Swapper extends ListenerAdapter {
             
             ArrayList<String> reply = findReplace(i, findNreplace, logCopy);
             
-            if (reply.size()==2&&!reply.get(1).equalsIgnoreCase("")){
+            if (reply.size()==2&&!reply.get(1).equalsIgnoreCase("")) {
                 event.getBot().sendIRC().message(event.getChannel().getName(),reply.get(0)+" "+reply.get(1).substring(0,Math.min(reply.get(1).length(),400)));
                 addToLog(channel, reply);
             }
         }
-        
+        /*
+        [Thread-0] INFO org.pircbotx.InputParser - :BODpc!BODpc@dtl-2f162k.com PRIVMSG #dtella :sw/\/
+java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
+\
+ ^
+        at java.util.regex.Pattern.error(Pattern.java:1924)
+        at java.util.regex.Pattern.compile(Pattern.java:1671)
+        at java.util.regex.Pattern.<init>(Pattern.java:1337)
+        at java.util.regex.Pattern.compile(Pattern.java:1022)
+        at Wheatley.Swapper.findReplace(Swapper.java:184)
+        at Wheatley.Swapper.onMessage(Swapper.java:72)
+        at org.pircbotx.hooks.ListenerAdapter.onEvent(ListenerAdapter.java:63)
+        at org.pircbotx.hooks.managers.ThreadedListenerManager$1.call(ThreadedListenerManager.java:119)
+        at org.pircbotx.hooks.managers.ThreadedListenerManager$1.call(ThreadedListenerManager.java:115)
+        at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+        at java.lang.Thread.run(Thread.java:745)
+        */
         if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             
             String command = message.split(Global.commandPrefix)[1];
