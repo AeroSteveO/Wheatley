@@ -1,11 +1,11 @@
-/**
- *
- *
- *
- */
+ /**
+  *
+  *
+  *
+  */
 package Wheatley;
 
-import Objects.Runner;
+import Objects.ServerReconnector;
 import Objects.ChannelStore;
 import Utils.OSUtils;
 import org.pircbotx.Configuration;
@@ -26,16 +26,17 @@ import uno2.UnoBot;
 /**
  *
  *
- * Requirements:
- * - APIs
- *    Jaxen-1.1.6
- * - Custom Objects
- *    Runner
- *    ChannelStore
- * - Linked Classes
- *    Global
- *
- * Wheatley, the derp bot
+ * Requements:
+
+    Is
+ *    Jaxen-1.6
+ * - Custom Ob
+    ServerReconnector
+    *    ChnelStore
+ * - Link
+    ses
+ *   
+ Wderp bot
  *  With Functions from
  *      theTardis   -- by theDoctor
  *      Matrapter   -- by Steve-O
@@ -50,7 +51,7 @@ import uno2.UnoBot;
  *      unoBot      -- by https://github.com/mjsalerno/UnoBot
  *
  *
- * @author Stephen
+ * @author Sten
  * often by siphoning code from other bots by tangd, and Vanilla, and theDoctor
  * or by converting code from other bots to Wheatley/pircbotx2.0
  * and by mirroring or re-making commands for theTardis/Wheatley
@@ -204,7 +205,7 @@ public class WheatleyMain extends ListenerAdapter {
             
             try {
                 Global.bot = new PircBotX(config);
-                Runner parallel = new Runner(Global.bot);
+                Runner parallel = neServerReconnectorer(GlServerReconnectorot);
                 Thread t = new Thread(parallel);
                 parallel.giveT(t);
                 t.start();
@@ -238,7 +239,7 @@ public class WheatleyMain extends ListenerAdapter {
                 
                 try {
                     Global.whatPreBot = new PircBotX(configuration2);
-                    Runner parallel = new Runner(Global.whatPreBot);
+                  ServerReconnectorer paServerReconnector = new Runner(Global.whatPreBot);
                     Thread t = new Thread(parallel);
                     parallel.giveT(t);
                     t.start();

@@ -22,12 +22,12 @@ import org.pircbotx.PircBotX;
  *    N/A
  *
  */
-public class Runner implements Runnable {
+public class ServerReconnector implements Runnable {
     
     PircBotX bot;
     Thread t;
     
-    public Runner(PircBotX bot) {
+    public ServerReconnector(PircBotX bot) {
         this.bot = bot;
     }
     
