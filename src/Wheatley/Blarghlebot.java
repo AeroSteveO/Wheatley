@@ -156,7 +156,7 @@ public class Blarghlebot extends ListenerAdapter {
             event.respond(magic.get((int) (Math.random()*magic.size()-1)));
         }
         
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
+        if (event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) {
             
             if (message.equalsIgnoreCase("!users")||message.equalsIgnoreCase("!dtellausers")){
                 int totalUsers = 0;
@@ -167,9 +167,6 @@ public class Blarghlebot extends ListenerAdapter {
                 Iterator<User> iterator = users.iterator();
                 while(iterator.hasNext()) {
                     User user = iterator.next();
-//                    if (user.getNick().startsWith("|")){
-//                        dtellaUsers++;
-//                    }
                     if (user.getNick().startsWith("|")&&!user.getNick().equalsIgnoreCase("***REMOVED***")){
                         dtellaUsers++;
                     }
@@ -231,7 +228,6 @@ public class Blarghlebot extends ListenerAdapter {
                     event.getChannel().send().kick(event.getUser(), "you += dead");
                 if (cmdSplit[0].toLowerCase().startsWith("troll")){
                     if((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
-//                        String[] kill = message.split(" ");
                         event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(cmdSplit[1]),"YOO GAWT TROLLED " + cmdSplit[1]);
                     }
                     else{
@@ -400,10 +396,6 @@ public class Blarghlebot extends ListenerAdapter {
 ////        System.out.println(event.getChannel().getName() + ", "+ event.getUser().getNick()+", "+event.getReason());
 //        addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList("* "+event.getUser().getNick(),"has kicked "+event.getRecipient().getNick()+" from "+event.getChannel().getName()+" ("+event.getReason()+")")));
 //    }
-////    @Override
-////    public void onNotice(NoticeEvent event) {
-////        addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList("-"+event.getUser().getNick()+"-",event.getNotice())));
-////    }
 //    
 //    
 //    private void addToLog(String channel, ArrayList<String> message) {

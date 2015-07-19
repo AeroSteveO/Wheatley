@@ -76,7 +76,7 @@ public class SRSBSNS extends ListenerAdapter {
 //        String[] messageArray = message.split(" ");
         String channel = event.getChannel().getName();
         
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
+        if (event.getBot().getUserChannelDao().containsUser("theTardis") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
             // separete input by spaces ( URLs don't have spaces )
             String [] parts = message.split("\\s");
             // Attempt to convert each item into an URL.
@@ -241,7 +241,7 @@ public class SRSBSNS extends ListenerAdapter {
                 }
             }
         }
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("Hermes")).contains(event.getChannel())) {
+        if (event.getBot().getUserChannelDao().containsUser("Hermes") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("Hermes")).contains(event.getChannel())) {
             if(message.toLowerCase().startsWith("!tell")&&message.split(" ").length>2) {
                 String target = message.split("\\s+")[1];
                 String tell = message.split(target)[1];
