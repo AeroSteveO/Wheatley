@@ -30,7 +30,7 @@ public  class TimedWaitForQueue extends WaitForQueue{
     public TimedWaitForQueue(MessageEvent event, int time, int key) throws InterruptedException {
         super(event.getBot());
         this.time=time;
-        QueueTime runnable = new QueueTime(event.getBot(),time,event.getChannel(),event.getBot().getUserBot(),key);
+        QueueTime runnable = new QueueTime(event, time, key);
         this.t = new Thread(runnable);
         runnable.giveT(t);
         t.start();

@@ -7,9 +7,11 @@
 package Objects;
 
 import Wheatley.Global;
+import com.google.common.collect.ImmutableMap;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
+import org.pircbotx.UserHostmask;
 import org.pircbotx.hooks.events.MessageEvent;
 
 /**
@@ -32,14 +34,16 @@ public  class QueueTime implements Runnable {
     int key;
     PircBotX bot;
     Thread t;
+    UserHostmask userHostmask;
+    ImmutableMap<String, String> v3Tags;
     
-    public QueueTime(PircBotX bot, int time, Channel chan, User user, int key) {
-        this.time = time;
-        this.chan=chan;
-        this.user=user;
-        this.key=key;
-        this.bot=bot;
-    }
+//    public QueueTime(PircBotX bot, int time, Channel chan, User user, int key) {
+//        this.time = time;
+//        this.chan=chan;
+//        this.user=user;
+//        this.key=key;
+//        this.bot=bot;
+//    }
     
     public QueueTime(MessageEvent event, int time, int key) {
         this.time = time;
@@ -47,6 +51,8 @@ public  class QueueTime implements Runnable {
         this.user = event.getBot().getUserBot();
         this.key = key;
         this.bot = Global.bot;
+        this.userHostmask = event.getUserHostmask();
+        this.v3Tags = event.getV3Tags();
     }
     
     public void interrupt(){
@@ -61,7 +67,7 @@ public  class QueueTime implements Runnable {
     public void run() {
         try { // No need to loop for this thread
             Thread.sleep(time*1000);
-            bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot,chan,user,Integer.toString(key)));
+            bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot, chan, chan.getName(), userHostmask, user, Integer.toString(key), v3Tags));
         } catch (InterruptedException ex) {
             
         }
