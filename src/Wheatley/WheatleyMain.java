@@ -205,7 +205,7 @@ public class WheatleyMain extends ListenerAdapter {
             
             try {
                 Global.bot = new PircBotX(config);
-                Runner parallel = neServerReconnectorer(GlServerReconnectorot);
+                ServerReconnector parallel = new ServerReconnector(Global.bot);
                 Thread t = new Thread(parallel);
                 parallel.giveT(t);
                 t.start();
@@ -239,7 +239,7 @@ public class WheatleyMain extends ListenerAdapter {
                 
                 try {
                     Global.whatPreBot = new PircBotX(configuration2);
-                  ServerReconnectorer paServerReconnector = new Runner(Global.whatPreBot);
+                  ServerReconnector parallel = new ServerReconnector(Global.whatPreBot);
                     Thread t = new Thread(parallel);
                     parallel.giveT(t);
                     t.start();
