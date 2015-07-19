@@ -78,6 +78,28 @@ public class Game {
         return this.chosenNum;
     }
     
+    public static char getExtendedNumerics(int val) {
+        String extendedNumerics = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        if (val > extendedNumerics.length()) {
+            throw (new IndexOutOfBoundsException("Index limit: " + (extendedNumerics.length()-1) + " input value out of bounds"));
+        }
+        
+        return (extendedNumerics.charAt(val));
+    }
+    
+    public static String convertDecimalTo(int convertToBase, int value) {
+        String conversion = "";
+        
+        int remainder = value % convertToBase;
+        while (value > 0) {
+            conversion = getExtendedNumerics(remainder) + conversion;
+            value = value / convertToBase;
+            remainder = value % convertToBase;
+        }
+        
+        return conversion;
+    }
+    
     public ArrayList<Integer> getIntArray(){
         return this.chosenNumArray;
     }
