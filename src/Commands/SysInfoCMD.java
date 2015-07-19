@@ -9,6 +9,7 @@ package Commands;
 import Objects.Command;
 import Objects.CommandMetaData;
 import Utils.IRCUtils;
+import Utils.OSUtils;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
@@ -32,6 +33,7 @@ public class SysInfoCMD implements Command {
         a.add("status");
         a.add("threads");
         a.add("uptime");
+        a.add("os");
         return a;
     }
     @Override
@@ -54,7 +56,7 @@ public class SysInfoCMD implements Command {
             respondTo = channel;
         
 //        boolean isVerified = data.isVerifiedBotOwner();
-//        
+//
 //        if(!isVerified){
 //            event.getBot().sendIRC().notice(caller, Colors.BOLD+"SysInfo: "+Colors.NORMAL+"You don't have access to this command");
 //        }
@@ -108,6 +110,16 @@ public class SysInfoCMD implements Command {
         if (message.equalsIgnoreCase("!uptime")) {
             long jvmUpTime = ManagementFactory.getRuntimeMXBean().getUptime();
             event.getBot().sendIRC().message(respondTo, Colors.BOLD+"Uptime: "+Colors.NORMAL+IRCUtils.millisToPrettyPrintTime(jvmUpTime)+"");
+        }
+        
+        if (message.equalsIgnoreCase("!os")) {
+            String name = OSUtils.getOSName();
+            String arch = OSUtils.getOSArchitecture();
+            String version = OSUtils.getOSVersion();
+            
+            event.getBot().sendIRC().message(respondTo, Colors.BOLD+"OS Name: " + Colors.NORMAL + name +
+                    Colors.BOLD + " OS Version: " + Colors.NORMAL + version +
+                    Colors.BOLD + " OS Architecture: " + Colors.NORMAL + arch);
         }
 //        }
     }
