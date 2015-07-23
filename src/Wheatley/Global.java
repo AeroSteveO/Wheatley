@@ -10,6 +10,8 @@ import Objects.ChannelStore.ChannelArray;
 import Objects.Settings;
 import Objects.Throttle;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.pircbotx.PircBotX;
 
 /**
@@ -52,12 +54,10 @@ public class Global {
     
     public static String mainChan = "#rapterverse";
     
-    public static ChannelArray channels = new ChannelArray();
+    public static List<String> channels = Collections.synchronizedList(new ArrayList<String>());
     public static String commandPrefix = "!";              // Not implemented in all functions
     public static String phrasePrefix = new String();      //mainNick+", ";
     public static ArrayList<String> botAdmin = getBotAdmins();
-//    public static final Reflections wheatleyReflection = new Reflections("org.pircbotx");
-    //public static List<Command> commandList = new ArrayList<>();
     
     public static Settings settings = new Settings("settings.json");
     public static Throttle throttle = new Throttle("throttle.json");
@@ -74,20 +74,4 @@ public class Global {
         admins.add("burg");
         return(admins);
     }
-//    public static void addCommands(List<Command> list, Class<? extends Annotation> cl) {
-//        Set<Class<?>> classes = wheatleyReflection.getTypesAnnotatedWith(cl);
-//        for (Class<?> clss : classes) {
-//            try {
-//                System.out.println(((Command) clss.newInstance()).toString());
-//                list.add(((Command) clss.newInstance()));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-//    public static void registerCommandList() {
-//        for (Command command : commandList) {
-//            commandList.add(command.getCommand());
-//        }
-//    }
 }

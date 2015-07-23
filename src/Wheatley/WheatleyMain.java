@@ -7,6 +7,7 @@ package Wheatley;
 
 import Objects.ServerReconnector;
 import Objects.ChannelStore;
+import Objects.PastebinExceptionHandler;
 import Utils.OSUtils;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -99,7 +100,7 @@ public class WheatleyMain extends ListenerAdapter {
 //        System.out.println(Boolean.parseBoolean(Global.settings.get("acceptinvites",event.getChannel())));
         if (Boolean.parseBoolean(Global.settings.get("acceptinvites",event.getChannel()))){
             event.getBot().sendIRC().joinChannel(event.getChannel());
-            Global.channels.add(new ChannelStore(event.getChannel())); //think this will work
+            Global.channels.add(event.getChannel().toLowerCase()); //think this will work
         }
     }
     
@@ -129,6 +130,7 @@ public class WheatleyMain extends ListenerAdapter {
             Global.mainServer = eElement.getElementsByTagName("address").item(0).getTextContent();
             
             BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
+            BackgroundListener.setExceptionHandler(new PastebinExceptionHandler());
             
             ArrayList<ServerEntry> servers = new ArrayList<>();
             ServerEntry entry = new ServerEntry(Global.mainServer, Integer.parseInt(Global.serverPort));
@@ -163,15 +165,15 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameAltReverse())     //alternate reverse game listener
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
-                    .addListener(new EnglishSayings())
+//                    .addListener(new EnglishSayings())
                     .addListener(new DefListener2())
                     .addListener(new AutodlText())
 //                    .addListener(new Fuckingweather())
 //                    .addListener(new KickBanWatcher())
-                    .addListener(new FactSphereFacts())
+//                    .addListener(new FactSphereFacts())
                     .addListener(new BotControl())
 //                    .addListener(new Ping())
-                    .addListener(new CaveJohnson())
+//                    .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
                     .addListener(new Weather())
 //                    .addListener(new TvSchedule())
@@ -192,7 +194,7 @@ public class WheatleyMain extends ListenerAdapter {
             
             for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++){ //Add channels from XML and load into channels Object
                 configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
-                Global.channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
+                Global.channels.add((eElement.getElementsByTagName("channel").item(i).getTextContent().toLowerCase()));
                 Global.settings.create("NA", "NA", eElement.getElementsByTagName("channel").item(i).getTextContent());
                 Global.throttle.create("NA", "NA", eElement.getElementsByTagName("channel").item(i).getTextContent());
             }
@@ -205,6 +207,7 @@ public class WheatleyMain extends ListenerAdapter {
             
             try {
                 Global.bot = new PircBotX(config);
+                Global.bot.getConfiguration().getListenerManager().setExceptionHandler(new PastebinExceptionHandler());
                 ServerReconnector parallel = new ServerReconnector(Global.bot);
                 Thread t = new Thread(parallel);
                 parallel.giveT(t);

@@ -41,7 +41,7 @@ public class FixCMD implements Command{
     
     @Override
     public String toString(){
-        return("Ghosts the bots nick, changes nick, identifies, and rejoins channels");
+        return("Fix: Ghosts the bots nick, changes nick, identifies, and rejoins channels");
     }
     
     @Override
@@ -79,7 +79,7 @@ public class FixCMD implements Command{
             event.getBot().sendIRC().message("NickServ", "identify " + Global.nickPass);
             
             updateChannelsFromXML();
-            Global.channels.removeDupes();
+//            Global.channels.removeDupes();
             for (int i=0;i<Global.channels.size();i++){
                 event.getBot().sendIRC().joinChannel(Global.channels.get(i).toString());
             }
@@ -99,7 +99,7 @@ public class FixCMD implements Command{
             
             
             for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++){ //Add channels from XML and load into channels Object
-                Global.channels.add(new ChannelStore(eElement.getElementsByTagName("channel").item(i).getTextContent()));
+                Global.channels.add(eElement.getElementsByTagName("channel").item(i).getTextContent().toLowerCase());
             }
             
         }
