@@ -30,7 +30,6 @@ public class SysInfoCMD implements Command {
         ArrayList<String> a = new ArrayList<>();
         a.add("sysinfo");
         a.add("ram");
-        a.add("status");
         a.add("threads");
         a.add("uptime");
         a.add("os");
@@ -100,11 +99,9 @@ public class SysInfoCMD implements Command {
         if (message.equalsIgnoreCase("!sysinfo")) {
             int usedRam = (int) (Runtime.getRuntime().totalMemory()/1024/1024); //make it MB
             int freeRam = (int) (Runtime.getRuntime().freeMemory()/1024/1024);  //make it MB
-            int cpuCores = Runtime.getRuntime().availableProcessors();
             event.getBot().sendIRC().message(respondTo, Colors.BOLD+"RAM used: "+Colors.NORMAL+usedRam+"MB"+
                     Colors.BOLD+" RAM free: "+Colors.NORMAL+freeRam+"MB"+
-                    Colors.BOLD+" Threads: "+Colors.NORMAL+Thread.activeCount() +
-                    Colors.BOLD + " Cores Available: " + Colors.NORMAL + cpuCores);
+                    Colors.BOLD+" Threads: "+Colors.NORMAL+Thread.activeCount());
         }
         
         if (message.equalsIgnoreCase("!uptime")) {
@@ -116,10 +113,12 @@ public class SysInfoCMD implements Command {
             String name = OSUtils.getOSName();
             String arch = OSUtils.getOSArchitecture();
             String version = OSUtils.getOSVersion();
-            
+            int cpuCores = Runtime.getRuntime().availableProcessors();
+
             event.getBot().sendIRC().message(respondTo, Colors.BOLD+"OS Name: " + Colors.NORMAL + name +
                     Colors.BOLD + " OS Version: " + Colors.NORMAL + version +
-                    Colors.BOLD + " OS Architecture: " + Colors.NORMAL + arch);
+                    Colors.BOLD + " OS Architecture: " + Colors.NORMAL + arch + 
+                    Colors.BOLD + " Cores Available: " + Colors.NORMAL + cpuCores);
         }
 //        }
     }
