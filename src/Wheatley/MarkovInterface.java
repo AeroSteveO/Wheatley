@@ -61,7 +61,7 @@ public class MarkovInterface extends ListenerAdapter{
     String botListFileName = "botList.txt";
     String markovFileName = "ImportedMarkov";
     File markovFile = new File(markovFileName);
-    JBorg borg = new JBorg(1,15);
+    final JBorg borg = new JBorg(1,15);
     boolean loaded = borg.loadWords(markovFile);
     
     @Override
