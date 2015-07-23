@@ -131,10 +131,13 @@ public class CommandMetaData {
             channel = mEvent.getChannel().getName();
             
             if (message.contains("#")){
-                refChan ="#" + message.split("#")[0].split(" ")[0];
+                refChan ="#" + message.split("#")[1].split(" ")[0];
                 isVerified  = mEvent.getUser().isVerified();
                 isBotOwner  = caller.equalsIgnoreCase(Global.botOwner);
-                isChanOwner = mEvent.getUser().getChannelsOwnerIn().contains(mEvent.getBot().getUserChannelDao().getChannel(refChan));
+                
+                if (mEvent.getUser() != null && mEvent.getBot().getUserChannelDao().containsChannel(refChan)) {
+                    isChanOwner = mEvent.getUser().getChannelsOwnerIn().contains(mEvent.getBot().getUserChannelDao().getChannel(refChan));
+                }
             }
             else{
                 
@@ -153,10 +156,13 @@ public class CommandMetaData {
             caller = pmEvent.getUser().getNick();
             
             if (message.contains("#")){
-                refChan = "#" + message.split("#")[0].split(" ")[0];
+                refChan = "#" + message.split("#")[1].split(" ")[0];
                 isVerified  = pmEvent.getUser().isVerified();
                 isBotOwner  = caller.equalsIgnoreCase(Global.botOwner);
-                isChanOwner = pmEvent.getUser().getChannelsOwnerIn().contains(pmEvent.getBot().getUserChannelDao().getChannel(refChan));
+                
+                if (pmEvent.getUser() != null && pmEvent.getBot().getUserChannelDao().containsChannel(refChan)) {
+                    isChanOwner = pmEvent.getUser().getChannelsOwnerIn().contains(pmEvent.getBot().getUserChannelDao().getChannel(refChan));
+                }
             }
             else{
                 isVerified = pmEvent.getUser().isVerified();
