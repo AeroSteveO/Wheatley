@@ -65,6 +65,21 @@ public class BotUtils {
         }
     }
     
+    public static String pastebin(Throwable t) {
+        return pastebin(t,null);
+    }
+    
+    public static String pastebin(Throwable t, String message) {
+                        try {
+            return Pastebin.pastePaste(pasteBinKey, (message == null ? "" : message + "\n") + getStackTrace(t), Global.mainNick + " EXCEPTION " + t.getMessage()).toString();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
+    
     public static String formatPastebinPost(Throwable t) {
         
         String stackURL = linkToStackTrace(t);
@@ -89,11 +104,11 @@ public class BotUtils {
     public static String linkToStackTrace(Throwable t) {
         //noinspection ThrowableResultOfMethodCallIgnored
         notNull(t, "");
-        String pastebin = BotUtils.pastebin(BotUtils.getStackTrace(t));
+        String pastebin = pastebin(getStackTrace(t));
         if (pastebin != null) {
             String url = null;
             try {
-                url = BotUtils.shortenURL(pastebin);
+                url = shortenURL(pastebin);
             } catch (Exception ignored) {
                 ignored.printStackTrace();
             }
