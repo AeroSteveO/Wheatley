@@ -231,7 +231,7 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
     
     @Override
     public void onKick(KickEvent event) {
-        addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList("* "+event.getUser().getNick(),"has kicked "+event.getRecipient().getNick()+" from "+event.getChannel().getName()+" ("+event.getReason()+")")));
+        addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList("* "+event.getUserHostmask().getNick(),"has kicked "+event.getRecipient().getNick()+" from "+event.getChannel().getName()+" ("+event.getReason()+")")));
     }
     
     
