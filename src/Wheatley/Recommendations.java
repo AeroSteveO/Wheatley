@@ -26,7 +26,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  * Requirements:
  * - APIs
- *    N/A
+ *    AOSP JSON
  * - Custom Objects
  *    N/A
  * - Utilities
