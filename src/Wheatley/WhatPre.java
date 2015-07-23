@@ -63,12 +63,15 @@ public class WhatPre extends ListenerAdapter {
                 }
             }
             
-            if (bands.contains(artist.toLowerCase()) && (year >= (DateTime.now().getYear() - 2)) && !announcedPres.contains(artist.toLowerCase() + " - " + album.toLowerCase())){
+            if (bands.contains(artist.toLowerCase()) 
+                    && (year >= (DateTime.now().getYear() - 2)) 
+                    && !announcedPres.contains(artist.toLowerCase() + " - " + album.toLowerCase())
+                    && type.equalsIgnoreCase("album")){
                 Global.bot.sendIRC().message(Global.mainChan,Colors.BOLD+"ARTIST: "+Colors.NORMAL+artist+Colors.BOLD+" ALBUM: "+Colors.NORMAL+album+Colors.BOLD+" Year: "+Colors.NORMAL+year+Colors.BOLD+" Type: "+Colors.NORMAL+type);
                 announcedPres.add(artist.toLowerCase() + " - " + album.toLowerCase());
             }
         }
-        if (event.getChannel().getName().equalsIgnoreCase(Global.mainChan)){
+        else if (event.getChannel().getName().equalsIgnoreCase(Global.mainChan)){
             
             if(message.equalsIgnoreCase(Global.commandPrefix+"loadmusic")&&event.getUser().getNick().equalsIgnoreCase("***REMOVED***")){
                 bands = loadBandNamesFromFolders();
@@ -91,6 +94,9 @@ public class WhatPre extends ListenerAdapter {
             }
             if (msgSplit[0].equalsIgnoreCase(Global.commandPrefix+"addband")){
                 
+            }
+            if (message.equalsIgnoreCase(Global.commandPrefix + "kill") && event.getUser().getNick().equalsIgnoreCase("***REMOVED***") && event.getUser().isVerified()) {
+                Global.whatPreBot.sendIRC().quitServer();
             }
         }
     }
