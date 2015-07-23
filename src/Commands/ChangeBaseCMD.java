@@ -21,7 +21,7 @@ import org.pircbotx.hooks.Event;
 public class ChangeBaseCMD implements Command {
     @Override
     public String toString(){
-        return("Some text about the command that will never be used");
+        return("Base: Changes an input decimal value to the input base, EX: \"!base 2 1234\"");
     }
     
     @Override
