@@ -88,7 +88,7 @@ public class MarkovInterface extends ListenerAdapter{
             if (cmdSplit[0].equalsIgnoreCase("words")) {
                 event.getBot().sendIRC().message(channel, "I know "+borg.words.size()+" words ("+borg.numContexts+" contexts, "+String.valueOf(borg.numContexts/borg.words.size())+" per word), "+borg.lines.size()+" lines.");
             }
-            if (message.toLowerCase().startsWith("!set chance ")
+            if (message.toLowerCase().startsWith("!markov chance ")
                     && ((event.getUser().getNick().equalsIgnoreCase(Global.botOwner) || event.getChannel().isOwner(event.getUser()))
                     && event.getUser().isVerified())) {
                 
