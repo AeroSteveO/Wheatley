@@ -8,6 +8,7 @@ package Utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 import org.pircbotx.hooks.Event;
@@ -65,16 +66,63 @@ public class IRCUtils{
         long days = x;
         
         if (days > 0) {
-            prettyPrintTime += days + " days, ";
+            prettyPrintTime += days + " day";
+            
+            if (days > 1) {
+                prettyPrintTime += "s, ";
+            }
+            else {
+                prettyPrintTime += ", ";
+            }
         }
         if (hours > 0) {
-            prettyPrintTime += hours + " hours, ";
+            prettyPrintTime += hours + " hour";
+            
+            if (hours > 1) {
+                prettyPrintTime += "s, ";
+            }
+            else {
+                prettyPrintTime += ", ";
+            }
         }
         if (minutes > 0) {
-            prettyPrintTime += minutes + " minutes, ";
+            prettyPrintTime += minutes + " minute";
+            
+            if (minutes > 1) {
+                prettyPrintTime += "s, ";
+            }
+            else {
+                prettyPrintTime += ", ";
+            }
         }
-        prettyPrintTime += seconds + " seconds.";
+        
+        
+        prettyPrintTime += seconds + " second";
+        if (seconds > 1) {
+            prettyPrintTime += "s.";
+        }
+        else {
+            prettyPrintTime += ".";
+        }
+        
         
         return prettyPrintTime;
+    }
+    
+    public static String arrayListToString(ArrayList<String> array) {
+        
+        if (array == null || array.isEmpty()) {
+            return "";
+        }
+        
+        String converted = "";
+        
+        for (int i = 0; i < array.size(); i++) {
+            converted += array.get(i) + ", ";
+        }
+        
+        converted = converted.substring(0, converted.length()-2);
+        
+        return converted;
     }
 }
