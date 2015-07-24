@@ -7,6 +7,7 @@
 package Wheatley;
 
 import Objects.MapArray;
+import Utils.IRCUtils;
 import Utils.TextUtils;
 import static Utils.TextUtils.loadTextAsList;
 import java.io.File;
@@ -108,15 +109,18 @@ public class MarkovInterface extends ListenerAdapter{
                 else
                     event.getBot().sendIRC().notice(event.getUser().getNick(), "Chance must be an integer value greater than 0");
             }
-            else if (cmdSplit[0].equalsIgnoreCase("ignore") && event.getUser().getNick().equalsIgnoreCase(Global.botOwner) && event.getUser().isVerified()){
+            else if (cmdSplit[0].equalsIgnoreCase("ignore") && event.getUser().getNick().equalsIgnoreCase(Global.botOwner) && event.getUser().isVerified()) {
                 if (cmdSplit.length > 2){
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"!Ignore: This command accepts a single input");
                 }
-                else{
+                else {
                     botList.add(cmdSplit[1]);
                     TextUtils.addToDocIfUnique(botListFileName, cmdSplit[1]);
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Success! " + cmdSplit[1] + " was added to the Markov ignore list");
                 }
+            }
+            else if (cmdSplit[0].equalsIgnoreCase("ignorelist")) {
+                event.getBot().sendIRC().message(event.getUser().getNick(),"Ignored Users: " + IRCUtils.arrayListToString(botList));
             }
         }
         
