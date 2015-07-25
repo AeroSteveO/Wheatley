@@ -29,6 +29,11 @@ import org.pircbotx.hooks.Event;
  *
  * Methods:
  *     *getTimeStamp - returns a nicely formatted time stamp
+ *     *millisToPrettyPrintTime - Responds a nicely formatted string in human
+ *                                readable time of the milliseconds input (days,
+ *                                hours, minutes, seconds)
+ *     *arrayListToString - Takes an arraylist of strings, and returns a pretty
+ *                          formatted version of it in a single line string
  *
  * Note: Only commands marked with a * are available for use outside the object
  *

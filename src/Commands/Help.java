@@ -18,6 +18,25 @@ import org.pircbotx.hooks.Event;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    Command
+ *    CommandMetaData
+ * - Utilities
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
+ * Activate Command with:
+ *      !help
+ *          Responds with a list of every command utilized in the command listener
+ *          package
+ *      !help modules
+ *          Responds with a list of loaded command modules
+ * 
  */
 public class Help implements Command {
     
@@ -34,8 +53,7 @@ public class Help implements Command {
     @Override
     public ArrayList<String> commandTerms() {
         ArrayList<String> a = new ArrayList<>();
-        a.add("help"); // Terms that when prefixed by the command prefix, will activate the command
-// NOTE: these should be all lowercase
+        a.add("help"); 
         return a;
     }
     

@@ -11,6 +11,17 @@ import java.util.Locale;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ *  - Utilities
+ *    N/A
+ * - Linked Classes
+ *    N/A
+ * 
  */
 public class OSUtils {
     

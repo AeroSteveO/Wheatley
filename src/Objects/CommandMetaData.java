@@ -54,15 +54,17 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *                               is either the bot owner, or the channel owner
  *                               of the channel the command was sent from, or
  *                               channel contained in the event
- *     *isVerified             - Returns true if the user is logged into the
- *                               NickServ account they're currently using
+ *     *isVerified        - Returns true if the user is logged into the NickServ
+ *                          account they're currently using
+ *     *isUserInChannel   - Responds with a boolean if the input user is in the
+ *                          input channel
  *
  * Note: Only commands marked with a * are available for use outside the object
  *
  * Useful Resources
  * - N/A
  *
- * Version: 0.5.0
+ * Version: 0.5.5
  */
 public class CommandMetaData {
     private final Event event;

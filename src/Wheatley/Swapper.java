@@ -24,7 +24,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * - APIs
  *    N/A
  * - Custom Objects
- *    N/A
+ *    MapArray
  * - Linked Classes
  *    Global
  *
@@ -44,6 +44,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *      !bfff [nick]
  *          Reverses all the words, and all the letters in all the words, of the
  *          previous line said, or the previous line said by the input nickname
+ * 
  */
 public class Swapper extends ListenerAdapter {
 //    Map<String,ArrayList<ArrayList<String>>> log = Collections.synchronizedMap(new TreeMap<String,ArrayList<ArrayList<String>>>());

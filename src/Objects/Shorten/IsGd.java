@@ -13,6 +13,22 @@ import org.pircbotx.Colors;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    N/A
+ * - Custom Objects
+ *    N/A
+ * - Utilities
+ *    BotUtils
+ * - Linked Classes
+ *    N/A
+ * 
+ * Object:
+ *      IsGd
+ * - Object that implements the link shortner interface, giving access to Is.Gd
+ *   as a link shortening service
+ * 
  */
 public class IsGd implements ShortenerInterface {
     
