@@ -23,7 +23,7 @@ import org.pircbotx.hooks.Event;
 /**
  *
  * @author Stephen
- * 
+ *
  * The most BA package of kicks you'll ever see
  */
 public class KickCMD implements Command {
@@ -109,10 +109,10 @@ public class KickCMD implements Command {
                         }
                     }
                     
-                    addKick(kickCommand, kickMessage, kickFail, whiteListedUsers, blacklistedChannels);
+                    addKick(kickCommand, kickMessage, kickFail, whiteListedUsers, blacklistedChannels, (message.contains("-w")));
                     event.getBot().sendIRC().message(respondTo, "Kick: Success, " + kickCommand + " has been successfully added to the kick commands");
                 }
-                else if (message.contains("-c") || message.contains("-u") || message.contains("-f") || message.contains("-b") || message.contains("-m")) {
+                else if (message.contains("-c") || message.contains("-u") || message.contains("-f") || message.contains("-b") || message.contains("-m") || message.contains("-w")) {
                     event.getBot().sendIRC().notice(caller, "Kick: Full set of inputs not found in input string");
                 }
                 else if (cmdSplit.length >= 3) {
@@ -186,7 +186,22 @@ public class KickCMD implements Command {
             
             KickInterface kick = getKick(cmdSplit[0]);
             
-            if (data.isVerifiedChanBotOwner() || (kick.getAllowedUsers() != null && kick.getAllowedUsers().contains(caller.toLowerCase()) && data.isVerified())) {
+            
+            
+            if (data.isVerifiedChanBotOwner()
+                    || (kick.getAllowedUsers() != null && kick.getAllowedUsers().contains(caller.toLowerCase()) && data.isVerified())) {
+                
+                if (!data.isVerifiedChanBotOwner() && kick.getChannelList() != null) {
+                    if (kick.isChannelListWhitelist() && !kick.getChannelList().contains(channel.toLowerCase())) {
+                        event.getBot().sendIRC().notice(caller, "Kick: You are not allowed to use that function in this channel");
+                        return;
+                    }
+                    else if (!kick.isChannelListWhitelist() && kick.getChannelList().contains(channel.toLowerCase())){
+                        event.getBot().sendIRC().notice(caller, "Kick: You are not allowed to use that function in this channel");
+                        return;
+                    }
+                }
+                
                 if (cmdSplit.length == 2) {
                     for (int i = 0; i < kicks.size(); i++) {
                         if (kicks.get(i).getCommand().equalsIgnoreCase(cmdSplit[0])) {
@@ -225,14 +240,14 @@ public class KickCMD implements Command {
     }
     
     private void addKick(String command, String message) {
-        addKick(command, message, null, null, null);
+        addKick(command, message, null, null, null, false);
     }
     
     private void addKick(String command, String message, String failureMessage) {
-        addKick(command, message, failureMessage, null, null);
+        addKick(command, message, failureMessage, null, null, false);
     }
-    private void addKick(String command, String message, String failureMessage, ArrayList<String> allowedUsers, ArrayList<String> blockedChans) {
-        kicks.add(new CustomKick(command, message, failureMessage, allowedUsers, blockedChans));
+    private void addKick(String command, String message, String failureMessage, ArrayList<String> allowedUsers, ArrayList<String> blockedChans, boolean isWhitelist) {
+        kicks.add(new CustomKick(command, message, failureMessage, allowedUsers, blockedChans, isWhitelist));
     }
     
     private boolean delKick(String command) {

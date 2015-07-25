@@ -16,7 +16,8 @@ public interface KickInterface {
     public String getCommand();
     public String getMessage();
     public ArrayList<String> getAllowedUsers();
-    public ArrayList<String> getBlockedChannels();
+    public ArrayList<String> getChannelList();
+    public boolean isChannelListWhitelist();
     public String getFailureMessage();
     
 }

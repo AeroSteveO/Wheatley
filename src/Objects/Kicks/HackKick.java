@@ -42,7 +42,12 @@ public class HackKick implements KickInterface {
     }
 
     @Override
-    public ArrayList<String> getBlockedChannels() {
+    public ArrayList<String> getChannelList() {
         return null;
+    }
+
+    @Override
+    public boolean isChannelListWhitelist() {
+        return false;
     }
 }

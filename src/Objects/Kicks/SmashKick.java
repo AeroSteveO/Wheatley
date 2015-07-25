@@ -28,6 +28,8 @@ public class SmashKick implements KickInterface {
     public String getMessage() {
         return "Aristotle vs MASHY-SPIKE-PLATE";
     }
+    
+    @Override
     public String getFailureMessage() {
         return "MASHY-SPIKE-PLATE smashed you into goop";
     }
@@ -38,7 +40,12 @@ public class SmashKick implements KickInterface {
     }
 
     @Override
-    public ArrayList<String> getBlockedChannels() {
+    public ArrayList<String> getChannelList() {
         return null;
+    }
+
+    @Override
+    public boolean isChannelListWhitelist() {
+        return false;
     }
 }
