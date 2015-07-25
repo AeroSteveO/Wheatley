@@ -35,23 +35,23 @@ public class WheatleyChatStuff extends ListenerAdapter {
             String[] cmdSplit = command.split(" ");
             
             
-            if (cmdSplit[0].equalsIgnoreCase("hack")){
-                if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
-                    event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(cmdSplit[1]),"Wheatley has killed you in his attempt to plug your brain into a computer");
-                }
-                else{
-                    event.getChannel().send().kick(event.getUser(),"Wheatley has killed you in an attempt to counter hack your brain");
-                }
-            }
-            
-            if (cmdSplit[0].equalsIgnoreCase("smash")){
-                if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){//||event.getUser().getNick().equals("fluke42")
-                    event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(cmdSplit[1]),"Aristotle vs MASHY-SPIKE-PLATE");
-                }
-                else{
-                    event.getChannel().send().kick(event.getUser(),"MASHY-SPIKE-PLATE smashed you into goop");
-                }
-            }
+//            if (cmdSplit[0].equalsIgnoreCase("hack")){
+//                if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){
+//                    event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(cmdSplit[1]),"Wheatley has killed you in his attempt to plug your brain into a computer");
+//                }
+//                else{
+//                    event.getChannel().send().kick(event.getUser(),"Wheatley has killed you in an attempt to counter hack your brain");
+//                }
+//            }
+//            
+//            if (cmdSplit[0].equalsIgnoreCase("smash")){
+//                if((event.getUser().getNick().equals(Global.botOwner)||event.getChannel().isOwner(event.getUser()))&&event.getUser().isVerified()){//||event.getUser().getNick().equals("fluke42")
+//                    event.getChannel().send().kick(event.getBot().getUserChannelDao().getUser(cmdSplit[1]),"Aristotle vs MASHY-SPIKE-PLATE");
+//                }
+//                else{
+//                    event.getChannel().send().kick(event.getUser(),"MASHY-SPIKE-PLATE smashed you into goop");
+//                }
+//            }
             
 //            if (cmdSplit[0].equalsIgnoreCase("old"))
 //                event.getBot().sendIRC().notice(event.getUser().getNick(),"you so funny, me ruv u rong time");
