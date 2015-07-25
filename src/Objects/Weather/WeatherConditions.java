@@ -7,7 +7,6 @@
 package Objects.Weather;
 
 import java.util.ArrayList;
-import org.joda.time.DateTime;
 import org.pircbotx.Colors;
 
 /**
@@ -25,8 +24,8 @@ public class WeatherConditions extends WeatherBasic implements WeatherCacheInter
     private String windKPH;    // Wind speed in KPH
     private String windDir;    // Direction of wind
     
-    public WeatherConditions(String inputLocation,String inputZip, String inputWeather, String hum, String tmp, String windImperial, String windMetric, String windDirection, String obsTime) {
-        super(inputZip, inputLocation);
+    public WeatherConditions(LocationData location, String inputWeather, String hum, String tmp, String windImperial, String windMetric, String windDirection, String obsTime) {
+        super(location, 60);
         this.conditions = inputWeather;
         if (hum.equals("-999%"))
             hum = null; // Null out humidity instead of throwing crap values to the channel
@@ -36,7 +35,6 @@ public class WeatherConditions extends WeatherBasic implements WeatherCacheInter
         this.windMPH = windImperial;
         this.windDir = windDirection;
         this.observationTime = obsTime;
-        this.expiration = new DateTime().plusMinutes(60);
     }
 
     @Override
@@ -53,12 +51,6 @@ public class WeatherConditions extends WeatherBasic implements WeatherCacheInter
                             
                 response += Colors.BOLD+"Wind: "+Colors.NORMAL+this.windMPH+" ("+this.windKPH+") "+this.windDir;
         return response;
-    }
-
-    // This is not at all used here
-    @Override
-    public String getExtendedResponse() {
-        throw new UnsupportedOperationException("getExtendedResponse Unavailable for this type of Weather Log");
     }
 
     // This is not at all used here

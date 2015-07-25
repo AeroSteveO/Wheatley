@@ -32,37 +32,14 @@ public class WeatherCache {
     }
     public WeatherCacheInterface getCacheEntry(String locationString, WeatherType type){
         purge();
-        int idx = -1;
         
         synchronized(cache){
             for(int i = 0; i < cache.size(); i++) {
                 if ((cache.get(i).getZip().equalsIgnoreCase(locationString)||cache.get(i).getCityState().equalsIgnoreCase(locationString))&&cache.get(i).getType() == (type)) {
-                    idx = i;
-                    return(cache.get(idx));
+                    return(cache.get(i));
                 }
             }
-            if (idx != -1)
-                return(cache.get(idx));
-            else
-                return null;
-        }
-    }
-    public WeatherCacheInterface getCacheEntry(WeatherCacheInterface cacheEntry, WeatherType type) {
-        purge();
-        int idx = -1;
-        
-        synchronized(cache){
-            for(int i = 0; i < cache.size(); i++) {
-                if ((cache.get(i).getZip().equalsIgnoreCase(cacheEntry.getZip()) || cache.get(i).getCityState().equalsIgnoreCase(cacheEntry.getCityState()))
-                        && cache.get(i).getType() == (type)) {
-                    idx = i;
-                    return(cache.get(idx));
-                }
-            }
-            if (idx != -1)
-                return(cache.get(idx));
-            else
-                return null;
+            return null;
         }
     }
         
@@ -145,10 +122,10 @@ public class WeatherCache {
     }
     
     // Removes all cache entries that are past their expiration
-    private void purge(){
-        synchronized(cache){
-            for (int i=0;i<cache.size();i++){
-                if(cache.get(i).isAfterExpiration()){
+    private void purge() {
+        synchronized(cache) {
+            for (int i=0; i < cache.size(); i++) {
+                if(cache.get(i).isAfterExpiration()) {
                     cache.remove(i);
                     i--;
                 }

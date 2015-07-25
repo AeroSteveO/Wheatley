@@ -14,33 +14,25 @@ import org.joda.time.DateTime;
  * @author Stephen
  */
 public abstract class WeatherBasic {
-    private final String zip;       // Zip code of the city
     public DateTime expiration;             // Expiration time of the cache entry
-    private final String cityState; // City, State (two letter state)
-
+    private final LocationData location;
     
-    public WeatherBasic(String zip, String cityState) {
-        this.zip = zip;
-        this.cityState = cityState;
+    public WeatherBasic(LocationData location, int minutesTillExpiration) {
+        this.expiration = new DateTime().plusMinutes(minutesTillExpiration);
+        this.location = location;
     }
     
     public String getZip(){
-        return(zip);
+        return location.getZip();
     }
     
     public String getCityState(){
-        return cityState;
+        return location.toString();
     }
 
     // Creates an array containing the city, state, and zip all as separate entries
-    public ArrayList<String> getLocationData(){
-        ArrayList<String> locationData = new ArrayList<>();
-        
-        locationData.add(cityState.split(",")[0].trim());
-        locationData.add(cityState.split(",")[1].trim());
-        locationData.add(zip);
-        
-        return locationData;
+    public LocationData getLocationData(){
+        return location;
     }
     
     // Returns if the cache entry is after its expiration time
@@ -51,12 +43,12 @@ public abstract class WeatherBasic {
         return(false);
     }
     
-    public boolean compareLocation(ArrayList<String> locationStrings){
-        return (locationStrings.get(2).equalsIgnoreCase(zip)||(locationStrings.get(0).equalsIgnoreCase(cityState.split(",")[0].trim())&&locationStrings.get(1).equalsIgnoreCase(cityState.split(",")[1].trim())));
+    public boolean compareLocation(LocationData loc) {
+        return location.equalsCityOrZip(loc);
     }
     
     // Returns true if either part of the city state string contains an error
     public boolean containsError(){
-        return (cityState.toLowerCase().contains("error")||zip.toLowerCase().contains("error"));
+        return (location.getCity().toLowerCase().contains("error") || location.getState().toLowerCase().contains("error") || location.getZip().toLowerCase().contains("error"));
     }
 }

@@ -7,7 +7,6 @@
 package Objects.Weather;
 
 import java.util.ArrayList;
-import org.joda.time.DateTime;
 import org.pircbotx.Colors;
 
 /**
@@ -23,8 +22,8 @@ public class WeatherForecast extends WeatherBasic implements WeatherCacheInterfa
     private ArrayList<String> lowC;    // array containing all the low temps (C) for the week
     private ArrayList<String> forecastConditions; // Array contiaining the forecast conditions for each day of the week
     
-    public WeatherForecast(String inputLocation, String inputZip, ArrayList<String> highTempF, ArrayList<String> lowTempF, ArrayList<String> highTempC, ArrayList<String> lowTempC, ArrayList<String> weather, ArrayList<String> day, String pretty){
-        super(inputZip, inputLocation);
+    public WeatherForecast(LocationData location, ArrayList<String> highTempF, ArrayList<String> lowTempF, ArrayList<String> highTempC, ArrayList<String> lowTempC, ArrayList<String> weather, ArrayList<String> day, String pretty){
+        super(location, 60);
         this.weekDay = day;
         this.highF = highTempF;
         this.lowF = lowTempF;
@@ -32,7 +31,6 @@ public class WeatherForecast extends WeatherBasic implements WeatherCacheInterfa
         this.lowC = lowTempC;
         this.observationTime = pretty;
         this.forecastConditions = weather;
-        this.expiration = new DateTime().plusMinutes(60);
     }
     
     @Override
@@ -52,10 +50,10 @@ public class WeatherForecast extends WeatherBasic implements WeatherCacheInterfa
         return response;
     }
 
-    @Override
-    public String getExtendedResponse() {
-        throw new UnsupportedOperationException("getExtendedResponse Unavailable for this type of Weather Log");
-    }
+//    @Override
+//    public String getExtendedResponse() {
+//        throw new UnsupportedOperationException("getExtendedResponse Unavailable for this type of Weather Log");
+//    }
 
     @Override
     public ArrayList<String> getExtendedResponseArray() {

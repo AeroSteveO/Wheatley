@@ -19,11 +19,10 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
     private String alertExpires;  // Expiration of the alert (string from wunderground)
     private String alertText;     // The full text of the alert
     
-    public WeatherAlerts(String inputLocation, String inputZip, String alertDescription, String alertExpiration, String alertText){
-        super(inputZip, inputLocation);
+    public WeatherAlerts(LocationData location, String alertDescription, String alertExpiration, String alertText){
+        super(location, 30);
         this.alertType = alertDescription;
         this.alertExpires = alertExpiration;
-        this.expiration = new DateTime().plusMinutes(30);
         this.alertText = alertText;
     }
     
@@ -73,10 +72,5 @@ public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface
     public void updateExpiration(String expiration){
         this.alertExpires = expiration;
         this.expiration = new DateTime().plusMinutes(30); // updates the expiration of the alert cache entry if its still valid
-    }
-
-    @Override
-    public String getExtendedResponse() {
-        throw new UnsupportedOperationException("getExtendedResponse Unavailable for this type of Weather Log");
     }
 }
