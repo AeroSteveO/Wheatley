@@ -8,8 +8,6 @@ package Commands;
 
 import java.util.ArrayList;
 import org.pircbotx.hooks.Event;
-import Annot.CMD;
-import Annot.GenCMD;
 import Objects.Command;
 import Objects.CommandMetaData;
 import Wheatley.Global;
@@ -42,9 +40,6 @@ import org.pircbotx.hooks.events.MessageEvent;
  *          Responds with the current throttle settings for the channel
  *
  */
-
-@CMD
-@GenCMD
 
 public class ThrottleCMD implements Command {
     

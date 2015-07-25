@@ -6,8 +6,6 @@
 
 package Commands;
 
-import Annot.CMD;
-import Annot.GenCMD;
 import Objects.Command;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
@@ -34,8 +32,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *          Responds with a valid port number for use in a program
  * 
  */
-@CMD
-@GenCMD
+
 public class PickAPort implements Command{
     
     @Override

@@ -6,8 +6,6 @@
 
 package Commands;
 
-import Annot.CMD;
-import Annot.GenCMD;
 import Objects.Command;
 import Wheatley.Global;
 import java.util.ArrayList;
@@ -37,8 +35,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *          Responds with a randomly generated reason as to why
  * 
  */
-@CMD
-@GenCMD
+
 public class Why implements Command{
     
     @Override

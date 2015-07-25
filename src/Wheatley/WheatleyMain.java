@@ -6,7 +6,6 @@
 package Wheatley;
 
 import Objects.ServerReconnector;
-import Objects.ChannelStore;
 import Objects.PastebinExceptionHandler;
 import Utils.OSUtils;
 import org.pircbotx.Configuration;
@@ -155,7 +154,6 @@ public class WheatleyMain extends ListenerAdapter {
 //                    .addListener(new GameBomb())           //bomb game listener
                     .addListener(new GameMasterMind())     //mastermind game listener
                     .addListener(new GameGuessTheNumber()) //guess the number game listener
-//                    .addListener(new GameControl())
                     .addListener(new UnoBot())
                     .addListener(new GameListener())
 //                    .addListener(new GameLuckyLotto())
@@ -165,15 +163,12 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new GameAltReverse())     //alternate reverse game listener
                     .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
                     .addListener(new MatrapterChat())
-//                    .addListener(new EnglishSayings())
                     .addListener(new DefListener2())
                     .addListener(new AutodlText())
 //                    .addListener(new Fuckingweather())
 //                    .addListener(new KickBanWatcher())
-//                    .addListener(new FactSphereFacts())
                     .addListener(new BotControl())
 //                    .addListener(new Ping())
-//                    .addListener(new CaveJohnson())
                     .addListener(new BlarghleRandom())
                     .addListener(new Weather())
 //                    .addListener(new TvSchedule())

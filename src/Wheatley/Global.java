@@ -6,7 +6,6 @@
 
 package Wheatley;
 
-import Objects.ChannelStore.ChannelArray;
 import Objects.Settings;
 import Objects.Throttle;
 import java.util.ArrayList;

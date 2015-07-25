@@ -6,8 +6,6 @@
 
 package Commands;
 
-import Annot.CMD;
-import Annot.GenCMD;
 import Objects.Command;
 import Objects.CommandMetaData;
 import java.util.ArrayList;
@@ -41,8 +39,7 @@ import org.pircbotx.hooks.Event;
  *          Repeats the given message in the input channel
  *
  */
-@GenCMD
-@CMD
+
 public class ManualBotControl implements Command{
     
     @Override
