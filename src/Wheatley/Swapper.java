@@ -140,6 +140,12 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
                 }
                 else{
                     ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
+                    
+                    if (logCopy.isEmpty()) {
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "!BF log empty");
+                        return;
+                    }
+                    
                     String nick = logCopy.get(logCopy.size()-2).get(0);
                     String line = logCopy.get(logCopy.size()-2).get(1);
                     
