@@ -22,7 +22,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  * create commandlist in this class and do a hard coded array for testing
  */
 public class CommandListener extends ListenerAdapter{
-    List<Command> commandList = getCommandList();
+    private static List<Command> commandList = getCommandList();
     
     
     @Override
@@ -72,7 +72,11 @@ public class CommandListener extends ListenerAdapter{
         }
     }
     
-    private List<Command> getCommandList() {
+    public static List<Command> getCommandsAvailable() {
+        return commandList;
+    }
+    
+    private static List<Command> getCommandList() {
         List<Command> listOfCommands = new ArrayList<>();
 //        listOfCommands.add(new PickAPort());
         listOfCommands.add(new Why());
@@ -89,7 +93,13 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new ShortenCMD());
         listOfCommands.add(new SysInfoCMD());
         listOfCommands.add(new ChangeBaseCMD());
-        
+        listOfCommands.add(new Help());
+        listOfCommands.add(new CaveJohnsonCMD());
+        listOfCommands.add(new FactSphereCMD());
+        listOfCommands.add(new EnglishSayingsCMD());
+        listOfCommands.add(new ChannelJoinCMD());
+        listOfCommands.add(new ChannelPartCMD());
+        listOfCommands.add(new KickCMD());
         return(listOfCommands);
     }
 }
