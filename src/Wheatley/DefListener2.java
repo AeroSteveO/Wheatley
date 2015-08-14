@@ -102,7 +102,7 @@ public class DefListener2 extends ListenerAdapter {
             event.getBot().sendIRC().message(event.getUser().getNick(),wordList);
         }
         
-        if (msgSplit[0].equalsIgnoreCase("tell")&&msgSplit[2].equalsIgnoreCase("about")){
+        if (msgSplit.length > 3 && msgSplit[0].equalsIgnoreCase("tell") && msgSplit[2].equalsIgnoreCase("about")){
             String user = message.split(" ")[1];
             if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(user))) {
                 
