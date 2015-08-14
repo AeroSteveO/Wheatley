@@ -182,8 +182,8 @@ public class CommandMetaData {
         // IF THE COMMAND STARTS WITH THE PREDETERMINED PREFIX AND CONTAINS MORE THAN JUST SPACES AND COMMAND CHARACTERS
         if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             
-            command = message.split(Global.commandPrefix)[1];
-            cmdSplit = command.split(" ");
+            command = message.split(Global.commandPrefix)[1].split(" ")[0];
+            cmdSplit = message.split(Global.commandPrefix, 2)[1].split(" ");
         }
     }
     
