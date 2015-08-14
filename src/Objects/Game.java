@@ -87,14 +87,14 @@ public class Game {
         return (extendedNumerics.charAt(val));
     }
     
-    public static String convertDecimalTo(int convertToBase, int value) {
+    public static String convertDecimalTo(int convertToBase, long value) {
         String conversion = "";
         
-        int remainder = value % convertToBase;
+        int remainder = (int) (value % convertToBase);
         while (value > 0) {
             conversion = getExtendedNumerics(remainder) + conversion;
             value = value / convertToBase;
-            remainder = value % convertToBase;
+            remainder = (int) (value % convertToBase);
         }
         
         return conversion;
