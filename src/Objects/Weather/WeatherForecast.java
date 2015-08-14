@@ -13,7 +13,7 @@ import org.pircbotx.Colors;
  *
  * @author Stephen
  */
-public class WeatherForecast extends WeatherBasic implements WeatherCacheInterface{
+public class WeatherForecast extends WeatherBasic {
     private String observationTime;    // Time the weather was last updated
     private ArrayList<String> weekDay; // Day of the week
     private ArrayList<String> highF;   // array containing all the high temps (F) for the week

@@ -9,7 +9,7 @@ package Wheatley;
 import Objects.Weather.LocationData;
 import Objects.Weather.WeatherAlerts;
 import Objects.Weather.WeatherCache;
-import Objects.Weather.WeatherCacheInterface;
+import Objects.Weather.WeatherBasic;
 import Objects.Weather.WeatherConditions;
 import Objects.Weather.WeatherForecast;
 import Objects.Weather.WeatherType;
@@ -39,7 +39,7 @@ import org.json.JSONTokener;
  *    WeatherAlerts
  *    WeatherConditions
  *    WeatherForecast
- *    WeatherCacheInterface
+ *    WeatherBasic
  *    AlertTime (Built in)
  *    LocationData
  *    WeatherType
@@ -362,7 +362,7 @@ public class Weather extends ListenerAdapter{
                     
                     LocationData locationInfo = getLocationData(stockZip);
                     
-                    ArrayList<WeatherCacheInterface> newAlerts = new ArrayList<>();
+                    ArrayList<WeatherBasic> newAlerts = new ArrayList<>();
                     for (int i=0;i<alertType.size();i++){
                         newAlerts.add(new WeatherAlerts(locationInfo,alertType.get(i), alertExpiration.get(i), alertText.get(i)));
                     }

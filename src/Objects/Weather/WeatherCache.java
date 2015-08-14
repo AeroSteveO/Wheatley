@@ -17,9 +17,9 @@ import org.pircbotx.Colors;
  * @author Stephen
  */
 public class WeatherCache {
-    private final List<WeatherCacheInterface> cache = Collections.synchronizedList( new ArrayList<WeatherCacheInterface>());
+    private final List<WeatherBasic> cache = Collections.synchronizedList( new ArrayList<WeatherBasic>());
     
-    public void add(WeatherCacheInterface log){
+    public void add(WeatherBasic log){
         this.cache.add(log);
     }
     
@@ -30,7 +30,7 @@ public class WeatherCache {
     public boolean isEmpty() {
         return (this.cache.isEmpty());
     }
-    public WeatherCacheInterface getCacheEntry(String locationString, WeatherType type){
+    public WeatherBasic getCacheEntry(String locationString, WeatherType type){
         purge();
         
         synchronized(cache){
@@ -45,7 +45,7 @@ public class WeatherCache {
         
     public ArrayList<String> getFormattedAlertArray(String locationString){
         ArrayList<String> formattedAlerts = new ArrayList<>();
-        List<WeatherCacheInterface> alerts = getCacheArray(locationString, WeatherType.ALERT);
+        List<WeatherBasic> alerts = getCacheArray(locationString, WeatherType.ALERT);
         if (alerts.size()>0){
             for (int i=0;i<alerts.size()-1;i++){
                 formattedAlerts.add(alerts.get(i).getFormattedResponse());
@@ -61,7 +61,7 @@ public class WeatherCache {
     
     public ArrayList<String> getAllAlertsLongResponse(String locationString){
         ArrayList<String> formattedAlerts = new ArrayList<>();
-        List<WeatherCacheInterface> alerts = getCacheArray(locationString, WeatherType.ALERT);
+        List<WeatherBasic> alerts = getCacheArray(locationString, WeatherType.ALERT);
         
         for (int i=0;i<alerts.size();i++){
             formattedAlerts.addAll(alerts.get(i).getExtendedResponseArray());
@@ -71,7 +71,7 @@ public class WeatherCache {
     }
     
     public boolean addNewAlert(WeatherAlerts newAlert) {
-        List<WeatherCacheInterface> currentAlerts = getCacheArray(newAlert.getCityState(), WeatherType.ALERT);
+        List<WeatherBasic> currentAlerts = getCacheArray(newAlert.getCityState(), WeatherType.ALERT);
         //(ArrayList<WeatherAlerts>)
         for (int i=0; i < currentAlerts.size(); i++) {
             if (((WeatherAlerts) currentAlerts.get(i)).getAlertType().equalsIgnoreCase(newAlert.getAlertType()) && currentAlerts.get(i).getZip().equals(newAlert.getZip())) {
@@ -86,10 +86,10 @@ public class WeatherCache {
         return false;
     }
     
-    public List<WeatherCacheInterface> getCacheArray(String locationString, WeatherType type){
+    public List<WeatherBasic> getCacheArray(String locationString, WeatherType type){
         purge();
         int idx = -1;
-        List<WeatherCacheInterface> cacheReturn = new ArrayList<>();
+        List<WeatherBasic> cacheReturn = new ArrayList<>();
         
         synchronized(cache){
             for(int i = 0; i < cache.size(); i++) {

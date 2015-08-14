@@ -14,7 +14,7 @@ import org.pircbotx.Colors;
  *
  * @author Stephen
  */
-public class WeatherAlerts extends WeatherBasic implements WeatherCacheInterface{
+public class WeatherAlerts extends WeatherBasic {
     private String alertType;     // Type of the alert (simple type)
     private String alertExpires;  // Expiration of the alert (string from wunderground)
     private String alertText;     // The full text of the alert

@@ -13,7 +13,7 @@ import org.pircbotx.Colors;
  *
  * @author Stephen
  */
-public class WeatherConditions extends WeatherBasic implements WeatherCacheInterface{
+public class WeatherConditions extends WeatherBasic {
     
     private String observationTime; // Time the weather was last updated
     
