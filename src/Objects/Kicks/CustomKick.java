@@ -38,17 +38,22 @@ public class CustomKick implements KickInterface{
     public String getCommand() {
         return command;
     }
+    
     @Override
     public String getMessage() {
         return message;
     }
+    
     @Override
     public ArrayList<String> getAllowedUsers() {
         return allowedUsers;
     }
+    
+    @Override
     public ArrayList<String> getChannelList() {
         return blockedFromChannels;
     }
+    
     @Override
     public String getFailureMessage() {
         return failure;
