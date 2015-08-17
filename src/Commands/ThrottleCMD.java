@@ -53,6 +53,15 @@ public class ThrottleCMD implements Command {
         a.add("throttle");
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "throttle [type] [time | log] [#channel] [value]" + Colors.NORMAL + ": In order to adjust throttling, a modifier and integer must be input, the modifier can be log or time, to correlate to how many calls may be made in a set time");
+        a.add(Colors.BOLD + Global.commandPrefix + "throttle [type] [#channel]" + Colors.NORMAL + ": Returns the current throttle settings for that channel, if no channel is input, returns the throttle settings for the channel the command was run within");
+        return a;
+    }
+
     @Override
     public boolean isCommand(String toCheck){
         return false;

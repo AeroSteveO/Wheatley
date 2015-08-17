@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 import org.w3c.dom.Element;
 
@@ -54,6 +55,14 @@ public class FixCMD implements Command{
         a.add(null);
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.mainNick + ", fix yourself" + Colors.NORMAL + ": Tells the bot to recover its nick, change to its main nick, and rejoin all channels from the settings file" );
+        return a;
+    }
+    
     
     @Override
     public void processCommand(Event event){

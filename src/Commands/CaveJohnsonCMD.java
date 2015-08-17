@@ -11,6 +11,7 @@ import Objects.CommandMetaData;
 import Wheatley.Global;
 import java.util.ArrayList;
 import java.util.List;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -37,6 +38,14 @@ public class CaveJohnsonCMD implements Command {
         a.add("cavejohnson");
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "Cave | " + Global.commandPrefix + "CaveJohnson" + Colors.NORMAL + ": Responds with a random Cave Johnson quote from Portal 2. ");
+        return a;
+    }
+
     
     @Override
     public void processCommand(Event event) {

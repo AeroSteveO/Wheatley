@@ -10,6 +10,7 @@ import Objects.Command;
 import Objects.CommandMetaData;
 import Wheatley.Global;
 import java.util.ArrayList;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -52,6 +53,14 @@ public class ExampleCMD implements Command {
 // NOTE: these should be all lowercase
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "bankick [user] [time] [reason]" + Colors.NORMAL + ": Bans a user’s nickname only (not hostmask) for a period of time and then kicks them from the channel. ");
+        return a;
+    }
+    
     
     @Override
     public void processCommand(Event event) {

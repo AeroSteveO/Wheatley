@@ -8,8 +8,10 @@ package Commands;
 
 import Objects.Command;
 import Objects.CommandMetaData;
+import Utils.BotUtils;
 import Utils.IRCUtils;
 import Utils.OSUtils;
+import Wheatley.Global;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
@@ -35,6 +37,29 @@ public class SysInfoCMD implements Command {
         a.add("os");
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        if (command.equalsIgnoreCase("sysinfo") || command.equalsIgnoreCase(BotUtils.getClassName(this))) {
+            a.add(Colors.BOLD + Global.commandPrefix + "SysInfo" + Colors.NORMAL + ": Responds with information regarding the bots thread and RAM usage" );
+        }
+        if (command.equalsIgnoreCase("ram") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "Ram" + Colors.NORMAL + ": Responds with detailed information regarding the bots RAM usage" );
+        
+        if (command.equalsIgnoreCase("threads") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "Threads" + Colors.NORMAL + ": Responds with detailed information regarding the bots thread usage" );
+        
+        if (command.equalsIgnoreCase("uptime") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "Uptime" + Colors.NORMAL + ": Responds with the bot's current uptime" );
+        
+        if (command.equalsIgnoreCase("os") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "OS" + Colors.NORMAL + ": Responds with information about the bot's current host OS" );
+        
+        return a;
+    }
+    
+    
     @Override
     public boolean isCommand(String toCheck) {
         return false;

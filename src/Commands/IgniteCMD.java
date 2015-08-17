@@ -8,8 +8,10 @@ package Commands;
 
 import Objects.Command;
 import Objects.CommandMetaData;
+import Wheatley.Global;
 import java.util.ArrayList;
 import java.util.List;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -52,6 +54,15 @@ public class IgniteCMD implements Command {
         a.add("ignite");
         return a;
     }
+    
+        @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "Ignite [thing]" + Colors.NORMAL + ": Responds with a randomly generated way to burn the input item, or if no item is input, it burns \"it\"");
+        
+        return a;
+    }
+
     
     @Override
     public void processCommand(Event event){

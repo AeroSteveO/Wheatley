@@ -25,7 +25,11 @@ import org.pircbotx.hooks.Event;
 public interface Command {
     
     public void processCommand(Event event);
+    
     public ArrayList<String> commandTerms();
+    
     public boolean isCommand(String toCheck);
+    
+    public ArrayList<String> help(String command);
     
 }

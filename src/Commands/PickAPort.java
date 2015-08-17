@@ -7,6 +7,7 @@
 package Commands;
 
 import Objects.Command;
+import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
@@ -44,6 +45,14 @@ public class PickAPort implements Command{
     public boolean isCommand(String toCheck){
         return false;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "PickAPort" + Colors.NORMAL + ": Responds a valid port number to use in port forwarding");
+        return a;
+    }
+
     
     @Override
     public ArrayList<String> commandTerms(){

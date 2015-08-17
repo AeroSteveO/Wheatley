@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -39,6 +40,18 @@ public class EnglishSayingsCMD implements Command {
         a.add("saying"); 
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "saying" + Colors.NORMAL + ": Provides a randomly generated english saying of some form" );
+        a.add(Colors.BOLD + Global.commandPrefix + "saying [-,.]" + Colors.NORMAL + ": Provides a randomly generated english in the specified form" );
+        a.add(Colors.BOLD + "[-]" + Colors.NORMAL + ": Generates a random 2 part hyphenated saying" );
+        a.add(Colors.BOLD + "[.]" + Colors.NORMAL + ": Returns a random saying from the saying database" );
+        a.add(Colors.BOLD + "[,]" + Colors.NORMAL + ": Generates a random 2 part comma separated saying" );
+        return a;
+    }
+
     
     @Override
     public void processCommand(Event event) {

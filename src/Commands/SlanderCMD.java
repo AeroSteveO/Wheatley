@@ -8,7 +8,9 @@ package Commands;
 
 import Objects.Command;
 import Objects.CommandMetaData;
+import Wheatley.Global;
 import java.util.ArrayList;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -62,6 +64,14 @@ public class SlanderCMD implements Command {
         a.add("shakespeare");
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "Slander [nick]" + Colors.NORMAL + ": Responds with a randomly generated insult of the input nick, or if no nick is input, it insults \"you\"");
+        return a;
+    }
+
     
     @Override
     public void processCommand(Event event){

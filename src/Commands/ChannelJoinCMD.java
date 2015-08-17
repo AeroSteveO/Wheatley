@@ -10,6 +10,7 @@ import Objects.Command;
 import Objects.CommandMetaData;
 import Wheatley.Global;
 import java.util.ArrayList;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -34,6 +35,14 @@ public class ChannelJoinCMD implements Command {
 //        a.add("join");
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.mainNick + ", join [#channel]" + Colors.NORMAL + ": Commands the bot to join the input channel" );
+        return a;
+    }
+    
     
     @Override
     public void processCommand(Event event) {

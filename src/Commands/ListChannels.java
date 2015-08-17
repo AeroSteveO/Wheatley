@@ -8,6 +8,7 @@ package Commands;
 
 import Objects.CommandMetaData;
 import Objects.Command;
+import Wheatley.Global;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,6 +51,13 @@ public class ListChannels implements Command {
     @Override
     public boolean isCommand(String toCheck){
         return false;
+    }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "channels" + Colors.NORMAL + ": Responds with a list of the channels the bot is currently in");
+        return a;
     }
     
     @Override

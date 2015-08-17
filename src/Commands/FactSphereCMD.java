@@ -10,6 +10,7 @@ import Objects.Command;
 import Objects.CommandMetaData;
 import Wheatley.Global;
 import java.util.ArrayList;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -33,6 +34,13 @@ public class FactSphereCMD implements Command {
     public ArrayList<String> commandTerms() {
         ArrayList<String> a = new ArrayList<>();
         a.add("fact");
+        return a;
+    }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "Fact" + Colors.NORMAL + ": Returns a true fact from the Fact Sphere himself");
         return a;
     }
     

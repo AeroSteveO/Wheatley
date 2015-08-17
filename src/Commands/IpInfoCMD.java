@@ -60,6 +60,13 @@ public class IpInfoCMD implements Command{
     }
     
     @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "IP [ip or URL]" + Colors.NORMAL + ": Responds information regarding the input IP or URL");
+        return a;
+    }
+
+    @Override
     public void processCommand(Event event){
         
         CommandMetaData data = new CommandMetaData(event,false);

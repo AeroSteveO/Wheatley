@@ -58,6 +58,17 @@ public class Help implements Command {
     }
     
     @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "help" + Colors.NORMAL + ":  Provides a list of commands and packages that support the help function"); 
+        a.add(Colors.BOLD + Global.commandPrefix + "help modules" + Colors.NORMAL + ":  Provides a list of currently loaded packages that support the help function");
+        a.add(Colors.BOLD + Global.commandPrefix + "help [command]" + Colors.NORMAL + ":  Provides help regarding the input command");
+        a.add(Colors.BOLD + Global.commandPrefix + "help [module]" + Colors.NORMAL + ":  Provides help regarding the input module");
+        return a;
+    }
+
+    
+    @Override
     public void processCommand(Event event) {
         
         CommandMetaData data = new CommandMetaData(event, false);
@@ -95,6 +106,24 @@ public class Help implements Command {
                     modulesAvailable += commands.get(i).getClass().getName().split("\\.")[1] + ", ";
                 }
                 event.getBot().sendIRC().message(caller, modulesAvailable);
+            }
+            else {
+                String command = cmdSplit[1];
+                if (command.startsWith(Global.commandPrefix)) {
+                    command = command.substring(1);
+                }
+                
+                for (int i = 0; i < commands.size(); i++) {
+                    if (commands.get(i).commandTerms().contains(command.toLowerCase()) || commands.get(i).getClass().getName().split("\\.")[1].equalsIgnoreCase(command)) {
+                        ArrayList<String> helpText = commands.get(i).help(command);
+                        for (int j = 0; j < helpText.size(); j++) {
+                            event.getBot().sendIRC().message(caller, helpText.get(j));
+                        }
+                        return;
+                    }
+                }
+                
+                System.out.println(command);
             }
         }
         

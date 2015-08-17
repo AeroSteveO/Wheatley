@@ -11,7 +11,9 @@ import Objects.CommandMetaData;
 import Objects.Shorten.Bitly;
 import Objects.Shorten.IsGd;
 import Objects.Shorten.ShortenerInterface;
+import Wheatley.Global;
 import java.util.ArrayList;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -37,6 +39,19 @@ public class ShortenCMD implements Command {
         a.add("shorten");
         return a;
     }
+    
+        @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "Shorten [URL]" + Colors.NORMAL + ": Responds with a shortened version of the input URL");
+        a.add(Colors.BOLD + Global.commandPrefix + "Shorten [tag] [URL]" + Colors.NORMAL + ": Returns a shortened version of the URL using the specified link shortener");
+        a.add(Colors.BOLD + "Supported Tags/Shorteners");
+        for (int i = 0; i < shorteners.size(); i++) {
+            a.add(Colors.BOLD + shorteners.get(i).getInfo());
+        }
+        return a;
+    }
+
     
     @Override
     public void processCommand(Event event){
@@ -89,7 +104,7 @@ public class ShortenCMD implements Command {
     }
     
     private ArrayList<ShortenerInterface> getShorteners() {
-        ArrayList<ShortenerInterface> shorteners = new ArrayList<ShortenerInterface>();
+        ArrayList<ShortenerInterface> shorteners = new ArrayList<>();
         shorteners.add(new Bitly());
         shorteners.add(new IsGd());
         return shorteners;

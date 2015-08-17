@@ -13,6 +13,8 @@ import Objects.CommandMetaData;
 import Objects.CommandMetaData.EventType;
 import Objects.Kicks.CustomKick;
 import Objects.Kicks.KickInterface;
+import Utils.BotUtils;
+import Utils.IRCUtils;
 import Wheatley.Global;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +55,42 @@ public class KickCMD implements Command {
     }
     
     @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        if (command.equalsIgnoreCase("addkick") || command.equalsIgnoreCase(BotUtils.getClassName(this))) {
+            a.add(Colors.BOLD + Global.commandPrefix + "addkick [kick command] [kick message]" + Colors.NORMAL + ": Adds a new kick command using the input message as the kick message" );
+            a.add(Colors.BOLD + Global.commandPrefix + "addkick -c [kick command] -m [kick message] -u [space delimited list of allowed users] (-b | -w) [space delimited list of blacklisted or whitelisted channels] -f [failure message]" + Colors.NORMAL + ": Adds a new kick command using the input input settings for the kick, and -c, -m, & -f are the only required inputs" );
+        }
+        if (command.equalsIgnoreCase("delkick") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "delkick [kick]" + Colors.NORMAL + ": Completely deletes the input kick" );
+        
+        if (command.equalsIgnoreCase("enablekick") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "enablekick [kick]" + Colors.NORMAL + ": Enables the input kick so that it can be used" );
+        
+        if (command.equalsIgnoreCase("disablekick") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "disablekick [kick]" + Colors.NORMAL + ": Disables the input kick so that it cannot be used until its enabled" );
+        
+        if (command.equalsIgnoreCase("listkicks") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "listkicks" + Colors.NORMAL + ": Responds with a list of all the currently enabled or disabled kicks" );
+        
+        if (commandTerms().contains(command.toLowerCase())) {
+            a.add(kickHelpString(getKick(command.toLowerCase())));
+        }
+        else if (command.equalsIgnoreCase(BotUtils.getClassName(this))) {
+            for (int i = 0; i < kicks.size(); i++) {
+                a.add(kickHelpString(kicks.get(i)));
+            }
+            for (int i = 0; i < unloadedKicks.size(); i++) {
+                a.add(kickHelpString(unloadedKicks.get(i)));
+            }
+        }
+        
+        
+        return a;
+    }
+    
+    
+    @Override
     public void processCommand(Event event) {
         
         CommandMetaData data = new CommandMetaData(event, true);
@@ -81,17 +119,12 @@ public class KickCMD implements Command {
                                 return;
                             }
                             kickCommand = kickArgs[i].trim().toLowerCase();
-                            System.out.println("KICK COMMAND: " + kickCommand);
                         }
                         else if (message.split("-f")[1].trim().toLowerCase().startsWith(kickArgs[i].trim().toLowerCase()) && kickFail == null) {
                             kickFail = kickArgs[i].trim();
-                            System.out.println("KICK FAIL: " + kickFail);
-                            
                         }
                         else if (message.split("-m")[1].trim().toLowerCase().startsWith(kickArgs[i].trim().toLowerCase()) && kickMessage == null) {
                             kickMessage = kickArgs[i].trim();
-                            System.out.println("KICK MESSAGE: " + kickMessage);
-                            
                         }
                         else if ((message.contains("-b") && message.split("-b")[1].trim().toLowerCase().startsWith(kickArgs[i].trim().toLowerCase()) ||
                                 message.contains("-w") && message.split("-w")[1].trim().toLowerCase().startsWith(kickArgs[i].trim().toLowerCase())) && blacklistedChannels == null) {
@@ -103,7 +136,13 @@ public class KickCMD implements Command {
                     }
                     
                     for (int i = 0; i < kicks.size(); i++) {
-                        if (cmdSplit[1].equalsIgnoreCase(kicks.get(i).getCommand())) {
+                        if (kickCommand.equalsIgnoreCase(kicks.get(i).getCommand())) {
+                            event.getBot().sendIRC().notice(caller, "Kick: A kick already exists for that command string");
+                            return;
+                        }
+                    }
+                    for (int i = 0; i < unloadedKicks.size(); i++) {
+                        if (kickCommand.equalsIgnoreCase(unloadedKicks.get(i).getCommand())) {
                             event.getBot().sendIRC().notice(caller, "Kick: A kick already exists for that command string");
                             return;
                         }
@@ -113,7 +152,7 @@ public class KickCMD implements Command {
                     event.getBot().sendIRC().message(respondTo, "Kick: Success, " + kickCommand + " has been successfully added to the kick commands");
                 }
                 else if (message.contains("-c") || message.contains("-u") || message.contains("-f") || message.contains("-b") || message.contains("-m") || message.contains("-w")) {
-                    event.getBot().sendIRC().notice(caller, "Kick: Full set of inputs not found in input string");
+                    event.getBot().sendIRC().notice(caller, "Kick: Full set of inputs not found in input string, minimum inputs include -c, -f, -m");
                 }
                 else if (cmdSplit.length >= 3) {
                     for (int i = 0; i < kicks.size(); i++) {
@@ -122,6 +161,13 @@ public class KickCMD implements Command {
                             return;
                         }
                     }
+                    for (int i = 0; i < unloadedKicks.size(); i++) {
+                        if (cmdSplit[1].equalsIgnoreCase(unloadedKicks.get(i).getCommand())) {
+                            event.getBot().sendIRC().notice(caller, "Kick: A kick already exists for that command string");
+                            return;
+                        }
+                    }
+                    
                     
                     String kickMessage = data.getMessage().split(" ", 3)[2];
                     addKick(cmdSplit[1].toLowerCase(), kickMessage);
@@ -178,7 +224,7 @@ public class KickCMD implements Command {
             }
             
             kickList = kickList.substring(0, kickList.length()-2);
-            event.getBot().sendIRC().message(respondTo, kickList);
+            event.getBot().sendIRC().message(caller, kickList);
             return;
         }
         
@@ -228,7 +274,21 @@ public class KickCMD implements Command {
         }
     }
     
-    
+    public String kickHelpString(KickInterface kick) {
+        String helpString;
+        helpString = Colors.BOLD + "Command: " + Colors.NORMAL + kick.getCommand();
+        helpString += Colors.BOLD + " Whitelisted Users: " + Colors.NORMAL + Global.botOwner + (kick.getAllowedUsers() == null ? "" : ", " + IRCUtils.arrayListToString(kick.getAllowedUsers()));
+        if (kick.getChannelList() != null) {
+            if (kick.isChannelListWhitelist()) {
+                helpString += Colors.BOLD + " Channel Whitelist: " + Colors.NORMAL;
+            }
+            else {
+                helpString += Colors.BOLD + " Channel Blacklist: " + Colors.NORMAL;
+            }
+            helpString += IRCUtils.arrayListToString(kick.getChannelList());
+        }
+        return helpString;
+    }
     
     private Collection<? extends String> getKickCommands() {
         ArrayList<String> kickCommands = new ArrayList<>();

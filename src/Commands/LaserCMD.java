@@ -8,8 +8,10 @@ package Commands;
 
 import Objects.Command;
 import Objects.CommandMetaData;
+import Wheatley.Global;
 import java.util.ArrayList;
 import java.util.List;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -52,6 +54,14 @@ public class LaserCMD implements Command {
         a.add("laser");
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "Laser [item]" + Colors.NORMAL + ": Responds with a randomly generated way to add lasers onto the input item, or if no item is input, it adds lasers onto \"it\"");
+        return a;
+    }
+
     
     @Override
     public void processCommand(Event event){

@@ -11,6 +11,7 @@ import Objects.CommandMetaData;
 import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.Channel;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -36,7 +37,14 @@ public class ChannelPartCMD implements Command {
 //        a.add("part");
         return a;
     }
-    
+
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.mainNick + ", leave [#channel]" + Colors.NORMAL + ": Commands the bot to part the input channel, or if there is no input channel, to part the current channel" );
+        return a;
+    }
+
     @Override
     public void processCommand(Event event) {
         

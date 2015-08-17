@@ -8,8 +8,11 @@ package Commands;
 
 import Objects.Command;
 import Objects.CommandMetaData;
+import Utils.BotUtils;
+import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.Channel;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 
 /**
@@ -59,6 +62,20 @@ public class ManualBotControl implements Command{
         a.add("act");
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        
+        if (command.equalsIgnoreCase("say") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "say [#channel] [message]" + Colors.NORMAL + ": Says the input message in the input channel (or the current channel if no channel is input)");
+        if (command.equalsIgnoreCase("act") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "act [#channel] [action]" + Colors.NORMAL + ": Performs the input action in the input channel (or the current channel if no channel is input)");
+        
+        
+        return a;
+    }
+    
     
     @Override
     public void processCommand(Event event){

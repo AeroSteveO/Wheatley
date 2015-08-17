@@ -9,6 +9,7 @@ package Commands;
 import Objects.Command;
 import Objects.CommandMetaData;
 import Utils.TextUtils;
+import Wheatley.Global;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
@@ -52,6 +53,14 @@ public class UpdateFile implements Command{
         a.add("update");
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "update [filename] [addition]" + Colors.NORMAL + ": Adds the word to the given text file, currently for the bad word list");
+        return a;
+    }
+
     
     @Override
     public void processCommand(Event event){

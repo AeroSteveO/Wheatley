@@ -8,6 +8,7 @@ package Commands;
 
 import Objects.Command;
 import Objects.CommandMetaData;
+import Wheatley.Global;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
@@ -65,6 +66,14 @@ public class PingCMD implements Command{
         a.add("ping");
         return a;
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.commandPrefix + "ping [IP or URL]" + Colors.NORMAL + ": Attempts to ping the input IP or URL and responds with whether its online or offline");
+        return a;
+    }
+
     
     @Override
     public void processCommand(Event event){
