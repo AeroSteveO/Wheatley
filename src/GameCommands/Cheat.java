@@ -39,7 +39,7 @@ public class Cheat implements CommandGame {
         boolean isVerified = data.isVerified();
         
         if ((event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("burg")) && isVerified){
-            if (event.getBot().getUserChannelDao().userExists(cmdSplit[1])){
+            if (event.getBot().getUserChannelDao().containsUser(cmdSplit[1])){
                 if (cmdSplit.length < 3) {
                     
                     event.getBot().sendRaw().rawLineNow("tban " + channel + " 10m " + cmdSplit[1] + "!*@*");
