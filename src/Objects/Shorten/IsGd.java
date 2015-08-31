@@ -30,7 +30,7 @@ import org.pircbotx.Colors;
  *   as a link shortening service
  * 
  */
-public class IsGd implements ShortenerInterface {
+public class IsGd extends ShortenerInterface {
     
     @Override
     public String shorten(String url) {

@@ -26,9 +26,15 @@ package Objects.Shorten;
  * 
  */
 
-public interface ShortenerInterface {
-    public String shorten(String url);
-    public boolean isShortIdentifier(String id);
-    public String getInfo();
-    public String getName();
+public abstract class ShortenerInterface {
+    
+    public abstract String shorten(String url);
+    
+    public boolean isShortIdentifier(String id) {
+        return (id.equalsIgnoreCase(String.valueOf(this.getClass().getName().charAt(0))));
+    }
+    
+    public abstract String getInfo();
+    
+    public abstract String getName();
 }

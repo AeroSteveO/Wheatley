@@ -9,6 +9,7 @@ package Commands;
 import Objects.Command;
 import Objects.CommandMetaData;
 import Objects.Shorten.Bitly;
+import Objects.Shorten.DtellaShorten;
 import Objects.Shorten.IsGd;
 import Objects.Shorten.ShortenerInterface;
 import Wheatley.Global;
@@ -105,6 +106,7 @@ public class ShortenCMD implements Command {
     
     private ArrayList<ShortenerInterface> getShorteners() {
         ArrayList<ShortenerInterface> shorteners = new ArrayList<>();
+        shorteners.add(new DtellaShorten());
         shorteners.add(new Bitly());
         shorteners.add(new IsGd());
         return shorteners;

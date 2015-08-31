@@ -16,8 +16,24 @@ import org.pircbotx.Colors;
 /**
  *
  * @author Stephen
+ * 
+ * Requirements:
+ * - APIs
+ *    AOSP JSON
+ * - Custom Objects
+ *    N/A
+ * - Utilities
+ *    TextUtils
+ * - Linked Classes
+ *    N/A
+ * 
+ * Object:
+ *      Bitly
+ * - Object that implements the link shortner interface, giving access to Bit.Ly
+ *   as a link shortening service
+ * 
  */
-public class Bitly implements ShortenerInterface {
+public class Bitly extends ShortenerInterface {
     String bitlyKey = "165beb4666880ab9f846c5f81702eded052afae8";
     
     @Override
