@@ -34,6 +34,8 @@ public class MoneyCMD implements CommandGame {
         String caller = commandData.getCaller();
         String command = commandData.getCommand();
         String[] cmdSplit = commandData.getCommandSplit();
+        for(int i = 0; i < cmdSplit.length; i++)
+            System.out.println(cmdSplit[i]);
         
         if (cmdSplit.length==1){ // Get your current score
             int userScore = scores.getScore(caller);
@@ -44,8 +46,9 @@ public class MoneyCMD implements CommandGame {
                 event.respond("You currently have $"+userScore);
         }
         
-        else if (command.split(" ").length==2){ // Get someone elses current score
-            String user = command.split(" ")[1];
+        else if (cmdSplit.length == 2){ // Get someone elses current score
+            System.out.println("Get User Money");
+            String user = cmdSplit[1];
             int userScore = scores.getScore(user);
             if (userScore ==Integer.MIN_VALUE){
                 event.getBot().sendIRC().notice(caller, "USER NOT FOUND");
@@ -54,7 +57,7 @@ public class MoneyCMD implements CommandGame {
                 event.respond(user+" currently has $"+userScore);
         }
         
-        else if (cmdSplit.length==3&&caller.equalsIgnoreCase(Global.botOwner)){
+        else if (cmdSplit.length == 3&&caller.equalsIgnoreCase(Global.botOwner)){
             boolean isVerified = commandData.isVerifiedBotOwner();
             String responseLocation = commandData.respondToCallerOrMessageChan();
             
