@@ -285,7 +285,7 @@ public class Blarghlebot extends ListenerAdapter {
                     event.getBot().sendIRC().message(event.getChannel().getName(), "http://youtu.be/v1PBptSDIh8");
                 // REGEX for creating IRC quote links
                 else if (Pattern.matches("![0-9]+", message))
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote="+message.split("!")[1]);
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.net/?quote="+message.split("!")[1]);
                 
                 else if (command.equalsIgnoreCase("passthepoop")) {
                     if ("null".equals(poop)){
@@ -331,16 +331,16 @@ public class Blarghlebot extends ListenerAdapter {
                 // <BlarghleBot> [15:02:31] Yo dawg I heard you like bs so I put an b in your a so you can b while you a.
                 //DUMB CHAT
                 else if (command.equalsIgnoreCase("burn"))
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1076");
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.net/?quote=1076");
                 
                 else if (command.equalsIgnoreCase("udon"))
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1019");
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.net/?quote=1019");
                 
                 else if (command.equalsIgnoreCase("rimshot"))
                     event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.instantrimshot.com/");
                 
                 else if (command.equalsIgnoreCase("clitoris"))
-                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.org/?quote=1050");
+                    event.getBot().sendIRC().message(event.getChannel().getName(), "http://quotes.dtella.net/?quote=1050");
                 
                 else if (command.equalsIgnoreCase("vuvuzela"))
                     event.getBot().sendIRC().message(event.getChannel().getName(), "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
