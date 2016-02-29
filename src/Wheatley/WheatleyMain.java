@@ -25,18 +25,6 @@ import uno2.UnoBot;
 
 /**
  *
- *
- * Requements:
-
-    Is
- *    Jaxen-1.6
- * - Custom Ob
-    ServerReconnector
-    *    ChnelStore
- * - Link
-    ses
- *   
- Wderp bot
  *  With Functions from
  *      theTardis   -- by theDoctor
  *      Matrapter   -- by Steve-O
@@ -170,7 +158,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new BotControl())
 //                    .addListener(new Ping())
                     .addListener(new BlarghleRandom())
-                    .addListener(new Weather())
+//                    .addListener(new Weather())
 //                    .addListener(new TvSchedule())
 //                    .addListener(new MetaCritic())
 //                    .addListener(new Recommendations())
@@ -179,13 +167,14 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new IdleRPG())
 //                    .addListener(new MovieRatings())
                     .addListener(new BadWords())
-                    .addListener(new MarkovInterface())
+//                    .addListener(new MarkovInterface())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
                     .addListener(new RandChan())             // generates random 4chan image links
                     .addServer(entry);
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
+            BackgroundListener.addListener(new MarkovInterface(), true);
             
             for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++){ //Add channels from XML and load into channels Object
                 configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
