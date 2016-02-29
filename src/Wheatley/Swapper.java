@@ -55,18 +55,22 @@ public class Swapper extends ListenerAdapter {
         
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String channel = event.getChannel().getName();
+            addToLog(channel, new ArrayList(Arrays.asList("<"+event.getUser().getNick()+">",event.getMessage())));
         
-        addToLog(channel, new ArrayList(Arrays.asList("<"+event.getUser().getNick()+">",event.getMessage())));
         
         if (message.toLowerCase().startsWith("sw/") || ((message.toLowerCase().startsWith("s/") || message.toLowerCase().startsWith("sed/")) && ((event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("BlarghleBot")))){
-            if(logger.getArray(channel).isEmpty()) {
-                event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
-                return;
-            }
+//            if(logger.isEmpty(channel)) {
+//                event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
+//                return;
+//            }
             if (message.endsWith("/"))
                 message+="poop";
             
             ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
+            if (logCopy == null || logCopy.isEmpty()) {
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "s// log empty");
+                        return;
+                    }
             String[] findNreplace = Colors.removeFormattingAndColors(message).split("/");
             
             int i = logCopy.size()-2;
@@ -102,20 +106,22 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
             String command = message.split(Global.commandPrefix)[1];
             String[] cmdSplit = command.split(" ");
             
-            
             if (cmdSplit[0].toLowerCase().matches("b[f]{1,}")){
+//                if(logger.isEmpty(channel)){
+//                    event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
+//                    return;
+//                }
                 if (cmdSplit.length==2){
                     String nick = cmdSplit[1];
-                    if(logger.getArray(channel).isEmpty()) {
-                        event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
-                        return;
-                    }
                     ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
                     
                     int i=logCopy.size()-2;
                     boolean found = false;
                     String line = new String();
-                    
+                    if (logCopy == null || logCopy.isEmpty()) {
+                        event.getBot().sendIRC().notice(event.getUser().getNick(), "!BFF log empty");
+                        return;
+                    }
                     while (!found && i >= 0){
                         if(logCopy.get(i).get(0).replaceAll("(<|>)", "").equalsIgnoreCase(nick)){
                             found = true;
@@ -148,7 +154,7 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
                 else{
                     ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
                     
-                    if (logCopy.isEmpty()) {
+                    if (logCopy == null || logCopy.isEmpty() || logCopy.size() < 2) {
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "!BF log empty");
                         return;
                     }
@@ -171,6 +177,7 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
                 }
             }
         }
+        
     }
     
     private String reverseWords(String line){

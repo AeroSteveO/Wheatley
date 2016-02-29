@@ -36,6 +36,15 @@ public class MapArray {
         }
     }
     
+    public boolean isEmpty(String channel) {
+        synchronized(log) {
+        if (!log.containsKey(channel.toLowerCase()) || getArray(channel.toLowerCase()).isEmpty()) {
+            return true;
+        }
+        return false;
+        }
+    }
+    
     public void addToLog(String channel, String message) {
         synchronized(log) {
             ArrayList<String> array = new ArrayList<String>();
