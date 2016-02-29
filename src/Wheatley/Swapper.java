@@ -59,7 +59,10 @@ public class Swapper extends ListenerAdapter {
         addToLog(channel, new ArrayList(Arrays.asList("<"+event.getUser().getNick()+">",event.getMessage())));
         
         if (message.toLowerCase().startsWith("sw/") || ((message.toLowerCase().startsWith("s/") || message.toLowerCase().startsWith("sed/")) && ((event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("BlarghleBot")))){
-            
+            if(logger.getArray(channel).isEmpty()) {
+                event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
+                return;
+            }
             if (message.endsWith("/"))
                 message+="poop";
             
@@ -103,7 +106,10 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
             if (cmdSplit[0].toLowerCase().matches("b[f]{1,}")){
                 if (cmdSplit.length==2){
                     String nick = cmdSplit[1];
-                    
+                    if(logger.getArray(channel).isEmpty()) {
+                        event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
+                        return;
+                    }
                     ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
                     
                     int i=logCopy.size()-2;
