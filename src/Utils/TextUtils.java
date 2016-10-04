@@ -45,7 +45,7 @@ import java.util.Scanner;
  *
  */
 public class TextUtils {
-    private final String USER_AGENT = "Mozilla/5.0";
+    private static final String USER_AGENT = "Mozilla/5.0";
     
     public static String loadText(String filename) throws FileNotFoundException, IOException{
         File file =new File(filename);
@@ -122,7 +122,7 @@ public class TextUtils {
         }
     }
     
-    public String readUrlUsingGet(String url) throws Exception {
+    public static String readUrlUsingGet(String url) throws Exception {
         
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
