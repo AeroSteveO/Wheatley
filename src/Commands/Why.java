@@ -10,6 +10,7 @@ import Objects.Command;
 import Wheatley.Global;
 import java.util.ArrayList;
 import java.util.List;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
@@ -18,7 +19,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *
  * @author Stephen
  * Ported from an easter egg in MATLAB
- * 
+ *
  * Requirements:
  * - APIs
  *    N/A
@@ -28,12 +29,12 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  *    N/A
  * - Linked Classes
  *    Global
- * 
+ *
  * Activate Command with:
  *      !Why
  *      [BotName], Why [any question]
  *          Responds with a randomly generated reason as to why
- * 
+ *
  */
 
 public class Why implements Command{
@@ -48,7 +49,17 @@ public class Why implements Command{
         
         return(toCheck.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", why"));
     }
+    
+    @Override
+    public ArrayList<String> help(String command) {
+        ArrayList<String> a = new ArrayList<>();
+        a.add(Colors.BOLD + Global.mainNick + ", why [any sort of question]?" + Colors.NORMAL + ": Responds with a randomly generated reason as to why" );
+        a.add(Colors.BOLD + Global.commandPrefix + "Why" + Colors.NORMAL + ": Responds with a randomly generated reason as to why");
         
+        return a;
+    }
+    
+    
     @Override
     public ArrayList<String> commandTerms(){
         ArrayList<String> a = new ArrayList<>();
