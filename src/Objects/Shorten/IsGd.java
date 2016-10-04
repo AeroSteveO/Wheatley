@@ -37,7 +37,7 @@ public class IsGd extends ShortenerInterface {
         try {
             return BotUtils.shortenURL(url);
         }
-        catch (IOException ex) {
+        catch (Exception ex) {
             return null;
         }
     }
