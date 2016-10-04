@@ -345,14 +345,14 @@ public class Blarghlebot extends ListenerAdapter {
                 else if (command.equalsIgnoreCase("vuvuzela"))
                     event.getBot().sendIRC().message(event.getChannel().getName(), "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
                 
-                else if (cmdSplit[0].equalsIgnoreCase("bash")&&Pattern.matches("[0-9]+", cmdSplit[1]))
+                else if (cmdSplit[0].equalsIgnoreCase("bash")&&cmdSplit.length == 2 && Pattern.matches("[0-9]+", cmdSplit[1]))
                     event.getBot().sendIRC().message(event.getChannel().getName(), "http://bash.org/?"+message.split(" ")[1]);
                 
-                else if (cmdSplit[0].equalsIgnoreCase("xkcdb")&&Pattern.matches("[0-9]+", cmdSplit[1]))
+                else if (cmdSplit[0].equalsIgnoreCase("xkcdb")&&cmdSplit.length == 2 && Pattern.matches("[0-9]+", cmdSplit[1]))
                     event.getBot().sendIRC().message(event.getChannel().getName(), "http://www.xkcdb.com/"+message.split(" ")[1]);
                 
                 else if (command.equalsIgnoreCase("dropthebass"))
-                    event.getBot().sendIRC().message(event.getChannel().getName(),"WUB WUB WUBWUBWUBWUB WUB WUB");
+                    event.getBot().sendIRC().message(event.getChannel().getName(),"WUB WUB WUBWUBWUBWUB WUB WUB");                
             }
         }
     }
