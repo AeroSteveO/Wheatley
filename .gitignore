@@ -20,3 +20,5 @@ SettingMarkov.xml
 WheatleyLogs.plog
 badwords.txt
 gameScores.json
+*.json
+password.txt
