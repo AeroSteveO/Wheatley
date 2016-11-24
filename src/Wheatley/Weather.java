@@ -88,7 +88,7 @@ import org.json.JSONTokener;
  */
 
 public class Weather extends ListenerAdapter{
-    String key = "***REMOVED***";    // API KEY, DO NOT LOSE
+    String key = "";    // API KEY, DO NOT LOSE
     String stockZip = "77002";          // Stock location for weather/alerts/forecast/auto alerts
     WeatherCache localCache = new WeatherCache(); // Initiate cache of weather data
     
@@ -100,6 +100,14 @@ public class Weather extends ListenerAdapter{
     AlertTime alertUpdater = new AlertTime(alertChannel,updateAlerts,alertUpdateTime,stockZip);     // Initiate auto-alert object
     Thread t = new Thread(alertUpdater);          // Give it a thread to run in
     boolean started = startAlertTime(t);          // Start the auto-alert thread
+    
+    public Weather() {
+        if (!Global.settings.contains("wundergroundapi")) {
+            Global.settings.create("wundergroundapi","AddHere");
+            System.out.println("ERROR: NO WUNDERGROUND API KEY");
+        }
+        key = Global.settings.get("wundergroundapi");
+    }
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
