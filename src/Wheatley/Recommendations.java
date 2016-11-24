@@ -41,8 +41,17 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  */
 public class Recommendations extends ListenerAdapter{
-    private String key = "***REMOVED***";
+    private String key = "";
     private final String USER_AGENT = "Mozilla/5.0";
+    
+    public Recommendations() {
+        if (!Global.settings.contains("taste-kid-api")) {
+            Global.settings.create("taste-kid-api","AddHere");
+            System.out.println("ERROR: NO TASTE KID API KEY");
+        }
+        key = Global.settings.get("taste-kid-api");
+
+    }
     
     @Override
     public void onMessage(final MessageEvent event) {

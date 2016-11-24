@@ -20,9 +20,17 @@ public class IdleRPG extends ListenerAdapter {
     private String idleRPGChan = "#idlerpg";
     private String idleBot = "idlebot";
     private String username = Global.mainNick;
-    private String password = "***REMOVED***";
+    private String password = "";
     private String userClass = "Intelligence Dampening Sphere";
     private int time = 120; // seconds
+    
+    public IdleRPG() {
+        if (!Global.settings.contains("idlerpg-pass")) {
+            Global.settings.create("idlerpg-pass","AddHere");
+            System.out.println("ERROR: NO IDLE RPG PASSWORD");
+        }
+        password = Global.settings.get("idlerpg-pass");
+    }
     
     @Override
     public void onConnect(ConnectEvent event) {

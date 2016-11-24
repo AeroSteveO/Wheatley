@@ -54,10 +54,20 @@ public class TvSchedule extends ListenerAdapter{
     ArrayList<String> nightTimes = getNightTvTimes();
     Element cache = initializeCache();
     DateTime cacheExpiration = new DateTime().plusDays(1);
-    String key = "***REMOVED***";
+    String key = "";
     ArrayList<String> whiteList = getWhiteList();
     // <Matthias> CW, ABC, CBS, NBC, and FOX for the main networks
     //<Matthias> TBS, TNT, SYFY, AMC, showtime, hbo
+    
+    public TvSchedule() {
+        if (!Global.settings.contains("tvr-api")) {
+            Global.settings.create("tvr-api","AddHere");
+            System.out.println("ERROR: NO TV RAGE API KEY");
+        }
+        key = Global.settings.get("tvr-api");
+
+    }
+
     
     private ArrayList<String> getWhiteList(){
         ArrayList<String> whiteList = new ArrayList<>();

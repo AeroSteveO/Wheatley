@@ -52,11 +52,19 @@ import org.pircbotx.hooks.events.MessageEvent;
  */
 public class MovieRatings extends ListenerAdapter {
     boolean wideSearch = false;
-    private String key = "***REMOVED***";
+    private String key = "";
+    
+    public MovieRatings() {
+        if (!Global.settings.contains("rotten-tomatoes-api")) {
+            Global.settings.create("rotten-tomatoes-api","AddHere");
+            System.out.println("ERROR: NO ROTTEN TOMATOES API KEY");
+        }
+        key = Global.settings.get("rotten-tomatoes-api");
+    }
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
-        if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
+        if ((event.getBot().getUserChannelDao().containsUser("theTardis") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("theTardis")) {
             String message = Colors.removeFormattingAndColors(event.getMessage().trim());
             if (message.toLowerCase().matches("!imdb\\s[a-z\\s]+\\s[0-9]{4}")){
                 String[] msgSplit = message.split(" ");

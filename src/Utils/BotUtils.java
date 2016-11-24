@@ -18,6 +18,11 @@ import org.jpaste.pastebin.Pastebin;
  */
 public class BotUtils {
     
+    public static String getClassName(Object obj) {
+        String name = obj.getClass().getName();
+        return (name.split("\\.")[name.split("\\.").length - 1]);
+    }
+    
     /**
      * Gets the appropriate string to send to a user if an exception is encountered.
      *
@@ -25,8 +30,7 @@ public class BotUtils {
      * @return Message to send user; never null
      * @throws java.lang.NullPointerException If any argument is null
      */
-    public static String formatException(Throwable t) {
-        //noinspection ThrowableResultOfMethodCallIgnored
+    private static String formatException(Throwable t) {
         notNull(t, "t was null");
         return "Exception! " + t.getClass().getSimpleName() + ": " + t.getMessage();
     }
@@ -38,9 +42,7 @@ public class BotUtils {
      * @return Stack trace as string
      * @throws java.lang.NullPointerException If any argument is null
      */
-    public static String getStackTrace(Throwable t) {
-        //noinspection ThrowableResultOfMethodCallIgnored
-        notNull(t, "t was null");
+    private static String getStackTrace(Throwable t) {
         final StringWriter sw = new StringWriter();
         t.printStackTrace(new PrintWriter(sw));
         return sw.toString();
@@ -53,9 +55,8 @@ public class BotUtils {
      * @return Pastebin URL or null if error encountered
      * @throws java.lang.NullPointerException If any argument is null
      */
-    static String pasteBinKey = "45c22303a7f1c7da1e9ec812f559c65b";
-    public static String pastebin(String paste) {
-        
+    private static String pastebin(String paste) {
+        String pasteBinKey = Global.settings.get("pastebin-api");
         try {
             return Pastebin.pastePaste(pasteBinKey, paste, Global.mainNick + " EXCEPTION").toString();
         }
@@ -65,24 +66,29 @@ public class BotUtils {
         }
     }
     
-    public static String pastebin(Throwable t) {
-        return pastebin(t,null);
-    }
-    
-    public static String pastebin(Throwable t, String message) {
-                        try {
+    private static String pastebin(Throwable t, String message) {
+        String pasteBinKey = Global.settings.get("pastebin-api");
+        try {
             return Pastebin.pastePaste(pasteBinKey, (message == null ? "" : message + "\n") + getStackTrace(t), Global.mainNick + " EXCEPTION " + t.getMessage()).toString();
         }
         catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
-
     }
     
     public static String formatPastebinPost(Throwable t) {
-        
-        String stackURL = linkToStackTrace(t);
+        String pastebin = pastebin(getStackTrace(t));
+        String stackURL = null;
+        if (pastebin != null) {
+            try {
+                stackURL = shortenURL(pastebin);
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
+            }
+        }
+
+//        String stackURL = linkToStackTrace(t);
         String response = formatException(t);
         if (stackURL != null)
                 response += (" (" + stackURL + ")");
@@ -101,21 +107,21 @@ public class BotUtils {
      * @return Shortened link to the stack trace or null
      * @throws java.lang.NullPointerException If any argument is null
      */
-    public static String linkToStackTrace(Throwable t) {
-        //noinspection ThrowableResultOfMethodCallIgnored
-        notNull(t, "");
-        String pastebin = pastebin(getStackTrace(t));
-        if (pastebin != null) {
-            String url = null;
-            try {
-                url = shortenURL(pastebin);
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
-            }
-            if (url != null) return url;
-        }
-        return null;
-    }
+//    private static String linkToStackTrace(Throwable t) {
+//        //noinspection ThrowableResultOfMethodCallIgnored
+//        notNull(t, "");
+//        String pastebin = pastebin(getStackTrace(t));
+//        if (pastebin != null) {
+//            String url = null;
+//            try {
+//                url = shortenURL(pastebin);
+//            } catch (Exception ignored) {
+//                ignored.printStackTrace();
+//            }
+//            if (url != null) return url;
+//        }
+//        return null;
+//    }
     
     /**
      * Gets the contents of an external URL.
@@ -143,11 +149,11 @@ public class BotUtils {
      * @throws IOException                    If an exception occurs encoding or shortening
      * @throws java.lang.NullPointerException If any argument is null
      */
-    public static String shortenURL(String url) throws IOException {
+    public static String shortenURL(String url) throws Exception {
         notNull(url, "url was null");
         final URL shorten = new URL("http://is.gd/create.php?format=simple&url=" + URLEncoder.encode(url, "UTF-8"));
         System.out.println(shorten.toString());
-        System.out.println(getContent(shorten.toString()));
-        return getContent(shorten.toString());
+        System.out.println(TextUtils.readUrlUsingGet(shorten.toString()));
+        return TextUtils.readUrlUsingGet(shorten.toString());
     }
 }
