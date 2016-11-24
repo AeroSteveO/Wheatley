@@ -62,9 +62,8 @@ public class MoneyCMD implements CommandGame {
             String responseLocation = commandData.respondToCallerOrMessageChan();
             
             if(isVerified) {
-                
-                String user = command.split(" ")[1];
-                String score = command.split(" ")[2];
+                String user = cmdSplit[1];
+                String score = cmdSplit[2];
                 int userCurrentScore = scores.getScore(user);
                 
                 if (userCurrentScore < Integer.MIN_VALUE){
