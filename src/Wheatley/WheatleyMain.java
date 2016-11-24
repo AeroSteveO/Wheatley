@@ -7,7 +7,6 @@ package Wheatley;
 
 import Objects.ServerReconnector;
 import Objects.PastebinExceptionHandler;
-import Utils.OSUtils;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.Configuration.*;
@@ -32,10 +31,10 @@ import uno2.UnoBot;
  *      Bellagio    -- by http://casinobot.codeplex.com/
  *      RoyalBot    -- by http://www.msclemens.com/royaldev/royalbot
  *      SrsBsns     -- by saigon
- *      LilWayne    -- by
+ *      LilWayne    -- by 
  *      Hermes      -- by aaahhh
  *      Poopsock    -- by khwain
- *      meatpod     -- by
+ *      meatpod     -- by 
  *      unoBot      -- by https://github.com/mjsalerno/UnoBot
  *
  *
@@ -61,13 +60,6 @@ public class WheatleyMain extends ListenerAdapter {
     public void onKick(KickEvent event) throws Exception {
         if (event.getRecipient().getNick().equals(event.getBot().getNick())) {
             event.getBot().sendIRC().joinChannel(event.getChannel().getName());
-        }
-    }
-    @Override
-    // Wheatley channel relay
-    public void onMessage(MessageEvent event) throws Exception {
-        if (event.getChannel().getName().equalsIgnoreCase(Global.mainChan)&&Global.relay){
-            Global.whatPreBot.sendIRC().message(Global.mainChan,"<"+event.getUser().getNick()+"> "+event.getMessage());
         }
     }
     
@@ -184,11 +176,6 @@ public class WheatleyMain extends ListenerAdapter {
             }
             Configuration config = configuration.buildConfiguration();
             
-            baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
-            eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(2);
-            String musicBotNick = "***REMOVED***|bot";
-            String musicBotNickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
-            
             try {
                 Global.bot = new PircBotX(config);
                 Global.bot.getConfiguration().getListenerManager().setExceptionHandler(new PastebinExceptionHandler());
@@ -200,42 +187,7 @@ public class WheatleyMain extends ListenerAdapter {
                 ex.printStackTrace();
                 System.out.println("Failed to start bot");
             }
-            
-            if (!OSUtils.isWindows()) {
-                String host = eElement.getElementsByTagName("address").item(0).getTextContent();
-                ServerEntry server = new ServerEntry(host, 6667);
-                servers = new ArrayList<>();
-                servers.add(server);
-                
-                Configuration configuration2;
-                configuration2 = new Configuration.Builder()
-                        .setName(musicBotNick)
-                        .setLogin(musicBotNick)
-                        .setNickservPassword(musicBotNickPass)
-                        .setRealName("Wheatley")
-                        .setAutoReconnect(true)
-                        .setAutoNickChange(true)
-                        .setCapEnabled(true)
-                        .addListener(new WhatPre())
-                        .addServer(server)
-                        .addAutoJoinChannel("#rapterverse")
-                        .setSocketTimeout(130 * 1000) // Reduce socket timeouts from 5 minutes to 130 seconds
-                        .setMessageDelay(600) // Reduce message delays from 1 second to 600 milliseconds (need to experiment to get the lowest value without dropping messages)
-                        .setVersion("HexMIRC 2.0.1 Turbo Skynet") // Set to something funny
-                        .buildConfiguration();
-                
-                try {
-                    Global.whatPreBot = new PircBotX(configuration2);
-                  ServerReconnector parallel = new ServerReconnector(Global.whatPreBot);
-                    Thread t = new Thread(parallel);
-                    parallel.giveT(t);
-                    t.start();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    System.out.println("Failed to start bot");
-                }
             }
-        }
         catch (Exception ex) {
             ex.printStackTrace();
         }

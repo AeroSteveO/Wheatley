@@ -137,20 +137,20 @@ public class BotControl extends ListenerAdapter{
 //                event.getBot().sendIRC().joinChannel(Global.channels.get(i).toString());
 //            }
 //        }
-        if (message.equalsIgnoreCase(Global.commandPrefix+"relay")){
-            if (event.getUser().getNick().equals(Global.botOwner)&&event.getUser().isVerified()){
-                if (Global.relay){
-                    Global.relay = false;
-                    event.respond("RELAY DISABLED");
-                }
-                else{
-                    Global.relay = true;
-                    event.respond("RELAY ENABLED");
-                }
-            }
-            else
-                event.getBot().sendIRC().notice(event.getUser().getNick(),"RELAY: You don't have access to this function");
-        }
+//        if (message.equalsIgnoreCase(Global.commandPrefix+"relay")){
+//            if (event.getUser().getNick().equals(Global.botOwner)&&event.getUser().isVerified()){
+//                if (Global.relay){
+//                    Global.relay = false;
+//                    event.respond("RELAY DISABLED");
+//                }
+//                else{
+//                    Global.relay = true;
+//                    event.respond("RELAY ENABLED");
+//                }
+//            }
+//            else
+//                event.getBot().sendIRC().notice(event.getUser().getNick(),"RELAY: You don't have access to this function");
+//        }
         
         if (message.equalsIgnoreCase(Global.mainNick+", please shutdown")
                 ||message.equalsIgnoreCase("!shutdown")
