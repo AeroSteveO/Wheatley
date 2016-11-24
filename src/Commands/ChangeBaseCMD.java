@@ -20,6 +20,9 @@ import org.pircbotx.hooks.Event;
  * @author Stephen
  */
 public class ChangeBaseCMD implements Command {
+    public ChangeBaseCMD() {
+        
+    }
     @Override
     public String toString(){
         return("Base: Changes an input decimal value to the input base, EX: \"!base 2 1234\"");
@@ -58,11 +61,11 @@ public class ChangeBaseCMD implements Command {
         String[] cmdSplit = data.getCommandSplit();
         String respondTo = data.respondToCallerOrMessageChan();
         String command = data.getCommand();
-        System.out.println(command);
+        //System.out.println(command);
         
         if (command.equalsIgnoreCase("rpn")) {
             String message = data.getMessage().split(" ", 2)[1];
-            System.out.println(message);
+            //System.out.println(message);
          event.getBot().sendIRC().message(respondTo, "RPN Solution: " + evaluateRPN(message));   
         }
         else {
