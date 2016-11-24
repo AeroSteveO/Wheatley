@@ -35,11 +35,17 @@ import org.pircbotx.Colors;
  * Activate Commands With
  *     !mute
  *     !speak
+ *     [botnick], speak up
+ *     [botnick], shut up
  *         To turn on and off the random response markov generator
  *     !set chance [num]
  *         To set the chance of the markov generator to respond (1/[num] chance)
  *     !save
  *         To save the current lines used in markov chain generation
+ *     !ignore [user nick]
+ *         Prevents that nick from adding lines to the markov db
+ *     !ignorelist
+ *         Returns a list of all the users who have been ignored by markov
  *     !line
  *     [botnick], go on
  *     [botnick], continue
@@ -130,10 +136,8 @@ public class MarkovInterface extends ListenerAdapter{
             
             try{
                 String response = "";
-                int count = 0;
                 while(response.split(" ").length<2){
                     response = borg.generateReply(keyWord[keyWord.length-1]);
-                    count++;
                 }
                 event.getBot().sendIRC().message(channel, response);
                 previousLine.addToLog(channel, message);
