@@ -19,5 +19,4 @@ public interface KickInterface {
     public ArrayList<String> getChannelList();
     public boolean isChannelListWhitelist();
     public String getFailureMessage();
-    
 }
