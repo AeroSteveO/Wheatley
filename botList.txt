@@ -21,7 +21,6 @@ Sonny
 LilWayne
 magikarp
 stats
-***REMOVED***
 Shepard
 Jenny
 SHODAN
@@ -34,15 +33,4 @@ Gollum
 butteredtoast
 harmony
 TriviaBot
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED***
