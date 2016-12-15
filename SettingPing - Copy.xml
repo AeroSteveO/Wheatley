@@ -17,7 +17,7 @@
             <service>ServiceName</service>
             <port>12345</port>
             <serviceaddr>outside.url.com</serviceaddr>
-            <address>***REMOVED***</address>
+            <address>192.168.1.123</address>
         </server>
         
      

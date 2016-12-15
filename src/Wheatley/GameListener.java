@@ -90,7 +90,7 @@ public class GameListener extends ListenerAdapter{
         listOfCommands.add(new MakeItRain());
         listOfCommands.add(new Merge());
         listOfCommands.add(new Save());
-        listOfCommands.add(new PurchaseTimeBomb());
+       // listOfCommands.add(new PurchaseTimeBomb());
         listOfCommands.add(new GameBombCMD());
         return(listOfCommands);
     }

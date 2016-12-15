@@ -167,7 +167,7 @@ public class Blarghlebot extends ListenerAdapter {
                 Iterator<User> iterator = users.iterator();
                 while(iterator.hasNext()) {
                     User user = iterator.next();
-                    if (user.getNick().startsWith("|")&&!user.getNick().equalsIgnoreCase("***REMOVED***")){
+                    if (user.getNick().startsWith("|")&&!user.getNick().equalsIgnoreCase("|DtellaBridge")){
                         dtellaUsers++;
                     }
                     Iterator<Channel> chanIterator = user.getChannels().iterator();

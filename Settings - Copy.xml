@@ -47,7 +47,7 @@
     
     <email>
         <gmail id="Server Status">
-            <hostname>***REMOVED***</hostname>
+            <hostname>smtp.googlemail.com</hostname>
             <username>email@gmail.com</username>
             <password>PASSWORD</password>
             <from>email@gmail.com</from>

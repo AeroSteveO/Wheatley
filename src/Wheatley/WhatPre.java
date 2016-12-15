@@ -20,16 +20,17 @@ import org.pircbotx.hooks.events.MessageEvent;
  * @author Stephen
  */
 public class WhatPre extends ListenerAdapter {
-    String preChan = "#***REMOVED***-announce"; // Music pre channel
-    String preBot = "Drone"; // Music pre bot name
-    String musicFolderLocation = "/media/backup/Music - Stephen/"; // Music folder location
+    String preChan = "#music"; // Music pre channel
+    String preBot = "Bot"; // Music pre bot name
+    String musicFolderLocation = "/media/Music/"; // Music folder location
 //    String musicFolderLocation = "music/";
     ArrayList<String> bands = loadBandNamesFromFolders(); // List of bands from folder names in the music folder
     ArrayList<String> announcedPres = new ArrayList<>();  // Pre's that have been announced to the channel
-    
+    String password = "password";
+    String username = "user";
     @Override
     public void onConnect(ConnectEvent event){
-        event.getBot().sendIRC().message("Drone","enter :***REMOVED***,#***REMOVED***-announce ***REMOVED*** ***REMOVED***");
+        event.getBot().sendIRC().message("Drone","enter :"+preChan+" "+username+" " + password);
     }
     
     @Override
@@ -73,7 +74,7 @@ public class WhatPre extends ListenerAdapter {
         }
         else if (event.getChannel().getName().equalsIgnoreCase(Global.mainChan)){
             
-            if(message.equalsIgnoreCase(Global.commandPrefix+"loadmusic")&&event.getUser().getNick().equalsIgnoreCase("***REMOVED***")){
+            if(message.equalsIgnoreCase(Global.commandPrefix+"loadmusic")&&event.getUser().getNick().equalsIgnoreCase(username)){
                 bands = loadBandNamesFromFolders();
                 event.respond("Band folder names reloaded");
             }
@@ -81,7 +82,7 @@ public class WhatPre extends ListenerAdapter {
                 Global.bot.sendIRC().message(Global.mainChan,"<"+event.getUser().getNick()+"> "+event.getMessage());
             
             if (message.equalsIgnoreCase(Global.commandPrefix+"relay")){
-                if (event.getUser().getNick().equals("***REMOVED***")&&event.getUser().isVerified()){
+                if (event.getUser().getNick().equals(username)&&event.getUser().isVerified()){
                     if (Global.relay){
                         Global.relay = false;
                         event.respond("RELAY DISABLED");
@@ -95,7 +96,7 @@ public class WhatPre extends ListenerAdapter {
             if (msgSplit[0].equalsIgnoreCase(Global.commandPrefix+"addband")){
                 
             }
-            if (message.equalsIgnoreCase(Global.commandPrefix + "kill") && event.getUser().getNick().equalsIgnoreCase("***REMOVED***") && event.getUser().isVerified()) {
+            if (message.equalsIgnoreCase(Global.commandPrefix + "kill") && event.getUser().getNick().equalsIgnoreCase(username) && event.getUser().isVerified()) {
                 Global.whatPreBot.sendIRC().quitServer();
             }
         }

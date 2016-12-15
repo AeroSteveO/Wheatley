@@ -33,4 +33,4 @@ Gollum
 butteredtoast
 harmony
 TriviaBot
-***REMOVED***
+burnmaster
