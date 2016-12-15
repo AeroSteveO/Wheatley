@@ -15,22 +15,7 @@
         <nick>Wheatley</nick>
         <login>Wheatley</login>
         <nickservpass>PASSWORD</nickservpass>
-		<botowner>Steve-O</botowner>
-        <listener>Wheatley</listener>
-        <listener>Blarghlebot</listener>
-        <listener>omgword</listener>
-        <listener>Why</listener>
-        <listener>WheatleyChatStuff</listener>
-        <listener>MatrapterChat</listener>
-        <listener>AutodlText</listener>
-        <listener>Ignite</listener>
-        <listener>Laser</listener>
-        <listener>Hangman</listener>        
-        <listener>Bomb</listener>
-        <listener>FactSphereFacts</listener>
-        <listener>BotControl</listener>
-        <listener>Ping</listener>
-        <listener>CaveJohnson</listener>
+		<botowner>OwnerNick</botowner>
     </basicsettings>
     
     <server id="dtella">
