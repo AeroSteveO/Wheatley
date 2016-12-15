@@ -1,41 +1,16 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
 ### What is this repository for? ###
 
-* This is a PIRCBOTX IRC bot that I made, because I was bored
+* This is a PIRCBOTX IRC bot that I made to learn java, now its a project of different experimentation and play with IRC bots
 * PIRCBOTX 2.1
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
->1.  commons-codec-1.9.jar
-2.  commons-email-1.3.2.jar
-3.  commons-lang3-3.2.1.jar
-4.  guava-16.0.jar
-5.  jaxen-1.1.6.jar
-6.  json-droid.jar (Compiled from AOSP)
-7.  mail-1.4.1.jar
-8.  pircbotx-2.0.1.jar
-9.  slf4j-api-1.7.5.jar
-10. slf4j-simple-1.7.5.jar
-11. 
-(at least this is what i'm running it on currently, and it works just fine)
-* Database configuration
-* How to run tests
-* Deployment instructions
+* Everything should be in the repo for netbeans setup
+* .jar dependencies were included before it was known that this is a bad idea to do in the repo, it has yet to be fixed
 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
-* Pull requests?
-
-### Who do I talk to? ###
-
-* Me
+* Follow the general style of the latest commits, style has changed a few times since this was started and not everything is setup the same way
+* Pull requests will be reviewed before accepting
