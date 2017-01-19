@@ -100,6 +100,7 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new ChannelJoinCMD());
         listOfCommands.add(new ChannelPartCMD());
         listOfCommands.add(new KickCMD());
+        listOfCommands.add(new ShortCMD());
         return(listOfCommands);
     }
 }
