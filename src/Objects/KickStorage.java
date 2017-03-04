@@ -33,6 +33,7 @@ public class KickStorage extends SettingsBase {
             addKick("hack", "Wheatley has killed you in his attempt to plug your brain into a computer", 
                     "Wheatley has killed you in an attempt to counter hack your brain");
             addKick("smash", "Aristotle vs MASHY-SPIKE-PLATE", "MASHY-SPIKE-PLATE smashed you into goop");
+            save();
         }
     }
     
@@ -80,13 +81,18 @@ public class KickStorage extends SettingsBase {
         settings.put(command, newKick);
         this.save();
     }
-
-    public void copyInFromStorage(KickStorage s, String key) {
-        if (this.contains(key)) {
+public boolean copyInFromStorage(KickStorage s, String key) {
+  return copyInFromStorage(s, key, key);
+}
+    public boolean copyInFromStorage(KickStorage s, String key, String newName) {
+        if (this.contains(newName)) {
             System.err.println("KEY ALREADY IN USE");
-            return;
+            return false;
         }
-        
+        if (!s.contains(key)) {
+          System.err.println("KEY NOT AVAILABLE");
+          return false;
+        }
         TreeMap<String,String> newKick = new TreeMap<>();
         newKick.put("message", s.getMessage(key));
         newKick.put("users", (String)((Map)s.settings.get(key)).get("users"));
@@ -95,7 +101,9 @@ public class KickStorage extends SettingsBase {
         newKick.put("isenabled", "true");
         newKick.put("failure", s.getFailureMessage(key));
         
-        settings.put(key, newKick);
+        settings.put(newName, newKick);
+        save();
+        return true;
     }
     public void disableKick(String key) {
         ((Map) settings.get(key)).put("isenabled", "false");
@@ -184,5 +192,4 @@ public class KickStorage extends SettingsBase {
         System.out.println(bool + " " + (String) ((Map) settings.get(key)).get("isenabled"));
         return  bool;
     }
-
 }
