@@ -292,10 +292,13 @@ public class DynamicKickManager implements Command {
       cmd2 = command + i;
       i++;
     }
-    hist.copyInFromStorage(kickData, cmd2);
-    
-    kickData.removeKey(command);
-    return true;
+    boolean succeed = hist.copyInFromStorage(kickData, command, cmd2);
+    hist.save();
+    if (succeed) {
+      kickData.removeKey(command);
+      kickData.save();
+    }
+    return succeed;
   }
   
   private boolean unloadKick(String command) {
