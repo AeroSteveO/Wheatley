@@ -70,6 +70,16 @@ public abstract class SettingsBase {
         return keyList;
     }
     
+    public boolean contains(String key){
+        key=key.toLowerCase();
+        return(settings.containsKey(key));
+    }
+    
+    public void removeKey(String key) {
+        key=key.toLowerCase();
+        settings.remove(key);
+    }
+    
     public void save() {
         try {
             if (!file.getName().equalsIgnoreCase("doNotSave")) {
