@@ -8,21 +8,17 @@ package Objects;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -68,11 +64,7 @@ import org.json.JSONTokener;
  * Version: 0.6.0
  *
  */
-public class Settings {
-//    Map<String, String> stuff = new TreeMap<String, String>();
-//    String filename = "doNotSave";
-    File file = new File("doNotSave");
-    Map <String, Object> generalSettings = Collections.synchronizedMap(new TreeMap<String, Object>( ));
+public class Settings extends SettingsBase {
     Map <String, Object> channelSettings = Collections.synchronizedMap(new TreeMap<String, Object>( ));
     
     public Settings(String filename){
@@ -81,27 +73,26 @@ public class Settings {
     
     public Settings(File file){
         this.file = file;
-        try{
+        try {
             this.loadFile();
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
     
     public Settings(){
-        
+        super();
     }
     
     public void create(String key, String value){
         key=key.toLowerCase();
-        if (!generalSettings.containsKey(key))
-            generalSettings.put(key,value);
+        if (!settings.containsKey(key))
+            settings.put(key,value);
         save();
     }
     
     public Set<String> keySet(){
-        Set<String> genSet = generalSettings.keySet();
+        Set<String> genSet = settings.keySet();
         Set<String> chanSet = channelSettings.keySet();
         Set<String> allSet = new HashSet<>();
         
@@ -120,7 +111,7 @@ public class Settings {
     
     public boolean contains(String key){
         key=key.toLowerCase();
-        return(generalSettings.containsKey(key));
+        return(settings.containsKey(key));
     }
     
     public boolean contains(String key, String channel){
@@ -141,7 +132,7 @@ public class Settings {
                 if(tree.get(0).startsWith("#"))
                     throw new UnsupportedOperationException("Channels cannot contain any values, only more maps");
                 else
-                    return (generalSettings.get(tree.get(0)).toString());
+                    return (settings.get(tree.get(0)).toString());
             }
             else{
                 Map<String,Object> tempMap = new TreeMap<String,Object>();
@@ -176,9 +167,9 @@ public class Settings {
                         return null;
                 }
                 else{
-                    if (generalSettings.containsKey(tree.get(0))){
+                    if (settings.containsKey(tree.get(0))){
                         Iterator treeIterator = tree.iterator();
-                        tempMap.putAll(generalSettings);
+                        tempMap.putAll(settings);
                         String key = new String();
                         while (treeIterator.hasNext() && continueSearch){
                             
@@ -220,7 +211,7 @@ public class Settings {
             if(tree.get(0).startsWith("#"))
                 return (channelSettings.containsKey(tree.get(0)));
             else
-                return (generalSettings.containsKey(tree.get(0)));
+                return (settings.containsKey(tree.get(0)));
         }
         else{
             Map<String,Object> tempMap = new TreeMap<String,Object>();
@@ -255,9 +246,9 @@ public class Settings {
                     return false;
             }
             else{
-                if (generalSettings.containsKey(tree.get(0))){
+                if (settings.containsKey(tree.get(0))){
                     Iterator treeIterator = tree.iterator();
-                    tempMap.putAll(generalSettings);
+                    tempMap.putAll(settings);
                     
                     while (treeIterator.hasNext() && continueSearch){
                         
@@ -299,7 +290,7 @@ public class Settings {
                     throw new UnsupportedOperationException("CHANNELS CANNOT HAVE VALUES ASSOCIATED WITH THEM, ONLY KEY/VALUE PAIRS");
                 }
                 else{
-                    generalSettings.put(tree.get(0).toLowerCase(), tree.get(1));
+                    settings.put(tree.get(0).toLowerCase(), tree.get(1));
                 }
             }
             else{
@@ -319,7 +310,7 @@ public class Settings {
                     this.channelSettings.putAll((Map) newMap);
                 }
                 else{
-                    this.generalSettings.putAll((Map) newMap);
+                    this.settings.putAll((Map) newMap);
                 }
             }
             save();
@@ -394,8 +385,8 @@ public class Settings {
                     return true;
                 }
             }
-            else if (generalSettings.containsKey(key)){
-                generalSettings.put(key,value);
+            else if (settings.containsKey(key)){
+                settings.put(key,value);
                 save();
                 return true;
             }
@@ -413,8 +404,8 @@ public class Settings {
     }
     
     public boolean set(String key, String value) {
-        if (generalSettings.containsKey(key)){
-            generalSettings.put(key,value);
+        if (settings.containsKey(key)){
+            settings.put(key,value);
             save();
             return true;
         }
@@ -424,8 +415,8 @@ public class Settings {
     public String get(String key){
         key=key.toLowerCase();
         
-        if(generalSettings.containsKey(key))
-            return generalSettings.get(key).toString();
+        if(settings.containsKey(key))
+            return settings.get(key).toString();
         else
             throw new UnsupportedOperationException("KEY MISSING");
     }
@@ -456,11 +447,12 @@ public class Settings {
         return(channels);
     }
     
+    @Override
     public void save() {
         try{
             if (!this.file.getName().equalsIgnoreCase("doNotSave")){
                 JSONObject writeJSON = new JSONObject();
-                JSONObject genJSON = new JSONObject(generalSettings);
+                JSONObject genJSON = new JSONObject(settings);
                 JSONObject chanJSON = new JSONObject();
                 
                 writeJSON.put("generalSettings", genJSON);
@@ -482,18 +474,12 @@ public class Settings {
                     chanJSON.put(channelEntry.getKey().toString(), channelSettingJSON);
                 }
                 
-                writeJSON.put("channelSettings",chanJSON);
-//            For channel in channels
-//                    ....JSONObject settings = new JSONObject();
-//                    ....settings.addValue(settingName, settingValue);//for each setting
-//                    ....channelJson.addValue(channelName, settings);
+                writeJSON.put("channelSettings", chanJSON);
+                
                 String json = writeJSON.toString(2);
                 try{
-//                    File file =new File(filename);
-                    
                     file.createNewFile(); // We're just replacing the old file, not modifying it
                     
-                    //true = append file
                     FileWriter fileWritter = new FileWriter(file.getName());
                     BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                     bufferWritter.write(json);
@@ -512,6 +498,7 @@ public class Settings {
             ex.printStackTrace();
         }
     }
+    @Override
     public boolean loadFile() throws IOException, JSONException{
         
         
@@ -523,7 +510,7 @@ public class Settings {
                 
                 Map convertedJSON = jsonToMap(object);
                 
-                generalSettings =(Map) convertedJSON.get("generalSettings");
+                settings =(Map) convertedJSON.get("generalSettings");
                 channelSettings =(Map) convertedJSON.get("channelSettings");
                 
                 
@@ -541,94 +528,94 @@ public class Settings {
     }
     
     
-    public void setFileName(String filename){
-//        this.filename=filename;
-        this.file = new File(filename);
-        try{
-            if(!this.file.exists()){
-                this.file.createNewFile(); // We're just replacing the old file, not modifying it
-            }
-        }
-        catch (Exception ex){
-            ex.printStackTrace();
-        }
-    }
-    public void setFile(File file){
-        this.file = file;
-    }
-    
-    private String loadText() throws FileNotFoundException, IOException{
-//        File file =new File(filename);
-        //if file doesnt exists, then create it
-        if(!file.exists()){
-            file.createNewFile();
-            return null;
-        }
-        
-        try{
-            Scanner wordfile = new Scanner(file);
-            String wordls = "";
-            while (wordfile.hasNext()){
-                wordls= wordls+(wordfile.nextLine());
-            }
-            wordfile.close();
-            return (wordls);
-        } catch (FileNotFoundException ex) {
-            System.out.println("TEXT LOADER FAILED");
-            ex.printStackTrace();
-            return null;
-        }
-    }
-    
-    private static Map jsonToMap(JSONObject json) throws JSONException {
-        Map<String, Object> retMap = new HashMap<String, Object>();
-        
-        if(json != JSONObject.NULL) {
-            retMap = toMap(json);
-        }
-        else
-            System.out.println("JSON EMPTY");
-        return retMap;
-    }
-    
-    private static Map toMap(JSONObject object) throws JSONException {
-        Map<String, Object> map = new HashMap<String, Object>();
-        
-        Iterator<String> keysItr = object.keys();
-        while(keysItr.hasNext()) {
-            String key = keysItr.next();
-            Object value = object.get(key);
-            
-            if(value instanceof JSONArray) {
-                value = toList((JSONArray) value);
-            }
-            
-            else if(value instanceof JSONObject) {
-                value = toMap((JSONObject) value);
-            }
+//    public void setFileName(String filename){
+////        this.filename=filename;
+//        this.file = new File(filename);
+//        try{
+//            if(!this.file.exists()){
+//                this.file.createNewFile(); // We're just replacing the old file, not modifying it
+//            }
+//        }
+//        catch (Exception ex){
+//            ex.printStackTrace();
+//        }
+//    }
+//    public void setFile(File file){
+//        this.file = file;
+//    }
+//    
+//    private String loadText() throws FileNotFoundException, IOException{
+////        File file =new File(filename);
+//        //if file doesnt exists, then create it
+//        if(!file.exists()){
+//            file.createNewFile();
+//            return null;
+//        }
+//        
+//        try{
+//            Scanner wordfile = new Scanner(file);
+//            String wordls = "";
+//            while (wordfile.hasNext()){
+//                wordls= wordls+(wordfile.nextLine());
+//            }
+//            wordfile.close();
+//            return (wordls);
+//        } catch (FileNotFoundException ex) {
+//            System.out.println("TEXT LOADER FAILED");
+//            ex.printStackTrace();
+//            return null;
+//        }
+//    }
+//    
+//    private static Map jsonToMap(JSONObject json) throws JSONException {
+//        Map<String, Object> retMap = new HashMap<String, Object>();
+//        
+//        if(json != JSONObject.NULL) {
+//            retMap = toMap(json);
+//        }
+//        else
+//            System.out.println("JSON EMPTY");
+//        return retMap;
+//    }
+//    
+//    private static Map toMap(JSONObject object) throws JSONException {
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        
+//        Iterator<String> keysItr = object.keys();
+//        while(keysItr.hasNext()) {
+//            String key = keysItr.next();
+//            Object value = object.get(key);
+//            
+//            if(value instanceof JSONArray) {
+//                value = toList((JSONArray) value);
+//            }
+//            
+//            else if(value instanceof JSONObject) {
+//                value = toMap((JSONObject) value);
+//            }
+////            else
+////                System.out.println("AWW HELL, "+key+" failed");
+//            map.put(key, value);
+////            System.out.println("KEY: "+key+" VALUE: "+value);
+//        }
+//        return map;
+//    }
+//    
+//    private static List toList(JSONArray array) throws JSONException {
+//        List<Object> list = new ArrayList<Object>();
+//        for(int i = 0; i < array.length(); i++) {
+//            Object value = array.get(i);
+//            if(value instanceof JSONArray) {
+//                value = toList((JSONArray) value);
+//            }
+//            
+//            else if(value instanceof JSONObject) {
+//                value = toMap((JSONObject) value);
+//            }
 //            else
-//                System.out.println("AWW HELL, "+key+" failed");
-            map.put(key, value);
-//            System.out.println("KEY: "+key+" VALUE: "+value);
-        }
-        return map;
-    }
-    
-    private static List toList(JSONArray array) throws JSONException {
-        List<Object> list = new ArrayList<Object>();
-        for(int i = 0; i < array.length(); i++) {
-            Object value = array.get(i);
-            if(value instanceof JSONArray) {
-                value = toList((JSONArray) value);
-            }
-            
-            else if(value instanceof JSONObject) {
-                value = toMap((JSONObject) value);
-            }
-            else
-                System.out.println("DANGIT");
-            list.add(value);
-        }
-        return list;
-    }
+//                System.out.println("DANGIT");
+//            list.add(value);
+//        }
+//        return list;
+//    }
 }
