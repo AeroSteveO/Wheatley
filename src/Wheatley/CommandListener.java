@@ -99,7 +99,7 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new EnglishSayingsCMD());
         listOfCommands.add(new ChannelJoinCMD());
         listOfCommands.add(new ChannelPartCMD());
-        listOfCommands.add(new KickCMD());
+        listOfCommands.add(new DynamicKickManager());
         listOfCommands.add(new ShortCMD());
         return(listOfCommands);
     }
