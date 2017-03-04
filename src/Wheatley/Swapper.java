@@ -63,8 +63,8 @@ public class Swapper extends ListenerAdapter {
 //                event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
 //                return;
 //            }
-            if (message.endsWith("/"))
-                message+="poop";
+//            if (message.endsWith("/"))
+//                message+="";
             
             ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
             if (logCopy == null || logCopy.isEmpty()) {
@@ -72,6 +72,10 @@ public class Swapper extends ListenerAdapter {
                         return;
                     }
             String[] findNreplace = Colors.removeFormattingAndColors(message).split("/");
+            
+            if (findNreplace.length != 3) {
+                findNreplace = new String[]{findNreplace[0], findNreplace[1], "" };
+            }
             
             int i = logCopy.size()-2;
             
@@ -240,6 +244,9 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
             }catch (Exception ex){
                 
             }
+        }
+        for (int j = 0; j < reply.size(); j++) {
+            reply.set(j, reply.get(j).trim().replaceAll(" +", " "));
         }
         return(reply);
     }
