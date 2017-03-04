@@ -23,3 +23,6 @@ gameScores.json
 *.json
 password.txt
 *.dat
+cmdHist.txt
+ImportedMarkov.prev
+MarkovWords
