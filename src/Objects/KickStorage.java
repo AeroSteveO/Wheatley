@@ -5,14 +5,14 @@
  */
 package Objects;
 
-import Objects.Kicks.CustomKick;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- *
+ * This class stores kick data in a .json file and gives accessor methods into
+ * the data as well as other helpful methods for maintaining the kick data
  * @author Stephen
  */
 public class KickStorage extends SettingsBase {
@@ -67,12 +67,12 @@ public class KickStorage extends SettingsBase {
 
 
         TreeMap<String,String> newKick = new TreeMap<>();
-        newKick.put("message", message);
-        newKick.put("users", allowedUsers);
-        newKick.put("channels", blockedChans);
-        newKick.put("iswhitelist", isWhitelist);
-        newKick.put("isenabled", "true");
-        newKick.put("failure", failureMessage);
+        newKick.put(MESSAGE_KEY, message);
+        newKick.put(USERS_KEY, allowedUsers);
+        newKick.put(CHANNELS_KEY, blockedChans);
+        newKick.put(IS_WHITELIST_KEY, isWhitelist);
+        newKick.put(IS_ENABLED_KEY, "true");
+        newKick.put(FAILURE_KEY, failureMessage);
         
         
         System.out.println(command + " Should be added");
@@ -81,9 +81,11 @@ public class KickStorage extends SettingsBase {
         settings.put(command, newKick);
         this.save();
     }
-public boolean copyInFromStorage(KickStorage s, String key) {
-  return copyInFromStorage(s, key, key);
-}
+    
+    public boolean copyInFromStorage(KickStorage s, String key) {
+      return copyInFromStorage(s, key, key);
+    }
+    
     public boolean copyInFromStorage(KickStorage s, String key, String newName) {
         if (this.contains(newName)) {
             System.err.println("KEY ALREADY IN USE");
@@ -94,29 +96,25 @@ public boolean copyInFromStorage(KickStorage s, String key) {
           return false;
         }
         TreeMap<String,String> newKick = new TreeMap<>();
-        newKick.put("message", s.getMessage(key));
-        newKick.put("users", (String)((Map)s.settings.get(key)).get("users"));
-        newKick.put("channels", (String)((Map)s.settings.get(key)).get("channels"));
-        newKick.put("iswhitelist", (String)((Map)s.settings.get(key)).get("iswhitelist"));
-        newKick.put("isenabled", "true");
-        newKick.put("failure", s.getFailureMessage(key));
+        newKick.put(MESSAGE_KEY, s.getMessage(key));
+        newKick.put(USERS_KEY, (String)((Map)s.settings.get(key)).get(USERS_KEY));
+        newKick.put(CHANNELS_KEY, (String)((Map)s.settings.get(key)).get(CHANNELS_KEY));
+        newKick.put(IS_WHITELIST_KEY, (String)((Map)s.settings.get(key)).get(IS_WHITELIST_KEY));
+        newKick.put(IS_ENABLED_KEY, "true");
+        newKick.put(FAILURE_KEY, s.getFailureMessage(key));
         
         settings.put(newName, newKick);
         save();
         return true;
     }
     public void disableKick(String key) {
-        ((Map) settings.get(key)).put("isenabled", "false");
+        ((Map) settings.get(key)).put(IS_ENABLED_KEY, "false");
         this.save();
     }
     public void enableKick(String key) {
-        ((Map) settings.get(key)).put("isenabled", "true");
+        ((Map) settings.get(key)).put(IS_ENABLED_KEY, "true");
         this.save();
     }
-//    public String getCommand(String key) {
-//        key = key.toLowerCase();
-//        return (String) ((Map) settings.get(key)).get("command");
-//    }
     
     public ArrayList<String> getKickCommands() {
         return getKeyList();
@@ -124,7 +122,7 @@ public boolean copyInFromStorage(KickStorage s, String key) {
     
     public String getMessage(String key) {
         key = key.toLowerCase();
-        return (String) ((Map) settings.get(key)).get("message");
+        return (String) ((Map) settings.get(key)).get(MESSAGE_KEY);
     }
     
     public ArrayList<String> getAllowedUsers(String key) {
@@ -139,7 +137,7 @@ public boolean copyInFromStorage(KickStorage s, String key) {
         
         ArrayList<String> users = new ArrayList();
         
-        String[] userString = ((String) ((Map) settings.get(key)).get("users")).split(" ");
+        String[] userString = ((String) ((Map) settings.get(key)).get(USERS_KEY)).split(" ");
         
         for (int i = 0; i < userString.length; i++) {
             users.add(userString[i]);
@@ -160,7 +158,7 @@ public boolean copyInFromStorage(KickStorage s, String key) {
         
         ArrayList<String> channels = new ArrayList();
         
-        String[] channelNames = ((String) ((Map) settings.get(key)).get("channels")).split(" ");
+        String[] channelNames = ((String) ((Map) settings.get(key)).get(CHANNELS_KEY)).split(" ");
         
         for (int i = 0; i < channelNames.length; i++) {
             channels.add(channelNames[i]);
@@ -171,7 +169,7 @@ public boolean copyInFromStorage(KickStorage s, String key) {
     
     public String getFailureMessage(String key) {
         key = key.toLowerCase();
-        return (String) ((Map) settings.get(key)).get("failure");
+        return (String) ((Map) settings.get(key)).get(FAILURE_KEY);
     }
 
     public boolean isChannelListWhitelist(String key) {
@@ -183,13 +181,12 @@ public boolean copyInFromStorage(KickStorage s, String key) {
             return false;
         }
 
-        return  Boolean.parseBoolean((String) ((Map) settings.get(key)).get("iswhitelist"));
+        return  Boolean.parseBoolean((String) ((Map) settings.get(key)).get(IS_WHITELIST_KEY));
     }
     
     public boolean isKickEnabled(String key) {
         key = key.toLowerCase();
-        Boolean bool = Boolean.parseBoolean((String) ((Map) settings.get(key)).get("isenabled"));
-        System.out.println(bool + " " + (String) ((Map) settings.get(key)).get("isenabled"));
+        Boolean bool = Boolean.parseBoolean((String) ((Map) settings.get(key)).get(IS_ENABLED_KEY));
         return  bool;
     }
 }
