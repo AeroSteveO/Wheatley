@@ -39,8 +39,6 @@ public class ShortCMD implements Command {
         a.add("mkcmd");
         a.add("rmcmd");
         a.add("upcmd");
-//        a.add("command"); // Terms that when prefixed by the command prefix, will activate the command
-// NOTE: these should be all lowercase
         return a;
     }
     
@@ -51,7 +49,10 @@ public class ShortCMD implements Command {
         for (int i = 0; i < commands.size(); i++) {
             a.add(Colors.BOLD + Global.commandPrefix + commands.get(i) + Colors.NORMAL + ": " + shortCommands.getString(commands.get(i)));
         }
-//        a.add(Colors.BOLD + Global.commandPrefix + "bankick [user] [time] [reason]" + Colors.NORMAL + ": Bans a user’s nickname only (not hostmask) for a period of time and then kicks them from the channel. ");
+        a.add(Colors.BOLD + Global.commandPrefix + "mkcmd [command] [text]" + Colors.NORMAL + ": Adds a command with the input text");
+        a.add(Colors.BOLD + Global.commandPrefix + "rmcmd [command" + Colors.NORMAL + ": Removes a command");
+        a.add(Colors.BOLD + Global.commandPrefix + "upcmd [command] [text]" + Colors.NORMAL + ": Updates a command with the input text");
+
         return a;
     }
     
@@ -60,8 +61,6 @@ public class ShortCMD implements Command {
     public void processCommand(Event event) {
         CommandMetaData data = new CommandMetaData(event, true);
         String caller = data.getCaller(); // Nick of the user who called the command
-//        boolean isVerified = data.isVerifiedBotOwner(); // True if the user who called the command is the bot owner
-//        String[] cmdSplit = data.getCommandSplit();
         String cmd = data.getCommand();
         String respondTo = data.respondToIgnoreMessage();
         
