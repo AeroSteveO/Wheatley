@@ -71,7 +71,7 @@ public class SysInfoCMD implements Command {
         CommandMetaData data = new CommandMetaData(event, false);
         String caller = data.getCaller();
         String channel = data.getEventChannel();
-        String respondTo = new String();
+        String respondTo;
         String message = data.getMessage();
         
         if (channel==null)

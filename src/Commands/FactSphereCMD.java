@@ -54,7 +54,7 @@ public class FactSphereCMD implements Command {
     }
     
     private ArrayList<String> getQuoteList() {
-        ArrayList<String> quotes = new ArrayList<String>();
+        ArrayList<String> quotes = new ArrayList<>();
         //True Facts
         quotes.add("The billionth digit of Pi is 9.");
         quotes.add("Humans can survive underwater. But not for very long.");

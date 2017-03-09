@@ -57,7 +57,7 @@ public class CaveJohnsonCMD implements Command {
     }
     
     private ArrayList<String> getQuoteList() {
-        ArrayList<String> a = new ArrayList<String>();
+        ArrayList<String> a = new ArrayList<>();
 //1952
         a.add("Welcome, gentlemen, to Aperture Science. Astronauts, war heroes, Olympians--you're here because we want the best, and you are it. So: Who is ready to make some science?");
         a.add("Now, you already met one another on the limo ride over, so let me introduce myself.");

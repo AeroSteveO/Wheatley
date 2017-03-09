@@ -101,36 +101,35 @@ public class IpInfoCMD implements Command{
                 }else
                     ip = cmdSplit[1];
                 try{
-                    String ipInfo = TextUtils.readUrl("http://ipinfo.io/"+ip+"/json");
-                    JSONObject ipJSON = (JSONObject) new JSONTokener(ipInfo).nextValue();
-                    
-                    String ipAddress = ipJSON.getString("ip");
-                    String city = ipJSON.getString("city");
-                    String region = new String();
-                    
-                    if (ipJSON.has("region"))
+                  String ipInfo = TextUtils.readUrl("http://ipinfo.io/"+ip+"/json");
+                  JSONObject ipJSON = (JSONObject) new JSONTokener(ipInfo).nextValue();
+                  
+                  String ipAddress = ipJSON.getString("ip");
+                  String city = ipJSON.getString("city");
+                  String region = new String();
+                  
+                  if (ipJSON.has("region"))
                     region = ipJSON.getString("region");
-                    
-                    String country = ipJSON.getString("country");
-                    String org = ipJSON.getString("org");
-                    
-                    String response = Colors.BOLD+"IP: "+Colors.NORMAL+ipAddress+Colors.BOLD+" Location: "+Colors.NORMAL;
-                    
-                    if (!city.equalsIgnoreCase("null")){
-                        response+=city+", ";
-                    }
-                    if (!region.isEmpty()){
-                        response+=region + ", " + country+Colors.BOLD+" Organization: "+Colors.NORMAL+org;
-                    }
-                    else{
-                        response+=country+Colors.BOLD+" Organization: "+Colors.NORMAL+org;
-                    }
-                    event.getBot().sendIRC().message(respondTo,response);
+                  
+                  String country = ipJSON.getString("country");
+                  String org = ipJSON.getString("org");
+                  
+                  String response = Colors.BOLD+"IP: "+Colors.NORMAL+ipAddress+Colors.BOLD+" Location: "+Colors.NORMAL;
+                  
+                  if (!city.equalsIgnoreCase("null")){
+                    response+=city+", ";
+                  }
+                  if (!region.isEmpty()){
+                    response+=region + ", " + country+Colors.BOLD+" Organization: "+Colors.NORMAL+org;
+                  }
+                  else{
+                    response+=country+Colors.BOLD+" Organization: "+Colors.NORMAL+org;
+                  }
+                  event.getBot().sendIRC().message(respondTo,response);
                 }
                 catch (Exception ex){
-                    System.out.println(ex.getMessage());
-//                    ex.printStackTrace();
-                    event.getBot().sendIRC().notice(caller, "ERROR PARSING IP ADDRESS");
+                  System.out.println(ex.getMessage());
+                  event.getBot().sendIRC().notice(caller, "ERROR PARSING IP ADDRESS");
                 }
             }catch(Exception ex){
                 ex.printStackTrace();

@@ -96,7 +96,7 @@ public class PingCMD implements Command{
         
         
         String[] totalip = new String[2];
-        String[] pingresponse = new String[2];;
+        String[] pingresponse = new String[2];
         String[] address = new String[2];
         String pingmessage = new String();
         

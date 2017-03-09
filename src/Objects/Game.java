@@ -175,7 +175,7 @@ public class Game {
             characters.add(c);
         }
         StringBuilder output = new StringBuilder(input.length());
-        while(characters.size()!=0){
+        while(characters.isEmpty()){
             int randPicker = (int)(Math.random()*characters.size());
             output.append(characters.remove(randPicker));
         }
@@ -205,7 +205,7 @@ public class Game {
     private ArrayList<String> getColorList() throws FileNotFoundException{
         try{
             Scanner wordfile = new Scanner(new File("colorlist.txt"));
-            ArrayList<String> colorls = new ArrayList<String>();
+            ArrayList<String> colorls = new ArrayList<>();
             while (wordfile.hasNextLine()){
                 colorls.add(wordfile.nextLine());
             }

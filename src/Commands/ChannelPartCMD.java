@@ -53,7 +53,7 @@ public class ChannelPartCMD implements Command {
         String caller = data.getCaller(); // Nick of the user who called the command
         boolean isVerified = data.isVerifiedBotOwner(); // True if the user who called the command is the bot owner
         boolean isVerifiedChanOwner = data.isVerifiedChanBotOwner();
-        String[] cmdSplit = data.getCommandSplit();
+//        String[] cmdSplit = data.getCommandSplit();
         String message = data.getMessage();
         String respondTo = data.respondToCallerOrMessageChan();
         String channel = data.getCommandChannel();

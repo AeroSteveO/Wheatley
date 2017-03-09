@@ -92,7 +92,7 @@ public class EnglishSayingsCMD implements Command {
     private ArrayList<String> getSayings() {
         try{
             Scanner wordfile = new Scanner(new File("englishsayings.txt"));
-            ArrayList<String> wordls = new ArrayList<String>();
+            ArrayList<String> wordls = new ArrayList<>();
             while (wordfile.hasNext()){
                 wordls.add(wordfile.nextLine());
             }
@@ -104,10 +104,10 @@ public class EnglishSayingsCMD implements Command {
         }
     }
     private String randHyphenatedSaying() {
-        String saying = "";
-        ArrayList<String> start = new ArrayList<String>();
-        ArrayList<String> middle = new ArrayList<String>();
-        ArrayList<String> end = new ArrayList<String>();
+        String saying;
+        ArrayList<String> start = new ArrayList<>();
+        ArrayList<String> middle = new ArrayList<>();
+        ArrayList<String> end = new ArrayList<>();
         
         for (int i=0;i<sayings.size();i++){
             if (Pattern.matches("[-a-zA-Z]+", sayings.get(i))){
@@ -148,8 +148,8 @@ public class EnglishSayingsCMD implements Command {
     }
     private String randCommaSeparatedSaying() {
         String saying = "";
-        ArrayList<String> start = new ArrayList<String>();
-        ArrayList<String> end = new ArrayList<String>();
+        ArrayList<String> start = new ArrayList<>();
+        ArrayList<String> end = new ArrayList<>();
         
         for (int i=0;i<sayings.size();i++){
             if (Pattern.matches("[a-zA-Z\\s]+\\,[a-zA-Z\\s]+", sayings.get(i))){

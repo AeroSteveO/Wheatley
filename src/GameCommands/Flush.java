@@ -35,7 +35,7 @@ public class Flush implements CommandGame {
         CommandMetaData data = new CommandMetaData(event, true);
         
         String sender = data.getCaller();
-        String[] cmdSplit = data.getCommandSplit();
+//        String[] cmdSplit = data.getCommandSplit();
         boolean isVerified = data.isVerifiedBotOwner();
         
         if (isVerified) {

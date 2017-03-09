@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
-import java.net.URLEncoder;
 import static org.apache.commons.lang3.Validate.notNull;
 import org.jpaste.pastebin.Pastebin;
 import org.json.JSONObject;
@@ -94,7 +93,7 @@ public class PastebinExceptionHandler implements ManagerExceptionHandler {
         try {
             String json= readUrl("http://dtl.la/yourls-api.php?signature="+key+"&action=shorturl&url="+url+"&format=json");
             JSONObject defObject = (JSONObject) new JSONTokener(json).nextValue();
-            String link = null;
+            String link;
             if (!defObject.isNull("shorturl")) {
                 
                 link = defObject.getString("shorturl");

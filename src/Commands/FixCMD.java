@@ -71,7 +71,7 @@ public class FixCMD implements Command{
         
         String caller = data.getCaller();
         boolean isVerified = data.isVerifiedBotOwner();
-        String[] cmdSplit = data.getCommandSplit();
+//        String[] cmdSplit = data.getCommandSplit();
         
         if(isVerified){
             updateChannelsFromXML();
@@ -89,7 +89,7 @@ public class FixCMD implements Command{
             updateChannelsFromXML();
 //            Global.channels.removeDupes();
             for (int i=0;i<Global.channels.size();i++){
-                event.getBot().sendIRC().joinChannel(Global.channels.get(i).toString());
+                event.getBot().sendIRC().joinChannel(Global.channels.get(i));
             }
             event.getBot().sendIRC().notice(caller,"Fix completed");
         }

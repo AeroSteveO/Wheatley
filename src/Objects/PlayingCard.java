@@ -159,6 +159,7 @@ public class PlayingCard implements Comparable {
     /**
      * Returns true if both cards have the same value and suit.
      */
+    @Override
     public boolean equals(Object o) {
         if (o == null || !o.getClass().equals(this.getClass())) {
             //o is null or not of the same class
@@ -189,6 +190,7 @@ public class PlayingCard implements Comparable {
      * Joker is "jok".
      * Examples: "4h", "10c", "Ks".
      */
+    @Override
     public String toString() {
         String card = "";
         switch (this.value) {

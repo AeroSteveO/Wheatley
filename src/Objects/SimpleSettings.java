@@ -70,10 +70,6 @@ public class SimpleSettings extends SettingsBase {
         super(filename);
     }
     
-//    public boolean isEmpty(){
-//        return settings.isEmpty();
-//    }
-    
     public void create(String key, String value){
         key=key.toLowerCase();
         if (!settings.containsKey(key))
@@ -107,6 +103,7 @@ public class SimpleSettings extends SettingsBase {
         else
             throw new UnsupportedOperationException("KEY MISSING");
     }
+    
     public void setString(String key, String value){
         key=key.toLowerCase();
         
@@ -126,144 +123,16 @@ public class SimpleSettings extends SettingsBase {
         else
             throw new UnsupportedOperationException("KEY MISSING");
     }
+    
+    @Override
     public boolean contains(String key){
         key=key.toLowerCase();
         return(settings.containsKey(key));
     }
+    
+    @Override
     public void removeKey(String key) {
         key=key.toLowerCase();
         settings.remove(key);
     }
-
-//    public void save() {
-//        try{
-//            if (!file.getName().equalsIgnoreCase("doNotSave")){
-//                JSONObject genJSON = new JSONObject(settings);
-//                
-//                
-//                
-//                String json = genJSON.toString(2);
-//                try{
-//                    
-//                    file.createNewFile(); // We're just replacing the old file, not modifying it
-//                    
-//                    FileWriter fileWritter = new FileWriter(file.getName());
-//                    BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-//                    bufferWritter.write(json);
-//                    bufferWritter.close();
-//                    System.out.println("FILE SAVED");
-//                }catch(IOException e){
-//                    System.out.println(file.getName()+" HAS NOT BEEN SAVED");
-//                    e.printStackTrace();
-//                }
-//            }
-//            else
-//                System.out.println("FILE HAS NOT BEEN SAVED, NO FILENAME INPUT");
-//        }
-//        catch (Exception ex){
-//            System.out.println("FILE SAVE HAS FAILED");
-//            ex.printStackTrace();
-//        }
-//    }
-//    public boolean loadFile() throws IOException, JSONException{
-//        
-//        
-//        try{
-//            String json = loadText(); // Should only have one line of text
-//            
-//            if (json!=null&&!json.equals("")){
-//                JSONObject object = (JSONObject) new JSONTokener(json).nextValue();
-//                
-//                settings = jsonToMap(object);
-//                
-//            }
-//            else{
-//                System.out.println(file.getName()+" IS EMPTY");
-//                return false;
-//            }
-//        }catch(Exception e){
-//            System.out.println(file.getName()+" HAS NOT BEEN LOADED");
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//            return false;
-//        }
-//        return true;
-//    }
-//    
-//    
-//    public void setFileName(String filename){
-//        this.file = new File(filename);
-//    }
-//    public void setFile(File file){
-//        this.file = file;
-//    }
-//    
-//    private String loadText() throws FileNotFoundException, IOException{
-//        //if file doesnt exists, then create it
-//        if(!file.exists()){
-//            file.createNewFile();
-//            return null;
-//        }
-//        
-//        try{
-//            Scanner wordfile = new Scanner(file);
-//            String wordls = "";
-//            while (wordfile.hasNext()){
-//                wordls= wordls+(wordfile.nextLine());
-//            }
-//            wordfile.close();
-//            return (wordls);
-//        } catch (FileNotFoundException ex) {
-//            System.out.println("TEXT LOADER FAILED");
-//            ex.printStackTrace();
-//            return null;
-//        }
-//    }
-//    
-//    private static Map jsonToMap(JSONObject json) throws JSONException {
-//        Map<String, Object> retMap = new HashMap<String, Object>();
-//        
-//        if(json != JSONObject.NULL) {
-//            retMap = toMap(json);
-//        }
-//        else
-//            System.out.println("JSON EMPTY");
-//        return retMap;
-//    }
-//    
-//    private static Map toMap(JSONObject object) throws JSONException {
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        
-//        Iterator<String> keysItr = object.keys();
-//        while(keysItr.hasNext()) {
-//            String key = keysItr.next();
-//            Object value = object.get(key);
-//            
-//            if(value instanceof JSONArray) {
-//                value = toList((JSONArray) value);
-//            }
-//            
-//            else if(value instanceof JSONObject) {
-//                value = toMap((JSONObject) value);
-//            }
-//            map.put(key, value);
-//        }
-//        return map;
-//    }
-//    
-//    private static List toList(JSONArray array) throws JSONException {
-//        List<Object> list = new ArrayList<Object>();
-//        for(int i = 0; i < array.length(); i++) {
-//            Object value = array.get(i);
-//            if(value instanceof JSONArray) {
-//                value = toList((JSONArray) value);
-//            }
-//            
-//            else if(value instanceof JSONObject) {
-//                value = toMap((JSONObject) value);
-//            }
-//            list.add(value);
-//        }
-//        return list;
-//    }
 }

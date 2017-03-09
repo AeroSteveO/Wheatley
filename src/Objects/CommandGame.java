@@ -55,7 +55,7 @@ public interface CommandGame  {
     
     /**
      *
-     * @return ArrayList<String> of terms that will activate the command
+     * @return ArrayList String of terms that will activate the command
      */
     public ArrayList<String> commandTerms();
     

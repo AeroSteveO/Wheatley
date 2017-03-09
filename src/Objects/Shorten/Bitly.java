@@ -38,7 +38,7 @@ public class Bitly extends ShortenerInterface {
     
     @Override
     public String shorten (String url) {
-        String json = null;
+        String json;
         try {
             String link = ("https://api-ssl.bitly.com/v3/link/lookup?url=" + URLEncoder.encode(url, "UTF-8") + "&access_token=" + bitlyKey);
             json = TextUtils.readUrl(link);

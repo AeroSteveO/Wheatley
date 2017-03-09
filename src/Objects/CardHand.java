@@ -209,7 +209,7 @@ public class CardHand {
      * Note that aces are considered to have the lowest value, 1.
      */
     public void sortBySuit() {
-        ArrayList<PlayingCard> newHand = new ArrayList<PlayingCard>();
+        ArrayList<PlayingCard> newHand = new ArrayList<>();
         while (hand.size() > 0) {
             int pos = 0;  // Position of minimal card.
             PlayingCard c = hand.get(0);  // Minimal card.
@@ -233,7 +233,7 @@ public class CardHand {
      * Note that aces are considered to have the lowest value, 1.
      */
     public void sortByValue() {
-        ArrayList<PlayingCard> newHand = new ArrayList<PlayingCard>();
+        ArrayList<PlayingCard> newHand = new ArrayList<>();
         while (hand.size() > 0) {
             int pos = 0;  // Position of minimal card.
             PlayingCard c = hand.get(0);  // Minimal card.

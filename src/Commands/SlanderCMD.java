@@ -127,9 +127,9 @@ public class SlanderCMD implements Command {
     }
     
     private String basicInsult(String insult){
-        ArrayList<String> a = new ArrayList<String>(); //Begenning part of insult
-        ArrayList<String> b = new ArrayList<String>(); //Middle of insult
-        ArrayList<String> c = new ArrayList<String>(); //End of insult
+        ArrayList<String> a = new ArrayList<>(); //Begenning part of insult
+        ArrayList<String> b = new ArrayList<>(); //Middle of insult
+        ArrayList<String> c = new ArrayList<>(); //End of insult
         a.add("idiotic");
         a.add("insecure");
         a.add("stupid");
@@ -206,8 +206,8 @@ public class SlanderCMD implements Command {
     }
     
     private String gavinInsult(String insult){
-        ArrayList<String> a = new ArrayList<String>(); //Begenning part of insult
-        ArrayList<String> b = new ArrayList<String>(); //Middle of insult
+        ArrayList<String> a = new ArrayList<>(); //Begenning part of insult
+        ArrayList<String> b = new ArrayList<>(); //Middle of insult
         a.add("gobby");
         a.add("gammy");
         a.add("gumpy");
@@ -256,7 +256,7 @@ public class SlanderCMD implements Command {
         return(insult);
     }
     private ArrayList<String> shakespeareFront(){
-        ArrayList<String> first = new ArrayList<String>();
+        ArrayList<String> first = new ArrayList<>();
         first.add("artless");
         first.add("bawdy");
         first.add("beslubbering");
@@ -323,7 +323,7 @@ public class SlanderCMD implements Command {
         return first;
     }
     private ArrayList<String> shakespeareEnd(){
-        ArrayList<String> end = new ArrayList<String>();
+        ArrayList<String> end = new ArrayList<>();
         end.add("apple-john");
         end.add("boar-pig");
         end.add("bugbear");
@@ -388,7 +388,7 @@ public class SlanderCMD implements Command {
         return end;
     }
     private ArrayList<String> shakespeareMid(){
-        ArrayList<String> mid = new ArrayList<String>();
+        ArrayList<String> mid = new ArrayList<>();
         mid.add("base-court");
         mid.add("bat-fowling");
         mid.add("beef-witted");

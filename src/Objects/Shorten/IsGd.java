@@ -7,7 +7,6 @@
 package Objects.Shorten;
 
 import Utils.BotUtils;
-import java.io.IOException;
 import org.pircbotx.Colors;
 
 /**

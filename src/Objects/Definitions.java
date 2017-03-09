@@ -235,7 +235,7 @@ public class Definitions {
     }
     
     private static Map jsonToMap(JSONObject json) throws JSONException {
-        Map<String, Object> retMap = new HashMap<String, Object>();
+        Map<String, Object> retMap = new HashMap<>();
         
         if(json != JSONObject.NULL) {
             retMap = toMap(json);
@@ -246,7 +246,7 @@ public class Definitions {
     }
     
     private static Map toMap(JSONObject object) throws JSONException {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         
         Iterator<String> keysItr = object.keys();
         while(keysItr.hasNext()) {
@@ -266,7 +266,7 @@ public class Definitions {
     }
     
     private static List toList(JSONArray array) throws JSONException {
-        List<Object> list = new ArrayList<Object>();
+        List<Object> list = new ArrayList<>();
         for(int i = 0; i < array.length(); i++) {
             Object value = array.get(i);
             if(value instanceof JSONArray) {

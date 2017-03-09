@@ -88,7 +88,7 @@ public class TextUtils {
             
             Scanner wordfile = new Scanner(file);
 //new File("wordlist.txt")
-            ArrayList<String> wordls = new ArrayList<String>();
+            ArrayList<String> wordls = new ArrayList<>();
             while (wordfile.hasNext()){
                 wordls.add(wordfile.nextLine().trim());
             }

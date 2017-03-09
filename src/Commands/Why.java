@@ -69,7 +69,7 @@ public class Why implements Command{
     
     @Override
     public void processCommand(Event event){
-        String a = new String();
+        String a;
         
         switch((int) (Math.random()*10+1)) {
             case 1:
@@ -208,7 +208,7 @@ public class Why implements Command{
         return (a);
     }
     private static String oobject() {
-        String a = new String();
+        String a;
         switch((int) (Math.random()*3+1)) {
             case 1:
                 a = accusative_pronoun();

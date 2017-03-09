@@ -74,7 +74,7 @@ public class LaserCMD implements Command {
         String it;
         String[] check = commandData.getCommandSplit();
         String a="";
-        String[] parts = null;
+        String[] parts;
         
         if (check.length!=2){
             it = "it";

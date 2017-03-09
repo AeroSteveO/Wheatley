@@ -26,7 +26,7 @@ public class MapArray {
     public ArrayList<ArrayList<String>> getArray(String channel) {
         synchronized(log) {
             if (log.containsKey(channel)) {
-                ArrayList<ArrayList<String>> newArray = new ArrayList<ArrayList<String>>();
+                ArrayList<ArrayList<String>> newArray = new ArrayList<>();
                 newArray.addAll(log.get(channel));
                 return newArray;
             }
@@ -47,7 +47,7 @@ public class MapArray {
     
     public void addToLog(String channel, String message) {
         synchronized(log) {
-            ArrayList<String> array = new ArrayList<String>();
+            ArrayList<String> array = new ArrayList<>();
             array.add(message);
             addToLog(channel, array);
         }

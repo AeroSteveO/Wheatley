@@ -66,7 +66,7 @@ public class ListChannels implements Command {
         CommandMetaData data = new CommandMetaData(event,true);
         String caller = data.getCaller();
         String channel = data.getEventChannel();
-        String respondTo = new String();
+        String respondTo;
         
         if (channel==null)
             respondTo = caller;

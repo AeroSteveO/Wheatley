@@ -109,6 +109,7 @@ public class Settings extends SettingsBase {
         return allSet;
     }
     
+    @Override
     public boolean contains(String key){
         key=key.toLowerCase();
         return(settings.containsKey(key));
@@ -125,7 +126,7 @@ public class Settings extends SettingsBase {
     public String get(List<String> tree){
 //        System.out.println(tree + " is the contains tree");
         if (this.contains(tree)){
-            if (tree.size()==0){
+            if (tree.isEmpty()){
                 throw new UnsupportedOperationException("Input tree cannot be of ZERO size");
             }
             else if (tree.size()==1){
@@ -135,7 +136,7 @@ public class Settings extends SettingsBase {
                     return (settings.get(tree.get(0)).toString());
             }
             else{
-                Map<String,Object> tempMap = new TreeMap<String,Object>();
+                Map<String,Object> tempMap = new TreeMap<>();
                 boolean continueSearch = true;
                 
                 if (tree.get(0).startsWith("#")){
@@ -204,7 +205,7 @@ public class Settings extends SettingsBase {
     
     public boolean contains(List<String> tree){
 //        System.out.println(tree + " is the contains tree");
-        if (tree.size()==0){
+        if (tree.isEmpty()){
             throw new UnsupportedOperationException("Input tree cannot be of ZERO size");
         }
         else if (tree.size()==1){
@@ -214,7 +215,7 @@ public class Settings extends SettingsBase {
                 return (settings.containsKey(tree.get(0)));
         }
         else{
-            Map<String,Object> tempMap = new TreeMap<String,Object>();
+            Map<String,Object> tempMap = new TreeMap<>();
             boolean continueSearch = true;
             
             if (tree.get(0).startsWith("#")){
@@ -294,15 +295,15 @@ public class Settings extends SettingsBase {
                 }
             }
             else{
-                Map<String, Object> tmpMap = new TreeMap<String, Object>();
-                Map<String, Object> newMap = new TreeMap<String, Object>();
+                Map<String, Object> tmpMap = new TreeMap<>();
+                Map<String, Object> newMap = new TreeMap<>();
                 
                 tmpMap.put(tree.get(tree.size()-2).toLowerCase(), tree.get(tree.size()-1));
                 
                 for (int i=tree.size()-3;i>=0;i--){
                     newMap.put(tree.get(i).toLowerCase(), tmpMap);
                     
-                    tmpMap = new TreeMap<String, Object>();
+                    tmpMap = new TreeMap<>();
                     
                     tmpMap.putAll(newMap);
                 }
@@ -324,7 +325,7 @@ public class Settings extends SettingsBase {
         if (key=="NA"&&value=="NA"){
             if (channel.startsWith("#")&&channel.split(" ").length==1){
                 if (!channelSettings.containsKey(channel)){
-                    Map<String, String> newSetting = new TreeMap<String,String>();
+                    Map<String, String> newSetting = new TreeMap<>();
                     channelSettings.put(channel,newSetting);
 //                    System.out.println("CHANNEL ADDED TO SETTINGS: "+channel);
                     save();
