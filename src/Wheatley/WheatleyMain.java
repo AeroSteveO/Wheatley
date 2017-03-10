@@ -90,35 +90,76 @@ public class WheatleyMain extends ListenerAdapter {
         event.getBot().sendIRC().changeNick(Global.mainNick);
     }
     
+    public static void checkSettings() {
+      if (!Global.settings.contains("nick")) {
+        Global.settings.create("nick", "Wheatley");
+      }
+      if (!Global.settings.contains("nickservpass")) {
+        Global.settings.create("nickservpass", "password");
+      }
+      if (!Global.settings.contains("botowner")){
+        Global.settings.create("botowner", "Steve-O");
+      }
+      if (!Global.settings.contains("port")){
+        Global.settings.create("port", "6667");
+        
+      }      
+      if (!Global.settings.contains("login")){
+        Global.settings.create("login", "Derpy");
+        
+      }
+
+      if (!Global.settings.contains("address")){
+        Global.settings.create("address", "irc.rapternet.us");
+        
+      }
+      if (!Global.settings.contains("channellist")){
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add("#testing");
+        channels.add("#rapterverse");
+        Global.settings.create("channellist", channels);
+        
+      }
+
+    }
     @SuppressWarnings("CallToThreadDumpStack")
     public static void main(String[] args) {
 //        Global.addCommands(Global.commandList, CMD.class);
         //Setup this bot
-        try{
-            File fXmlFile = new File("Settings.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
-            int test = Integer.parseInt(baseElement.getElementsByTagName("test").item(0).getTextContent());
-            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(test);
-            Global.mainNick = baseElement.getElementsByTagName("nick").item(0).getTextContent();
-            Global.nickPass = baseElement.getElementsByTagName("nickservpass").item(0).getTextContent();
-            Global.botOwner = baseElement.getElementsByTagName("botowner").item(0).getTextContent();
-            Global.serverPort = eElement.getElementsByTagName("port").item(0).getTextContent();
+        checkSettings();
+//        String mainNick = Global.settings.get("nick");
+//        String nickPass = Global.settings.get("nickservpass");
+//        String botOwner = Global.settings.get("botowner");
+//        String serverPort = Global.settings.get("port");
+//        String phrasePrefix = Global.mainNick + ", ";
+//        String mainServer = Global.settings.get("address");
+        ArrayList<String> channels = Global.settings.getArray("channellist");
+        
+        try{ // MOVE ALL THE SETTINGS INTO JSON
+//            File fXmlFile = new File("Settings.xml");
+//            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+//            Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
+//            int test = Integer.parseInt(baseElement.getElementsByTagName("test").item(0).getTextContent());
+//            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(test);
+            Global.mainNick = Global.settings.get("nick");
+            Global.nickPass = Global.settings.get("nickservpass");
+            Global.botOwner = Global.settings.get("botowner");
+            Global.serverPort = Global.settings.get("port");
             Global.phrasePrefix = Global.mainNick+", ";
-            Global.mainServer = eElement.getElementsByTagName("address").item(0).getTextContent();
+            Global.mainServer = Global.settings.get("address");
             
             BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
             BackgroundListener.setExceptionHandler(new PastebinExceptionHandler());
             
-            ArrayList<ServerEntry> servers = new ArrayList<>();
+//            ArrayList<ServerEntry> servers = new ArrayList<>();
             ServerEntry entry = new ServerEntry(Global.mainServer, Integer.parseInt(Global.serverPort));
             
             //   Configuration configuration;
             Configuration.Builder configuration = new Configuration.Builder()
                     .setName(Global.mainNick)
                     .setRealName(Global.mainNick)
-                    .setLogin(baseElement.getElementsByTagName("login").item(0).getTextContent()) //login part of hostmask, eg name:login@host
+                    .setLogin(Global.settings.get("login")) //login part of hostmask, eg name:login@host
                     .setNickservPassword(Global.nickPass)
                     .setAutoNickChange(true) //Automatically change nick when the current one is in use
                     .setCapEnabled(true)     //Enable CAP features
@@ -168,11 +209,11 @@ public class WheatleyMain extends ListenerAdapter {
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
             BackgroundListener.addListener(new MarkovInterface(), true);
             
-            for (int i=0;i<eElement.getElementsByTagName("channel").getLength();i++){ //Add channels from XML and load into channels Object
-                configuration.addAutoJoinChannel(eElement.getElementsByTagName("channel").item(i).getTextContent());
-                Global.channels.add((eElement.getElementsByTagName("channel").item(i).getTextContent().toLowerCase()));
-                Global.settings.create("NA", "NA", eElement.getElementsByTagName("channel").item(i).getTextContent());
-                Global.throttle.create("NA", "NA", eElement.getElementsByTagName("channel").item(i).getTextContent());
+            for (String channel:channels){ //Add channels from XML and load into channels Object
+                configuration.addAutoJoinChannel(channel);
+                Global.channels.add(channel);
+                Global.settings.create("NA", "placeholder", channel);
+                Global.throttle.create("NA", "placeholder", channel);
             }
             Configuration config = configuration.buildConfiguration();
             
