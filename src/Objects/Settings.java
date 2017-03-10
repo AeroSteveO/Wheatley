@@ -421,7 +421,36 @@ public class Settings extends SettingsBase {
         else
             throw new UnsupportedOperationException("KEY MISSING");
     }
+    public ArrayList<String> getArray(String key){
+      key=key.toLowerCase();
+      if (!key.endsWith("list"))
+        key += "list";
+      if(settings.containsKey(key))
+        return (ArrayList) settings.get(key);
+      else
+        throw new UnsupportedOperationException("KEY MISSING");
+    }
     
+    public void setArray(String key, ArrayList<String> value){
+      key=key.toLowerCase();
+      if (!key.endsWith("list"))
+        key += "list";
+      
+      if(settings.containsKey(key))
+        settings.put(key,value);
+      else
+        throw new UnsupportedOperationException("KEY MISSING");
+    }
+    
+    public void create(String key, ArrayList<String> value){
+        key=key.toLowerCase();
+        if (!key.endsWith("list"))
+            key += "list";
+        
+        if (!settings.containsKey(key))
+            settings.put(key,value);
+    }
+
     public String get(String key, String channel){
         key=key.toLowerCase();
         channel = channel.toLowerCase();
