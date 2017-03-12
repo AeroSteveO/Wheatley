@@ -228,17 +228,18 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
 //                System.out.println(logCopy.get(i).get(1));
                 if (findThis.matcher(logCopy.get(i).get(1)).find()){
                     
-                    reply = new ArrayList(Arrays.asList(logCopy.get(i).get(0),logCopy.get(i).get(1).replaceAll(findNreplace[1],findNreplace[2])));
+                  reply = new ArrayList(Arrays.asList(logCopy.get(i).get(0),logCopy.get(i).get(1).replaceAll(findNreplace[1],findNreplace[2])));
                     
-                    if(reply.get(1).startsWith("sw/")||reply.get(1).startsWith("s/")||reply.get(1).startsWith("sed/")){
-                        i--;
-                        if (reply.get(1).endsWith("/"))
-                            reply.set(1, reply.get(1)+"poop");
-                        findNreplace = reply.get(1).split("/");
-                        reply = findReplace(i, findNreplace, logCopy);
+                  if (reply.get(1).startsWith("sw/") || reply.get(1).startsWith("s/") || reply.get(1).startsWith("sed/")) {
+                    i--;
+                    findNreplace = reply.get(1).split("/");
+                    if (findNreplace.length != 3) {
+                      findNreplace = new String[]{findNreplace[0], findNreplace[1], ""};
                     }
+                    reply = findReplace(i, findNreplace, logCopy);
+                  }
                     
-                    found = true;
+                  found = true;
                 }
                 i--;
             }catch (Exception ex){
