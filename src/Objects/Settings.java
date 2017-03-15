@@ -109,13 +109,27 @@ public class Settings extends SettingsBase {
         return allSet;
     }
     
-    @Override
+  /**
+   * Determines if the key is contained within the settings file
+   * 
+   * @param key The key to search for
+   * @return TRUE if the key exists in settings, false otherwise.
+   */
+  @Override
     public boolean contains(String key){
         key=key.toLowerCase();
         return(settings.containsKey(key));
     }
     
-    public boolean contains(String key, String channel){
+  /**
+   * Determines if the key is contained within the specified channels settings
+   * 
+   * @param key The key to search for in the channel specific settings
+   * @param channel The channel to search in for the key
+   * @return TRUE if the key exists for the channel in the settings file, false
+   *         otherwise
+   */
+  public boolean contains(String key, String channel){
         key=key.toLowerCase();
         channel = channel.toLowerCase();
         if (!channelSettings.containsKey(channel))
@@ -421,7 +435,14 @@ public class Settings extends SettingsBase {
         else
             throw new UnsupportedOperationException("KEY MISSING");
     }
-    public ArrayList<String> getArray(String key){
+
+  /**
+   * Gets the ArrayList String located at the input key
+   * 
+   * @param key The used to identify the array
+   * @return ArrayList String located at the input key
+   */
+  public ArrayList<String> getArray(String key){
       key=key.toLowerCase();
       if (!key.endsWith("list"))
         key += "list";

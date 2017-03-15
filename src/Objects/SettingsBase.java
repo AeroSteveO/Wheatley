@@ -55,7 +55,12 @@ public abstract class SettingsBase {
         }
     }
 
-    public boolean isEmpty() {
+  /**
+   * Determines if the settings are empty or not.
+   * 
+   * @return TRUE if the settings file is completely empty, false otherwise.
+   */
+  public boolean isEmpty() {
         return settings.isEmpty();
     }
 
@@ -69,13 +74,24 @@ public abstract class SettingsBase {
         }
         return keyList;
     }
-    
-    public boolean contains(String key){
-        key=key.toLowerCase();
-        return(settings.containsKey(key));
+
+    /**
+     * Determines if the key is contained within the settings file.
+     *
+     * @param key The key to search for.
+     * @return TRUE if the key exists in settings, false otherwise.
+     */
+    public boolean contains(String key) {
+      key = key.toLowerCase();
+      return (settings.containsKey(key));
     }
     
-    public void removeKey(String key) {
+  /**
+   * Removes the specified key from the settings file
+   * 
+   * @param key The key identifier to remove from the settings
+   */
+  public void removeKey(String key) {
         key=key.toLowerCase();
         settings.remove(key);
     }
