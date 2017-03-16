@@ -85,7 +85,12 @@ public class SimpleSettings extends SettingsBase {
             settings.put(key,value);
     }
     
-    public String getString(String key){
+  /**
+   * Returns the string value associated with the input key
+   * @param key
+   * @return string value for the key
+   */
+  public String getString(String key){
         key=key.toLowerCase();
         
         if(settings.containsKey(key))

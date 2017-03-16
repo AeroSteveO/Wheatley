@@ -9,7 +9,9 @@ package Wheatley;
 import Commands.*;
 import Commands.Why;
 import Objects.Command;
+import Objects.MapArray;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -23,11 +25,13 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  */
 public class CommandListener extends ListenerAdapter{
     private static List<Command> commandList = getCommandList();
-    
+    public static MapArray logger = new MapArray(100);
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
+        String nick = event.getUser().getNick();
+        logger.addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList(nick, message)));
         
         if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             String command = message.toLowerCase().split(Global.commandPrefix)[1];
@@ -39,9 +43,6 @@ public class CommandListener extends ListenerAdapter{
             }
         }
         else if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")){
-//            String command = message.split(Global.commandPrefix)[1];
-//            String[] cmdSplit = command.split(" ");
-            
             for (int i=0;i<commandList.size();i++){
                 if (commandList.get(i).isCommand(message)){
                     commandList.get(i).processCommand(event);
@@ -101,6 +102,7 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new ChannelPartCMD());
         listOfCommands.add(new DynamicKickManager());
         listOfCommands.add(new ShortCMD());
+        listOfCommands.add(new Hashtagify());
         return(listOfCommands);
     }
 }
