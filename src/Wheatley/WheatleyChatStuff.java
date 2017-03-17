@@ -77,7 +77,8 @@ public class WheatleyChatStuff extends ListenerAdapter {
         if (Pattern.matches(Global.mainNick+",?\\s+(youre|you're|you\\s+are)\\s+a?\\s*moron.*",message))
             event.getBot().sendIRC().message(event.getChannel().getName(),"I AM NOT A MORON");
         
-        if ((message.equalsIgnoreCase("!space"))||(message.equalsIgnoreCase("SPACE"))) {
+        // see also spaceCMD, which is the ! form of the command
+        if (message.equalsIgnoreCase("SPACE")) {
             switch((int) (Math.random()*3+1)) {
                 case 1:
                     event.getBot().sendIRC().message(event.getChannel().getName(),"What's your favorite thing about space? Mine is space.");
