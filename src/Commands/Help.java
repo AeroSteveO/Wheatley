@@ -11,6 +11,7 @@ import Objects.CommandMetaData;
 import Wheatley.CommandListener;
 import Wheatley.Global;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
@@ -60,8 +61,9 @@ public class Help implements Command {
     @Override
     public ArrayList<String> help(String command) {
         ArrayList<String> a = new ArrayList<>();
-        a.add(Colors.BOLD + Global.commandPrefix + "help" + Colors.NORMAL + ":  Provides a list of commands and packages that support the help function"); 
+        a.add(Colors.BOLD + Global.commandPrefix + "help" + Colors.NORMAL + ":  Provides a list of commands and packages that support the help function");
         a.add(Colors.BOLD + Global.commandPrefix + "help modules" + Colors.NORMAL + ":  Provides a list of currently loaded packages that support the help function");
+        a.add(Colors.BOLD + Global.commandPrefix + "help list" + Colors.NORMAL + ":  Provides a list of available commands utilizing help");
         a.add(Colors.BOLD + Global.commandPrefix + "help [command]" + Colors.NORMAL + ":  Provides help regarding the input command");
         a.add(Colors.BOLD + Global.commandPrefix + "help [module]" + Colors.NORMAL + ":  Provides help regarding the input module");
         return a;
@@ -99,11 +101,26 @@ public class Help implements Command {
             event.getBot().sendIRC().message(caller, commandsAvailable);
         }
         else if (cmdSplit.length == 2) {
-            
             if (cmdSplit[1].equalsIgnoreCase("modules")) {
                 String modulesAvailable = Colors.RED + "Currently Enabled Modules: " + Colors.NORMAL;
                 for (int i = 0; i < commands.size(); i++) {
                     modulesAvailable += commands.get(i).getClass().getName().split("\\.")[1] + ", ";
+                }
+                event.getBot().sendIRC().message(caller, modulesAvailable);
+            }
+            else if (cmdSplit[1].equalsIgnoreCase("list")) {
+                String modulesAvailable = Colors.RED + "Currently Enabled Commands: " + Colors.NORMAL;
+                List<String> terms = new ArrayList<>();
+                for (Command command : commands) {
+                  for (String term: command.commandTerms()) {
+                    if (term != null)
+                     terms.add(term);
+                  }
+                }
+                
+                Collections.sort(terms, String.CASE_INSENSITIVE_ORDER);
+                for (String term: terms) {
+                  modulesAvailable += term + ", ";
                 }
                 event.getBot().sendIRC().message(caller, modulesAvailable);
             }
