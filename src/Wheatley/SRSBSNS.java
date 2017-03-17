@@ -218,7 +218,6 @@ public class SRSBSNS extends ListenerAdapter {
                             String search = command.split(" ",2)[1];
                             search = search.replaceAll("!", "");
                             String url = duckDuckUrl(search);
-//                            System.out.println(url+"&pretty=1");
                             String json = readUrlUsingGet(url);
                             json = json.replaceAll("(?i)<a([^>]+)>(.+?)</a>", "");
                             JSONObject similar = (JSONObject) new JSONTokener(json).nextValue();
@@ -245,10 +244,6 @@ public class SRSBSNS extends ListenerAdapter {
                                     return;
                                 }
                             }
-//                        if (info.length()+topic.length()+hitUrl.length()>396){
-//                            info = info.substring(0,396-topic.length()-hitUrl.length())+"...";
-//                        }
-                            //Colors.BOLD+topic+Colors.NORMAL+info.split(topic,2)[1]
                             event.getBot().sendIRC().message(event.getChannel().getName(),info+" ("+hitUrl+")");
                         }
                         catch (Exception ex){
@@ -306,11 +301,8 @@ public class SRSBSNS extends ListenerAdapter {
         con.setRequestProperty("User-Agent", USER_AGENT);
         con.setRequestProperty("format", "json");
         
-//        con.setRequestProperty("X-Mashape-Key", key);
         
         int responseCode = con.getResponseCode();
-//        System.out.println("\nSending 'GET' request to URL : " + url);
-//        System.out.println("Response Code : " + responseCode);
         
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
@@ -322,7 +314,6 @@ public class SRSBSNS extends ListenerAdapter {
         }
         in.close();
         
-//        System.out.println(response.toString());
         return response.toString();
     }
 }

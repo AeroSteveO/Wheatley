@@ -103,6 +103,7 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new DynamicKickManager());
         listOfCommands.add(new ShortCMD());
         listOfCommands.add(new Hashtagify());
+        listOfCommands.add(new SpaceCMD());
         return(listOfCommands);
     }
 }
