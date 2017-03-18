@@ -13,23 +13,44 @@ import org.pircbotx.hooks.Event;
  *
  * @author Stephen
  * 
- * Requirements:
- * - APIs
- *    N/A
- * - Custom Objects
- *    N/A
- * - Linked Classes
- *    N/A
+ * Requirements:<br>
+ * - APIs<br>
+ *    N/A<br>
+ * - Custom Objects<br>
+ *    N/A<br>
+ * - Linked Classes<br>
+ *    N/A<br>
  * 
  */
 public interface Command {
     
-    public void processCommand(Event event);
+  /**
+   * Processes the command in the input Event.
+   * The Event must already have been screened to contain the command.
+   * @param event Event to process
+   */
+  public void processCommand(Event event);
     
-    public ArrayList<String> commandTerms();
+  /**
+   * Command terms this object will accept as input.
+   * @return Array of Strings containing the terms that will trigger this
+   *         command
+   */
+  public ArrayList<String> commandTerms();
     
-    public boolean isCommand(String toCheck);
+  /**
+   * Determines if the input command string can be processed with this object.
+   * @param toCheck Command string to check
+   * @return TRUE if this object can process the command, FALSE otherwise.
+   */
+  public boolean isCommand(String toCheck);
     
-    public ArrayList<String> help(String command);
+  /**
+   * Returns an arraylist of help data for the input command. Each element
+   * in the list will be output to the user on a new line.
+   * @param command Command to get the help information for.
+   * @return List of help string lines.
+   */
+  public ArrayList<String> help(String command);
     
 }

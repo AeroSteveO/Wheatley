@@ -25,10 +25,20 @@ public class KickStorage extends SettingsBase {
   private static String FAILURE_KEY = "failure";
   private static String IS_ENABLED_KEY = "isenabled";
 
+  /**
+   * Basic constructor takes a file name as input for the JSON file that will
+   * back the storage.
+   * @param filename JSON file to back the storage
+   */
   public KickStorage(String filename) {
     this(new File(filename));
   }
 
+  /**
+   * Basic constructor takes a file as input for the JSON file that will
+   * back the storage.
+   * @param file The JSON file that will back the storage of kick data.
+   */
   public KickStorage(File file) {
     super(file);
     if (isEmpty()) {
@@ -83,10 +93,26 @@ public class KickStorage extends SettingsBase {
     this.save();
   }
 
+  /**
+   * Copies the kick identified by the input key in from the kickstorage object
+   * provided as input.
+   * @param s KickStorage to copy the kick from
+   * @param key Key for the kick to be copied
+   * @return TRUE if successful, FALSE if not
+   */
   public boolean copyInFromStorage(KickStorage s, String key) {
     return copyInFromStorage(s, key, key);
   }
 
+  /**
+   * Copies the kick identified by the input key in from the kickstorage object
+   * provided as input, also accepts a new name for the kick for when its copied
+   * in.
+   * @param s KickStorage to copy the kick from
+   * @param key Key for the kick to be copied
+   * @param newName new name/key for the kick
+   * @return TRUE if successful, FALSE if not
+   */
   public boolean copyInFromStorage(KickStorage s, String key, String newName) {
     if (this.contains(newName)) {
       System.err.println("KEY ALREADY IN USE");
