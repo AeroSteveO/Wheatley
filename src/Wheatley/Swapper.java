@@ -43,6 +43,7 @@ public class Swapper extends ListenerAdapter {
     String channel = event.getChannel().getName();
     addToLog(channel, new ArrayList(Arrays.asList("<" + event.getUser().getNick() + ">", event.getMessage())));
 
+    // PROCESS s// commands and sed type commands
     if (message.toLowerCase().startsWith("sw/") || ((message.toLowerCase().startsWith("s/") || message.toLowerCase().startsWith("sed/")) && ((event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("BlarghleBot")))) {
 //            if(logger.isEmpty(channel)) {
 //                event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
@@ -52,13 +53,13 @@ public class Swapper extends ListenerAdapter {
 //                message+="";
 
       ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
-      if (logCopy == null || logCopy.isEmpty()) {
+      if (logCopy == null || logCopy.isEmpty()) { // if log is empty, no output is available
         event.getBot().sendIRC().notice(event.getUser().getNick(), "s// log empty");
         return;
       }
       String[] findNreplace = Colors.removeFormattingAndColors(message).split("/");
 
-      if (findNreplace.length != 3) {
+      if (findNreplace.length != 3) { // input of "s/anything/" will have a blank string added to the end, string.split does not do this.
         findNreplace = new String[]{findNreplace[0], findNreplace[1], ""};
       }
 
@@ -96,10 +97,6 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
       String[] cmdSplit = command.split(" ");
 
       if (cmdSplit[0].toLowerCase().matches("b[f]{1,}")) {
-//                if(logger.isEmpty(channel)){
-//                    event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
-//                    return;
-//                }
         if (cmdSplit.length == 2) {
           String nick = cmdSplit[1];
           ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
@@ -195,6 +192,16 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
     return newLine;
   }
 
+  /**
+   * Searches through the log until it finds a match to the regex. If the match
+   * is in the form of another swap styled string, then continue looking back
+   * through the log with the new regex from the swap string.
+   * 
+   * @param i Number of items left in the log file that have yet to be looked at.
+   * @param findNreplace Array containing the swap data {s, input, output}
+   * @param logCopy the log to search through
+   * @return List containing the output response, {Nick, Message}.
+   */
   private ArrayList<String> findReplace(int i, String[] findNreplace, ArrayList<ArrayList<String>> logCopy) {
     ArrayList<String> reply = new ArrayList<>();
     Boolean found = false;
@@ -202,17 +209,22 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
 
     while (i >= 0 && !found) {
       try {
-//                System.out.println(logCopy.get(i).get(1));
         if (findThis.matcher(logCopy.get(i).get(1)).find()) {
 
+          // DO THE SWAPPING
           reply = new ArrayList(Arrays.asList(logCopy.get(i).get(0), logCopy.get(i).get(1).replaceAll(findNreplace[1], findNreplace[2])));
 
+          // if the string is another swapper string, need to work on it,
+          // and continue recursively through the log.
           if (reply.get(1).startsWith("sw/") || reply.get(1).startsWith("s/") || reply.get(1).startsWith("sed/")) {
             i--;
-            findNreplace = reply.get(1).split("/");
-            if (findNreplace.length != 3) {
+            
+            findNreplace = reply.get(1).split("/"); // split up the swapper string
+            if (findNreplace.length != 3) { // if the length isn't 3, add on an empty string to make the swapper remove words
               findNreplace = new String[]{findNreplace[0], findNreplace[1], ""};
             }
+            // Found another swapper string, continue our recursive track
+            // through the log.
             reply = findReplace(i, findNreplace, logCopy);
           }
 
@@ -220,7 +232,7 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
         }
         i--;
       } catch (Exception ex) {
-
+        // Don't care about the exceptions, just don't want to break from them.
       }
     }
     for (int j = 0; j < reply.size(); j++) {
