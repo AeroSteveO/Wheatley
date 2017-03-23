@@ -45,8 +45,8 @@ public class KickCMD implements Command {
     @Override
     public ArrayList<String> commandTerms() {
         ArrayList<String> a = new ArrayList<>();
-        a.add("addkick");
-        a.add("delkick");
+        a.add("mkkick");
+        a.add("rmkick");
         a.add("enablekick");
         a.add("disablekick");
         a.add("listkicks");
