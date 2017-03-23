@@ -31,7 +31,7 @@ public class CommandListener extends ListenerAdapter{
     public void onMessage(MessageEvent event) throws Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
         String nick = event.getUser().getNick();
-        logger.addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList(nick, message)));
+        logger.addToLog(event.getChannel().getName(), new ArrayList(Arrays.asList("<" + nick + ">", message)));
         
         if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")){
             String command = message.toLowerCase().split(Global.commandPrefix)[1];
