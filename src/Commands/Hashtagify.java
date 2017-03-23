@@ -7,7 +7,6 @@ package Commands;
 
 import Objects.Command;
 import Objects.CommandMetaData;
-import Objects.MapArray;
 import Wheatley.CommandListener;
 import Wheatley.Global;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class Hashtagify implements Command {
 
   @Override
   public boolean isCommand(String toCheck) {
-    return false;
+    return commandTerms().contains(toCheck.toLowerCase());
   }
 
   @Override
@@ -48,6 +47,7 @@ public class Hashtagify implements Command {
   public ArrayList<String> commandTerms() {
     ArrayList<String> a = new ArrayList<>();
     a.add("hashtagify");
+    a.add("#");
     return a;
   }
 
@@ -55,7 +55,7 @@ public class Hashtagify implements Command {
   public void processCommand(Event event) {
     CommandMetaData commandData = new CommandMetaData(event, false);
     String respondTo = commandData.respondToIgnoreMessage();
-    String channel = commandData.getCommandChannel();
+    String channel = commandData.getEventChannel();
     ArrayList<ArrayList<String>> logCopy = CommandListener.logger.getArray(channel);
     if (CommandListener.logger.isEmpty(channel)) {
       return;
