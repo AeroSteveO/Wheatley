@@ -57,12 +57,12 @@ public class KickCMD implements Command {
     @Override
     public ArrayList<String> help(String command) {
         ArrayList<String> a = new ArrayList<>();
-        if (command.equalsIgnoreCase("addkick") || command.equalsIgnoreCase(BotUtils.getClassName(this))) {
-            a.add(Colors.BOLD + Global.commandPrefix + "addkick [kick command] [kick message]" + Colors.NORMAL + ": Adds a new kick command using the input message as the kick message" );
-            a.add(Colors.BOLD + Global.commandPrefix + "addkick -c [kick command] -m [kick message] -u [space delimited list of allowed users] (-b | -w) [space delimited list of blacklisted or whitelisted channels] -f [failure message]" + Colors.NORMAL + ": Adds a new kick command using the input input settings for the kick, and -c, -m, & -f are the only required inputs" );
+        if (command.equalsIgnoreCase("mkkick") || command.equalsIgnoreCase(BotUtils.getClassName(this))) {
+            a.add(Colors.BOLD + Global.commandPrefix + "mkkick [kick command] [kick message]" + Colors.NORMAL + ": Adds a new kick command using the input message as the kick message" );
+            a.add(Colors.BOLD + Global.commandPrefix + "mkkick -c [kick command] -m [kick message] -u [space delimited list of allowed users] (-b | -w) [space delimited list of blacklisted or whitelisted channels] -f [failure message]" + Colors.NORMAL + ": Adds a new kick command using the input input settings for the kick, and -c, -m, & -f are the only required inputs" );
         }
-        if (command.equalsIgnoreCase("delkick") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
-            a.add(Colors.BOLD + Global.commandPrefix + "delkick [kick]" + Colors.NORMAL + ": Completely deletes the input kick" );
+        if (command.equalsIgnoreCase("rmkick") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
+            a.add(Colors.BOLD + Global.commandPrefix + "rmkick [kick]" + Colors.NORMAL + ": Completely deletes the input kick" );
         
         if (command.equalsIgnoreCase("enablekick") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
             a.add(Colors.BOLD + Global.commandPrefix + "enablekick [kick]" + Colors.NORMAL + ": Enables the input kick so that it can be used" );
@@ -102,7 +102,7 @@ public class KickCMD implements Command {
         String channel = data.getEventChannel();
         String message = data.getMessage();
         
-        if (cmdSplit[0].equals("addkick")) {
+        if (cmdSplit[0].equals("mkkick")) {
             if (isVerified) {
                 if (message.contains("-c") && message.contains("-f") && message.contains("-m")) { // && message.contains("-b") && message.contains("-u")
                     String[] kickArgs = message.split("(\\-c)|(\\-u)|(\\-b)|(\\-f)|(\\-m)|(\\-w)");
@@ -176,7 +176,7 @@ public class KickCMD implements Command {
             }
             return;
         }
-        else if (cmdSplit[0].equals("delkick")) {
+        else if (cmdSplit[0].equals("rmkick")) {
             if (isVerified) {
                 if (cmdSplit.length == 2) {
                     if (delKick(cmdSplit[1])) {
