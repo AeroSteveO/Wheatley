@@ -76,6 +76,19 @@ public class SRSBSNS extends ListenerAdapter {
 //        String[] messageArray = message.split(" ");
         String channel = event.getChannel().getName();
         
+        
+      if (message.toLowerCase().startsWith("!tell") && message.split(" ").length > 2) {
+        String target = message.split("\\s+")[1];
+        String tell = message.split(target)[1];
+        if (event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(target))) {
+          //If the user is in the same channel as the summon
+          event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD + "!tell " + Colors.NORMAL + target + " has been PMed");
+          event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(target).getNick(), event.getUser().getNick() + " wants me to tell you: " + tell);
+        } else {
+          event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD + "!tell " + Colors.NORMAL + "user not in channel");
+        }
+      }
+
         if ((event.getBot().getUserChannelDao().containsUser("theTardis") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("theTardis")) {
             // separete input by spaces ( URLs don't have spaces )
             String [] parts = message.split("\\s");
@@ -255,18 +268,6 @@ public class SRSBSNS extends ListenerAdapter {
             }
         }
         if (event.getBot().getUserChannelDao().containsUser("Hermes") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("Hermes")).contains(event.getChannel())) {
-            if(message.toLowerCase().startsWith("!tell")&&message.split(" ").length>2) {
-                String target = message.split("\\s+")[1];
-                String tell = message.split(target)[1];
-                if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(target))) {
-                    //If the user is in the same channel as the summon
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!tell "+Colors.NORMAL+target+" has been PMed");
-                    event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(target).getNick(), event.getUser().getNick() + " wants me to tell you: "+tell);
-                }
-                else {
-                    event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"!tell "+Colors.NORMAL+"user not in channel");
-                }
-            }
         }
         if(message.equalsIgnoreCase("mein leader, i summon thee")) {
             if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser("theDoctor"))) {
