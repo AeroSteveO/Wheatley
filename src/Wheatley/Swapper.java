@@ -6,8 +6,10 @@
 package Wheatley;
 
 import Objects.MapArray;
+import Utils.TextUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -35,7 +37,8 @@ public class Swapper extends ListenerAdapter {
 //    Map<String,ArrayList<ArrayList<String>>> log = Collections.synchronizedMap(new TreeMap<String,ArrayList<ArrayList<String>>>());
 
   public static MapArray logger = new MapArray(100);
-
+  public static boolean replace = false;
+  
   @Override
   public void onMessage(MessageEvent event) {
 
@@ -43,26 +46,45 @@ public class Swapper extends ListenerAdapter {
     String channel = event.getChannel().getName();
     addToLog(channel, new ArrayList(Arrays.asList("<" + event.getUser().getNick() + ">", event.getMessage())));
 
+    if (message.equals("!replace")) {
+      if (replace) {
+        replace = false;
+      } else {
+        replace = true;
+      }
+    }
+    
+    
     // PROCESS s// commands and sed type commands
-    if (message.toLowerCase().startsWith("sw/") || ((message.toLowerCase().startsWith("s/") || message.toLowerCase().startsWith("sed/")) && ((event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("BlarghleBot")))) {
-//            if(logger.isEmpty(channel)) {
-//                event.getBot().sendIRC().message(event.getChannel().getName(), "Swap Log Empty");
-//                return;
-//            }
-//            if (message.endsWith("/"))
-//                message+="";
+    if (message.toLowerCase().startsWith("sw/") || message.toLowerCase().startsWith("r/") || 
+            ((message.toLowerCase().startsWith("s/") || message.toLowerCase().startsWith("sed/")) && ((event.getBot().getUserChannelDao().containsUser("BlarghleBot") && !event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("BlarghleBot")).contains(event.getChannel())) || !event.getBot().getUserChannelDao().containsUser("BlarghleBot")))) {
 
       ArrayList<ArrayList<String>> logCopy = logger.getArray(channel);
       if (logCopy == null || logCopy.isEmpty()) { // if log is empty, no output is available
         event.getBot().sendIRC().notice(event.getUser().getNick(), "s// log empty");
         return;
       }
-      String[] findNreplace = Colors.removeFormattingAndColors(message).split("/");
-
+      String[] findNreplace = Colors.removeFormattingAndColors(message).split("(?<!\\\\)/", 3);
+      
       if (findNreplace.length != 3) { // input of "s/anything/" will have a blank string added to the end, string.split does not do this.
         findNreplace = new String[]{findNreplace[0], findNreplace[1], ""};
       }
+      
+      if (message.toLowerCase().startsWith("r/") || replace) {
+        List<String> wordList = TextUtils.loadTextAsList("wordlist.txt");//
+        String chosenWord = wordList.get((int) (Math.random() * wordList.size() - 1));
+        System.out.println(chosenWord);
+        findNreplace[2] = chosenWord;
+      }
 
+      for (String s : findNreplace) {
+        if (s.contains("\\/")) {
+          s = s.replaceAll("\\/", "/");
+        }
+        System.out.print(s + ", ");
+      }
+      System.out.println("");
+              
       int i = logCopy.size() - 2;
 
       ArrayList<String> reply = findReplace(i, findNreplace, logCopy);
@@ -216,10 +238,10 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
 
           // if the string is another swapper string, need to work on it,
           // and continue recursively through the log.
-          if (reply.get(1).startsWith("sw/") || reply.get(1).startsWith("s/") || reply.get(1).startsWith("sed/")) {
+          if (reply.get(1).startsWith("sw/") || reply.get(1).startsWith("r/") || reply.get(1).startsWith("s/") || reply.get(1).startsWith("sed/")) {
             i--;
             
-            findNreplace = reply.get(1).split("/"); // split up the swapper string
+            findNreplace = reply.get(1).split("(?<!\\\\)/", 3); // split up the swapper string
             if (findNreplace.length != 3) { // if the length isn't 3, add on an empty string to make the swapper remove words
               findNreplace = new String[]{findNreplace[0], findNreplace[1], ""};
             }
