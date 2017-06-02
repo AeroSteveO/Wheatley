@@ -46,7 +46,7 @@ public class Swapper extends ListenerAdapter {
     String channel = event.getChannel().getName();
     addToLog(channel, new ArrayList(Arrays.asList("<" + event.getUser().getNick() + ">", event.getMessage())));
 
-    if (message.equals("!replace")) {
+    if (message.equals("!replace") && event.getUser().getNick().equals(Global.botOwner)) {
       if (replace) {
         replace = false;
       } else {
