@@ -50,7 +50,7 @@ public class BadWords extends ListenerAdapter{
             // UPDATING THE BADWORD LIST
             if (badwords == null)
                 badwords = getBadWords();
-            if (message.toLowerCase().startsWith("!update badwords"))
+            if (message.toLowerCase().startsWith("!update badwords") && event.getUser().getNick().equals(Global.botOwner))
                 if (message.split(" ").length==3)
                     badwords.add(message.split(" ")[2]);
             
@@ -58,7 +58,7 @@ public class BadWords extends ListenerAdapter{
             String[] stuff = message.split(" ");
             for (int i=0;i<badwords.size();i++){
                 for (int j=0;j<stuff.length;j++){
-                    if (stuff[j].equalsIgnoreCase(badwords.get(i))){
+                    if (stuff[j].equalsIgnoreCase(badwords.get(i)) && !event.getUser().getNick().startsWith("|")){
                         if(!event.getChannel().isHalfOp(event.getUser())&&!event.getChannel().isOwner(event.getUser())&&!event.getChannel().isOp(event.getUser())&&!event.getChannel().isSuperOp(event.getUser())){
                             event.getChannel().send().kick(event.getUser(), "Don't say "+badwords.get(i)+".  That's just turrable!");
                         }
