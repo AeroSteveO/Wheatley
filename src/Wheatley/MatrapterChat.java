@@ -86,13 +86,35 @@ public class MatrapterChat extends ListenerAdapter {
 //                    event.getBot().sendIRC().message(currentChan, "http://meatspin.cc");
         if (message.equalsIgnoreCase("fuck")){
             int i = (int) (Math.random()*250+1);
+            String reponse;
             if (i == 100)
-                event.getBot().sendIRC().message(currentChan, "a duck");
+                reponse = "a duck";
             else if (i == 150)
-                event.getBot().sendIRC().message(currentChan, "a dog in the ass");
+                reponse = "a dog in the ass";
             else
-                event.getBot().sendIRC().message(currentChan, "you");
+                reponse = "you";
+            
+            if (message.equals(message.toUpperCase())) {
+              reponse = reponse.toUpperCase();
+            }
+            event.getBot().sendIRC().message(currentChan, reponse);
         }
+      if (message.equalsIgnoreCase("fuk")) {
+        int i = (int) (Math.random() * 250 + 1);
+            String reponse;
+            if (i == 100)
+                reponse = "a duk";
+            else if (i == 150)
+                reponse = "a truk";
+            else
+                reponse = "yu";
+            
+            if (message.equals(message.toUpperCase())) {
+              reponse = reponse.toUpperCase();
+            }
+            event.getBot().sendIRC().message(currentChan, reponse);
+      }
+
 //            }
         
         //Bane
@@ -160,22 +182,30 @@ public class MatrapterChat extends ListenerAdapter {
                 event.getBot().sendIRC().message(event.getUser().getNick(),a.get(i));
         }
         
-        if (message.toLowerCase().startsWith("give ")&&(message.toLowerCase().split(" ",3)[2].toLowerCase().equalsIgnoreCase("some freedom"))){
-            
-            String user = message.split(" ")[1];
-            if(event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(user))) {
-                
-                ArrayList<String> a = getFlag();
-                event.getBot().sendIRC().notice(event.getUser().getNick(),user+" has been PMed the American flag");
-                
-                for (int i=0;i<a.size();i++)
-                    event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(user).getNick(),a.get(i));
+      if (message.toLowerCase().startsWith("give ") && (message.toLowerCase().split(" ", 3)[2].toLowerCase().equalsIgnoreCase("some freedom"))) {
+        if (event.getUser().getNick().equals(Global.botOwner) && event.getUser().isVerified()) {
+
+          String user = message.split(" ")[1];
+          if (event.getBot().getUserChannelDao().getAllUsers().contains(event.getBot().getUserChannelDao().getUser(user))) {
+
+            ArrayList<String> a = getFlag();
+            event.getBot().sendIRC().notice(event.getUser().getNick(), user + " has been PMed the American flag");
+
+            for (int i = 0; i < a.size(); i++) {
+              event.getBot().sendIRC().message(event.getBot().getUserChannelDao().getUser(user).getNick(), a.get(i));
             }
-            else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
-                event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD+"tell "+Colors.NORMAL+"user not in channel");
+          } else if (!event.getBot().getUserChannelDao().getChannels(event.getBot().getUserChannelDao().getUser("theTardis")).contains(event.getChannel())) {
+            event.getBot().sendIRC().notice(event.getUser().getNick(), Colors.BOLD + "tell " + Colors.NORMAL + "user not in channel");
+          }
+        } else {
+          {
+            ArrayList<String> a = getFlag();
+            for (int i = 0; i < a.size(); i++) {
+              event.getBot().sendIRC().message(event.getUser().getNick(), a.get(i));
             }
-//            }
+          }
         }
+      }
     }
     
     public ArrayList<String> getFlag() {
