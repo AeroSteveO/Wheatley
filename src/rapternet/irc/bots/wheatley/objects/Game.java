@@ -175,7 +175,7 @@ public class Game {
             characters.add(c);
         }
         StringBuilder output = new StringBuilder(input.length());
-        while(characters.isEmpty()){
+        while(!characters.isEmpty()){
             int randPicker = (int)(Math.random()*characters.size());
             output.append(characters.remove(randPicker));
         }
