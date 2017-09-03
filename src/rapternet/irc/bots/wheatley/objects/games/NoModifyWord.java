@@ -10,6 +10,8 @@ package rapternet.irc.bots.wheatley.objects.games;
  * @author Stephen
  */
 public class NoModifyWord implements WordGame{
+    
+    @Override
     public String modify(String word) {
         return word;
     }

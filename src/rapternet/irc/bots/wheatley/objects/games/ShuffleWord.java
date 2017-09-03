@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class ShuffleWord implements WordGame {
 
+    @Override
     public String modify(String input) {
         List<Character> characters = new ArrayList<>();
         for (char c : input.toCharArray()) {

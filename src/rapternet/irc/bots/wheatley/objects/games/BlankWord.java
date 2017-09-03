@@ -11,6 +11,7 @@ package rapternet.irc.bots.wheatley.objects.games;
  */
 public class BlankWord implements WordGame {
 
+    @Override
     public String modify(String input) {
         String blanks = new String();
         for (int i = 0; i < input.length(); i++) {
