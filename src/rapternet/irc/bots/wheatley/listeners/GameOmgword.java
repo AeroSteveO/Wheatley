@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.*;
 import org.pircbotx.hooks.events.*;
+import rapternet.irc.bots.wheatley.objects.games.ShuffleWord;
 
 /**
  *
@@ -51,7 +52,7 @@ public class GameOmgword extends ListenerAdapter {
             
             if (!GameListener.activeGame.isGameActive(gameChan, "omgword")){
 //                GameListener.activeGame.add(gameChan, "omgword", "short");
-                Game currentGame = new Game(GameMod.SHUFFLE);
+                Game currentGame = new Game(new ShuffleWord());
                 //get and shuffle the word
                 boolean running = true;
                 String chosenword = currentGame.getChosenWord();

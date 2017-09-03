@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package rapternet.irc.bots.wheatley.objects;
+package rapternet.irc.bots.wheatley.objects.games;
 
 /**
  *
  * @author Stephen
  */
-public enum GameMod {
-    INT, INT_ARRAY;
+public class NoModifyWord implements WordGame{
+    public String modify(String word) {
+        return word;
+    }
 }

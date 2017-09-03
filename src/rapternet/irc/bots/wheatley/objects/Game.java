@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Scanner;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
+import rapternet.irc.bots.wheatley.objects.games.WordGame;
 
 /**
  *
@@ -47,22 +48,19 @@ import org.joda.time.Period;
 public class Game {
     private List<String> wordList = TextUtils.loadTextAsList("wordlist.txt");//getWordList();
     private String chosenWord;
-    private GameMod modifier;
     private String solution;
     private int chosenNum;
     private ArrayList<Integer> chosenNumArray;
     DateTime startTime;// = new DateTime();
     
     
-    public Game(GameMod mod) throws FileNotFoundException{
-        this.modifier = mod;
+    public Game(WordGame mod) throws FileNotFoundException{
         this.chosenWord = wordList.get((int) (Math.random()*wordList.size()-1));
-        this.solution=modify(mod,this.chosenWord);
+        this.solution=mod.modify(this.chosenWord);
         this.startTime = new DateTime();
     }
     
     public Game(GameMod mod, int length, int charSize) throws FileNotFoundException{
-        this.modifier = mod;
         this.startTime = new DateTime();
         
         if (mod == GameMod.INT_ARRAY){
@@ -150,58 +148,7 @@ public class Game {
     public String getSolution(){
         return(this.solution);
     }
-    
-    private static String modify(GameMod mod, String word){
-        
-        String modifiedWord ="";
-        
-        if(mod == GameMod.BLANK)   //Change the chosenword to all underscores
-            modifiedWord=makeBlank(word);
-        else if(mod == GameMod.SHUFFLE) //Shuffle the characters in the chosen word
-            modifiedWord=shuffle(word);
-        else if(mod == GameMod.REVERSE) //Reverse the chosenword
-            modifiedWord=reverse(word);
-        else if(mod == GameMod.NONE)    //User doesn't want the string modified
-            modifiedWord=word;
-        else
-            throw new UnsupportedOperationException("Modifier not supported, use 'none' to leave the word unmodified");
-        
-        return(modifiedWord);
-    }
-    
-    private static String shuffle(String input){
-        List<Character> characters = new ArrayList<>();
-        for(char c:input.toCharArray()){
-            characters.add(c);
-        }
-        StringBuilder output = new StringBuilder(input.length());
-        while(!characters.isEmpty()){
-            int randPicker = (int)(Math.random()*characters.size());
-            output.append(characters.remove(randPicker));
-        }
-        return(output.toString());
-    }
-    
-    private static String makeBlank(String input){
-        String blanks = new String();
-        for (int i = 0; i<input.length(); i++){
-            blanks = blanks + "_";
-        }
-        return(blanks);
-    }
-    
-    private static String reverse(String input){
-        List<Character> characters = new ArrayList<>();
-        for(char c:input.toCharArray()){
-            characters.add(c);
-        }
-        StringBuilder output = new StringBuilder(input.length());
-        for(int i=characters.size();i>0;i--){
-            output.append(characters.get(i-1));
-        }
-        return(output.toString());
-    }
-    
+      
     public static ArrayList<String> getColorList() throws FileNotFoundException{
         try{
             Scanner wordfile = new Scanner(new File("colorlist.txt"));

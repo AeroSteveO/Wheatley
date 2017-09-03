@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import rapternet.irc.bots.wheatley.objects.games.ReverseWord;
 
 /**
  *
@@ -53,7 +54,7 @@ public class GameAltReverse extends ListenerAdapter {
             
             if (!GameListener.activeGame.isGameActive(gameChan, "altreverse")){
                 
-                Game currentGame = new Game(GameMod.REVERSE);
+                Game currentGame = new Game(new ReverseWord());
                 //get and shuffle the word
 //                int currentIndex = Global.activeGame.getGameIdx(gameChan,"altreverse");
                 String chosenword = currentGame.getChosenWord();

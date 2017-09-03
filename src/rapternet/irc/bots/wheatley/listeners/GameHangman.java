@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import rapternet.irc.bots.wheatley.objects.games.BlankWord;
 
 /**
  *
@@ -50,7 +51,7 @@ public class GameHangman extends ListenerAdapter {
             
             if (!GameListener.activeGame.isGameActive(gameChan, "hangman", "long")){
                 
-                Game currentGame = new Game(GameMod.BLANK);
+                Game currentGame = new Game(new BlankWord());
                 
                 // Setup variables that will be needed through hangman
                 int changed = 0;
