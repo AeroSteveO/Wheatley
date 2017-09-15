@@ -5,17 +5,14 @@
   */
 package rapternet.irc.bots.wheatley.listeners;
 
+import rapternet.irc.bots.thetardis.Recommendations;
+import rapternet.irc.bots.thetardis.Urban;
 import rapternet.irc.bots.wheatley.objects.ServerReconnector;
-import rapternet.irc.bots.wheatley.objects.PastebinExceptionHandler;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.Configuration.*;
 import org.pircbotx.hooks.*;
 import org.pircbotx.hooks.events.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Element;
-import java.io.File;
 import java.util.Arrays;
 import org.pircbotx.Colors;
 import java.util.ArrayList;
@@ -45,8 +42,8 @@ import rapternet.irc.bots.uno2.UnoBot;
  *
  */
 public class WheatleyMain extends ListenerAdapter {
-    
-    
+
+        
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
 // in case something should be done here
@@ -150,7 +147,7 @@ public class WheatleyMain extends ListenerAdapter {
             Global.mainServer = Global.settings.get("address");
             
             BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
-            BackgroundListener.setExceptionHandler(new PastebinExceptionHandler());
+//            BackgroundListener.setExceptionHandler(new PastebinExceptionHandler());
             
 //            ArrayList<ServerEntry> servers = new ArrayList<>();
             ServerEntry entry = new ServerEntry(Global.mainServer, Integer.parseInt(Global.serverPort));
@@ -204,6 +201,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
                     .addListener(new RandChan())             // generates random 4chan image links
+                    .addListener(new ExceptionListener())
                     .addServer(entry);
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
@@ -219,7 +217,8 @@ public class WheatleyMain extends ListenerAdapter {
             
             try {
                 Global.bot = new PircBotX(config);
-                Global.bot.getConfiguration().getListenerManager().setExceptionHandler(new PastebinExceptionHandler());
+//                Global.bot.getConfiguration().getListenerManager().
+//                Global.bot.getConfiguration().getListenerManager().setExceptionHandler(new PastebinExceptionHandler());
                 ServerReconnector parallel = new ServerReconnector(Global.bot);
                 Thread t = new Thread(parallel);
                 parallel.giveT(t);
