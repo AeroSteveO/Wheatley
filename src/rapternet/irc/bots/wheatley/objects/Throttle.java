@@ -58,10 +58,6 @@ public class Throttle extends Settings{
 //String.CASE_INSENSITIVE_ORDER
     //   CHAN        TYPE     TIMELOG
     
-    public Throttle (){
-        super();
-    }
-    
     public Throttle(String filename){
         super(filename);
     }
@@ -150,18 +146,15 @@ public class Throttle extends Settings{
                 timeLog.get(channel).get(type+"log").pollLast();
             }
             if(timeLog.get(channel).get(type+"log").size() >= inputMaxLog) {
-//                System.out.println("THROTTLED! BAM");
                 return(true);
             }
         }
         timeLog.get(channel).get(type+"log").addFirst(d.getTime());
-//        System.out.println("NOT THROTTLED YET");
         return(false);
     }
     
     private void createMaxTime(String type, String maxTime, String channel) {
         this.create(type+"time", maxTime, channel);
-//        System.out.println("YAY TIMES");
     }
     
     private void addChannelToLog(String channel){

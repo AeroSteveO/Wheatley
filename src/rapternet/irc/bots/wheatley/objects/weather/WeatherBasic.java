@@ -73,7 +73,9 @@ public abstract class WeatherBasic {
     
     // Returns true if either part of the city state string contains an error
     public boolean containsError(){
-        return (location.getCity().toLowerCase().contains("error") || location.getState().toLowerCase().contains("error") || location.getZip().toLowerCase().contains("error"));
+        return (location.getCity().toLowerCase().contains("error") || 
+                location.getState().toLowerCase().contains("error") || 
+                location.getZip().toLowerCase().contains("error"));
     }
     
     abstract public String getFormattedResponse();
