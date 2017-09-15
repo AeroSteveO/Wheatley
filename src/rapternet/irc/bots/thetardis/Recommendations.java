@@ -4,7 +4,7 @@
 * and open the template in the editor.
 */
 
-package rapternet.irc.bots.wheatley.listeners;
+package rapternet.irc.bots.thetardis;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -19,6 +19,8 @@ import org.json.JSONTokener;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import rapternet.irc.bots.wheatley.listeners.Global;
+import rapternet.irc.bots.wheatley.utils.TextUtils;
 
 /**
  *
@@ -68,7 +70,9 @@ public class Recommendations extends ListenerAdapter{
                     String search = command.split(" ",2)[1];
                     String url = getTasteKidURL(search);
                     try{
-                        String json = sendGet(url);
+                        String json = readUrlUsingGet(url);
+                        System.out.println(url);
+                        System.out.println(json);
                         JSONObject similar = (JSONObject) new JSONTokener(json).nextValue();
                         JSONObject results = similar.getJSONObject("Similar");
                         JSONArray info = results.getJSONArray("Results");
@@ -108,7 +112,7 @@ public class Recommendations extends ListenerAdapter{
     private String getTasteKidURL(String search){
         
         try {
-            return ("http://www.tastekid.com/api/similar?q="+URLEncoder.encode(search, "UTF-8")+"&k="+key+"&callback");
+            return ("https://tastedive.com/api/similar?q="+URLEncoder.encode(search, "UTF-8")+"&k="+key+"&callback");
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
             return null;
@@ -116,7 +120,7 @@ public class Recommendations extends ListenerAdapter{
         }
     }
     
-    private String sendGet(String url) throws Exception {
+    private String readUrlUsingGet(String url) throws Exception {
         
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -130,8 +134,8 @@ public class Recommendations extends ListenerAdapter{
 //        con.setRequestProperty("X-Mashape-Key", key);
         
         int responseCode = con.getResponseCode();
-//        System.out.println("\nSending 'GET' request to URL : " + url);
-//        System.out.println("Response Code : " + responseCode);
+        System.out.println("\nSending 'GET' request to URL : " + url);
+        System.out.println("Response Code : " + responseCode);
         
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
@@ -144,7 +148,7 @@ public class Recommendations extends ListenerAdapter{
         in.close();
         
         //print result
-//        System.out.println(response.toString());
+        System.out.println(response.toString());
         return response.toString();
     }
 }

@@ -4,7 +4,7 @@
 * and open the template in the editor.
 */
 
-package rapternet.irc.bots.wheatley.listeners;
+package rapternet.irc.bots.thetardis;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,6 +17,7 @@ import org.json.JSONTokener;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import rapternet.irc.bots.wheatley.listeners.Global;
 
 /**
  *

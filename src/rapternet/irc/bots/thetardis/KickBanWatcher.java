@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package rapternet.irc.bots.wheatley.listeners;
+package rapternet.irc.bots.thetardis;
 
 import rapternet.irc.bots.wheatley.objects.BanLog;
 import rapternet.irc.bots.wheatley.objects.BanLog.BanList;

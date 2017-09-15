@@ -4,7 +4,7 @@
 * and open the template in the editor.
 */
 
-package rapternet.irc.bots.wheatley.listeners;
+package rapternet.irc.bots.thetardis;
 
 import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
@@ -18,6 +18,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import rapternet.irc.bots.wheatley.listeners.Global;
 
 /**
  *
