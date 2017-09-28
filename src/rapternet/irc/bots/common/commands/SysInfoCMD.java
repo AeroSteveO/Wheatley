@@ -4,13 +4,13 @@
 * and open the template in the editor.
 */
 
-package rapternet.irc.bots.wheatley.commands;
+package rapternet.irc.bots.common.commands;
 
-import rapternet.irc.bots.wheatley.objects.Command;
-import rapternet.irc.bots.wheatley.objects.CommandMetaData;
-import rapternet.irc.bots.wheatley.utils.BotUtils;
-import rapternet.irc.bots.wheatley.utils.IRCUtils;
-import rapternet.irc.bots.wheatley.utils.OSUtils;
+import rapternet.irc.bots.common.objects.Command;
+import rapternet.irc.bots.common.objects.CommandMetaData;
+import rapternet.irc.bots.common.utils.BotUtils;
+import rapternet.irc.bots.common.utils.IRCUtils;
+import rapternet.irc.bots.common.utils.OSUtils;
 import rapternet.irc.bots.wheatley.listeners.Global;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;

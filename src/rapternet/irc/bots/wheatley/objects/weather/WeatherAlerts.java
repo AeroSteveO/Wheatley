@@ -33,7 +33,7 @@ public class WeatherAlerts extends WeatherBasic {
     
     @Override
     public String getFormattedResponse(){
-        String response = "";
+        String response;
         if (!this.containsError())
             response = Colors.RED + Colors.BOLD + "WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL+this.getCityState()+ Colors.BOLD+" Description: "+Colors.NORMAL+this.alertType+Colors.BOLD+" Ending: "+Colors.NORMAL+this.alertExpires;
         else

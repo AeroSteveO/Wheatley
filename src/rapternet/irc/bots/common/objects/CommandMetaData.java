@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package rapternet.irc.bots.wheatley.objects;
+package rapternet.irc.bots.common.objects;
 
 import rapternet.irc.bots.wheatley.listeners.Global;
 import org.pircbotx.Colors;

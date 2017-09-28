@@ -172,7 +172,7 @@ public class WheatleyMain extends ListenerAdapter {
 //                    .addListener(new GameBomb())           //bomb game listener
                     .addListener(new GameMasterMind())     //mastermind game listener
                     .addListener(new GameGuessTheNumber()) //guess the number game listener
-                    .addListener(new UnoBot())
+//                    .addListener(new UnoBot())
                     .addListener(new GameListener())
 //                    .addListener(new GameLuckyLotto())
                     .addListener(new GameHighLow())

@@ -6,7 +6,7 @@
 package rapternet.irc.bots.wheatley.listeners;
 
 import rapternet.irc.bots.wheatley.objects.MapArray;
-import rapternet.irc.bots.wheatley.utils.TextUtils;
+import rapternet.irc.bots.common.utils.TextUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

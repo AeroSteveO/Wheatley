@@ -12,6 +12,7 @@ import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.UserHostmask;
+import org.pircbotx.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
 
 /**
@@ -67,7 +68,7 @@ public  class QueueTime implements Runnable {
     public void run() {
         try { // No need to loop for this thread
             Thread.sleep(time*1000);
-            bot.getConfiguration().getListenerManager().dispatchEvent(new MessageEvent(Global.bot, chan, chan.getName(), userHostmask, user, Integer.toString(key), v3Tags));
+            Utils.dispatchEvent(this.bot, new MessageEvent(Global.bot, chan, chan.getName(), userHostmask, user, Integer.toString(key), v3Tags));
         } catch (InterruptedException ex) {
             
         }

@@ -50,11 +50,6 @@ public class WeatherForecast extends WeatherBasic {
         return response;
     }
 
-//    @Override
-//    public String getExtendedResponse() {
-//        throw new UnsupportedOperationException("getExtendedResponse Unavailable for this type of Weather Log");
-//    }
-
     @Override
     public ArrayList<String> getExtendedResponseArray() {
         throw new UnsupportedOperationException("ExtendedResponseArray Unavailable for this type of Weather Log");

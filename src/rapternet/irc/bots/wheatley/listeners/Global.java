@@ -6,7 +6,7 @@
 
 package rapternet.irc.bots.wheatley.listeners;
 
-import rapternet.irc.bots.wheatley.objects.Settings;
+import rapternet.irc.bots.common.objects.Settings;
 import rapternet.irc.bots.wheatley.objects.Throttle;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,5 +72,13 @@ public class Global {
         admins.add("theDoctor");
         admins.add("burg");
         return(admins);
+    }
+
+  public static String getGameChan() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+    
+    public boolean isBotAdmin(String username) {
+        return false;
     }
 }

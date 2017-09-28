@@ -89,7 +89,7 @@ import rapternet.irc.bots.wheatley.listeners.Global;
  */
 
 public class Weather extends ListenerAdapter{
-    String key = "";    // API KEY, DO NOT LOSE
+    String key;
     String stockZip = "77002";          // Stock location for weather/alerts/forecast/auto alerts
     WeatherCache localCache = new WeatherCache(); // Initiate cache of weather data
     
@@ -112,7 +112,7 @@ public class Weather extends ListenerAdapter{
     
     @Override
     public void onMessage(MessageEvent event) throws Exception {
-        String location = null;
+        String location;
         String message = Colors.removeFormattingAndColors(event.getMessage().toLowerCase());
         String[] msgSplit = message.split(" ",2);
         boolean locationDataRetrieved = false;
@@ -573,8 +573,8 @@ public class Weather extends ListenerAdapter{
             tempString = currentWeather.getString("temperature_string");
             weather = currentWeather.getString("weather");
             windDir = currentWeather.getString("wind_dir");
-            windMPH = currentWeather.getString("wind_mph").toString()+" mph";
-            windKPH = currentWeather.getString("wind_kph").toString()+" Kph";
+            windMPH = currentWeather.getString("wind_mph")+" mph";
+            windKPH = currentWeather.getString("wind_kph")+" Kph";
             humidity = currentWeather.getString("relative_humidity");
             observationTime =currentWeather.getString("observation_time").split("Last Updated on",2)[1];
             WeatherConditions weatherData = new WeatherConditions(loc, weather, humidity, tempString, windMPH, windKPH, windDir, observationTime);

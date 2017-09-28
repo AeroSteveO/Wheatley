@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rapternet.irc.bots.wheatley.objects;
+package rapternet.irc.bots.common.objects;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,7 +31,7 @@ import org.json.JSONTokener;
 public abstract class SettingsBase {
 
     File file = new File("doNotSave");
-    Map<String, Object> settings = Collections.synchronizedMap(new TreeMap<String, Object>());
+    protected Map<String, Object> settings = Collections.synchronizedMap(new TreeMap<String, Object>());
 
     public SettingsBase(){
         

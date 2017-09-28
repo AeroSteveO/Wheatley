@@ -1,4 +1,4 @@
-package rapternet.irc.bots.wheatley.utils;
+package rapternet.irc.bots.common.utils;
 
 import rapternet.irc.bots.wheatley.listeners.Global;
 import java.io.BufferedReader;

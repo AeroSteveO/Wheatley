@@ -7,8 +7,8 @@ package rapternet.irc.bots.thetardis;
 
 import rapternet.irc.bots.wheatley.objects.BanLog;
 import rapternet.irc.bots.wheatley.objects.BanLog.BanList;
-import rapternet.irc.bots.wheatley.utils.ColorUtils;
-import rapternet.irc.bots.wheatley.utils.IRCUtils;
+import rapternet.irc.bots.common.utils.ColorUtils;
+import rapternet.irc.bots.common.utils.IRCUtils;
 import com.google.common.collect.ImmutableList;
 import org.pircbotx.Colors;
 import org.pircbotx.ReplyConstants;

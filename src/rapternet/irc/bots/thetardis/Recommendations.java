@@ -20,7 +20,7 @@ import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import rapternet.irc.bots.wheatley.listeners.Global;
-import rapternet.irc.bots.wheatley.utils.TextUtils;
+import rapternet.irc.bots.common.utils.TextUtils;
 
 /**
  *

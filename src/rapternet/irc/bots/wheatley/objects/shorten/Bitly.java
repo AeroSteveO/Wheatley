@@ -6,7 +6,7 @@
 
 package rapternet.irc.bots.wheatley.objects.shorten;
 
-import rapternet.irc.bots.wheatley.utils.TextUtils;
+import rapternet.irc.bots.common.utils.TextUtils;
 import java.net.URLEncoder;
 import org.json.JSONArray;
 import org.json.JSONObject;

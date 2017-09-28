@@ -6,7 +6,7 @@
 
 package rapternet.irc.bots.wheatley.objects.kicks;
 
-import rapternet.irc.bots.wheatley.objects.CommandMetaData;
+import rapternet.irc.bots.common.objects.CommandMetaData;
 import rapternet.irc.bots.wheatley.listeners.Global;
 import java.util.ArrayList;
 import org.pircbotx.hooks.Event;

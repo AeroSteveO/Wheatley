@@ -50,7 +50,6 @@ public class WeatherCache {
             for (int i=0;i<alerts.size()-1;i++){
                 formattedAlerts.add(alerts.get(i).getFormattedResponse());
             }
-//                System.out.println(alerts.size());
             formattedAlerts.add(alerts.get(alerts.size()-1).getFormattedResponse()+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alerts full [zip]' for the full alert text");
         }
         else
@@ -104,16 +103,10 @@ public class WeatherCache {
     
     public boolean containsEntry(String locationString, WeatherType type) {
         purge();
-//            System.out.println(locationString);
         
         synchronized(cache){
             for(int i = 0; i < cache.size(); i++) {
-//                    System.out.println("Search String: "+locationString);
-//                    System.out.println(cache.get(i).cityState);
-//                    System.out.println(cache.get(i).zip);
-//                    System.out.println(cache.get(i).cacheType);
                 if ((cache.get(i).getZip().equalsIgnoreCase(locationString)||cache.get(i).getCityState().equalsIgnoreCase(locationString))&&cache.get(i).getType() == (type)) {
-//                        System.out.println("Found Cached Entry " + cache.get(i).cacheType);
                     return(true);
                 }
             }

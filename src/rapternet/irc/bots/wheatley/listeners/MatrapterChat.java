@@ -6,7 +6,7 @@
 
 package rapternet.irc.bots.wheatley.listeners;
 
-import rapternet.irc.bots.wheatley.utils.ColorUtils;
+import rapternet.irc.bots.common.utils.ColorUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.pircbotx.Colors;

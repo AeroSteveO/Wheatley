@@ -7,8 +7,8 @@
 package rapternet.irc.bots.wheatley.gamecommands;
 
 import rapternet.irc.bots.wheatley.objects.CommandGame;
-import rapternet.irc.bots.wheatley.objects.CommandMetaData;
-import rapternet.irc.bots.wheatley.utils.ColorUtils;
+import rapternet.irc.bots.common.objects.CommandMetaData;
+import rapternet.irc.bots.common.utils.ColorUtils;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.ArrayList;
 import java.util.Iterator;

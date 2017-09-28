@@ -7,7 +7,7 @@
 package rapternet.irc.bots.wheatley.listeners;
 
 import rapternet.irc.bots.wheatley.objects.TimedWaitForQueue;
-import rapternet.irc.bots.wheatley.utils.GameUtils;
+import rapternet.irc.bots.common.utils.GameUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

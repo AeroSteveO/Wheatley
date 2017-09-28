@@ -11,7 +11,7 @@
 
 
 
-package rapternet.irc.bots.wheatley.objects;
+package rapternet.irc.bots.common.objects;
 
 import java.io.File;
 import java.util.ArrayList;

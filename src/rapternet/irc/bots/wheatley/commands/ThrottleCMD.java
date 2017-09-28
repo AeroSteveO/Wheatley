@@ -8,8 +8,8 @@ package rapternet.irc.bots.wheatley.commands;
 
 import java.util.ArrayList;
 import org.pircbotx.hooks.Event;
-import rapternet.irc.bots.wheatley.objects.Command;
-import rapternet.irc.bots.wheatley.objects.CommandMetaData;
+import rapternet.irc.bots.common.objects.Command;
+import rapternet.irc.bots.common.objects.CommandMetaData;
 import rapternet.irc.bots.wheatley.listeners.Global;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.events.MessageEvent;

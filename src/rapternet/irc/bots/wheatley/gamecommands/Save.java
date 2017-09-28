@@ -7,7 +7,7 @@
 package rapternet.irc.bots.wheatley.gamecommands;
 
 import rapternet.irc.bots.wheatley.objects.CommandGame;
-import rapternet.irc.bots.wheatley.objects.CommandMetaData;
+import rapternet.irc.bots.common.objects.CommandMetaData;
 import static rapternet.irc.bots.wheatley.listeners.GameListener.scores;
 import java.util.ArrayList;
 import org.pircbotx.hooks.events.MessageEvent;

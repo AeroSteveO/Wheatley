@@ -8,13 +8,13 @@ package rapternet.irc.bots.wheatley.commands;
 
 import rapternet.irc.bots.wheatley.objects.kicks.SmashKick;
 import rapternet.irc.bots.wheatley.objects.kicks.HackKick;
-import rapternet.irc.bots.wheatley.objects.Command;
-import rapternet.irc.bots.wheatley.objects.CommandMetaData;
-import rapternet.irc.bots.wheatley.objects.CommandMetaData.EventType;
+import rapternet.irc.bots.common.objects.Command;
+import rapternet.irc.bots.common.objects.CommandMetaData;
+import rapternet.irc.bots.common.objects.CommandMetaData.EventType;
 import rapternet.irc.bots.wheatley.objects.kicks.CustomKick;
 import rapternet.irc.bots.wheatley.objects.kicks.KickInterface;
-import rapternet.irc.bots.wheatley.utils.BotUtils;
-import rapternet.irc.bots.wheatley.utils.IRCUtils;
+import rapternet.irc.bots.common.utils.BotUtils;
+import rapternet.irc.bots.common.utils.IRCUtils;
 import rapternet.irc.bots.wheatley.listeners.Global;
 import java.util.ArrayList;
 import java.util.Arrays;

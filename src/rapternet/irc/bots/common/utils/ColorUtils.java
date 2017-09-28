@@ -4,7 +4,7 @@
 * and open the template in the editor.
 */
 
-package rapternet.irc.bots.wheatley.utils;
+package rapternet.irc.bots.common.utils;
 
 /**
  *

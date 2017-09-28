@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package rapternet.irc.bots.wheatley.objects;
+package rapternet.irc.bots.common.objects;
 
 import java.util.ArrayList;
 import org.pircbotx.hooks.Event;

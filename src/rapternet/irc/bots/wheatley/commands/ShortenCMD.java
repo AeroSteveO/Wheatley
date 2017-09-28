@@ -6,8 +6,8 @@
 
 package rapternet.irc.bots.wheatley.commands;
 
-import rapternet.irc.bots.wheatley.objects.Command;
-import rapternet.irc.bots.wheatley.objects.CommandMetaData;
+import rapternet.irc.bots.common.objects.Command;
+import rapternet.irc.bots.common.objects.CommandMetaData;
 import rapternet.irc.bots.wheatley.objects.shorten.Bitly;
 import rapternet.irc.bots.wheatley.objects.shorten.DtellaShorten;
 import rapternet.irc.bots.wheatley.objects.shorten.IsGd;

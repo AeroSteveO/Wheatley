@@ -6,7 +6,7 @@
 
 package rapternet.irc.bots.wheatley.objects.shorten;
 
-import rapternet.irc.bots.wheatley.utils.BotUtils;
+import rapternet.irc.bots.common.utils.BotUtils;
 import org.pircbotx.Colors;
 
 /**

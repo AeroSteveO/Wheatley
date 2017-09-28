@@ -38,26 +38,16 @@ public class LocationData {
     public String getZip() {
         return zip;
     }
-    
-    public ArrayList<String> toArrayList() {
-                ArrayList<String> locationData = new ArrayList<>();
-        
-        locationData.add(city);
-        locationData.add(state);
-        locationData.add(zip);
-        
-        return locationData;
-
-    }
-    
-    public boolean equals(LocationData loc) {
-        return (loc.city.equalsIgnoreCase(this.city) && loc.state.equalsIgnoreCase(this.state) && loc.zip.equals(this.zip));
-    }
+       
+//    public boolean equals(LocationData loc) {
+//        return (loc.city.equalsIgnoreCase(city) && loc.state.equalsIgnoreCase(state) && loc.zip.equals(zip));
+//    }
     
     public boolean equalsCityOrZip(LocationData loc) {
-        return ((loc.city.equalsIgnoreCase(this.city) && loc.state.equalsIgnoreCase(this.state)) || loc.zip.equals(this.zip));
+        return ((loc.city.equalsIgnoreCase(city) && loc.state.equalsIgnoreCase(state)) || loc.zip.equals(zip));
     }
     
+    @Override
     public String toString() {
         return (city + ", " + state);
     }

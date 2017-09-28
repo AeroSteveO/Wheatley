@@ -7,7 +7,7 @@
 package rapternet.irc.bots.wheatley.listeners;
 
 import rapternet.irc.bots.wheatley.objects.Definitions;
-import rapternet.irc.bots.wheatley.utils.IRCUtils;
+import rapternet.irc.bots.common.utils.IRCUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

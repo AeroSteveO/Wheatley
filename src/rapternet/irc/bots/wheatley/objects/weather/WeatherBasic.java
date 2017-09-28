@@ -67,9 +67,9 @@ public abstract class WeatherBasic {
         return(false);
     }
     
-    public boolean compareLocation(LocationData loc) {
-        return location.equalsCityOrZip(loc);
-    }
+//    public boolean compareLocation(LocationData loc) {
+//        return location.equalsCityOrZip(loc);
+//    }
     
     // Returns true if either part of the city state string contains an error
     public boolean containsError(){

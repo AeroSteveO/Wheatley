@@ -10,7 +10,7 @@ import rapternet.irc.bots.wheatley.objects.CardHand;
 import rapternet.irc.bots.wheatley.objects.DeckOfCards;
 import rapternet.irc.bots.wheatley.objects.MultiplayerArrayGetQueue;
 import rapternet.irc.bots.wheatley.objects.QueueTime;
-import rapternet.irc.bots.wheatley.utils.GameUtils;
+import rapternet.irc.bots.common.utils.GameUtils;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;

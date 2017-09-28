@@ -8,7 +8,7 @@ package rapternet.irc.bots.wheatley.listeners;
 import rapternet.irc.bots.wheatley.objects.Game;
 import rapternet.irc.bots.wheatley.objects.GameMod;
 import rapternet.irc.bots.wheatley.objects.TimedWaitForQueue;
-import rapternet.irc.bots.wheatley.utils.GameUtils;
+import rapternet.irc.bots.common.utils.GameUtils;
 import java.io.FileNotFoundException;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.*;

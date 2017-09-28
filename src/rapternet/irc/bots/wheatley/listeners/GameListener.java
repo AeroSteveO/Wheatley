@@ -18,7 +18,7 @@ import rapternet.irc.bots.wheatley.gamecommands.Give;
 import rapternet.irc.bots.wheatley.objects.CommandGame;
 import rapternet.irc.bots.wheatley.objects.GameList;
 import rapternet.irc.bots.wheatley.objects.Score;
-import rapternet.irc.bots.wheatley.utils.GameUtils;
+import rapternet.irc.bots.common.utils.GameUtils;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.ArrayList;
 import java.util.Iterator;

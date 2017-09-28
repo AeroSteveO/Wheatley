@@ -5,8 +5,8 @@
  */
 package rapternet.irc.bots.wheatley.commands;
 
-import rapternet.irc.bots.wheatley.objects.Command;
-import rapternet.irc.bots.wheatley.objects.CommandMetaData;
+import rapternet.irc.bots.common.objects.Command;
+import rapternet.irc.bots.common.objects.CommandMetaData;
 import rapternet.irc.bots.wheatley.listeners.CommandListener;
 import rapternet.irc.bots.wheatley.listeners.Global;
 import static rapternet.irc.bots.wheatley.listeners.Swapper.logger;

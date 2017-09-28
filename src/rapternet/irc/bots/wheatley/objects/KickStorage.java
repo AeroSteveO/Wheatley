@@ -5,6 +5,7 @@
  */
 package rapternet.irc.bots.wheatley.objects;
 
+import rapternet.irc.bots.common.objects.SettingsBase;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;

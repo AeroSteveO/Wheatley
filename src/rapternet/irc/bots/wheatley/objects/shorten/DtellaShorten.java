@@ -5,7 +5,7 @@
  */
 package rapternet.irc.bots.wheatley.objects.shorten;
 
-import rapternet.irc.bots.wheatley.utils.TextUtils;
+import rapternet.irc.bots.common.utils.TextUtils;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.pircbotx.Colors;
