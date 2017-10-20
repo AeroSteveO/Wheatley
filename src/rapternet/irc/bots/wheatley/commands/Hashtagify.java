@@ -9,9 +9,7 @@ import rapternet.irc.bots.common.objects.Command;
 import rapternet.irc.bots.common.objects.CommandMetaData;
 import rapternet.irc.bots.wheatley.listeners.CommandListener;
 import rapternet.irc.bots.wheatley.listeners.Global;
-import static rapternet.irc.bots.wheatley.listeners.Swapper.logger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 

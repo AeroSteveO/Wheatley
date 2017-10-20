@@ -255,11 +255,9 @@ public class DynamicKickManager implements Command {
         if (kickData.contains(cmdSplit[0]) && !kickData.getFailureMessage(cmdSplit[0]).equals("null")) {
           if (!kickData.isKickEnabled(cmdSplit[0])) {
             event.getBot().sendIRC().notice(caller, "Kick: "+cmdSplit[0]+" Command Currently Disabled");
-            return;
           }
           else {
             event.getBot().sendRaw().rawLine("KICK " + channel + " " + caller +  " " + kickData.getFailureMessage(cmdSplit[0]));
-            return;
           }
         }
       }

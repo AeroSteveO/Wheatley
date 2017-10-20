@@ -19,7 +19,7 @@ import org.pircbotx.hooks.Event;
  * @author Stephen
  */
 public class ShortCMD implements Command {
-    private static SimpleSettings shortCommands = new SimpleSettings("shortCommands.json");
+    private static final SimpleSettings shortCommands = new SimpleSettings("shortCommands.json");
     String historyFilename = "cmdHist.txt";
     
     @Override

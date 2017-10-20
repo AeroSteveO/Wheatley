@@ -122,7 +122,7 @@ public class RandChan extends ListenerAdapter {
                             }
                         }
                         else {
-                            event.respond(get4ChanImage(boardInfo.get((int) (Math.random()*boardInfo.size()-1)).get(0).toString()));
+                            event.respond(get4ChanImage(boardInfo.get((int) (Math.random()*boardInfo.size()-1)).get(0)));
                         }
                     }else{
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");

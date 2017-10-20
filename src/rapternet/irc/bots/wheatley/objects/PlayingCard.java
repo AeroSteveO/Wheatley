@@ -71,7 +71,7 @@ public class PlayingCard implements Comparable {
     }
     /**
      * Returns the suit of this card.
-     * @returns the suit, which is one of the constants Card.SPADES,
+     * @return the suit, which is one of the constants Card.SPADES,
      * Card.HEARTS, Card.DIAMONDS, Card.CLUBS, or Card.JOKER
      */
     public int getSuit() {

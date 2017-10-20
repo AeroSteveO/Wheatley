@@ -23,7 +23,7 @@ public class DtellaShorten extends ShortenerInterface {
         try {
             String json= TextUtils.readUrl("http://dtl.la/yourls-api.php?signature="+key+"&action=shorturl&url="+url+"&format=json");
             JSONObject defObject = (JSONObject) new JSONTokener(json).nextValue();
-            String link = null;
+            String link;
             if (!defObject.isNull("shorturl")) {
                 
                 link = defObject.getString("shorturl");

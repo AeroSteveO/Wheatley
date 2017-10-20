@@ -12,6 +12,7 @@ import rapternet.irc.bots.wheatley.objects.TimedWaitForQueue;
 import rapternet.irc.bots.common.utils.GameUtils;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -157,7 +158,7 @@ public class GameMasterMind extends ListenerAdapter {
                                 guessArr.add(Integer.parseInt(temp[i]));
                             }
                             for (int i = 0;i<guessArr.size()&&i<solutionArray.size();i++){
-                                if (guessArr.get(i)==solutionArray.get(i))
+                                if (Objects.equals(guessArr.get(i), solutionArray.get(i)))
                                     scorePositionValue++;
                             }
                             for (int i = 0;i<=charSize;i++){

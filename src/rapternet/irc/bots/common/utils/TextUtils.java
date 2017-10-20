@@ -158,7 +158,6 @@ public class TextUtils {
             
             if (filename.split("\\.").length==1){
                 file =new File(filename+".txt");
-                filename = filename+".txt";
             }
             else{
                 file =new File(filename);
@@ -225,7 +224,6 @@ public class TextUtils {
         }
         catch(Exception ex){
             ex.printStackTrace();
-            return;
         }
     }
     

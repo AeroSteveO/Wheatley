@@ -20,7 +20,6 @@ import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import rapternet.irc.bots.wheatley.listeners.Global;
-import rapternet.irc.bots.common.utils.TextUtils;
 
 /**
  *
@@ -140,7 +139,7 @@ public class Recommendations extends ListenerAdapter{
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
         String inputLine;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);

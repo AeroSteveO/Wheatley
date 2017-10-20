@@ -96,9 +96,9 @@ public class PingCMD implements Command{
         
         
         String[] totalip = new String[2];
-        String[] pingresponse = new String[2];
+        String[] pingresponse;
         String[] address = new String[2];
-        String pingmessage = new String();
+        String pingmessage;
         
         if (cmdSplit.length==1){
             event.getBot().sendIRC().notice(caller, Colors.BOLD+"Ping: "+Colors.NORMAL+"too few inputs");
@@ -125,10 +125,6 @@ public class PingCMD implements Command{
             return;
         }
         
-        
-//            totalip = event.getMessage().split(" ");
-//            pingresponse = new String[2];
-//            address = new String[2];
         
         System.setProperty("java.net.preferIPv4Stack" , "true");
         if (cmdSplit.length==3&&cmdSplit[1].equalsIgnoreCase("check")){//&&!event.getChannel().getName().equals("#dtella")
@@ -167,7 +163,6 @@ public class PingCMD implements Command{
                             }
                             if (pingmessage!=null){
                                 event.getBot().sendIRC().message(respondTo,pingmessage);
-                                pingmessage = null;
                             }
                         }
                     }

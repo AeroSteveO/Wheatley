@@ -67,7 +67,7 @@ public class UpdateFiles extends ListenerAdapter{
                 }
                 else if (cmdSplit[0].equalsIgnoreCase("create")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
                     
-                    ArrayList<String> tree = new ArrayList<String>(Arrays.asList(cmdSplit));
+                    ArrayList<String> tree = new ArrayList<>(Arrays.asList(cmdSplit));
                     tree.remove(0);
                     Global.settings.create(tree);
                     event.respond(String.valueOf("Maybe its been modified? "+Global.settings.contains(tree.subList(0, tree.size()-1))));
@@ -76,7 +76,7 @@ public class UpdateFiles extends ListenerAdapter{
                 
                 else if (cmdSplit[0].equalsIgnoreCase("contains")&&event.getUser().getNick().equalsIgnoreCase(Global.botOwner)){
                     
-                    ArrayList<String> tree = new ArrayList<String>(Arrays.asList(cmdSplit));
+                    ArrayList<String> tree = new ArrayList<>(Arrays.asList(cmdSplit));
                     tree.remove(0);
                     event.respond(String.valueOf(Global.settings.contains(tree)));
                 }

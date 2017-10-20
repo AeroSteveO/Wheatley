@@ -55,16 +55,16 @@ public class OSUtils {
      * detect the operating system from the os.name System property and cache
      * the result
      *
-     * @returns - the operating system detected
+     * @return the operating system detected
      */
     public static OSType getOperatingSystemType() {
         if (detectedOS == null) {
             String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
             if ((OS.contains("mac")) || (OS.contains("darwin"))) {
                 detectedOS = OSType.MacOS;
-            } else if (OS.indexOf("win") >= 0) {
+            } else if (OS.contains("win")) {
                 detectedOS = OSType.Windows;
-            } else if (OS.indexOf("nux") >= 0) {
+            } else if (OS.contains("nux")) {
                 detectedOS = OSType.Linux;
             } else {
                 detectedOS = OSType.Other;

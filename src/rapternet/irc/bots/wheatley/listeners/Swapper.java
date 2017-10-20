@@ -126,7 +126,7 @@ java.util.regex.PatternSyntaxException: Unexpected internal error near index 1
           int i = logCopy.size() - 2;
           boolean found = false;
           String line = new String();
-          if (logCopy == null || logCopy.isEmpty()) {
+          if (logCopy.isEmpty()) {
             event.getBot().sendIRC().notice(event.getUser().getNick(), "!BFF log empty");
             return;
           }

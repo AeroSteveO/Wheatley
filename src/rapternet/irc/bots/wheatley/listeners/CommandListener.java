@@ -46,7 +46,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  * create commandlist in this class and do a hard coded array for testing
  */
 public class CommandListener extends ListenerAdapter{
-    private static List<Command> commandList = getCommandList();
+    private static final List<Command> commandList = getCommandList();
     public static MapArray logger = new MapArray(100);
     
     @Override

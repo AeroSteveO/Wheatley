@@ -243,7 +243,7 @@ public class DefListener2 extends ListenerAdapter {
             return;
         try{
             Scanner wordfile = new Scanner(new File(filename));
-            ArrayList<String> wordls = new ArrayList<String>();
+            ArrayList<String> wordls = new ArrayList<>();
             while (wordfile.hasNext()){
                 wordls.add(wordfile.nextLine());
             }
@@ -254,7 +254,6 @@ public class DefListener2 extends ListenerAdapter {
             }
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
-            return;
         }
     }
     private void addDefLogFromFile(String filename, String time){
@@ -263,7 +262,7 @@ public class DefListener2 extends ListenerAdapter {
             return;
         try{
             Scanner wordfile = new Scanner(new File(filename));
-            ArrayList<String> wordls = new ArrayList<String>();
+            ArrayList<String> wordls = new ArrayList<>();
             while (wordfile.hasNext()){
                 wordls.add(wordfile.nextLine());
             }
@@ -281,7 +280,6 @@ public class DefListener2 extends ListenerAdapter {
             }
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
-            return;
         }
     }
 }

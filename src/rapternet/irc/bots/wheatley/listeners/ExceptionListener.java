@@ -31,6 +31,7 @@ public class ExceptionListener extends ListenerAdapter {
     onException(event.getException());
   }
 
+  @Override
   public void onListenerException(ListenerExceptionEvent event) throws Exception {
     onException(event.getException());
   }

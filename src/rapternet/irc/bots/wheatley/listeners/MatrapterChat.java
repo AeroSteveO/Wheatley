@@ -125,14 +125,14 @@ public class MatrapterChat extends ListenerAdapter {
         if (message.toLowerCase().startsWith("!bane ")){
             String[] baneterm = message.split(" ");
             if (baneterm.length==2){
-                ArrayList<String> baneparts = new ArrayList<String>();
+                ArrayList<String> baneparts = new ArrayList<>();
                 baneparts.add("Ah you think ");
                 baneparts.add(" is your ally? You merely adopted the ");
                 baneparts.add(". I was born in it, molded by it. I didn't see the light until I was already a man, by then it was nothing to me but blinding!");
                 event.getBot().sendIRC().message(currentChan,baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[1]+baneparts.get(2));
             }
             else if (baneterm.length==3){
-                ArrayList<String> baneparts = new ArrayList<String>();
+                ArrayList<String> baneparts = new ArrayList<>();
                 baneparts.add("Ah you think ");
                 baneparts.add(" is your ally? You merely adopted the ");
                 baneparts.add(". I was born in it, molded by it. I didn't see the ");
@@ -140,7 +140,7 @@ public class MatrapterChat extends ListenerAdapter {
                 event.getBot().sendIRC().message(currentChan,baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[1]+baneparts.get(2)+baneterm[2]+baneparts.get(3));
             }
             else if (baneterm.length==4){
-                ArrayList<String> baneparts = new ArrayList<String>();
+                ArrayList<String> baneparts = new ArrayList<>();
                 baneparts.add("Ah you think ");
                 baneparts.add(" is your ally? You merely adopted the ");
                 baneparts.add(". I was born in it, molded by it. I didn't see the ");
@@ -148,7 +148,7 @@ public class MatrapterChat extends ListenerAdapter {
                 event.getBot().sendIRC().message(currentChan,baneparts.get(0)+baneterm[1]+baneparts.get(1)+baneterm[2]+baneparts.get(2)+baneterm[3]+baneparts.get(3));
             }
             else if (baneterm.length==5){
-                ArrayList<String> baneparts = new ArrayList<String>();
+                ArrayList<String> baneparts = new ArrayList<>();
                 baneparts.add("Ah you think ");
                 baneparts.add(" is your ally? You merely adopted the ");
                 baneparts.add(". I was born in it, molded by it. I didn't see the ");

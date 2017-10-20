@@ -6,10 +6,7 @@
 
 package rapternet.irc.bots.wheatley.objects.kicks;
 
-import rapternet.irc.bots.common.objects.CommandMetaData;
-import rapternet.irc.bots.wheatley.listeners.Global;
 import java.util.ArrayList;
-import org.pircbotx.hooks.Event;
 
 /**
  *
@@ -32,6 +29,7 @@ public class HackKick implements KickInterface {
         return "Wheatley has killed you in his attempt to plug your brain into a computer";
     }
     
+    @Override
     public String getFailureMessage() {
         return "Wheatley has killed you in an attempt to counter hack your brain";
     }

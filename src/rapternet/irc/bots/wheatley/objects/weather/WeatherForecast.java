@@ -40,7 +40,7 @@ public class WeatherForecast extends WeatherBasic {
     
     @Override
     public String getFormattedResponse(){
-        String response = "";
+        String response;
         // FORECAST CACHE FORMATTED RESPONSE
         response =(Colors.BOLD+this.getCityState()+" Forecast "+Colors.NORMAL+"(High/Low); "+Colors.BOLD+"Updated: "+Colors.NORMAL+this.observationTime.split("on")[0].trim()+"; ");
         

@@ -6,8 +6,6 @@
 
 package rapternet.irc.bots.wheatley.objects.weather;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author Stephen

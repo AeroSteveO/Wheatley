@@ -87,7 +87,7 @@ public class WeatherCache {
     
     public List<WeatherBasic> getCacheArray(String locationString, WeatherType type){
         purge();
-        int idx = -1;
+        int idx;
         List<WeatherBasic> cacheReturn = new ArrayList<>();
         
         synchronized(cache){

@@ -124,7 +124,6 @@ public class Ping extends ListenerAdapter {
                                     }
                                     if (pingmessage!=null){
                                         event.getBot().sendIRC().message(event.getChannel().getName(),pingmessage);
-                                        pingmessage = null;
                                     }
                                 }
                             }

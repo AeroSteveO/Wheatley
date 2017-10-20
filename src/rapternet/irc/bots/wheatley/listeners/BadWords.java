@@ -34,7 +34,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  *      !list bad words
  *      !list badwords
  *          lists out all current bad words
- *      !update badwordlist <word>
+ *      !update badwordlist word
  *          adds the given word to the ArrayList of bad words, but doesn't update the text file
  * 
  */
@@ -82,7 +82,7 @@ public class BadWords extends ListenerAdapter{
     public ArrayList<String> getBadWords() throws FileNotFoundException{
         try{
             Scanner wordfile = new Scanner(new File("badwords.txt"));
-            ArrayList<String> wordls = new ArrayList<String>();
+            ArrayList<String> wordls = new ArrayList<>();
             while (wordfile.hasNext()){
                 wordls.add(wordfile.next());
             }

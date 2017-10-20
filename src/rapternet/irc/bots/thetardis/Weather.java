@@ -446,12 +446,12 @@ public class Weather extends ListenerAdapter{
                 return(localCache.getFormattedAlertArray(locationData.getZip()));
             }
             else
-                return new ArrayList<String>(Arrays.asList("No Current Weather Alerts"));
+                return new ArrayList<>(Arrays.asList("No Current Weather Alerts"));
             
             
         }catch (Exception ex){
             ex.printStackTrace();
-            return new ArrayList<String>(Arrays.asList("Error Parsing Alerts"));
+            return new ArrayList<>(Arrays.asList("Error Parsing Alerts"));
         }
     }
     private String getCurrentForecast(String location) throws Exception {

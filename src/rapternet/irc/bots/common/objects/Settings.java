@@ -336,7 +336,7 @@ public class Settings extends SettingsBase {
     public void create (String key, String value, String channel) {
         key=key.toLowerCase();
         channel = channel.toLowerCase();
-        if (key=="NA"&&value=="NA"){
+        if (key.equals("NA") && value.equals("NA")){
             if (channel.startsWith("#")&&channel.split(" ").length==1){
                 if (!channelSettings.containsKey(channel)){
                     Map<String, String> newSetting = new TreeMap<>();
@@ -367,7 +367,7 @@ public class Settings extends SettingsBase {
                     ((Map)channelSettings.get(channel)).put(key, value);
             }
             else{
-                Map<String, String> newSetting = new TreeMap<String,String>();
+                Map<String, String> newSetting = new TreeMap<>();
                 newSetting.put(key, value);
                 channelSettings.put(channel,newSetting);
             }

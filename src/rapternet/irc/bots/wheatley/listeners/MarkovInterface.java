@@ -7,9 +7,9 @@
 package rapternet.irc.bots.wheatley.listeners;
 
 import rapternet.irc.bots.wheatley.objects.MapArray;
-import rapternet.irc.bots.wheatley.utils.IRCUtils;
-import rapternet.irc.bots.wheatley.utils.TextUtils;
-import static rapternet.irc.bots.wheatley.utils.TextUtils.loadTextAsList;
+import rapternet.irc.bots.common.utils.IRCUtils;
+import rapternet.irc.bots.common.utils.TextUtils;
+import static rapternet.irc.bots.common.utils.TextUtils.loadTextAsList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -214,7 +214,7 @@ public class MarkovInterface extends ListenerAdapter{
             ArrayList<String> bots = loadTextAsList(botListFileName);
             
             if (bots == null)
-                return (new ArrayList<String>());
+                return (new ArrayList<>());
             
             return (bots);
         }

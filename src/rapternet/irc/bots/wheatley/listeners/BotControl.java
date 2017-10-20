@@ -53,7 +53,6 @@ public class BotControl extends ListenerAdapter{
     @Override
     public void onMessage(MessageEvent event) throws InterruptedException, Exception {
         String message = Colors.removeFormattingAndColors(event.getMessage());
-        String[] msgSplit = message.split(" ");
         if (message.equalsIgnoreCase("!flush")&&(event.getUser().getNick().equals(Global.botOwner)&&event.getUser().isVerified())){
             
             Blarghlebot.poop = "null";

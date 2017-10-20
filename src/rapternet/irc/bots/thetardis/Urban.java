@@ -43,7 +43,7 @@ import rapternet.irc.bots.wheatley.listeners.Global;
  */
 public class Urban extends ListenerAdapter {
     
-    private LinkedList<Long> timeLog = new LinkedList<Long>();
+    private LinkedList<Long> timeLog = new LinkedList<>();
     private int maxLog = 2;
     private long maxTime = 30*1000;
 //    private Throttle uThrottle = new Throttle("udict");

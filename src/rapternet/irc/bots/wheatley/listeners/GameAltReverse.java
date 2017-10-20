@@ -7,7 +7,6 @@
 package rapternet.irc.bots.wheatley.listeners;
 
 import rapternet.irc.bots.wheatley.objects.Game;
-import rapternet.irc.bots.wheatley.objects.GameMod;
 import rapternet.irc.bots.wheatley.objects.TimedWaitForQueue;
 import rapternet.irc.bots.common.utils.GameUtils;
 import java.io.FileNotFoundException;
@@ -38,7 +37,7 @@ import rapternet.irc.bots.wheatley.objects.games.ReverseWord;
  *      esrever!
  */
 public class GameAltReverse extends ListenerAdapter {
-    static ArrayList<String> activechan = new ArrayList<String>();
+    static ArrayList<String> activechan = new ArrayList<>();
 //    static GameArray activeGame = new GameArray();
     
     String blockedChan = "#dtella";

@@ -140,7 +140,7 @@ public class GameBomb extends ListenerAdapter {
     public ArrayList<String> getColorList() {
         try{
             Scanner wordfile = new Scanner(new File("colorlist.txt"));
-            ArrayList<String> colorls = new ArrayList<String>();
+            ArrayList<String> colorls = new ArrayList<>();
             while (wordfile.hasNextLine()){
                 colorls.add(wordfile.nextLine());
             }

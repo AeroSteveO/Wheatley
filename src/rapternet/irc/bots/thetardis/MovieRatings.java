@@ -143,7 +143,7 @@ public class MovieRatings extends ListenerAdapter {
         String title;
         long year;
         String rating;
-        String response = "";
+        String response;
         try{
             
             JSONObject movieJSON = (JSONObject) new JSONTokener(similarJSON).nextValue();
