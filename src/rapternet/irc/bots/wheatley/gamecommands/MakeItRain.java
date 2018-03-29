@@ -50,13 +50,17 @@ public class MakeItRain implements CommandGame {
             }
             ArrayList<String> people = new ArrayList<>();
             
+            Iterator<User> userList = event.getChannel().getUsers().iterator();
+            int numUsers = event.getChannel().getUsers().size();
+            int earnings = rain/(numUsers-2);
+                
             if(scores.getScoreObj(sender).getScore()<rain){
                 event.getBot().sendIRC().notice(sender, "You don't have enough to make it rain that much");
+            } else if (earnings == 0) {
+                event.getBot().sendIRC().notice(sender, "You need to give everyone at least $1");
             }
             else{
-                Iterator<User> userList = event.getChannel().getUsers().iterator();
-                int numUsers = event.getChannel().getUsers().size();
-                int earnings = rain/(numUsers-2);
+                
                 scores.subtractScore(sender, rain);
                 
                 while (userList.hasNext()){
