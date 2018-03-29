@@ -39,6 +39,8 @@ import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
+import rapternet.irc.bots.wheatley.commands.Morris;
+import rapternet.irc.bots.wheatley.commands.MathCmd;
 
 /**
  *
@@ -126,6 +128,8 @@ public class CommandListener extends ListenerAdapter{
         listOfCommands.add(new ShortCMD());
         listOfCommands.add(new Hashtagify());
         listOfCommands.add(new SpaceCMD());
+        listOfCommands.add(new Morris());
+        listOfCommands.add(new MathCmd());
         return(listOfCommands);
     }
 }
