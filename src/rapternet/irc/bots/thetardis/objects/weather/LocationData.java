@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package rapternet.irc.bots.wheatley.objects.weather;
+package rapternet.irc.bots.thetardis.objects.weather;
 
 /**
  *
@@ -37,14 +37,6 @@ public class LocationData {
         return zip;
     }
        
-//    public boolean equals(LocationData loc) {
-//        return (loc.city.equalsIgnoreCase(city) && loc.state.equalsIgnoreCase(state) && loc.zip.equals(zip));
-//    }
-    
-    public boolean equalsCityOrZip(LocationData loc) {
-        return ((loc.city.equalsIgnoreCase(city) && loc.state.equalsIgnoreCase(state)) || loc.zip.equals(zip));
-    }
-    
     @Override
     public String toString() {
         return (city + ", " + state);

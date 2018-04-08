@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package rapternet.irc.bots.wheatley.objects.weather;
+package rapternet.irc.bots.thetardis.objects.weather;
 
 /**
  *

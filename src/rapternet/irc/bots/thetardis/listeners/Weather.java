@@ -4,15 +4,15 @@
 * and open the template in the editor.
 */
 
-package rapternet.irc.bots.thetardis;
+package rapternet.irc.bots.thetardis.listeners;
 
-import rapternet.irc.bots.wheatley.objects.weather.LocationData;
-import rapternet.irc.bots.wheatley.objects.weather.WeatherAlerts;
-import rapternet.irc.bots.wheatley.objects.weather.WeatherCache;
-import rapternet.irc.bots.wheatley.objects.weather.WeatherBasic;
-import rapternet.irc.bots.wheatley.objects.weather.WeatherConditions;
-import rapternet.irc.bots.wheatley.objects.weather.WeatherForecast;
-import rapternet.irc.bots.wheatley.objects.weather.WeatherType;
+import rapternet.irc.bots.thetardis.objects.weather.LocationData;
+import rapternet.irc.bots.thetardis.objects.weather.WeatherAlerts;
+import rapternet.irc.bots.thetardis.objects.weather.WeatherCache;
+import rapternet.irc.bots.thetardis.objects.weather.WeatherBasic;
+import rapternet.irc.bots.thetardis.objects.weather.WeatherConditions;
+import rapternet.irc.bots.thetardis.objects.weather.WeatherForecast;
+import rapternet.irc.bots.thetardis.objects.weather.WeatherType;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -128,8 +128,6 @@ public class Weather extends ListenerAdapter{
                     ||msgSplit[0].equals("!f")||msgSplit[0].equals("!forecast")
                     ||msgSplit[0].equals("!a")||msgSplit[0].equals("!alerts")||msgSplit[0].equals("!alert"))){
                 
-                System.out.println("MESSAGE IS WEATHER COMMAND");
-                
                 location = parseLocationFromMessage(message);
                 
                 if (location == null) { // When all else fails, geo lookup
@@ -240,7 +238,7 @@ public class Weather extends ListenerAdapter{
                             }
                         }
                         else {
-                            ArrayList<String> derpina = getCurrentAlerts(location,locationData); // this array doesn't matter, the method just needs to run
+                            getCurrentAlerts(location,locationData); // this array doesn't matter, the method just needs to run
                             
                             ArrayList<String> alertFullText = localCache.getAllAlertsLongResponse(search);
                             
@@ -271,7 +269,6 @@ public class Weather extends ListenerAdapter{
     private String parseLocationFromMessage(String message){
         String[] msgSplit = message.split(" ",2);
         String location;
-        LocationData locationData;
         
         // No input location tells us to use the stock zipcode
         if (msgSplit.length == 1 || (message.split(" ").length == 2 && msgSplit[1].equalsIgnoreCase("full"))){
@@ -392,17 +389,7 @@ public class Weather extends ListenerAdapter{
                     else{
                         for (int j=0; j < newAlerts.size(); j++){
                             if (newAlerts.get(j) instanceof WeatherAlerts) {
-//                                boolean isAlertNew = true;
-//                                for (int i=0;i<localCache.size();i++){
-//
-//                                    if (((WeatherAlerts) localCache.get(i)).getAlertType().equalsIgnoreCase(((WeatherAlerts) newAlerts.get(j)).getAlertType())){
-//                                        ((WeatherAlerts) localCache.get(i)).updateExpiration(((WeatherAlerts) newAlerts.get(j)).getExpiration());
-//                                        isAlertNew=false;
-//                                    }
-//                                }
                                 if (localCache.addNewAlert((WeatherAlerts) newAlerts.get(j))){
-//                                WeatherAlerts newAlert = new WeatherAlerts(cityState, zip,alertType.get(j), alertExpiration.get(j), alertText.get(j));
-//                                    localCache.add(newAlerts.get(j));
                                     Global.bot.sendIRC().message(channel,Colors.RED+Colors.BOLD+"WEATHER ALERT "+Colors.NORMAL+Colors.BOLD+"For: " + Colors.NORMAL + locationInfo.toString() + Colors.BOLD+" Description: "+Colors.NORMAL+alertType.get(j)+Colors.BOLD+" Ending: "+Colors.NORMAL+alertExpiration.get(j)+Colors.BOLD+" Type: "+Colors.NORMAL+"'!alerts full [zip]' for the full alert text");
                                 }
                             }
@@ -419,7 +406,6 @@ public class Weather extends ListenerAdapter{
     }
     
     private ArrayList<String> getCurrentAlerts(String location, LocationData locationData) throws Exception {
-//        JSONParser parser = new JSONParser();
         
         String jsonData = readUrl(alertUrl(location));
         
@@ -429,13 +415,11 @@ public class Weather extends ListenerAdapter{
         try{
             JSONObject alertJSON = (JSONObject) new JSONTokener(jsonData).nextValue();
             JSONArray alertArrayJSON = (JSONArray) alertJSON.get("alerts");
-//            System.out.println(alertArrayJSON);
             if (alertArrayJSON!=null && alertArrayJSON.length()!=0){
                 for (int i=0;i<alertArrayJSON.length();i++){
                     JSONObject alert = (JSONObject) alertArrayJSON.get(i);
                     alertType.add((String) alert.get("description"));
                     alertExpiration.add((String) alert.get("expires"));
-//                    System.out.println(alertType.get(alertType.size()-1));
                     alertText.add((String) alert.get("message"));
                 }
                 
@@ -458,7 +442,6 @@ public class Weather extends ListenerAdapter{
         
         String jsonData = readUrl(forecastUrl(location));
         
-//        JSONParser parser = new JSONParser();
         String response;
         ArrayList<String> weekDay = new ArrayList<>();
         ArrayList<String> highF = new ArrayList<>();
