@@ -4,7 +4,7 @@
 * and open the template in the editor.
 */
 
-package rapternet.irc.bots.thetardis;
+package rapternet.irc.bots.thetardis.listeners;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
