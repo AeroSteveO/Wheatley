@@ -124,21 +124,9 @@ public class WheatleyMain extends ListenerAdapter {
 //        Global.addCommands(Global.commandList, CMD.class);
         //Setup this bot
         checkSettings();
-//        String mainNick = Global.settings.get("nick");
-//        String nickPass = Global.settings.get("nickservpass");
-//        String botOwner = Global.settings.get("botowner");
-//        String serverPort = Global.settings.get("port");
-//        String phrasePrefix = Global.mainNick + ", ";
-//        String mainServer = Global.settings.get("address");
         ArrayList<String> channels = Global.settings.getArray("channellist");
         
         try{ // MOVE ALL THE SETTINGS INTO JSON
-//            File fXmlFile = new File("Settings.xml");
-//            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-//            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-//            Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);
-//            int test = Integer.parseInt(baseElement.getElementsByTagName("test").item(0).getTextContent());
-//            Element eElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("server").item(test);
             Global.mainNick = Global.settings.get("nick");
             Global.nickPass = Global.settings.get("nickservpass");
             Global.botOwner = Global.settings.get("botowner");

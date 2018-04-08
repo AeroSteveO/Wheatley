@@ -42,9 +42,9 @@ import org.pircbotx.hooks.events.MessageEvent;
 public class GameBombCMD implements CommandGame {
     // Woohooo basic variables for junk
     int time = 10;  // Seconds
-    ArrayList<String> colorls = null;
+    ArrayList<String> colorls = null; // list of potential wire colors
     int prize = 70; // $
-    int loss = 50;
+    int loss = 50; // potential money lost 
     
     @Override
     public boolean isGame() {

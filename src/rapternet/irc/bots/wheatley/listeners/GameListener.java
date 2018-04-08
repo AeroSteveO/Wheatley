@@ -56,37 +56,8 @@ public class GameListener extends ListenerAdapter{
                     }
                 }
             }
-//            else if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")) {
-//                for (int i=0;i<commandList.size();i++){
-//                    if (commandList.get(i).isCommand(message)){
-//                        commandList.get(i).processCommand(event);
-//                    }
-//                }
-//            }
         }
     }
-    
-//    @Override
-//    public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
-//        String message = Colors.removeFormattingAndColors(event.getMessage());
-//
-//        if (message.startsWith(Global.commandPrefix)&&!message.matches("([ ]{0,}"+Global.commandPrefix+"{1,}[ ]{0,}){1,}")) {
-//            String command = message.split(Global.commandPrefix)[1];
-//            String[] cmdSplit = command.split(" ");
-//            for (int i=0;i<commandList.size();i++){
-//                if (commandList.get(i).commandTerms().contains(cmdSplit[0])) {
-//                    commandList.get(i).processCommand(event);
-//                }
-//            }
-//        }
-//        else if (message.toLowerCase().startsWith(Global.mainNick.toLowerCase())) {
-//            for (int i=0;i<commandList.size();i++){
-//                if (commandList.get(i).isCommand(message)){
-//                    commandList.get(i).processCommand(event);
-//                }
-//            }
-//        }
-//    }
     
     private List<CommandGame> getCommandList() {
         List<CommandGame> listOfCommands = new ArrayList<>();
@@ -106,7 +77,6 @@ public class GameListener extends ListenerAdapter{
         boolean loaded;
         try{
             scores.setFilename(filename);
-//            scores.setBaseScore(500);
             loaded = scores.loadFromJSON();
         }
         catch (Exception ex){
@@ -139,7 +109,6 @@ public class GameListener extends ListenerAdapter{
             while(iterator.hasNext()) {
                 User element = iterator.next();
                 if (!scores.containsUser(element.getNick())){
-                    //temp = (User)users.floor(temp);
                     scores.addUser(element.getNick());
                     System.out.println(element.getNick());
                     modified = true;
