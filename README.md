@@ -7,8 +7,10 @@
 
 ### How do I get set up? ###
 
-* Everything should be in the repo for netbeans setup
-* .jar dependencies were included before it was known that this is a bad idea to do in the repo, it has yet to be fixed
+* Building can be done using ant or docker
+  * docker build . -t wheatley
+  * ant clean-build
+* .jar dependencies are included in the repo to provide a baseline configuration
 
 ### Contribution guidelines ###
 
