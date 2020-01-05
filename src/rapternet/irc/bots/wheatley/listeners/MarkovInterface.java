@@ -155,7 +155,8 @@ public class MarkovInterface extends ListenerAdapter{
                 !Pattern.matches("[a-zA-Z_0-9]+\\++", message.toLowerCase())&&
                 !Pattern.matches("[0-9]+", message.toLowerCase())&&
                 !(message.split(" ").length==1)&&
-                !message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ")){
+                !message.toLowerCase().startsWith(Global.mainNick.toLowerCase()+", ") &&
+                this.getMarkovSpeech(channel)){
             borg.learn(message);
             newLines++;
             
@@ -252,6 +253,12 @@ public class MarkovInterface extends ListenerAdapter{
             Global.settings.create("markovchance", chance, channel);
         }
     }
+
+    /**
+     * Returns TRUE if the channel can have markov speech in it (or record markov lines from it), and FALSE otherwise
+     * @param channel
+     * @return
+     */
     private boolean getMarkovSpeech(String channel){
         if (Global.settings.contains("markovspeak",channel)){
             return Boolean.valueOf(Global.settings.get("markovspeak", channel));
