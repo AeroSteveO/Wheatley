@@ -15,6 +15,7 @@ import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.MessageEvent;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -74,7 +75,7 @@ public class Logger extends ListenerAdapter{
     
     private Boolean saveToFile(ArrayList<String> log) throws IOException {
         Boolean isSaved = false;
-        File file =new File("WheatleyLogs.plog");
+        File file =new File(Env.CONFIG_LOCATION + "WheatleyLogs.plog");
         if(!file.exists()){
             file.createNewFile();
         }

@@ -10,6 +10,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.NoticeEvent;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -17,16 +18,16 @@ import org.pircbotx.hooks.events.NoticeEvent;
  */
 public class IdleRPG extends ListenerAdapter {
     
-    private String idleRPGChan = "#idlerpg"; // TODO ADD TO SETTINGS
-    private String idleBot = "idlebot"; // TODO ADD TO SETTINGS
-    private String username = Global.mainNick;
+    private String idleRPGChan = Env.IRPG_CHANNEL; // TODO ADD TO SETTINGS
+    private String idleBot = Env.IRPG_BOT_NAME; // TODO ADD TO SETTINGS
+    private String username = Env.IRPG_USERNAME;
     private String password = ""; // TODO ADD TO SETTINGS
-    private String userClass = "Intelligence Dampening Sphere"; // TODO ADD TO SETTINGS
+    private String userClass = Env.IRPG_USER_CLASS; // TODO ADD TO SETTINGS
     private int time = 120; // seconds
     
     public IdleRPG() {
         if (!Global.settings.contains("idlerpg-pass")) {
-            Global.settings.create("idlerpg-pass","AddHere");
+            Global.settings.create("idlerpg-pass",Env.IRPG_PASSWORD);
             System.out.println("ERROR: NO IDLE RPG PASSWORD");
         }
         password = Global.settings.get("idlerpg-pass");

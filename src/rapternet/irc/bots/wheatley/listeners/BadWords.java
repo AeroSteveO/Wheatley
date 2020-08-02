@@ -13,6 +13,7 @@ import java.util.Scanner;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -81,7 +82,7 @@ public class BadWords extends ListenerAdapter{
     
     public ArrayList<String> getBadWords() throws FileNotFoundException{
         try{
-            Scanner wordfile = new Scanner(new File("badwords.txt"));
+            Scanner wordfile = new Scanner(new File(Env.CONFIG_LOCATION + "badwords.txt"));
             ArrayList<String> wordls = new ArrayList<>();
             while (wordfile.hasNext()){
                 wordls.add(wordfile.next());

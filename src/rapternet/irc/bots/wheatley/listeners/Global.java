@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import org.pircbotx.PircBotX;
 import rapternet.irc.bots.common.utils.TextUtils;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -59,8 +60,8 @@ public class Global {
     public static String phrasePrefix = new String();      //mainNick+", ";
     public static ArrayList<String> botAdmin = getBotAdmins();
     
-    public static Settings settings = new Settings("settings.json");
-    public static Throttle throttle = new Throttle("throttle.json");
+    public static Settings settings = new Settings(Env.CONFIG_LOCATION + "settings.json");
+    public static Throttle throttle = new Throttle(Env.CONFIG_LOCATION + "throttle.json");
     
     public static String[] getBotOps(){
         String[] admins = {"Steve-O","burg","theDoctor"};
@@ -68,7 +69,7 @@ public class Global {
     }
             
     private static ArrayList<String> getBotAdmins() {
-        ArrayList<String> admins = TextUtils.loadTextAsList("admins.txt");
+        ArrayList<String> admins = TextUtils.loadTextAsList(Env.CONFIG_LOCATION + "admins.txt");
         if (admins == null) {
           admins = new ArrayList<>();
         }
@@ -76,7 +77,7 @@ public class Global {
     }
 
   public static String getGameChan() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   static boolean isBotOwner(String nick) {

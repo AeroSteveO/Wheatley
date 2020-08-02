@@ -16,6 +16,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Element;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -91,7 +92,7 @@ public class Ping extends ListenerAdapter {
                 if (cmdSplit.length==3&&cmdSplit[1].equalsIgnoreCase("check")&&!event.getChannel().getName().equals("#dtella")){
                     if(event.getUser().getNick().equals(Global.botOwner)){
                         try{
-                            File fXmlFile = new File("SettingPing.xml");
+                            File fXmlFile = new File(Env.CONFIG_LOCATION + "SettingPing.xml");
                             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                             Element serverelement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("ping").item(0);

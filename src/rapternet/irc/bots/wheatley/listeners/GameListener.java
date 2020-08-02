@@ -29,6 +29,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.UserListEvent;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -38,7 +39,7 @@ public class GameListener extends ListenerAdapter{
     List<CommandGame> commandList = getCommandList();
     public static GameList activeGame = new GameList();    // To be implemented in games
     public static Score.ScoreArray scores = new Score.ScoreArray();
-    String filename = "gameScores.json";
+    String filename = Env.CONFIG_LOCATION + "gameScores.json";
     boolean loaded = startScores();
     
     

@@ -18,6 +18,7 @@ import rapternet.irc.bots.wheatley.listeners.Global;
 import java.util.ArrayList;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -26,8 +27,8 @@ import org.pircbotx.hooks.Event;
  * The most BA package of kicks you'll ever see
  */
 public class DynamicKickManager implements Command {
-  private static KickStorage kickData = new KickStorage("kicks.json");
-  private static KickStorage hist = new KickStorage("hist-kicks.json");
+  private static KickStorage kickData = new KickStorage(Env.CONFIG_LOCATION + "kicks.json");
+  private static KickStorage hist = new KickStorage(Env.CONFIG_LOCATION + "hist-kicks.json");
   
   @Override
   public String toString() {

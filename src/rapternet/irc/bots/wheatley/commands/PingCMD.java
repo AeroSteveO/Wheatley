@@ -18,6 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 import org.w3c.dom.Element;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -130,7 +131,7 @@ public class PingCMD implements Command{
         if (cmdSplit.length==3&&cmdSplit[1].equalsIgnoreCase("check")){//&&!event.getChannel().getName().equals("#dtella")
             if(isVerified){
                 try{
-                    File fXmlFile = new File("SettingPing.xml");
+                    File fXmlFile = new File(Env.CONFIG_LOCATION + "SettingPing.xml");
                     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                     Element serverelement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("ping").item(0);

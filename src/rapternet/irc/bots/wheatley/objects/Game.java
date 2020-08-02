@@ -46,7 +46,7 @@ import rapternet.irc.bots.wheatley.objects.games.WordGame;
  *          Creates an int using the upper bounds input
  */
 public class Game {
-    private List<String> wordList = TextUtils.loadTextAsList("wordlist.txt");//getWordList();
+    private List<String> wordList = TextUtils.loadTextAsList(Env.CONFIG_LOCATION + "wordlist.txt");//getWordList();
     private String chosenWord;
     private String solution;
     private int chosenNum;
@@ -151,7 +151,7 @@ public class Game {
       
     public static ArrayList<String> getColorList() throws FileNotFoundException{
         try{
-            Scanner wordfile = new Scanner(new File("colorlist.txt"));
+            Scanner wordfile = new Scanner(new File(Env.CONFIG_LOCATION + "colorlist.txt"));
             ArrayList<String> colorls = new ArrayList<>();
             while (wordfile.hasNextLine()){
                 colorls.add(wordfile.nextLine());

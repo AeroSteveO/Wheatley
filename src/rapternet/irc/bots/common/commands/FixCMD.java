@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
 import org.w3c.dom.Element;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -97,7 +98,7 @@ public class FixCMD implements Command{
     private void updateChannelsFromXML(){
         
         try{
-            File fXmlFile = new File("Settings.xml");
+            File fXmlFile = new File(Env.CONFIG_LOCATION + "Settings.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Element baseElement = (Element) dBuilder.parse(fXmlFile).getElementsByTagName("basicsettings").item(0);

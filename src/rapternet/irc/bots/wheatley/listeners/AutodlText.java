@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -35,7 +36,8 @@ public class AutodlText extends ListenerAdapter {
         if (event.getUser().getNick().equals("SHODAN")){  //Auto Download bot nick
             if(message.startsWith("Saved")){
                 // LOAD XML
-                File fXmlFile = new File("Settings.xml");
+                // TODO: USE SETTINGS JSON INSTEAD OF XML
+                File fXmlFile = new File(Env.CONFIG_LOCATION + "Settings.xml");
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                 Document doc = dBuilder.parse(fXmlFile);

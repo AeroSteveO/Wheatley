@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -21,8 +22,8 @@ public class ScoreBoardOld {
         
         boolean winAdded = false;
         
-        File score = new File("score.txt");
-        File lastGame = new File("lastGame.txt");
+        File score = new File(Env.CONFIG_LOCATION + "score.txt");
+        File lastGame = new File(Env.CONFIG_LOCATION + "lastGame.txt");
         
             score.createNewFile();
         Scanner in;
@@ -68,7 +69,7 @@ public class ScoreBoardOld {
     
     
     public static void sortScore() throws FileNotFoundException{
-        File score = new File("score.txt");        
+        File score = new File(Env.CONFIG_LOCATION + "score.txt");        
         LinkedList<String> file = new LinkedList(); 
         try (Scanner in = new Scanner(new FileInputStream(score))) {
             while (in.hasNext()) {
@@ -89,7 +90,7 @@ public class ScoreBoardOld {
     
     public static void sortScoreBoard(){
         try {
-            File score = new File("score.txt");
+            File score = new File(Env.CONFIG_LOCATION + "score.txt");
             ArrayList file = new ArrayList();
             try (Scanner in = new Scanner(new FileInputStream(score))) {
                 while (in.hasNext()) {

@@ -32,6 +32,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.pircbotx.hooks.events.QuitEvent;
 import org.pircbotx.hooks.events.UserListEvent;
 import rapternet.irc.bots.wheatley.listeners.Global;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -77,8 +78,8 @@ public class UnoBot extends ListenerAdapter {
   private Messenger setupMsg() {
     Messenger msg;
     try {
-      if (new File("Messages.dat").exists()) {
-        msg = new Messenger("Messages.dat");
+      if (new File(Env.CONFIG_LOCATION + "Messages.dat").exists()) {
+        msg = new Messenger(Env.CONFIG_LOCATION + "Messages.dat");
       } else {
         msg = new Messenger();
       }
@@ -228,12 +229,12 @@ public class UnoBot extends ListenerAdapter {
     
     public void setScoreBoardFileName(String fileName) {
         this.ScoreBoardFileName = fileName;
-        File file = new File(fileName);
+        File file = new File(Env.CONFIG_LOCATION + fileName);
         if (!file.exists()) {
             this.sb = new ScoreBoard2();
         } else {
             try {
-                this.sb = new ScoreBoard2(fileName);
+                this.sb = new ScoreBoard2(Env.CONFIG_LOCATION + fileName);
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println("the file " + fileName + " is not a valid ScoreBoard object\nI will create a new one");
                 this.sb = new ScoreBoard2();
@@ -242,13 +243,13 @@ public class UnoBot extends ListenerAdapter {
     }
     
     public ScoreBoard2 startScoreBoard() {
-        File file = new File(ScoreBoardFileName);
+        File file = new File(Env.CONFIG_LOCATION + ScoreBoardFileName);
         ScoreBoard2 sb;
         if (!file.exists()) {
             sb = new ScoreBoard2();
         } else {
             try {
-                sb = new ScoreBoard2(ScoreBoardFileName);
+                sb = new ScoreBoard2(Env.CONFIG_LOCATION + ScoreBoardFileName);
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println("the file " + ScoreBoardFileName + " is not a valid ScoreBoard object\nI will create a new one");
                 sb = new ScoreBoard2();
@@ -271,9 +272,9 @@ public class UnoBot extends ListenerAdapter {
     }
     
     private void resetScoreBoard() throws FileNotFoundException, IOException {
-        this.sb.scoreBoardToFile("BACKUP_" + this.ScoreBoardFileName);
+        this.sb.scoreBoardToFile(Env.CONFIG_LOCATION + "BACKUP_" + this.ScoreBoardFileName);
         this.sb = new ScoreBoard2();
-        this.sb.scoreBoardToFile(this.ScoreBoardFileName);
+        this.sb.scoreBoardToFile(Env.CONFIG_LOCATION + this.ScoreBoardFileName);
     }
     
     private boolean checkWin(String channel, Player player) {
@@ -308,7 +309,7 @@ public class UnoBot extends ListenerAdapter {
             
             sb.updateScoreBoard(players);
             try {
-                sb.scoreBoardToFile(ScoreBoardFileName);
+                sb.scoreBoardToFile(Env.CONFIG_LOCATION + ScoreBoardFileName);
             } catch (FileNotFoundException ex) {
                 bot.sendIRC().message(channel, "Sorry but I can't find the score board file to save to.");
             } catch (IOException ex) {

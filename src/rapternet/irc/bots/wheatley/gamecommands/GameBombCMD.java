@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.events.MessageEvent;
+import rapternet.irc.bots.wheatley.objects.Env;
 /**
  *
  * @author Steve-O
@@ -152,7 +153,7 @@ public class GameBombCMD implements CommandGame {
     
     public ArrayList<String> getColorList() {
         try{
-            Scanner wordfile = new Scanner(new File("colorlist.txt"));
+            Scanner wordfile = new Scanner(new File(Env.CONFIG_LOCATION + "colorlist.txt"));
             ArrayList<String> colorls = new ArrayList<>();
             while (wordfile.hasNextLine()){
                 colorls.add(wordfile.nextLine());

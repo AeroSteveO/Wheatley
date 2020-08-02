@@ -16,6 +16,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.Event;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -91,7 +92,7 @@ public class EnglishSayingsCMD implements Command {
     
     private ArrayList<String> getSayings() {
         try{
-            Scanner wordfile = new Scanner(new File("englishsayings.txt"));
+            Scanner wordfile = new Scanner(new File(Env.CONFIG_LOCATION + "englishsayings.txt"));
             ArrayList<String> wordls = new ArrayList<>();
             while (wordfile.hasNext()){
                 wordls.add(wordfile.nextLine());

@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -55,8 +56,8 @@ import org.pircbotx.hooks.events.MessageEvent;
  *
  */
 public class DefListener2 extends ListenerAdapter {
-    Definitions defs = new Definitions("definitions.json");
-    Definitions defsLog = new Definitions("definitionLog.json");
+    Definitions defs = new Definitions(Env.CONFIG_LOCATION + "definitions.json");
+    Definitions defsLog = new Definitions(Env.CONFIG_LOCATION + "definitionLog.json");
     
     @Override
     public void onMessage(MessageEvent event) throws FileNotFoundException, InterruptedException {
@@ -139,7 +140,7 @@ public class DefListener2 extends ListenerAdapter {
         // ADDING DEFINITIONS
         if(msgSplit[0].equalsIgnoreCase("!mkdef")){//||msgSplit[0].equalsIgnoreCase("!addef")
             
-            if (event.getUser().getNick().equalsIgnoreCase(Global.botOwner)&&event.getUser().isVerified()){
+            if (Global.isBotOwner(event.getUser().getNick()) && event.getUser().isVerified()){
                 
                 if(message.split("@").length!=2){
                     event.getBot().sendIRC().notice(event.getUser().getNick(),"Improperly formed defintion add command: !mkdef word or phrase @ definition phrase");

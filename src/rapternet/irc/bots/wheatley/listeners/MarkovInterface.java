@@ -18,6 +18,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.jborg.*;
 import org.pircbotx.Colors;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -65,8 +66,8 @@ public class MarkovInterface extends ListenerAdapter{
     int newLinesBeforeUpdate = 10;
     MapArray previousLine = new MapArray(2);
     
-    String botListFileName = "botList.txt";
-    String markovFileName = "ImportedMarkov";
+    String botListFileName = Env.CONFIG_LOCATION + "botList.txt";
+    String markovFileName = Env.CONFIG_LOCATION + "ImportedMarkov";
     File markovFile = new File(markovFileName);
     final JBorg borg = new JBorg(1,15);
     boolean loaded = borg.loadWords(markovFile);

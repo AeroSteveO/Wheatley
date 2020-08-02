@@ -18,6 +18,7 @@ import org.pircbotx.Colors;
 import java.util.ArrayList;
 import org.pircbotx.hooks.managers.BackgroundListenerManager;
 import rapternet.irc.bots.uno2.UnoBot;
+import rapternet.irc.bots.wheatley.objects.Env;
 
 /**
  *
@@ -89,36 +90,38 @@ public class WheatleyMain extends ListenerAdapter {
     
     public static void checkSettings() {
       if (!Global.settings.contains("nick")) {
-        Global.settings.create("nick", "Wheatley");
+        Global.settings.create("nick", Env.NICK);
       }
+      
       if (!Global.settings.contains("nickservpass")) {
-        Global.settings.create("nickservpass", "password");
+        Global.settings.create("nickservpass", Env.PASSWORD);
       }
+      
       if (!Global.settings.contains("botowner")){
-        Global.settings.create("botowner", "Steve-O");
+        Global.settings.create("botowner", Env.OWNER_NICK);
       }
+      
       if (!Global.settings.contains("port")){
-        Global.settings.create("port", "6667");
-        
-      }      
+        Global.settings.create("port", Env.IRC_PORT);
+      }
+      
       if (!Global.settings.contains("login")){
-        Global.settings.create("login", "Derpy");
-        
+        Global.settings.create("login", Env.LOGIN);
       }
 
       if (!Global.settings.contains("address")){
-        Global.settings.create("address", "irc.rapternet.us");
-        
+        Global.settings.create("address", Env.IRC_ADDRESS);
       }
+      
       if (!Global.settings.contains("channellist")){
         ArrayList<String> channels = new ArrayList<>();
-        channels.add("#testing");
-        channels.add("#rapterverse");
+        for (String channel : Env.CHANNEL_LIST) {
+          channels.add(channel);
+        }
         Global.settings.create("channellist", channels);
-        
       }
-
     }
+    
     @SuppressWarnings("CallToThreadDumpStack")
     public static void main(String[] args) {
 //        Global.addCommands(Global.commandList, CMD.class);
@@ -153,47 +156,47 @@ public class WheatleyMain extends ListenerAdapter {
                     .setListenerManager(BackgroundListener)//Allow for logger background listener
                     .addListener(new WheatleyMain())       //This main class's listener
 //                    .addListener(new Blarghlebot())        //Trollbot Listener
-//                    .addListener(new Swapper())
-//                    .addListener(new GameOmgword())        //omgword game listener
-//                    .addListener(new GameReverse())        //reverse the word game
-//                    .addListener(new GameHangman())        //omgword game listener
+                    .addListener(new Swapper())
+                    .addListener(new GameOmgword())        //omgword game listener
+                    .addListener(new GameReverse())        //reverse the word game
+                    .addListener(new GameHangman())        //omgword game listener
 //                    .addListener(new GameBomb())           //bomb game listener
-//                    .addListener(new GameMasterMind())     //mastermind game listener
-//                    .addListener(new GameGuessTheNumber()) //guess the number game listener
+                    .addListener(new GameMasterMind())     //mastermind game listener
+                    .addListener(new GameGuessTheNumber()) //guess the number game listener
 //                    .addListener(new UnoBot())
-//                    .addListener(new GameListener())
+                    .addListener(new GameListener())
 //                    .addListener(new GameLuckyLotto())
-//                    .addListener(new GameHighLow())
-//                    .addListener(new GameBlackjack())
-//                    .addListener(new GameSlots())
-//                    .addListener(new GameAltReverse())     //alternate reverse game listener
-//                    .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
-//                    .addListener(new MatrapterChat())
+                    .addListener(new GameHighLow())
+                    .addListener(new GameBlackjack())
+                    .addListener(new GameSlots())
+                    .addListener(new GameAltReverse())     //alternate reverse game listener
+                    .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
+                    .addListener(new MatrapterChat())
                     .addListener(new DefListener2())
-//                    .addListener(new AutodlText())
+                    .addListener(new AutodlText())
 //                    .addListener(new Fuckingweather())
 //                    .addListener(new KickBanWatcher())
                     .addListener(new BotControl())
-//                    .addListener(new Ping())
-//                    .addListener(new BlarghleRandom())
+                    .addListener(new Ping())
+                    .addListener(new BlarghleRandom())
 //                    .addListener(new Weather())
 //                    .addListener(new TvSchedule())
 //                    .addListener(new MetaCritic())
 //                    .addListener(new Recommendations())
 //                    .addListener(new Urban())
-//                    .addListener(new CommandListener())
-//                    .addListener(new IdleRPG())
+                    .addListener(new CommandListener())
+                    .addListener(new IdleRPG())
 //                    .addListener(new MovieRatings())
-//                    .addListener(new BadWords())
-//                    .addListener(new MarkovInterface())
-//                    .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
-//                    .addListener(new UpdateFiles())          // updates text files via irc
-//                    .addListener(new RandChan())             // generates random 4chan image links
-//                    .addListener(new ExceptionListener())
+                    .addListener(new BadWords())
+                    .addListener(new MarkovInterface())
+                    .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
+                    .addListener(new UpdateFiles())          // updates text files via irc
+                    .addListener(new RandChan())             // generates random 4chan image links
+                    .addListener(new ExceptionListener())
                     .addServer(entry);
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
-//            BackgroundListener.addListener(new MarkovInterface(), true);
+            BackgroundListener.addListener(new MarkovInterface(), true);
             
             for (String channel:channels){ //Add channels from XML and load into channels Object
                 configuration.addAutoJoinChannel(channel);
