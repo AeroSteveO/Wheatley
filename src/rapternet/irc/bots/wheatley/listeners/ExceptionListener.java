@@ -84,7 +84,7 @@ public class ExceptionListener extends ListenerAdapter {
       try {
         url = shortenURL(pastebin);
       } catch (Exception ignored) {
-        ignored.printStackTrace();
+//        ignored.printStackTrace();
       }
       if (url != null) {
         return url;

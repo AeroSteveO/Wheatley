@@ -5,8 +5,8 @@
   */
 package rapternet.irc.bots.wheatley.listeners;
 
-import rapternet.irc.bots.thetardis.Recommendations;
-import rapternet.irc.bots.thetardis.Urban;
+import rapternet.irc.bots.thetardis.listeners.Recommendations;
+import rapternet.irc.bots.thetardis.listeners.Urban;
 import rapternet.irc.bots.wheatley.objects.ServerReconnector;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -152,48 +152,48 @@ public class WheatleyMain extends ListenerAdapter {
                     .setMaxLineLength(425)
                     .setListenerManager(BackgroundListener)//Allow for logger background listener
                     .addListener(new WheatleyMain())       //This main class's listener
-                    .addListener(new Blarghlebot())        //Trollbot Listener
-                    .addListener(new Swapper())
-                    .addListener(new GameOmgword())        //omgword game listener
-                    .addListener(new GameReverse())        //reverse the word game
-                    .addListener(new GameHangman())        //omgword game listener
+//                    .addListener(new Blarghlebot())        //Trollbot Listener
+//                    .addListener(new Swapper())
+//                    .addListener(new GameOmgword())        //omgword game listener
+//                    .addListener(new GameReverse())        //reverse the word game
+//                    .addListener(new GameHangman())        //omgword game listener
 //                    .addListener(new GameBomb())           //bomb game listener
-                    .addListener(new GameMasterMind())     //mastermind game listener
-                    .addListener(new GameGuessTheNumber()) //guess the number game listener
+//                    .addListener(new GameMasterMind())     //mastermind game listener
+//                    .addListener(new GameGuessTheNumber()) //guess the number game listener
 //                    .addListener(new UnoBot())
-                    .addListener(new GameListener())
+//                    .addListener(new GameListener())
 //                    .addListener(new GameLuckyLotto())
-                    .addListener(new GameHighLow())
-                    .addListener(new GameBlackjack())
-                    .addListener(new GameSlots())
-                    .addListener(new GameAltReverse())     //alternate reverse game listener
-                    .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
-                    .addListener(new MatrapterChat())
+//                    .addListener(new GameHighLow())
+//                    .addListener(new GameBlackjack())
+//                    .addListener(new GameSlots())
+//                    .addListener(new GameAltReverse())     //alternate reverse game listener
+//                    .addListener(new WheatleyChatStuff())  //general portal wheatley chat stuff
+//                    .addListener(new MatrapterChat())
                     .addListener(new DefListener2())
-                    .addListener(new AutodlText())
+//                    .addListener(new AutodlText())
 //                    .addListener(new Fuckingweather())
 //                    .addListener(new KickBanWatcher())
                     .addListener(new BotControl())
 //                    .addListener(new Ping())
-                    .addListener(new BlarghleRandom())
+//                    .addListener(new BlarghleRandom())
 //                    .addListener(new Weather())
 //                    .addListener(new TvSchedule())
 //                    .addListener(new MetaCritic())
 //                    .addListener(new Recommendations())
 //                    .addListener(new Urban())
-                    .addListener(new CommandListener())
-                    .addListener(new IdleRPG())
+//                    .addListener(new CommandListener())
+//                    .addListener(new IdleRPG())
 //                    .addListener(new MovieRatings())
-                    .addListener(new BadWords())
+//                    .addListener(new BadWords())
 //                    .addListener(new MarkovInterface())
-                    .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
-                    .addListener(new UpdateFiles())          // updates text files via irc
-                    .addListener(new RandChan())             // generates random 4chan image links
-                    .addListener(new ExceptionListener())
+//                    .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
+//                    .addListener(new UpdateFiles())          // updates text files via irc
+//                    .addListener(new RandChan())             // generates random 4chan image links
+//                    .addListener(new ExceptionListener())
                     .addServer(entry);
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
-            BackgroundListener.addListener(new MarkovInterface(), true);
+//            BackgroundListener.addListener(new MarkovInterface(), true);
             
             for (String channel:channels){ //Add channels from XML and load into channels Object
                 configuration.addAutoJoinChannel(channel);

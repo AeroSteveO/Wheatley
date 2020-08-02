@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.pircbotx.PircBotX;
+import rapternet.irc.bots.common.utils.TextUtils;
 
 /**
  *
@@ -67,15 +68,19 @@ public class Global {
     }
             
     private static ArrayList<String> getBotAdmins() {
-        ArrayList<String> admins = new ArrayList<>();
-        admins.add(botOwner);
-        admins.add("theDoctor");
-        admins.add("burg");
+        ArrayList<String> admins = TextUtils.loadTextAsList("admins.txt");
+        if (admins == null) {
+          admins = new ArrayList<>();
+        }
         return(admins);
     }
 
   public static String getGameChan() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  static boolean isBotOwner(String nick) {
+    return botOwner.equals(nick) || getBotAdmins().contains(nick);
   }
     
     public boolean isBotAdmin(String username) {

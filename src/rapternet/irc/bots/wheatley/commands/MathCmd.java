@@ -6,8 +6,6 @@
 package rapternet.irc.bots.wheatley.commands;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import org.pircbotx.Colors;
@@ -57,8 +55,8 @@ public class MathCmd implements Command {
     String built = "";
     for (int i = 1; i < cmdSplit.length; i++) {
       built += cmdSplit[i].toLowerCase();
-
     }
+    built = built.replaceAll("[a-zA-Z]", "");
     try {
       ScriptEngineManager mgr = new ScriptEngineManager();
       ScriptEngine engine = mgr.getEngineByName("JavaScript");

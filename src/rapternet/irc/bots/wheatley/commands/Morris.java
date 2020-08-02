@@ -64,10 +64,9 @@ public class Morris implements Command {
     for (int i = 1; i < cmdSplit.length; i++) {
       for (char c : cmdSplit[i].toLowerCase().toCharArray()) {
         out += morse.getOrDefault(String.valueOf(c), "") + " ";
-
       }
     }
-    event.respond(out);
+    event.getBot().sendIRC().message(data.respondToCallerOrMessageChan(), out);
   }
 
   public Map<String, String> generateMap() {
