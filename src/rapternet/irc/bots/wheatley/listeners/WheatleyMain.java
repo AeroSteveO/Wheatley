@@ -155,7 +155,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .setMaxLineLength(425)
                     .setListenerManager(BackgroundListener)//Allow for logger background listener
                     .addListener(new WheatleyMain())       //This main class's listener
-//                    .addListener(new Blarghlebot())        //Trollbot Listener
+                    .addListener(new Blarghlebot())        //Trollbot Listener
                     .addListener(new Swapper())
                     .addListener(new GameOmgword())        //omgword game listener
                     .addListener(new GameReverse())        //reverse the word game
