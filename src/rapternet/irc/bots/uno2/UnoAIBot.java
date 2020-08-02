@@ -1,7 +1,5 @@
 package rapternet.irc.bots.uno2;
 
-import rapternet.irc.bots.wheatley.listeners.Global;
-import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.KickEvent;
@@ -18,6 +16,9 @@ import org.pircbotx.hooks.events.NoticeEvent;
  * @author roofis0
  */
 public class UnoAIBot extends ListenerAdapter {
+    
+    private static final String PLAY_SPACE = "!play ";
+    private static final String SHLD_SND_MSG = "SHOULD HAVE SENT MESSAGE";
     
     private String[] botOps;
     private boolean justDrew;
@@ -45,6 +46,7 @@ public class UnoAIBot extends ListenerAdapter {
     }
     public void playAI(String channel, Player me, Deck deck) {
         Card card = null;
+        System.out.println("PLAYING AS AI");
         if (UnoAI.hasPlayable(me, deck)) {
             card = UnoAI.getPlayable(me, deck);
         } else {
@@ -56,11 +58,11 @@ public class UnoAIBot extends ListenerAdapter {
         }
         
         if (!justDrew && card.color.equals(Card.Color.WILD)) {
-            bot.sendIRC().message(channel, Global.commandPrefix + "play " + card.face.toString() + " " + UnoAI.colorMostOf(me, deck).toString());
-            System.out.println("SHOULD HAVE SENT MESSAGE");
+            bot.sendIRC().message(channel, PLAY_SPACE + card.face.toString() + " " + UnoAI.colorMostOf(me, deck).toString());
+            System.out.println(SHLD_SND_MSG);
         } else if (!justDrew) {
-            bot.sendIRC().message(channel, Global.commandPrefix + "play " + card.color.toString() + " " + card.face.toString());
-            System.out.println("SHOULD HAVE SENT MESSAGE");
+            bot.sendIRC().message(channel, PLAY_SPACE + card.color.toString() + " " + card.face.toString());
+            System.out.println(SHLD_SND_MSG);
         }
         
     }
@@ -70,40 +72,31 @@ public class UnoAIBot extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         String sender = event.getUser().getNick();
         String channel = event.getChannel().getName();
-        String[] Tokens = Colors.removeFormattingAndColors(event.getMessage()).split(" ");
+        String[] Tokens = event.getMessage().split(" ");
         
         //NICK
-        if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "nickai") && this.isBotOp(sender)) {
-            event.getBot().sendIRC().changeNick(Tokens[1]);
-        } //JOINC
-        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "joincai") && this.isBotOp(sender)) {
-            event.getBot().sendIRC().joinChannel(Tokens[1]);
-        } //JOIN GAME
-        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "joingame") && this.isBotOp(sender)) {
-            event.getBot().sendIRC().message(channel, Global.commandPrefix + "join");
+        if (Tokens[0].equalsIgnoreCase("!nickai") && this.isBotOp(sender)) {
+            bot.sendIRC().changeNick(Tokens[1]);
+        } //HELP
+        //JOINC
+        else if (Tokens[0].equalsIgnoreCase("!joincai") && this.isBotOp(sender)) {
+            bot.sendIRC().joinChannel(Tokens[1]);
         } //QUIT
-        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "quit") && this.isBotOp(sender)) {
-            event.getBot().sendIRC().quitServer();
+        else if (Tokens[0].equalsIgnoreCase("!quit") && this.isBotOp(sender)) {
+            bot.sendIRC().quitServer();
+            System.exit(0);
         } //UNO
-        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "uno")) {
-            Thread.sleep(5*1000); // Wait 5 seconds plox, thnx
-            event.getBot().sendIRC().message(channel, Global.commandPrefix + "join");
-        } // Help
-        else if (Tokens[0].equalsIgnoreCase(Global.commandPrefix + "unoAIhelp") && this.isBotOp(sender)){
-            event.getBot().sendIRC().notice(sender, "----------- OP Only AI Commands -----------");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "nickai ----- Tells the bot to change his nick.");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "joincai ---- Tells the bot to join a channel.");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "joingame --- Tells the bot to send the '" + Global.commandPrefix + "join' command.");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "uno -------- Tells the bot send " + Global.commandPrefix + "join to join the uno game.");
-            event.getBot().sendIRC().notice(sender, Global.commandPrefix + "quit ------- Tells the bot to dissconnect from the entire server.");
+        else if (Tokens[0].equalsIgnoreCase("!uno")) {
+            Thread.sleep(3000);
+            bot.sendIRC().message(channel, "!join");
         }
     }
     
     @Override
     public void onKick(KickEvent event) throws Exception {
         String recipientNick = event.getRecipient().getNick();
-        if (recipientNick.equals(event.getBot().getNick())) {
-            event.getBot().sendIRC().joinChannel( event.getChannel().getName() );
+        if (recipientNick.equals(bot.getNick())) {
+            bot.sendIRC().joinChannel( event.getChannel().getName() );
         }
     }
     
@@ -120,12 +113,15 @@ public class UnoAIBot extends ListenerAdapter {
             
             if (savedMe.isCardPlayable(drawnCard, savedDeck)) {
                 if (drawnCard.color.equals(Card.Color.WILD)) {
-                    event.getBot().sendIRC().message(savedChannel, Global.commandPrefix + "play " + drawnCard.face.toString() + " " + UnoAI.colorMostOf(savedMe, savedDeck).toString());
+                    bot.sendIRC().message(savedChannel, PLAY_SPACE + drawnCard.face.toString() + " " + UnoAI.colorMostOf(savedMe, savedDeck).toString());
+                    System.out.println(SHLD_SND_MSG);
                 } else {
-                    event.getBot().sendIRC().message(savedChannel, Global.commandPrefix + "play " + drawnCard.color.toString() + " " + drawnCard.face.toString());
+                    bot.sendIRC().message(savedChannel, PLAY_SPACE + drawnCard.color.toString() + " " + drawnCard.face.toString());
+                    System.out.println(SHLD_SND_MSG);
                 }
             } else {
-                event.getBot().sendIRC().message(savedChannel, Global.commandPrefix + "pass");
+                bot.sendIRC().message(savedChannel, "!pass");
+                System.out.println(SHLD_SND_MSG);
             }
             
         }
@@ -136,12 +132,12 @@ public class UnoAIBot extends ListenerAdapter {
             if (UnoAI.hasPlayable(savedMe, savedDeck)) {
                 card = UnoAI.getPlayable(savedMe, savedDeck);
             } else {
-                event.getBot().sendIRC().message(savedChannel, Global.commandPrefix + "pass");
+                bot.sendIRC().message(savedChannel, "!pass");
             }
             if (!justDrew && card.color.equals(Card.Color.WILD)) {
-                event.getBot().sendIRC().message(savedChannel, Global.commandPrefix + "play " + card.face.toString() + " " + UnoAI.colorMostOf(savedMe, savedDeck).toString());
+                bot.sendIRC().message(savedChannel, PLAY_SPACE + card.face.toString() + " " + UnoAI.colorMostOf(savedMe, savedDeck).toString());
             } else if (!justDrew) {
-                event.getBot().sendIRC().message(savedChannel, Global.commandPrefix + "play " + card.color.toString() + " " + card.face.toString());
+                bot.sendIRC().message(savedChannel, PLAY_SPACE + card.color.toString() + " " + card.face.toString());
             }
         }
     }
