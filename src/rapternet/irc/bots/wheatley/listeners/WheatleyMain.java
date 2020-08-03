@@ -196,7 +196,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addServer(entry);
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
-            BackgroundListener.addListener(new MarkovInterface(), true);
+//            BackgroundListener.addListener(new MarkovInterface(), true);
             
             for (String channel:channels){ //Add channels from XML and load into channels Object
                 configuration.addAutoJoinChannel(channel);
