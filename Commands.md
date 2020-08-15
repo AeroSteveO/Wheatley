@@ -529,7 +529,7 @@ S### RSBSNS Mirror Functions
 **[Channel Owners and Bot Owner Only Commands]**
 * Wheatley, leave
 * Wheatley, please leave
-* Commands Wheatley to leave the channel the command is sent from
+  * Commands Wheatley to leave the channel the command is sent from
 * !Throttle [type] [log || time] [#channel] [int input]
   * In order to adjust throttling, a modifier and integer must be input, the modifier can be log or time, to correlate to how many calls may be made in a set time
 * !Throttle [type] [#channel]
