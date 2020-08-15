@@ -19,13 +19,13 @@ Wheatley is a bot that has been developed by Steve-O by fumbling around theTardi
 **[Bot Owner Only Commands]**
 * !MkDef [word/phrase] @ [definition]
   * Adds the given word/definition combo to the definition file
-  * Example: <Steve-O> !mkdef Wheatley @ that one idiot bot
+  * Example: \<Steve-O> !mkdef Wheatley @ that one idiot bot
 * !RmDef [Word/Phrase]
   * Deletes the given word/phrase from the definition file
-  * Example: <Steve-O> !rmdef Wheatley
+  * Example: \<Steve-O> !rmdef Wheatley
 * !OverDef [Word/Phrase] @ [Definition]
   * Updates the given word with the new definition
-  * Example: <Steve-O> !overdef Wheatley @ hyper intelligent ai
+  * Example: \<Steve-O> !overdef Wheatley @ hyper intelligent ai
 * !Load
   * Loads previous style definitions text file into the new JSON system
         
@@ -72,8 +72,8 @@ Wheatley is a bot that has been developed by Steve-O by fumbling around theTardi
   * Responds with a PM with all the boards available to randchan and the subsequent titles of those boards
 * !Board [4chan board]
   * Gives the topic of the input board name
-  * Example: <~Steve-O> !board b
-  * <&Wheatley> b: Random
+  * Example: \<~Steve-O> !board b
+  * \<&Wheatley> b: Random
 * !IP [URL/IP]
   * Responds with information about that IP, location, service provider, etc
 * !Ping [URL/IP] [Port]
@@ -96,12 +96,12 @@ Wheatley is a bot that has been developed by Steve-O by fumbling around theTardi
 **[Public]**
 * !base [int 0-36] [int]
   * Changes the base of a number from decimal to the supplied integer
-  * <Steve-O> !base 16 64589713
-  * <Wheatley> Decimal Value: 64589713 Base 16: 3D98F91
+  * \<Steve-O> !base 16 64589713
+  * \<Wheatley> Decimal Value: 64589713 Base 16: 3D98F91
 * !RPN [expression]
   * Evaluates Reverse-Polish-Notation expressions
-  * <Steve-O> !rpn 2 4 * 2 / 9 -
-  * <Wheatley> RPN Solution: -5
+  * \<Steve-O> !rpn 2 4 * 2 / 9 -
+  * \<Wheatley> RPN Solution: -5
   
 ### Casino Bot Functions
 **(Blocked from #dtella)**
@@ -252,14 +252,14 @@ Wheatley is a bot that has been developed by Steve-O by fumbling around theTardi
 **[Public]**
 * !Bane [term1] [term2] [term3] [term4]
   * If only no terms are input, outputs Bane’s original speech, if one term is input, outputs a slightly modified version, if 2 terms are input, outputs an even more modified version of Bane’s speech
-  * Example:   <Steve-O> !bane W X Y Z
-  * <Wheatley> Ah you think W is your ally? You merely adopted the X. I was born in it, molded by it. I didn't see the Y until I was already a man, by then it was nothing to me but Z!
-  * <Steve-O> !bane X
-  * <Wheatley> Ah you think X is your ally? You merely adopted the X. I was born in it, molded by it. I didn't see the light until I was already a man, by then it was nothing to me but blinding!
-  * <Steve-O> !bane X Y
-  * <Wheatley> Ah you think X is your ally? You merely adopted the X. I was born in it, molded by it. I didn't see the Y until I was already a man, by then it was nothing to me but blinding!
-  * <Steve-O> !bane X Y Z
-  * <Wheatley> Ah you think X is your ally? You merely adopted the Y. I was born in it, molded by it. I didn't see the Z until I was already a man, by then it was nothing to me but blinding!
+  * Example:   \<Steve-O> !bane W X Y Z
+  * \<Wheatley> Ah you think W is your ally? You merely adopted the X. I was born in it, molded by it. I didn't see the Y until I was already a man, by then it was nothing to me but Z!
+  * \<Steve-O> !bane X
+  * \<Wheatley> Ah you think X is your ally? You merely adopted the X. I was born in it, molded by it. I didn't see the light until I was already a man, by then it was nothing to me but blinding!
+  * \<Steve-O> !bane X Y
+  * \<Wheatley> Ah you think X is your ally? You merely adopted the X. I was born in it, molded by it. I didn't see the Y until I was already a man, by then it was nothing to me but blinding!
+  * \<Steve-O> !bane X Y Z
+  * \<Wheatley> Ah you think X is your ally? You merely adopted the Y. I was born in it, molded by it. I didn't see the Z until I was already a man, by then it was nothing to me but blinding!
 * !Ignite [it]
   * Responds with randomly generated sentence about lighting [it] on fire, if nothing is input, then it will simply light “it” on fire
 * !Laser [it]
@@ -409,8 +409,8 @@ S### RSBSNS Mirror Functions
 * s/[find this string or regex]/[replace with this]
   * Attempts the given string or regex in the previous ~100 lines of chat and replaces it with the second string in the command
   * Example: <Steve-O> will this work 1
-  * <Steve-O> s/1/nope
-  * <Wheatley> <Steve-O> will this work nope
+  * \<Steve-O> s/1/nope
+  * \<Wheatley> <Steve-O> will this work nope
 * Blarghlebot, [any kind of question]?
 * Wheatley, [any kind of question]?
   * Responds with a magic 8-ball message
