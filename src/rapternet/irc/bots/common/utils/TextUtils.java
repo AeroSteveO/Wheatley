@@ -82,6 +82,7 @@ public class TextUtils {
         try{
             
             if(!file.exists()){
+                System.out.println("Failed to locate " + file.getAbsolutePath());
                 file.createNewFile();
                 return null;
             }
