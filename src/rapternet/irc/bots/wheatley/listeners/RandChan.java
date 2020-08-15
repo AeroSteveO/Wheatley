@@ -57,11 +57,7 @@ public class RandChan extends ListenerAdapter {
     private LinkedList<Long> timeLog = new LinkedList<>();
     private int maxLog = 2;
     private long maxTime = 100*1000;
-//    private List<String> boardList = getBoardList();
-//    private List<String> boardTitles = getBoardTitles();
     private List<List<String>> boardInfo = getBoardInfo();
-//    private Throttle rThrottle = new Throttle("randchan");
-//    boolean setup = setupThrottle(maxLog,maxTime);
     private String type = "randchan";
     
     @Override
@@ -104,8 +100,9 @@ public class RandChan extends ListenerAdapter {
                 }
                 else if (command.equalsIgnoreCase("randchan list")){
                     String boards = "";
+                    System.out.println("Board Info: " + boardInfo.size());
                     for(int i=0;i<boardInfo.size()-1;i++){
-                        boards = boards+Colors.RED+boardInfo.get(i).get(0)+": "+Colors.NORMAL+boardInfo.get(i).get(1)+", ";
+                        boards = boards + Colors.RED + boardInfo.get(i).get(0) + ": " + Colors.NORMAL + boardInfo.get(i).get(1) + ", ";
                     }
                     event.getBot().sendIRC().message(event.getUser().getNick(),boards);
                 }
@@ -155,7 +152,7 @@ public class RandChan extends ListenerAdapter {
             catch(Exception ex){
                 ex.printStackTrace();
                 System.out.println(ex.getMessage());
-                event.respond("http://i.imgur.com/JaKGGo7.jpg"); // Throws hanson if theres an error
+                event.respond("https://i.imgur.com/JaKGGo7.jpg"); // Throws hanson if theres an error
             }
         }
     }
@@ -191,7 +188,7 @@ public class RandChan extends ListenerAdapter {
 //        JSONParser parser = new JSONParser();
 //        List<String> boards = new ArrayList<>();
 //        try{
-//            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
+//            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("https://a.4cdn.org/boards.json"));
 //            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
 //            for (int i=0; i<boardsTemp.size(); i++) {
 //                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
@@ -211,7 +208,7 @@ public class RandChan extends ListenerAdapter {
 //        JSONParser parser = new JSONParser();
 //        List<String> titles = new ArrayList<>();
 //        try{
-//            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("http://a.4cdn.org/boards.json"));
+//            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("https://a.4cdn.org/boards.json"));
 //            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
 //            for (int i=0; i<boardsTemp.size(); i++) {
 //                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
@@ -232,7 +229,7 @@ public class RandChan extends ListenerAdapter {
 //        List<String> filename = new ArrayList<>();
         List<String> extension = new ArrayList<>();
         
-        String jsonText = readUrl("http://a.4cdn.org/"+board+"/threads.json");
+        String jsonText = readUrl("https://a.4cdn.org/"+board+"/threads.json");
         
         JSONArray pages = (JSONArray) new JSONTokener(jsonText).nextValue();
         
@@ -244,7 +241,7 @@ public class RandChan extends ListenerAdapter {
             JSONArray threadList = pages.getJSONObject((int) (Math.random()*pages.length()-1)).getJSONArray("threads");
             String threadNumber = threadList.getJSONObject((int) (Math.random()*threadList.length()-1)).getString("no");
             
-            jsonText = readUrl("http://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
+            jsonText = readUrl("https://a.4cdn.org/"+board+"/thread/"+threadNumber+".json");
             try{
                 JSONObject postsObject = (JSONObject) new JSONTokener(jsonText).nextValue();
                 JSONArray posts = postsObject.getJSONArray("posts");
@@ -252,11 +249,11 @@ public class RandChan extends ListenerAdapter {
                 
                 find = choice.has("ext")&&choice.has("tim");
                 if(find)
-                    image = "http://i.4cdn.org/"+board+"/"+choice.getLong("tim")+choice.getString("ext");
+                    image = "https://i.4cdn.org/"+board+"/"+choice.getLong("tim")+choice.getString("ext");
             }
             catch(Exception pe){
                 pe.printStackTrace();
-                image="http://i.imgur.com/JaKGGo7.jpg"; // Throw Hanson if theres an error
+                image="https://i.imgur.com/JaKGGo7.jpg"; // Throw Hanson if theres an error
             }
         }
         return(image);
@@ -303,7 +300,7 @@ public class RandChan extends ListenerAdapter {
         List<List<String>> info = new ArrayList<>();
 //        JSONParser parser = new JSONParser();
         try{
-            JSONObject jsonObject = (JSONObject) new JSONTokener(readUrl("http://a.4cdn.org/boards.json")).nextValue();
+            JSONObject jsonObject = (JSONObject) new JSONTokener(readUrl("https://a.4cdn.org/boards.json")).nextValue();
             JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
             for (int i=0; i<boardsTemp.length(); i++) {
                 List<String> singleBoardInfo = new ArrayList<>();
