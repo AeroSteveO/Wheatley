@@ -125,29 +125,6 @@ public class RandChan extends ListenerAdapter {
                         event.getBot().sendIRC().notice(event.getUser().getNick(), "Current number of randchan calls are greater than the rate limiting system allows");
                     }
                 }
-                
-//                if (message.toLowerCase().matches("!set rcall [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
-//                    maxLog = Integer.parseInt(message.split(" ")[2])-1;
-//                    long sec = maxTime/1000;
-//                    Global.throttle.setMaxLog(type, maxLog, event.getChannel().getName());
-//                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
-//                }
-//
-//                if (message.toLowerCase().matches("!set rtime [0-9]*")&&(event.getUser().getNick().equalsIgnoreCase(Global.botOwner)||event.getUser().getNick().equalsIgnoreCase("theDoctor"))&&event.getUser().isVerified()){
-//                    maxTime = Integer.parseInt(message.split(" ")[2])*1000;
-//                    long sec = maxTime/1000;
-//                    Global.throttle.setMaxTime(type, maxTime, event.getChannel().getName());
-//                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
-//                }
-//
-//                if (message.equalsIgnoreCase("!set rcall")||message.equalsIgnoreCase("!set rtime")){
-//                    long sec = maxTime/1000;
-//                    event.getBot().sendIRC().notice(event.getUser().getNick(), Integer.toString(maxLog+1)+" calls can now be made per every "+sec+"s");
-//                }
-                
-//                if (message.equalsIgnoreCase("!setup")){
-//                    setupThrottle(maxLog,maxTime, event);
-//                }
             }
             catch(Exception ex){
                 ex.printStackTrace();
@@ -182,46 +159,6 @@ public class RandChan extends ListenerAdapter {
                 reader.close();
         }
     }
-    
-//    //Gets a full list of 4Chan boards using the 4chan json
-//    private List<String> getBoardList(){
-//        JSONParser parser = new JSONParser();
-//        List<String> boards = new ArrayList<>();
-//        try{
-//            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("https://a.4cdn.org/boards.json"));
-//            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
-//            for (int i=0; i<boardsTemp.size(); i++) {
-//                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
-//                boards.add((String) jsonObject.get("board"));
-//            }
-//        }
-//        catch(Exception ex){
-//            ex.printStackTrace();
-//            System.out.println(ex.getMessage());
-//        }
-//        return(boards);
-//    }
-    
-    
-//    //Gets a full list of 4Chan board titles using the 4chan json
-//    private List<String> getBoardTitles(){
-//        JSONParser parser = new JSONParser();
-//        List<String> titles = new ArrayList<>();
-//        try{
-//            JSONObject jsonObject = (JSONObject) parser.parse(readUrl("https://a.4cdn.org/boards.json"));
-//            JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
-//            for (int i=0; i<boardsTemp.size(); i++) {
-//                jsonObject = (JSONObject) parser.parse(boardsTemp.get(i).toString());
-//                titles.add((String) jsonObject.get("title"));
-//            }
-//        }
-//        catch(Exception ex){
-//            ex.printStackTrace();
-//            System.out.println(ex.getMessage());
-//        }
-//        return(titles);
-//    }
-    
     
     private String get4ChanImage(String board) throws Exception {
         String image = new String();
@@ -259,48 +196,17 @@ public class RandChan extends ListenerAdapter {
         return(image);
     }
     
-    //Finds the given key in the json string using keyfinder.java
-//    private List<String> JSONKeyFinder(String jsonText,String jsonKey) {
-//        JSONParser parser = new JSONParser();
-//        KeyFinder finder = new KeyFinder();
-//        List<String> matchedJson = new ArrayList<>();
-//        finder.setMatchKey(jsonKey);
-//        while(!finder.isEnd()){
-//            parser.parse(jsonText, finder, true);
-//            if(finder.isFound()){
-//                finder.setFound(false);
-//                matchedJson.add(finder.getValue().toString());
-//            }
-//        }
-//        return(matchedJson);
-//    }
-//    private boolean setupThrottle(int maxLog, long maxTime){
-//        Global.throttle.createMaxLog(type,String.valueOf(maxLog), "ALL");
-//        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
-//        return(true);
-//
-//    }
-//    private boolean setupThrottle(int maxLog, long maxTime, MessageEvent event) {
-//        ImmutableSortedSet<Channel> channels = event.getBot().getUserBot().getChannels();
-//
-//        Iterator<Channel> iterator = channels.iterator();
-//        while(iterator.hasNext()) {
-//            Channel element = iterator.next();
-//
-//            Global.throttle.create("NA", "NA", element.getName());
-//
-//        }
-//
-//        Global.throttle.createMaxLog(type, String.valueOf(maxLog), "ALL");
-//        Global.throttle.createMaxTime(type, String.valueOf(maxTime), "ALL");
-//        return(true);
-//    }
-    
+   
     private List<List<String>> getBoardInfo() {
         List<List<String>> info = new ArrayList<>();
 //        JSONParser parser = new JSONParser();
         try{
-            JSONObject jsonObject = (JSONObject) new JSONTokener(readUrl("https://a.4cdn.org/boards.json")).nextValue();
+            String data = readUrl("https://a.4cdn.org/boards.json");
+            if (data == null || data.isEmpty()) {
+                System.out.println("error getting data from json api");
+                return null;
+            }
+            JSONObject jsonObject = (JSONObject) new JSONTokener(data).nextValue();
             JSONArray boardsTemp = (JSONArray) jsonObject.get("boards");
             for (int i=0; i<boardsTemp.length(); i++) {
                 List<String> singleBoardInfo = new ArrayList<>();
