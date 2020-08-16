@@ -8,12 +8,15 @@
 ### Docker Environment
 All of the environment variables the bot loads from docker are put into the configuration files at first start. If the config files exist, then these will not be used, and the config file settings will be used instead.
 * BOT_CONFIG_FOLDER
+  * The path to use for all of the files needed by the bot
 * BOT_NICK
 * BOT_PASSWORD
 * BOT_OWNER_NICK
 * BOT_IRC_PORT
+  * The IRC server port
 * BOT_LOGIN
 * BOT_IRC_ADDRESS
+  * The IRC server address
 * BOT_CHANNEL_LIST
 * BOT_IRPG_HOST_BOT_NAME
 * BOT_IRPG_CHANNEL
@@ -22,7 +25,7 @@ All of the environment variables the bot loads from docker are put into the conf
 * BOT_IRPG_USER_CLASS
 
 
-### How do I get set up? ###
+### Building Wheatley ###
 
 * Building can be done using ant or docker
   * docker build . -t wheatley
