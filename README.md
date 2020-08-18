@@ -10,19 +10,29 @@ All of the environment variables the bot loads from docker are put into the conf
 * BOT_CONFIG_FOLDER
   * The path to use for all of the files needed by the bot
 * BOT_NICK
+  * The nickname to use on IRC, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_PASSWORD
+  * The nickname to use on IRC, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_OWNER_NICK
+  * The nickname to use on IRC, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_IRC_PORT
-  * The IRC server port
+  * The IRC server port, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_LOGIN
+  * The nickname to use on IRC, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_IRC_ADDRESS
-  * The IRC server address
+  * The IRC server address, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_CHANNEL_LIST
+  * A comma separated list of channels to join, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_IRPG_HOST_BOT_NAME
+  * the IRPG hosting bot name, used when logging into IRPG, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_IRPG_CHANNEL
+  * the channel to use for IRPG, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_IRPG_USERNAME
+  * the username that the bot should use when creating/logging into IRPG, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_IRPG_PASSWORD
+  * the password that the bot should use when creating/logging into IRPG, this is loaded into the configuration file and should be updated there after the first startup
 * BOT_IRPG_USER_CLASS
+  * the bots IRPG class, used when creating an account for IRPG, this is loaded into the configuration file and should be updated there after the first startup
 
 
 ### Building Wheatley ###
