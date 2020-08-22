@@ -82,32 +82,44 @@ public class Help implements Command {
         
         if (cmdSplit.length == 1) {
             String commandsAvailable = Colors.RED + "Commands supporting help (also support use by PM): " + Colors.NORMAL;
+            List<String> commandsFound = new ArrayList<>();
+
             for (int i = 0; i < commands.size(); i++) {
                 ArrayList<String> internalCommands = commands.get(i).commandTerms();
                 if (internalCommands == null || internalCommands.isEmpty()) {
-                    commandsAvailable += commands.get(i).getClass().getName().split("\\.")[1] + ", ";
+                    commandsFound.add(commands.get(i).getClass().getName().split("\\.")[1]);
                 }
                 else {
                     for (int j = 0; j < internalCommands.size(); j++) {
                         if (internalCommands.get(j) == null) {
-                            commandsAvailable += commands.get(i).getClass().getName().split("\\.")[1] + ", ";
+                            commandsFound.add(commands.get(i).getClass().getName().split("\\.")[1]);
                         }
                         else {
-                            commandsAvailable += internalCommands.get(j) + ", ";
+                            commandsFound.add(internalCommands.get(j));
                         }
                     }
                 }
+            }
+            Collections.sort(commandsFound, String.CASE_INSENSITIVE_ORDER);
+            for (String command: commandsFound) {
+                commandsAvailable += command + ", ";
             }
             event.getBot().sendIRC().message(caller, commandsAvailable);
         }
         else if (cmdSplit.length == 2) {
             if (cmdSplit[1].equalsIgnoreCase("modules")) {
                 String modulesAvailable = Colors.RED + "Currently Enabled Modules: " + Colors.NORMAL;
+                List<String> moduleList = new ArrayList<>();
                 for (int i = 0; i < commands.size(); i++) {
-                    modulesAvailable += commands.get(i).getClass().getName().split("\\.")[1] + ", ";
+                    moduleList.add(commands.get(i).getClass().getSimpleName());
+                }
+                Collections.sort(moduleList, String.CASE_INSENSITIVE_ORDER);
+                for (String module: moduleList) {
+                    modulesAvailable += module.getClass().getSimpleName() + ", ";
                 }
                 event.getBot().sendIRC().message(caller, modulesAvailable);
             }
+
             else if (cmdSplit[1].equalsIgnoreCase("list")) {
                 String modulesAvailable = Colors.RED + "Currently Enabled Commands: " + Colors.NORMAL;
                 List<String> terms = new ArrayList<>();
