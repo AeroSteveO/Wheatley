@@ -71,7 +71,7 @@ public class DynamicKickManager implements Command {
     if (command.equalsIgnoreCase("listkicks") || command.equalsIgnoreCase(BotUtils.getClassName(this)))
       a.add(Colors.BOLD + Global.commandPrefix + "listkicks" + Colors.NORMAL + ": Responds with a list of all the currently enabled or disabled kicks" );
     
-    if (commandTerms().contains(command.toLowerCase())) {
+    if (kickData.getKickCommands().contains(command.toLowerCase())) {
       a.add(kickHelpString(command.toLowerCase()));
     }
     else if (command.equalsIgnoreCase(BotUtils.getClassName(this))) {
