@@ -19,8 +19,7 @@ import org.jpaste.pastebin.Pastebin;
 public class BotUtils {
     
     public static String getClassName(Object obj) {
-        String name = obj.getClass().getName();
-        return (name.split("\\.")[name.split("\\.").length - 1]);
+        return obj.getClass().getSimpleName();
     }
     
     /**
