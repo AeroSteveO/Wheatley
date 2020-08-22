@@ -115,7 +115,7 @@ public class Help implements Command {
                 }
                 Collections.sort(moduleList, String.CASE_INSENSITIVE_ORDER);
                 for (String module: moduleList) {
-                    modulesAvailable += module.getClass().getSimpleName() + ", ";
+                    modulesAvailable += module + ", ";
                 }
                 event.getBot().sendIRC().message(caller, modulesAvailable);
             }
