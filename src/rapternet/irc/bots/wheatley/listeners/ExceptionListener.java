@@ -36,14 +36,19 @@ public class ExceptionListener extends ListenerAdapter {
     onException(event.getException());
   }
   static String pasteBinKey = "";
+  static String logChannel = "";
 
   public ExceptionListener() {
     if (!Global.settings.contains("pastebin-api")) {
       Global.settings.create("pastebin-api", "AddHere");
       System.out.println("ERROR: NO Pastebin API KEY");
     }
+    if (!Global.settings.contains("exception-log-channel")) {
+      Global.settings.create("exception-log-channel", Global.mainChan);
+      System.out.println("Using Default log channel");
+    }
     pasteBinKey = Global.settings.get("pastebin-api");
-
+    logChannel = Global.settings.get("exception-log-channel");
   }
 
   public void onException(Throwable thrwbl) {
@@ -52,7 +57,7 @@ public class ExceptionListener extends ListenerAdapter {
     } else {
       try {
         if (Global.bot.isConnected()) {
-          Global.bot.sendIRC().message("#dtella2.0", formatPastebinPost(thrwbl));
+          Global.bot.sendIRC().message(logChannel, formatPastebinPost(thrwbl));
         }
         thrwbl.printStackTrace();
       } catch (Exception e) {
