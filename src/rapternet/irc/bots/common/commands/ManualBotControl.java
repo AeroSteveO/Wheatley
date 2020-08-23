@@ -43,7 +43,7 @@ import org.pircbotx.hooks.Event;
  *
  */
 
-public class ManualBotControl implements Command{
+public class ManualBotControl implements Command {
     
     @Override
     public String toString(){

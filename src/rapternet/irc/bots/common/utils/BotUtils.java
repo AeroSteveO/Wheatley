@@ -87,40 +87,12 @@ public class BotUtils {
             }
         }
 
-//        String stackURL = linkToStackTrace(t);
         String response = formatException(t);
         if (stackURL != null)
                 response += (" (" + stackURL + ")");
         
         return response;
     }
-    
-    /**
-     * Convenience method to get a stack trace from an Exception, send it to Hastebin, and shorten the resulting link
-     * with is.gd.
-     * <br/>
-     * <strong>Note:</strong> If <em>any</em> errors occur, this will simply return null, and you will get no feedback
-     * of the error.
-     *
-     * @param t Throwable to do this with
-     * @return Shortened link to the stack trace or null
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-//    private static String linkToStackTrace(Throwable t) {
-//        //noinspection ThrowableResultOfMethodCallIgnored
-//        notNull(t, "");
-//        String pastebin = pastebin(getStackTrace(t));
-//        if (pastebin != null) {
-//            String url = null;
-//            try {
-//                url = shortenURL(pastebin);
-//            } catch (Exception ignored) {
-//                ignored.printStackTrace();
-//            }
-//            if (url != null) return url;
-//        }
-//        return null;
-//    }
     
     /**
      * Gets the contents of an external URL.

@@ -47,7 +47,6 @@ public class WheatleyMain extends ListenerAdapter {
         
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
-// in case something should be done here
         String message = Colors.removeFormattingAndColors(event.getMessage());
         if (!message.startsWith(Global.commandPrefix)&&!message.toLowerCase().startsWith(Global.mainNick.toLowerCase())){
             event.respond("I am a bot, I cannot respond to private messages");
@@ -74,7 +73,6 @@ public class WheatleyMain extends ListenerAdapter {
         if (!Global.settings.contains(Arrays.asList(event.getChannel(),"acceptinvites"))){
             Global.settings.create("acceptinvites","true",event.getChannel());
         }
-//        System.out.println(Boolean.parseBoolean(Global.settings.get("acceptinvites",event.getChannel())));
         if (Boolean.parseBoolean(Global.settings.get("acceptinvites",event.getChannel()))){
             event.getBot().sendIRC().joinChannel(event.getChannel());
             Global.channels.add(event.getChannel().toLowerCase()); //think this will work
@@ -124,7 +122,6 @@ public class WheatleyMain extends ListenerAdapter {
     
     @SuppressWarnings("CallToThreadDumpStack")
     public static void main(String[] args) {
-//        Global.addCommands(Global.commandList, CMD.class);
         //Setup this bot
         checkSettings();
         ArrayList<String> channels = Global.settings.getArray("channellist");
@@ -138,9 +135,7 @@ public class WheatleyMain extends ListenerAdapter {
             Global.mainServer = Global.settings.get("address");
             
             BackgroundListenerManager BackgroundListener = new BackgroundListenerManager();
-//            BackgroundListener.setExceptionHandler(new PastebinExceptionHandler());
             
-//            ArrayList<ServerEntry> servers = new ArrayList<>();
             ServerEntry entry = new ServerEntry(Global.mainServer, Integer.parseInt(Global.serverPort));
             
             //   Configuration configuration;
@@ -179,7 +174,6 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new BotControl())
                     .addListener(new Ping())
                     .addListener(new BlarghleRandom())
-//                    .addListener(new Weather())
 //                    .addListener(new TvSchedule())
 //                    .addListener(new MetaCritic())
 //                    .addListener(new Recommendations())
@@ -188,7 +182,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addListener(new IdleRPG())
 //                    .addListener(new MovieRatings())
                     .addListener(new BadWords())
-                    .addListener(new MarkovInterface())
+//                    .addListener(new MarkovInterface())
                     .addListener(new SRSBSNS())              // contains lasturl and secondlasturl
                     .addListener(new UpdateFiles())          // updates text files via irc
                     .addListener(new RandChan())             // generates random 4chan image links
@@ -196,7 +190,7 @@ public class WheatleyMain extends ListenerAdapter {
                     .addServer(entry);
             
             BackgroundListener.addListener(new Logger(),true); //Add logger background listener
-//            BackgroundListener.addListener(new MarkovInterface(), true);
+            BackgroundListener.addListener(new MarkovInterface(), true);// Probably needs to be single threaded
             
             for (String channel:channels){ //Add channels from XML and load into channels Object
                 configuration.addAutoJoinChannel(channel);
@@ -208,8 +202,6 @@ public class WheatleyMain extends ListenerAdapter {
             
             try {
                 Global.bot = new PircBotX(config);
-//                Global.bot.getConfiguration().getListenerManager().
-//                Global.bot.getConfiguration().getListenerManager().setExceptionHandler(new PastebinExceptionHandler());
                 ServerReconnector parallel = new ServerReconnector(Global.bot);
                 Thread t = new Thread(parallel);
                 parallel.giveT(t);
@@ -218,7 +210,7 @@ public class WheatleyMain extends ListenerAdapter {
                 ex.printStackTrace();
                 System.out.println("Failed to start bot");
             }
-            }
+        }
         catch (Exception ex) {
             ex.printStackTrace();
         }
