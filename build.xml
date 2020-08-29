@@ -3,7 +3,7 @@
 
     <property name="src.dir"     value="src"/>
     <property name="src.test"     value="test"/>
-	<property name="reports.tests" vale="test-reports"/>
+	<property name="reports.tests" value="test-reports"/>
 
     <property name="build.dir"   value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
