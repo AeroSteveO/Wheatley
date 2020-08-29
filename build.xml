@@ -2,16 +2,24 @@
 
 
     <property name="src.dir"     value="src"/>
+    <property name="src.test"     value="test"/>
 
     <property name="build.dir"   value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir"     value="${build.dir}/jar"/>
+    <property name="test.classes.dir" value="${build.dir}/testclasses"/>
+
+	<property name="jar.dir"     value="${build.dir}/jar"/>
 
     <property name="main-class"  value="rapternet.irc.bots.wheatley.listeners.WheatleyMain"/>
     <property name="lib.dir"     value="lib"/>
+    <property name="test.dir"     value="testlib"/>
 
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+    <path id="test.classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <fileset dir="${test.dir}" includes="**/*.jar"/>
     </path>
 
 
@@ -45,40 +53,37 @@
     <target name="clean-build" depends="clean,jar"/>
 
     <target name="main" depends="clean,run"/>
+	
+	<target name="compileTest" depends="compile" description="compile jUnit Test cases ">
+		<mkdir dir="${classes.dir}"/>
+
+		<echo message="Ant java version: ${ant.java.version}" />
+		<javac srcdir="${src.test}" destdir="${classes.dir}" includeantruntime="true" nowarn="yes" debug="true" classpathref="test.classpath"/>
+	</target>
+
+	<target name="unit-test-all" depends="compileTest">
+		<mkdir dir="${reports.tests}"/>
+
+		<junit printsummary="yes" haltonfailure="yes">
 
 
+		  <classpath>
+			<pathelement location="${classes.dir}"/>
+			<pathelement location="${classes.dir}"/>
+			<fileset dir="testlib" includes="**/*.jar"/>
+			<pathelement path="${java.class.path}"/>
+		  </classpath>
 
+		  <formatter type="plain"/>
+		  <formatter type="xml"/>
 
+		  <batchtest fork="yes" todir="${reports.tests}">
+			<fileset dir="${src.test}">
+			  <include name="**/*Test*.java"/>
+			</fileset>
+		  </batchtest>
 
+		</junit>
+	</target>
 
-
-
-
-
-
-
-<!--
-
-    <target name="clean">
-        <delete dir="build"/>
-    </target>
-
-    <target name="compile">
-        <mkdir dir="build/classes"/>
-        <javac srcdir="src" destdir="build/classes"/>
-    </target>
-
-    <target name="jar">
-        <mkdir dir="build/jar"/>
-        <jar destfile="build/jar/Wheatley.jar" basedir="build/classes">
-            <manifest>
-                <attribute name="WheatleyMain" value="rapternet.irc.bots.wheatley.listeners.WheatleyMain"/>
-            </manifest>
-        </jar>
-    </target>
-
-    <target name="run">
-        <java jar="build/jar/Wheatley.jar" fork="true"/>
-    </target>
--->
 </project>
