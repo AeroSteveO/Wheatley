@@ -293,7 +293,10 @@ public class Settings extends SettingsBase {
     }
     
     public void create(List<String> tree){
-        System.out.println(tree.subList(0, tree.size()-1));
+        if (tree == null || tree.isEmpty()) {
+            throw new UnsupportedOperationException("TREE MUST CONTAIN AT LEAST 2 VALUES, A KEY AND A VALUE");
+        }
+
         if (!contains(tree.subList(0, tree.size()-1))){
             
             
@@ -419,8 +422,8 @@ public class Settings extends SettingsBase {
     }
     
     public boolean set(String key, String value) {
-        if (settings.containsKey(key)){
-            settings.put(key,value);
+        if (settings.containsKey(key.toLowerCase())){
+            settings.put(key.toLowerCase(),value);
             save();
             return true;
         }
@@ -577,96 +580,4 @@ public class Settings extends SettingsBase {
         }
         return true;
     }
-    
-    
-//    public void setFileName(String filename){
-////        this.filename=filename;
-//        this.file = new File(filename);
-//        try{
-//            if(!this.file.exists()){
-//                this.file.createNewFile(); // We're just replacing the old file, not modifying it
-//            }
-//        }
-//        catch (Exception ex){
-//            ex.printStackTrace();
-//        }
-//    }
-//    public void setFile(File file){
-//        this.file = file;
-//    }
-//    
-//    private String loadText() throws FileNotFoundException, IOException{
-////        File file =new File(filename);
-//        //if file doesnt exists, then create it
-//        if(!file.exists()){
-//            file.createNewFile();
-//            return null;
-//        }
-//        
-//        try{
-//            Scanner wordfile = new Scanner(file);
-//            String wordls = "";
-//            while (wordfile.hasNext()){
-//                wordls= wordls+(wordfile.nextLine());
-//            }
-//            wordfile.close();
-//            return (wordls);
-//        } catch (FileNotFoundException ex) {
-//            System.out.println("TEXT LOADER FAILED");
-//            ex.printStackTrace();
-//            return null;
-//        }
-//    }
-//    
-//    private static Map jsonToMap(JSONObject json) throws JSONException {
-//        Map<String, Object> retMap = new HashMap<String, Object>();
-//        
-//        if(json != JSONObject.NULL) {
-//            retMap = toMap(json);
-//        }
-//        else
-//            System.out.println("JSON EMPTY");
-//        return retMap;
-//    }
-//    
-//    private static Map toMap(JSONObject object) throws JSONException {
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        
-//        Iterator<String> keysItr = object.keys();
-//        while(keysItr.hasNext()) {
-//            String key = keysItr.next();
-//            Object value = object.get(key);
-//            
-//            if(value instanceof JSONArray) {
-//                value = toList((JSONArray) value);
-//            }
-//            
-//            else if(value instanceof JSONObject) {
-//                value = toMap((JSONObject) value);
-//            }
-////            else
-////                System.out.println("AWW HELL, "+key+" failed");
-//            map.put(key, value);
-////            System.out.println("KEY: "+key+" VALUE: "+value);
-//        }
-//        return map;
-//    }
-//    
-//    private static List toList(JSONArray array) throws JSONException {
-//        List<Object> list = new ArrayList<Object>();
-//        for(int i = 0; i < array.length(); i++) {
-//            Object value = array.get(i);
-//            if(value instanceof JSONArray) {
-//                value = toList((JSONArray) value);
-//            }
-//            
-//            else if(value instanceof JSONObject) {
-//                value = toMap((JSONObject) value);
-//            }
-//            else
-//                System.out.println("DANGIT");
-//            list.add(value);
-//        }
-//        return list;
-//    }
 }
