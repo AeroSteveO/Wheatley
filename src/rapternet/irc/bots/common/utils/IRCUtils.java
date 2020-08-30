@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import org.pircbotx.hooks.Event;
 
@@ -114,7 +115,7 @@ public class IRCUtils{
         return prettyPrintTime;
     }
     
-    public static String arrayListToString(ArrayList<String> array) {
+    public static String arrayListToString(List<String> array) {
         
         if (array == null || array.isEmpty()) {
             return "";
