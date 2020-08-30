@@ -62,5 +62,27 @@ public class SettingsTest {
         s.create(l);
     }
 
+    @Test
+    public void testChannelList() {
+        Settings s = new Settings();
+        List<String> l = new ArrayList<>();
+        l.add("#channel");
+        l.add("setting");
+        l.add("option");
 
+        s.create(l);
+
+        List<String> channels = s.getChannelList();
+
+        assertEquals(1, channels.size());
+        assertEquals("#channel", channels.get(0));
+
+        l.set(0, "#chan");
+        s.create(l);
+
+        channels = s.getChannelList();
+        assertEquals(2, channels.size());
+        assertTrue(channels.contains("#chan"));
+        assertTrue(channels.contains("#channel"));
+    }
 }
