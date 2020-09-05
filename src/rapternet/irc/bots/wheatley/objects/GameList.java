@@ -115,10 +115,22 @@ public class GameList {
     }
     
     public void add(String channel, String game){
+        if (channel == null) {
+            throw new NullPointerException("Channel Cannot be Null");
+        }
+        if (game == null) {
+            throw new NullPointerException("Game Cannot be Null");
+        }
         games.add(new String[] {channel, game});
     }
     
     public void add(String channel, String game, String length){
+        if (channel == null) {
+            throw new NullPointerException("Channel Cannot be Null");
+        }
+        if (game == null) {
+            throw new NullPointerException("Game Cannot be Null");
+        }
         games.add(new String[] {channel, game, length});
     }
     
