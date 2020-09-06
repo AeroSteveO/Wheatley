@@ -18,11 +18,11 @@ import rapternet.irc.bots.wheatley.objects.Env;
  */
 public class IdleRPG extends ListenerAdapter {
     
-    private String idleRPGChan = Env.IRPG_CHANNEL; // TODO ADD TO SETTINGS
-    private String idleBot = Env.IRPG_BOT_NAME; // TODO ADD TO SETTINGS
+    private String idleRPGChan = Env.IRPG_CHANNEL;
+    private String idleBot = Env.IRPG_BOT_NAME;
     private String username = Env.IRPG_USERNAME;
-    private String password = ""; // TODO ADD TO SETTINGS
-    private String userClass = Env.IRPG_USER_CLASS; // TODO ADD TO SETTINGS
+    private String password = "";
+    private String userClass = Env.IRPG_USER_CLASS;
     private int time = 120; // seconds
     
     public IdleRPG() {

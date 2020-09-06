@@ -24,9 +24,16 @@ public class Env {
     public static final String IRPG_USERNAME = getVarOrDefault("BOT_IRPG_USERNAME", NICK);
     public static final String IRPG_PASSWORD = getVarOrDefault("BOT_IRPG_PASSWORD", "AddHere");
     public static final String IRPG_USER_CLASS = getVarOrDefault("BOT_IRPG_USER_CLASS", "Intelligence Dampening Sphere");
-    
+
+    /**
+     * Gets the input environment variable, or returns the default if not found.
+     * This checks both the java environment, and the system environment
+     * @param key the environment variable to use
+     * @param def the default value if the environment variable is not found
+     * @return the value of the environment variable key, or the default if its not found
+     */
     static String getVarOrDefault(String key, String def) {
-        String javaProp = System.getProperty(key, def);
+        String javaProp = System.getProperty(key, def); // TODO: Update to use configuration file if not found elsewhere?
         return System.getenv().getOrDefault(key, javaProp);
     }
 }
