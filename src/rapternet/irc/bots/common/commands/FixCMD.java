@@ -72,8 +72,7 @@ public class FixCMD implements Command{
         
         String caller = data.getCaller();
         boolean isVerified = data.isVerifiedBotOwner();
-//        String[] cmdSplit = data.getCommandSplit();
-        
+
         if(isVerified){
             updateChannelsFromXML();
             event.getBot().sendIRC().message("NickServ", "ghost " + Global.mainNick + " " + Global.nickPass);  //ghost is a depricated command, if it doesn't work, the next command should work
@@ -88,15 +87,15 @@ public class FixCMD implements Command{
             event.getBot().sendIRC().message("NickServ", "identify " + Global.nickPass);
             
             updateChannelsFromXML();
-//            Global.channels.removeDupes();
             for (int i=0;i<Global.channels.size();i++){
                 event.getBot().sendIRC().joinChannel(Global.channels.get(i));
             }
             event.getBot().sendIRC().notice(caller,"Fix completed");
         }
     }
+
+    
     private void updateChannelsFromXML(){
-        
         try{
             File fXmlFile = new File(Env.CONFIG_LOCATION + "Settings.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

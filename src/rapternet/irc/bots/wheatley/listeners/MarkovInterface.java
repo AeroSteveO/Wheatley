@@ -57,8 +57,6 @@ import rapternet.irc.bots.wheatley.objects.Env;
  *     [botnick], what do you think about [item]
  *         To force a seed word into the generator and command a reply
  *
- * ToDo:
- *
  */
 public class MarkovInterface extends ListenerAdapter{
     ArrayList<String> botList = null;
