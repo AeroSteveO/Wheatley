@@ -113,12 +113,12 @@ public final class ColorUtils {
         int color = (int) (Math.random()*16);
         return (BASE+Integer.toString(color));
     }
+
     public static String getRandomBackground(){
-
-int color = (int) (Math.random()*16);
+        int color = (int) (Math.random()*16);
         return (BASE+BLACK+","+ Integer.toString(color));
-
     }
+
     public static final String getRandomColorAndBackground(){
         int color = (int) (Math.random()*16);
         int color2 = (int) (Math.random()*16);
