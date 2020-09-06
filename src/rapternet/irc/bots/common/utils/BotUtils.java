@@ -64,32 +64,14 @@ public class BotUtils {
             return null;
         }
     }
-    
-    private static String pastebin(Throwable t, String message) {
-        String pasteBinKey = Global.settings.get("pastebin-api");
-        try {
-            return Pastebin.pastePaste(pasteBinKey, (message == null ? "" : message + "\n") + getStackTrace(t), Global.mainNick + " EXCEPTION " + t.getMessage()).toString();
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-    
+
     public static String formatPastebinPost(Throwable t) {
         String pastebin = pastebin(getStackTrace(t));
         String stackURL = null;
-        if (pastebin != null) {
-            try {
-                stackURL = shortenURL(pastebin);
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
-            }
-        }
 
         String response = formatException(t);
-        if (stackURL != null)
-                response += (" (" + stackURL + ")");
+        if (pastebin != null)
+                response += (" (" + pastebin + ")");
         
         return response;
     }
@@ -110,21 +92,5 @@ public class BotUtils {
         String line;
         while ((line = br.readLine()) != null) sb.append(line).append("\n");
         return sb.substring(0, sb.length() - 1); // remove last newline
-    }
-    
-    /**
-     * Shortens a URL with is.gd.
-     *
-     * @param url URL to shorten
-     * @return Shortened URL
-     * @throws IOException                    If an exception occurs encoding or shortening
-     * @throws java.lang.NullPointerException If any argument is null
-     */
-    public static String shortenURL(String url) throws Exception {
-        notNull(url, "url was null");
-        final URL shorten = new URL("http://is.gd/create.php?format=simple&url=" + URLEncoder.encode(url, "UTF-8"));
-        System.out.println(shorten.toString());
-        System.out.println(TextUtils.readUrlUsingGet(shorten.toString()));
-        return TextUtils.readUrlUsingGet(shorten.toString());
     }
 }
