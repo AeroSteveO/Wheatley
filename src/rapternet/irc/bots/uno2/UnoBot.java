@@ -40,7 +40,7 @@ import rapternet.irc.bots.wheatley.objects.Env;
  */
 public class UnoBot extends ListenerAdapter {
   // killl all the queues on game end
-  private String[] botOps = Global.getBotOps();
+  private String[] botOps = Global.getBotAdmins().toArray(new String[]{});
   private String gameStarter = null; // User who started the UNO game
   private String currChannel = null;
   private final String gameChannel = "#casino";

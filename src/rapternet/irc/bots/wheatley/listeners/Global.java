@@ -62,13 +62,8 @@ public class Global {
     
     public static Settings settings = new Settings(Env.CONFIG_LOCATION + "settings.json");
     public static Throttle throttle = new Throttle(Env.CONFIG_LOCATION + "throttle.json");
-    
-    public static String[] getBotOps(){
-        String[] admins = {"Steve-O","burg","theDoctor"};
-        return admins;
-    }
             
-    private static ArrayList<String> getBotAdmins() {
+    public static ArrayList<String> getBotAdmins() {
         ArrayList<String> admins = TextUtils.loadTextAsList(Env.CONFIG_LOCATION + "admins.txt");
         if (admins == null) {
           admins = new ArrayList<>();
@@ -76,15 +71,7 @@ public class Global {
         return(admins);
     }
 
-  public static String getGameChan() {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  static boolean isBotOwner(String nick) {
-    return botOwner.equals(nick) || getBotAdmins().contains(nick);
-  }
-    
-    public boolean isBotAdmin(String username) {
-        return false;
+    static boolean isBotOwner(String nick) {
+        return botOwner.equals(nick) || getBotAdmins().contains(nick);
     }
 }

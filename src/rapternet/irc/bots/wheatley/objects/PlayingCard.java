@@ -63,7 +63,7 @@ public class PlayingCard implements Comparable {
             //a valid playing card
             this.value = value;
             this.suit = suit;
-        }else {
+        } else {
             //joker, intentionally or unintentionally
             this.value = JOKER;
             this.suit = NONE;
