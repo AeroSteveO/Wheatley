@@ -27,4 +27,16 @@ public class DeckOfCardsTest {
         assertTrue(pc.getSuit() >0);
         assertTrue(pc.getSuit() <= 4);
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void testNullChannelInput() {
+        DeckOfCards list = new DeckOfCards();
+
+        while (list.cardsLeft() > 0) {
+            list.dealCard();
+        }
+
+        list.dealCard(); // deal one more card than is in the deck
+    }
+
 }
