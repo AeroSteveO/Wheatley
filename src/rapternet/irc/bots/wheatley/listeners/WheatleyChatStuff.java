@@ -57,7 +57,15 @@ public class WheatleyChatStuff extends ListenerAdapter {
 //                event.getBot().sendIRC().notice(event.getUser().getNick(),"you so funny, me ruv u rong time");
             
             if (cmdSplit[0].equalsIgnoreCase("Wheatley"))
-                event.getBot().sendIRC().message(event.getChannel().getName(),"My command list --> http://bit.ly/QWAKdE");
+                event.getBot().sendIRC().message(event.getChannel().getName(),"My command list --> https://github.com/AeroSteveO/Wheatley/blob/master/Commands.md");
+            else if (cmdSplit[0].equalsIgnoreCase("flip"))
+                event.getBot().sendIRC().message(event.getChannel().getName(),"(╯°□°）╯︵ ┻━┻");
+            else if (cmdSplit[0].equalsIgnoreCase("unflip"))
+                event.getBot().sendIRC().message(event.getChannel().getName(),"┬─┬ノ( º _ ºノ)");
+            else if (cmdSplit[0].equalsIgnoreCase("carrots"))
+                event.getBot().sendIRC().message(event.getChannel().getName(),"🥕");
+            else if (cmdSplit[0].equalsIgnoreCase("🥕"))
+                event.getBot().sendIRC().message(event.getChannel().getName(),"Carrots");
         }
         
         if (message.equalsIgnoreCase("Oh. Hi."))//||message.equalsIgnoreCase("potato?")
