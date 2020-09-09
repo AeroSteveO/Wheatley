@@ -65,8 +65,7 @@ public class ChangeBaseCMD implements Command {
         
         if (command.equalsIgnoreCase("rpn")) {
             String message = data.getMessage().split(" ", 2)[1];
-            //System.out.println(message);
-         event.getBot().sendIRC().message(respondTo, "RPN Solution: " + evaluateRPN(message));   
+            event.getBot().sendIRC().message(respondTo, "RPN Solution: " + evaluateRPN(message));
         }
         else {
         if (cmdSplit.length == 3) {
@@ -99,7 +98,7 @@ public class ChangeBaseCMD implements Command {
         Stack<Integer> stack = new Stack<>();
         String[] tokens = s.split(" ");
         for (String token : tokens) {
-            if (token.matches("[0-9]"))
+            if (token.matches("[0-9]+"))
                 stack.push(Integer.parseInt(token));
             else { // note non-standard compact formatting to fit slide...
                 int op2 = stack.pop(); int op1 = stack.pop();
