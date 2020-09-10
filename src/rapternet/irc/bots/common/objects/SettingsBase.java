@@ -106,7 +106,7 @@ public abstract class SettingsBase {
 
                     file.createNewFile(); // We're just replacing the old file, not modifying it
 
-                    FileWriter fileWritter = new FileWriter(file.getName());
+                    FileWriter fileWritter = new FileWriter(file.getAbsolutePath());
                     BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                     bufferWritter.write(json);
                     bufferWritter.close();

@@ -84,6 +84,8 @@ public class CardHand {
     public boolean isHandBlackjack(){
         if(getBlackjackHandValue()!=21)
             return(false);
+
+        System.out.println((getBlackjackHandValue() == 21) + " " + getBlackjackHandValue());
         
         boolean containsTen = false;
         boolean containsAce = false;
@@ -93,7 +95,8 @@ public class CardHand {
             else if(hand.get(i).getValue()==1)
                 containsAce=true;
         }
-        return(containsTen&&containsAce&&hand.size()==2);
+
+        return(containsTen && containsAce && hand.size()==2);
     }
     
     
@@ -107,6 +110,7 @@ public class CardHand {
             else
                 value+=hand.get(i).getValue();
         }
+
         return (value!=getBlackjackHandValue());
     }
     
@@ -129,9 +133,9 @@ public class CardHand {
             
         }
         
-        if (value>21){
+        if (value > 21) {
             int i=0;
-            while (i<aces&&value>21){
+            while (i < aces && value > 21){
                 value-=11;
                 value+=1;
                 i++;

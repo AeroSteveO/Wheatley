@@ -81,7 +81,7 @@ public class Logger extends ListenerAdapter{
         }
         try{
             for(String addition: log){
-                FileWriter fileWritter = new FileWriter(file.getName(),true);
+                FileWriter fileWritter = new FileWriter(file.getAbsolutePath(),true);
                 BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                 bufferWritter.write("\n"+addition);
                 bufferWritter.close();

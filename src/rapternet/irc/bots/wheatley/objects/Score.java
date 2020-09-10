@@ -330,7 +330,7 @@ public class Score implements Comparable<Score> {
                     
                     file.createNewFile();
                     
-                    FileWriter fileWritter = new FileWriter(file.getName());
+                    FileWriter fileWritter = new FileWriter(file.getAbsolutePath());
                     BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                     bufferWritter.write(addition);
                     bufferWritter.close();

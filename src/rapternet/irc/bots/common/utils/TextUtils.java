@@ -184,7 +184,7 @@ public class TextUtils {
                 return false;
             }
             else{
-                FileWriter fileWritter = new FileWriter(file.getName(),true);
+                FileWriter fileWritter = new FileWriter(file.getAbsolutePath(),true);
                 BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                 bufferWritter.write("\n"+addition);
                 bufferWritter.close();
@@ -227,7 +227,7 @@ public class TextUtils {
                 file.createNewFile();
             }
             
-            FileWriter fileWritter = new FileWriter(file.getName(),true);
+            FileWriter fileWritter = new FileWriter(file.getAbsolutePath(),true);
             BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
             bufferWritter.write("\n"+addition);
             bufferWritter.close();

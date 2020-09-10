@@ -160,11 +160,11 @@ public class Definitions {
                     file.createNewFile(); // We're just replacing the old file, not modifying it
                     
                     //true = append file
-                    FileWriter fileWritter = new FileWriter(file.getName());
-                    BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                    bufferWritter.write(json);
-                    bufferWritter.close();
-                    System.out.println("FILE SAVED");
+                    FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
+                    BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
+                    bufferWriter.write(json);
+                    bufferWriter.close();
+                    System.out.println("Definitions FILE SAVED");
                 }catch(IOException e){
                     System.out.println(file.getName()+" HAS NOT BEEN SAVED");
                     e.printStackTrace();
