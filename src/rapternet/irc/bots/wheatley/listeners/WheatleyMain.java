@@ -172,7 +172,6 @@ public class WheatleyMain extends ListenerAdapter {
 //                    .addListener(new Fuckingweather())
 //                    .addListener(new KickBanWatcher())
                     .addListener(new BotControl())
-                    .addListener(new Ping())
                     .addListener(new BlarghleRandom())
 //                    .addListener(new TvSchedule())
 //                    .addListener(new MetaCritic())
