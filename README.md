@@ -3,7 +3,7 @@
 ### What is this repository for? ###
 
 * This is a PIRCBOTX IRC bot that I made to learn java, now its a project of different experimentation and play with IRC bots
-* PIRCBOTX 2.1
+* [Bot commands](Commands.md) are available with descriptions of what they do
 
 ### Docker Environment
 All of the environment variables the bot loads from docker are put into the configuration files at first start. If the config files exist, then these will not be used, and the config file settings will be used instead.
